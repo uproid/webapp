@@ -1,0 +1,53 @@
+<div class="row my-5">
+  <h3>Test Cookies</h3>
+  <div class="card my-3 border-0 bg-transparent">
+    <div class="card-body p-0 m-0 ">
+      <table class="table table-striped p-0 m-0 border rounded-3">
+        <thead>
+          <tr>
+            <th>Key</th>
+            <th>Value</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <? for cookie in session.cookies ?>
+          <tr>
+            <td><?= cookie.name ?></td>
+            <td><?= cookie.value ?></td>
+            <td class="text-center">
+              <form method="post">
+                <input type="hidden" name="name" value="<?= cookie.name ?>" />
+                <input type="hidden" name="action" value="delete" />
+                <button type="submit" class="btn btn-sm btn-link">🗑️</button>
+              </form>
+          </tr>
+          <? endfor ?>
+        </tbody>
+        <tfoot>
+          <form method="post">
+            <tr>
+              <td>
+                <input placeholder="Cookie name" class="form-control" type="text" name="name" value="" />
+              </td>
+              <td colspan="2">
+                <div class="input-group">
+                  <input type="text" name="value" class="form-control" placeholder="Cookie value">
+                  <span class="input-group-text">
+                    <div class="form-check">
+                      <input class="form-check-input" name="safe" type="checkbox" value="1" id="flexCheckIndeterminate">
+                      <label class="form-check-label" for="flexCheckIndeterminate">
+                        Safe
+                      </label>
+                    </div>
+                  </span>
+                  <button class="btn btn-outline-primary" type="submit">Add</button>
+                </div>
+              </td>
+            </tr>
+          </form>
+        </tfoot>
+      </table>
+    </span>
+  </div>
+</div>

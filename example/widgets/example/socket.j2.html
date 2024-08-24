@@ -1,0 +1,37 @@
+<div class="row my-5">
+  <h3>Test WebSocket</h3>
+  <div class="card card-primary bg-light my-3">
+    <div class="card-body">
+      <div class="row">
+        <div class="col">
+          <div class="form-group">
+            <label for="exampleFormControlTextarea1">Output</label>
+            <textarea style="height: 350px" class="form-control" id="socket-output" rows="3"></textarea>
+          </div>
+        </div>
+        <template id="btn-template-client">
+          <button data-id="{id}" class="mt-1 d-flex socket-clinet-send btn-sm btn btn-outline-primary disable-wave">
+            {text}
+          </button>
+        </template>
+        <div id="clinet-list" class="col-auto pt-4"></div>
+      </div>
+      <div class="pt-3 row m-0 gap-1">
+        <button id="btn-socket-time" class="col-auto btn-sm btn btn-outline-primary disable-wave">
+          Get Time
+        </button>
+        <button id="btn-socket-fa" class="col-auto btn-sm btn btn-outline-primary disable-wave">
+          Random message
+        </button>
+        <button id="btn-socket-clients" class="col-auto btn-sm btn btn-outline-primary disable-wave">
+          Clinet lists
+        </button>
+        <div class="col align-self-end">
+          <button  onclick="document.getElementById('socket-output').innerHTML='';document.getElementById('clinet-list').innerHTML=''" class="me-3 btn-sm btn btn-outline-danger float-end">
+            Clear
+          </button>
+          </button>
+        </div>
+      </div>
+  </div>
+</div>

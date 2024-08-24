@@ -1,0 +1,62 @@
+<div class="wrapper">
+  <? include 'template/sidebar.j2.html' ?>
+  <!-- Main Component -->
+  <div class="main">
+    <nav class="navbar navbar-expand px-3 border-bottom">
+      <!-- Button for sidebar toggle -->
+      <button
+        class="button-sidebar btn btn-primary"
+        type="button"
+        data-bs-theme="dark"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a class="navbar-brand ms-2" href="/"><?= $t('logo.title') ?></a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse d-flex flex-column" id="navbarNav">
+        <div class="dropstart align-self-end">
+            <button
+              class="btn btn-primary text-light"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <?= $e.ln | upper ?>
+            </button>
+            <ul class="dropdown-menu">
+              <li>
+                <a class="dropdown-item" href="<?= $e.urlToLanguage('en') ?>"
+                  >English</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" href="<?= $e.urlToLanguage('fa') ?>"
+                  >Persian</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" href="<?= $e.urlToLanguage('nl') ?>"
+                  >Dutch</a
+                >
+              </li>
+            </ul>
+          </div>
+      </div>
+    </nav>
+    <main class="content px-3 py-2">
+      <div class="container">
+        <? include widget + '.j2.html' ?>
+      </div>
+    </main>
+  </div>
+</div>

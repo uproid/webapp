@@ -1,0 +1,68 @@
+<!-- Sidebar -->
+<aside id="sidebar">
+  <div class="h-100 p-2">
+      <a
+      href="/"
+      class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"
+    >
+      <span class="fs-4"><?= $t('logo.title') ?></span>
+    </a>
+    <hr />
+    <ul class="nav nav-pills flex-column mb-auto p-0">
+      <li class="nav-item">
+        <a
+          href="/"
+          class="nav-link <?= 'active' if $e.isPath('/') else '' ?>"
+          aria-current="page"
+        >
+          Home
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          href="/info"
+          class="nav-link <?= 'active' if $e.isPath('/info') else '' ?>"
+          aria-current="page"
+        >
+          Info
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          href="/example/form"
+          class="nav-link <?= 'active' if $e.isPath('/example/form') else '' ?>"
+          aria-current="page"
+        >
+          Form Example
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          href="/example/cookie"
+          class="nav-link <?= 'active' if $e.isPath('/example/cookie') else '' ?>"
+          aria-current="page"
+        >
+          Cookie Example
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          href="/example/route"
+          class="nav-link <?= 'active' if $e.isPath('/example/route') else '' ?>"
+          aria-current="page"
+        >
+          Route Example
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          href="/example/socket"
+          class="nav-link <?= 'active' if $e.isPath('/example/socket') else '' ?>"
+          aria-current="page"
+        >
+          Web Socket Example
+        </a>
+      </li>
+    </ul>
+  </div>
+</aside>

@@ -1,0 +1,37 @@
+<div class="row my-5">
+  <div class="container">
+    <h1>
+      Welcome to
+      <?= $t('logo') ?>
+    </h1>
+    </div>
+    <? if loginResult != true ?>
+    <div class="card card-primary mt-4">
+      <div class="card-body bg-light">
+        <h3>WebDart Features</h3>
+        <p>
+          WebDart provides you with everything you need to build a powerful web
+          application in the simplest way possible using the Dart language. This
+          tool includes a set of features for creating a fast, lightweight, and
+          robust web app. Here are some of the features it offers:
+        </p>
+        <ul>
+          <li>WebSocket</li>
+          <li>MongoDB</li>
+          <li>Cron Jobs</li>
+          <li>Routing</li>
+          <li>Form validators</li>
+          <li>Tools for rapid HTML page development</li>
+          <li>Database model creation</li>
+          <li>Fast API development with OpenAPI documentation</li>
+          <li>
+            And many other features, which we will explore in the examples.
+          </li>
+        </ul>
+      </div>
+    </div>
+    <? else ?>
+    <div class="alert alert-success">Login success</div>
+    <? endif ?>
+  </div>
+</div>

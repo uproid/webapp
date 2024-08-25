@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite errors="0" failures="0" tests="9" skipped="0" name="test.webapp" timestamp="2024-08-25T21:45:16">
+    <properties>
+      <property name="platform" value="vm"/>
+    </properties>
+    <testcase classname="test.webapp" name="Test tools Select Map" time="0.028"/>
+    <testcase classname="test.webapp" name="Test tools Test String tools Check email" time="0.004"/>
+    <testcase classname="test.webapp" name="Test tools Test String tools Check password" time="0.002"/>
+    <testcase classname="test.webapp" name="Test tools Test String tools String convert" time="0.066"/>
+    <testcase classname="test.webapp" name="Test tools Test Path" time="0.002"/>
+    <testcase classname="test.webapp" name="Test tools Test LMap" time="0.002"/>
+    <testcase classname="test.webapp" name="Test ModelLess Test ModelLess" time="0.009"/>
+    <testcase classname="test.webapp" name="Test ModelLess Map Navigation" time="0.002"/>
+    <testcase classname="test.webapp" name="check cron job Cron job" time="6.009"/>
+  </testsuite>
+</testsuites>

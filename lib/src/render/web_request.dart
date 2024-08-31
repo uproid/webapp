@@ -1,0 +1,1263 @@
+// ignore_for_file: type_literal_in_constant_pattern
+
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+import 'dart:math';
+import 'package:webapp/src/widgets/widget_dump.dart';
+import 'package:webapp/wa_model_less.dart';
+import 'package:webapp/src/render/asset_manager.dart';
+import 'package:webapp/src/render/authorization.dart';
+import 'package:webapp/src/router/request_methods.dart';
+import 'package:webapp/src/router/web_route.dart';
+import 'package:webapp/src/tools/console.dart';
+import 'package:webapp/src/tools/convertor/query_string.dart';
+import 'package:webapp/src/tools/convertor/safe_string.dart';
+import 'package:webapp/src/tools/convertor/serializable/value_converter.dart/json_value.dart';
+import 'package:webapp/src/tools/convertor/string_validator.dart';
+import 'package:webapp/src/tools/convertor/translate_string.dart';
+import 'package:webapp/src/tools/path.dart';
+import 'package:webapp/src/widgets/widget_error.dart';
+import 'package:intl/intl.dart';
+import 'package:jinja/jinja.dart';
+import 'package:jinja/loaders.dart';
+import 'package:mime/mime.dart';
+import 'package:mongo_dart/mongo_dart.dart';
+import 'package:webapp/wa_server.dart';
+
+/// The `WebRequest` class handles HTTP requests and provides various methods
+/// for processing, routing, and responding to client requests. It includes
+/// methods for parsing request data, managing sessions, handling cookies,
+/// rendering views, redirecting, and more.
+class WebRequest {
+  /// The [HttpRequest] instance associated with this request.
+  final HttpRequest _rq;
+
+  /// Manages assets like JavaScript and CSS for rendering.
+  late final AssetManager assetManager = AssetManager(this);
+
+  /// Indicates whether the response has been closed.
+  var isClosed = false;
+
+  /// Stores the application settings for the request.
+  static Map<String, Object?> _setting = {};
+
+  /// The route associated with the request, if any.
+  WebRoute? route;
+
+  /// Constructor to initialize the WebRequest with the given [HttpRequest].
+  WebRequest(this._rq);
+
+  /// Provides access to the underlying [HttpRequest].
+  HttpRequest get httpRequest => _rq;
+
+  /// Provides access to the session associated with the request.
+  HttpSession get session => _rq.session;
+
+  /// Provides access to the list of cookies included in the request.
+  List<Cookie> get cookies => _rq.cookies;
+
+  /// Provides access to the request stream.
+  HttpRequest get stream => _rq;
+
+  /// Provides access to the URI of the request.
+  Uri get uri => _rq.uri;
+
+  /// Provides access to the response associated with the request.
+  HttpResponse get response => _rq.response;
+
+  /// Provides access to the HTTP method (e.g., GET, POST) used in the request.
+  String get method => _rq.method;
+
+  /// Provides access to the HTTP headers included in the request.
+  HttpHeaders get headers => _rq.headers;
+
+  /// Sets application-specific settings for the request.
+  ///
+  /// If the `theme` cookie is present, it updates the theme setting accordingly.
+  setSetting(Map<String, Object?> setting) {
+    ///To change theme when Cookie of theme is seted.
+    var theme = getCookie(
+      'theme',
+      def: (setting['theme'] ?? 'light').toString(),
+      safe: false,
+    );
+    if (['light', 'dark'].contains(theme)) {
+      setting['theme'] = theme;
+    }
+
+    _setting = {
+      ...setting,
+    };
+  }
+
+  /// Initializes the request by setting response headers and parsing data.
+  ///
+  /// Returns the [WebRequest] instance after initialization.
+  Future<WebRequest> init() async {
+    _rq.response.headers.add('Access-Control-Allow-Origin', "*");
+    _rq.response.headers.add(
+      'Access-Control-Allow-Methods',
+      'GET,HEAD,OPTIONS,POST,PUT,DELETE',
+    );
+    _rq.response.headers.add('Access-Control-Allow-Headers',
+        'Origin, X-Requested-With, Content-Type, Accept, x-client-key, x-client-token, x-client-secret, Authorization');
+    _rq.response.headers.add('Access-Control-Allow-Credentials', 'true');
+
+    await parseData();
+    return this;
+  }
+
+  /// Holds parsed request data for GET, POST, content, and files.
+  Map<String, dynamic> _dataRequest = {
+    'POST': {},
+    'GET': {},
+    'CONTENT': '',
+    'FILE': '',
+  };
+
+  /// Changes the language based on the given language code [ln].
+  void changeLanguege(String ln) {
+    addCookie('language', ln, safe: false);
+    addSession('language', ln);
+  }
+
+  /// Retrieves the current language based on URI, session, or settings.
+  String getLanguage() {
+    var ln = uri.pathSegments.isNotEmpty ? uri.pathSegments[0] : '';
+    if (ln.isNotEmpty && WaServer.config.languages.contains(ln)) {
+      changeLanguege(ln);
+      return ln;
+    }
+
+    if (isApiEndpoint && hasData('lang')) {
+      return data('lang', def: 'en');
+    }
+
+    ln = getCookie(
+      'language',
+      safe: false,
+      def: getSession(
+        'language',
+        def: _setting['language'] ?? 'en',
+      ).toString(),
+    );
+
+    return ln.trim().toLowerCase();
+  }
+
+  /// Writes the [layout] to the response and closes it.
+  ///
+  /// This method ensures the response is not written if it is already closed.
+  Future writeAndClose(String layout) async {
+    if (isClosed) return;
+
+    layout = onClose(layout);
+    response.write(layout);
+    await _close();
+  }
+
+  /// Handles tasks to be performed before closing the response.
+  ///
+  /// This includes replacing placeholders for assets like JS and CSS in [layout].
+  String onClose(String layout) {
+    // 1. Replace assets values.
+    if (dataJsId.isNotEmpty) {
+      layout = layout.replaceFirst(dataJsId, assetManager.getDataJs());
+    }
+    // 2. Reolace assets url Js, Css
+    if (cssRenderId.isNotEmpty) {
+      layout = layout.replaceFirst(cssRenderId, assetManager.getCssUI());
+    }
+    if (jsRenderId.isNotEmpty) {
+      layout = layout.replaceAll(jsRenderId, assetManager.getJsUI());
+    }
+    return layout;
+  }
+
+  /// Closes the response if it hasn't been closed yet.
+  Future _close() async {
+    if (!isClosed) {
+      isClosed = true;
+      await _rq.response.close();
+    }
+  }
+
+  /// Parses and returns request data from GET, POST, and file fields.
+  ///
+  /// The result is stored in [_dataRequest].
+  Future<Map> parseData() async {
+    Map<String, dynamic> post = {};
+    Map<String, dynamic> get = {};
+    Map<String, dynamic> file = {};
+    String content = "";
+
+    // For GET
+    var params = _rq.uri.queryParameters;
+    get.addAll(params);
+    // For POST or PUT
+    if (method == RequestMethods.POST || method == RequestMethods.PUT) {
+      // Form Forms
+      if (headers.contentType
+          .toString()
+          .toLowerCase()
+          .contains("application/x-www-form-urlencoded")) {
+        try {
+          content = await utf8.decoder.bind(stream).join();
+          var body = QueryString.parse(content);
+          post.addAll(body);
+        } catch (e) {
+          Console.e(e);
+        }
+      } else if (headers.contentType
+          .toString()
+          .toLowerCase()
+          .contains("multipart/form-data")) {
+        var data = await getHeaderFormData();
+        post.addAll(data['fields']);
+        file.addAll(data['files']);
+      } else if (headers.contentType
+          .toString()
+          .toLowerCase()
+          .contains("application/json")) {
+        try {
+          content = await utf8.decoder.bind(stream).join();
+          var data = jsonDecode(content);
+          post.addAll(data);
+        } catch (e) {
+          Console.e(e);
+        }
+      } else {
+        try {
+          var bodyBytes = await stream
+              .fold<List<int>>([], (bytes, chunk) => bytes..addAll(chunk));
+          content = String.fromCharCodes(bodyBytes);
+        } catch (e) {
+          Console.e(e);
+        }
+      }
+    }
+    _dataRequest = {
+      'POST': post,
+      'GET': get,
+      'FILE': file,
+      'CONTENT': content,
+    };
+
+    return _dataRequest;
+  }
+
+  /// Retrieves all parsed request data including GET, POST, and FILE data.
+  Map getAllData() {
+    var map = {
+      ..._dataRequest['GET']!,
+      ..._dataRequest['POST'],
+      'POST': _dataRequest['POST'],
+      'GET': _dataRequest['GET'],
+      'FILE': _dataRequest['FILE'],
+    };
+    return map;
+  }
+
+  /// Retrieves the value associated with [key] from the request data.
+  ///
+  /// The value is sanitized to prevent script injection. An optional [def]
+  /// (default value) can be provided if the key is not found.
+  String data(String key, {String def = ''}) {
+    var map = getAllData();
+    ModelLess modelLess = ModelLess.fromMap(map);
+
+    String res = modelLess.get<String>(key, def: def);
+    return res.removeScripts();
+  }
+
+  /// Retrieves the value associated with [key] as an object from the request data.
+  dynamic dataObject(String key, {dynamic def}) {
+    var map = getAllData();
+    return map[key] ?? def;
+  }
+
+  /// Retrieves the value associated with [key] from the request data, cast to type [T].
+  T dataType<T>(String key, {T? def}) {
+    var map = getAllData();
+    T res = map[key] ?? def;
+    return res;
+  }
+
+  /// Retrieves file data associated with [key] from the request.
+  dynamic getFile(String key) {
+    var map = getAllData();
+    return map['FILE'] != null ? map['FILE'][key] : null;
+  }
+
+  /// Overloads the index operator to return the value for [key] using [data].
+  String operator [](String key) {
+    return data(key);
+  }
+
+  /// Checks if [key] exists in the request data.
+  bool hasData(String key) => getAllData().containsKey(key);
+
+  /// Checks if [key] exists and has a non-empty value in the request data.
+  bool hasDataValue(String key) =>
+      getAllData().containsKey(key) && this[key].isNotEmpty;
+
+  /// Retrieves the value of [key] cast to type [T]. Supports type-specific operations.
+  ///
+  /// Supported types include [List], [bool], [int], [double], and [String].
+  T get<T>(String key, {T? def}) {
+    switch (T) {
+      case List:
+        var res = dataObject(key, def: def);
+        if (res is List) {
+          return res as T;
+        }
+        if (def != null) return def;
+        return [] as T;
+      case num:
+        var res = (num.tryParse(data(key)) ?? -1);
+        if (def != null && res == -1) return def;
+        return res as T;
+      case int:
+        var res = (int.tryParse(data(key)) ?? -1);
+        if (def != null && res == -1) return def;
+        return res as T;
+      case bool:
+        return data(key).toBool as T;
+      case String:
+        var res = data(key).toString();
+        if (res.isEmpty && def != null) return def;
+        return res as T;
+      default:
+        return data(key) as T;
+    }
+  }
+
+  /// Renders an error view with the specified status and parameters.
+  ///
+  /// This method handles setting error-related parameters and generating the
+  /// appropriate error view based on the [status] and other parameters.
+  ///
+  /// [status] - The HTTP status code for the error.
+  /// [params] - Optional map of additional parameters to be added. Default is an empty map.
+  /// [message] - Optional error message to be included. Default is an empty string.
+  /// [toData] - Flag indicating whether to include the success parameter in the response. Default is false.
+  ///
+  /// Returns a [Future<String>] containing the rendered error view.
+  Future<String> renderError(
+    int status, {
+    Map<String, Object?> params = const {},
+    String message = '',
+    bool toData = false,
+  }) {
+    if (message.isNotEmpty) {
+      addParam('error', message);
+    } else if (toData && !hasParam('success')) {
+      if (!hasParam('message')) {
+        addParam('message', status == 404 ? 'error.notfound' : 'error.$status');
+      }
+      addParam('success', false);
+    }
+
+    if (Console.isDebug) {
+      addParams(params);
+    }
+
+    addParam('status', status);
+
+    return renderView(
+      path: ErrorWidget().layout,
+      status: status,
+      isFile: false,
+      toData: toData,
+    );
+  }
+
+  Future<String> dump(dynamic object) async {
+    addParam('output', WaJson.jsonEncoder(object));
+    response.headers.contentType = ContentType.html;
+    var output = await this.renderView(
+      path: DumpWodget().layout,
+      isFile: false,
+    );
+    await writeAndClose(output);
+    return "";
+  }
+
+  /// A model-less object holding parameters for the request.
+  final ModelLess _params = ModelLess(fields: {
+    'timestamp_start': DateTime.now().millisecondsSinceEpoch,
+  });
+
+  /// Retrieves the value of a parameter.
+  ///
+  /// [key] - The key of the parameter to retrieve.
+  /// [def] - Optional default value to return if the parameter is not found. Default is null.
+  ///
+  /// Returns the value of the parameter if it exists, otherwise returns [def].
+  Object? getParam(String key, {Object? def}) {
+    return _params[key] ?? def;
+  }
+
+  /// Checks if a parameter exists.
+  ///
+  /// [key] - The key of the parameter to check.
+  ///
+  /// Returns true if the parameter exists, otherwise returns false.
+  bool hasParam(String key) {
+    return _params.fields.keys.contains(key);
+  }
+
+  /// Retrieves all parameters as a map.
+  ///
+  /// Returns a map containing all the parameters.
+  Map<String, dynamic> getParams() {
+    return _params.fields;
+  }
+
+  /// A map holding validators for different forms.
+  final _validator = <String, Object?>{};
+
+  /// Retrieves the validators map.
+  ///
+  /// Returns a map of validators for various forms.
+  Map<String, Object?> getValidator() {
+    return _validator;
+  }
+
+  /// Adds a validator for a specific form.
+  ///
+  /// [formName] - The name of the form for which the validator is added.
+  /// [validator] - The map containing validation rules for the form.
+  void addValidator(String formName, Map<String, dynamic> validator) {
+    _validator[formName] = validator;
+  }
+
+  /// Adds multiple parameters to the request.
+  ///
+  /// [params] - A map of parameters to be added.
+  ///
+  /// Returns the current [WebRequest] instance for method chaining.
+  WebRequest addParams(Map<String, Object?> params) {
+    params.forEach((key, value) {
+      _params[key] = value;
+    });
+    return this;
+  }
+
+  /// Adds a single parameter to the request.
+  ///
+  /// [key] - The key of the parameter to add.
+  /// [param] - The value of the parameter to add.
+  ///
+  /// Returns the current [WebRequest] instance for method chaining.
+  WebRequest addParam(String key, Object? param) {
+    _params[key] = param;
+    return this;
+  }
+
+  /// Removes a parameter from the request.
+  ///
+  /// [key] - The key of the parameter to remove.
+  ///
+  /// Returns the current [WebRequest] instance for method chaining.
+  WebRequest removeParam(String key) {
+    _params.remove(key);
+    return this;
+  }
+
+  // Placeholder for the renderView method
+  /// after this function everything will be stop and send to client
+  Future<String> renderView({
+    required String path,
+    int status = 200,
+    bool isFile = true,
+    bool toData = false,
+    Map<String, dynamic> data = const {},
+  }) async {
+    if (isClosed) return '';
+
+    if (toData) {
+      return renderDataParam(status: status, data: data);
+    }
+
+    try {
+      response.statusCode = status;
+      response.headers.contentType = ContentType.html;
+    } catch (e) {
+      Console.i(e);
+    }
+    var renderString = await render(path: path, isFile: isFile);
+    await writeAndClose(renderString);
+    return renderString;
+  }
+
+  /// Renders a template with the given parameters and configuration.
+  ///
+  /// This method supports rendering from a file or a raw template string. It can handle
+  /// different types of rendering based on the [isFile] and [toData] parameters. It also
+  /// manages the localization and filtering of data.
+  ///
+  /// [path] - The path or content of the template to be rendered. If [isFile] is true, this should be the file path.
+  /// [viewParams] - A map of parameters to be passed to the template. Default is an empty map.
+  /// [isFile] - A flag indicating whether [path] refers to a file (true) or a string template (false). Default is true.
+  /// [toData] - A flag indicating whether to render the data as a parameter. Default is false.
+  /// [status] - The HTTP status code to be used. Default is 200.
+  ///
+  /// Returns a [Future<String>] containing the rendered template as a string.
+  Future<String> render({
+    required String path,
+    Map<String, Object?> viewParams = const {},
+    bool isFile = true,
+    bool toData = false,
+    int status = 200,
+  }) async {
+    if (isClosed) return '';
+
+    if (toData) {
+      return renderDataParam(status: status, data: viewParams);
+    }
+
+    if (isFile) {
+      File file = File(joinPaths([
+        WaServer.config.widgetsPath,
+        "$path.${WaServer.config.widgetsType}",
+      ]));
+
+      if (!file.existsSync()) {
+        if (WaServer.config.isLocalDebug) {
+          return "The path: ${file.path} is not correct!";
+        } else {
+          return "The path: ${file.uri.pathSegments.last} is not correct!";
+        }
+      }
+    }
+
+    var env = Environment(
+        globals: getGlobalEvents(),
+        autoReload: false,
+        loader: FileSystemLoader(paths: <String>[WaServer.config.widgetsPath]),
+        leftStripBlocks: false,
+        trimBlocks: false,
+        blockStart: WaServer.config.blockStart,
+        blockEnd: WaServer.config.blockEnd,
+        variableStart: WaServer.config.variableStart,
+        variableEnd: WaServer.config.variableEnd,
+        commentStart: WaServer.config.commentStart,
+        commentEnd: WaServer.config.commentEnd,
+        filters: {
+          'dateFormat': (DateTime dt, String format) {
+            return DateFormat(format).format(dt);
+          },
+        },
+        getAttribute: (String key, dynamic object) {
+          try {
+            if (object is TString) {
+              return object.write(this);
+            }
+            if (object is String && key == 'tr') {
+              return object.tr.write(this);
+            }
+            if (object is Cookie) {
+              return key == 'name' ? object.name : object.value;
+            }
+
+            if (object[key] != null) {
+              if (object[key] is ObjectId) {
+                (object[key] as ObjectId).oid;
+              }
+            }
+            return object[key];
+          } on NoSuchMethodError {
+            Console.e({
+              'error': {
+                'object': object,
+                'key': key,
+                'error': 'The key "$key" on "$object" not found',
+              }
+            });
+
+            if (object == null) {
+              if (WaServer.config.isLocalDebug) {
+                return 'The key "$key" on "$object" not found';
+              } else {
+                return null;
+              }
+            }
+
+            return null;
+          } catch (e) {
+            Console.e({
+              'error': {
+                'object': object,
+                'key': key,
+                'error': e,
+              }
+            });
+            return null;
+          }
+        });
+    var params = getParams();
+    params.addAll(viewParams);
+    Template template;
+    if (isFile) {
+      template = env.getTemplate(File(
+        joinPaths([
+          WaServer.config.widgetsPath,
+          "$path.${WaServer.config.widgetsType}",
+        ]),
+      ).path);
+    } else {
+      template = env.fromString(path);
+    }
+    var renderString = template.render(params);
+    return renderString;
+  }
+
+  /// currently it just support the Basic Authentication
+  /// You can develop the `Authorization` class.
+  Authorization get authorization {
+    var authString = headers.value(HttpHeaders.authorizationHeader) ?? '';
+    return Authorization.parse(authString);
+  }
+
+  /// Handles rendering of data with additional parameters and status code.
+  ///
+  /// This method combines the existing parameters and validators with the provided
+  /// data and renders it using the `renderData` method.
+  ///
+  /// [status] - The HTTP status code to be used for the rendering context. Default is 200.
+  /// [data] - A map of additional data to be included in the rendering. Default is an empty map.
+  ///
+  /// Returns a [Future<String>] containing the rendered data as a string.
+  Future<String> renderDataParam({
+    int status = 200,
+    Map<String, Object?> data = const {},
+  }) {
+    return renderData(
+      data: {
+        ...getParams(),
+        ...getValidator(),
+        ...data,
+      },
+      status: status,
+    );
+  }
+
+  /// Renders a list of data as JSON and sends it in the response.
+  ///
+  /// Sets the HTTP status code and content type for the response. Encodes the provided data
+  /// into a JSON string and writes it to the response. Handles errors and sets the status code
+  /// to 502 in case of failure.
+  ///
+  /// [data] - A list of maps containing the data to be rendered as JSON.
+  /// [status] - The HTTP status code to be set for the response. Default is 200.
+  ///
+  /// Returns a [Future<String>] containing the JSON string of the rendered data.
+  Future<String> renderListData({
+    required List<Map<String, Object?>> data,
+    int status = 200,
+  }) async {
+    try {
+      try {
+        response.statusCode = status;
+        response.headers.contentType = ContentType.json;
+      } catch (e) {
+        Console.i(e);
+      }
+
+      var renderString = WaJson.jsonEncoder(data, rq: this);
+      await writeAndClose(renderString);
+      return renderString;
+    } catch (e) {
+      try {
+        response.statusCode = 502;
+        response.headers.contentType = ContentType.json;
+      } catch (e) {
+        Console.i(e);
+      }
+
+      return jsonEncode({
+        'status': 502,
+        'error': e,
+      });
+    }
+  }
+
+  /// Renders a map of data as JSON and sends it in the response.
+  ///
+  /// Sets the HTTP status code and content type for the response. Encodes the provided data
+  /// into a JSON string and writes it to the response. Handles errors and sets the status code
+  /// to 502 in case of failure.
+  ///
+  /// [data] - A map containing the data to be rendered as JSON.
+  /// [status] - The HTTP status code to be set for the response. Default is 200.
+  ///
+  /// Returns a [Future<String>] containing the JSON string of the rendered data.
+  Future<String> renderData({
+    required Map<String, Object?> data,
+    int status = 200,
+  }) async {
+    try {
+      try {
+        response.statusCode = status;
+        response.headers.contentType = ContentType.json;
+      } catch (e) {
+        Console.i(e);
+      }
+
+      var renderString = WaJson.jsonEncoder(data, rq: this);
+      await writeAndClose(renderString);
+      return renderString;
+    } catch (e) {
+      try {
+        response.statusCode = 502;
+        response.headers.contentType = ContentType.json;
+      } catch (e) {
+        Console.i(e);
+      }
+
+      return jsonEncode({
+        'status': 502,
+        'error': e,
+      });
+    }
+  }
+
+  /// Renders a socket request. Currently, this method only returns a string.
+  /// this mean it will make a fake string to wait for socket response.
+  String renderSocket() => 'Socket is requested!';
+
+  /// Renders a plain text response.
+  ///
+  /// Sets the HTTP status code and content type for the response. Writes the provided text
+  /// to the response and handles errors by logging them and returning a default error string.
+  ///
+  /// [text] - The text to be rendered in the response.
+  /// [status] - The HTTP status code to be set for the response. Default is 200.
+  /// [contentType] - The content type to be set for the response. Defaults to `ContentType.text` if not provided.
+  ///
+  /// Returns a [Future<String>] containing the rendered text.
+  Future<String> renderString({
+    required String text,
+    int status = 200,
+    ContentType? contentType,
+  }) async {
+    try {
+      try {
+        response.statusCode = status;
+        response.headers.contentType = contentType ?? ContentType.text;
+      } catch (e) {
+        renderError(502, params: {'error': e});
+      }
+      await writeAndClose(text);
+      return text;
+    } catch (e) {
+      renderError(502, params: {'error': e});
+      return 'console.log("$e");';
+    }
+  }
+
+  /// Renders an HTML response.
+  ///
+  /// Calls [renderString] with the `ContentType.html` to render the provided HTML content.
+  ///
+  /// [html] - The HTML content to be rendered.
+  /// [status] - The HTTP status code to be set for the response. Default is 200.
+  ///
+  /// Returns a [Future<String>] containing the rendered HTML.
+  Future<String> renderHtml({
+    required String html,
+    int status = 200,
+  }) async {
+    return renderString(
+      text: html,
+      status: status,
+      contentType: ContentType.html,
+    );
+  }
+
+  /// Redirects the response to the given URI.
+  ///
+  /// Sets the HTTP status code for the redirect and performs the redirection. Handles
+  /// HTTP and HTTPS URLs differently based on the input URI.
+  ///
+  /// [uri] - The URI to redirect to.
+  /// [status] - The HTTP status code to be used for the redirection. Default is 302 (moved temporarily).
+  /// [checkApiPath] - A flag indicating whether to prefix the path with `/api` if it's an API endpoint. Default is true.
+  ///
+  /// Returns a [Future<String>] with a message indicating the redirection status.
+  Future<String> redirectUri(
+    Uri uri, {
+    int status = HttpStatus.movedTemporarily,
+    bool checkApiPath = true,
+  }) {
+    return redirect(
+      uri.toString(),
+      status: status,
+      checkApiPath: checkApiPath,
+    );
+  }
+
+  /// Redirects the response to the given URI and waits for the redirect to complete.
+  ///
+  /// Sets the HTTP status code for the redirect and performs the redirection. This method
+  /// closes the response and waits for the redirection to complete.
+  ///
+  /// [uri] - The URI to redirect to.
+  /// [status] - The HTTP status code to be used for the redirection. Default is 302 (moved temporarily).
+  /// [checkApiPath] - A flag indicating whether to prefix the path with `/api` if it's an API endpoint. Default is true.
+  ///
+  /// Returns a [Future<String>] with a message indicating the redirection status.
+  Future<String> redirectNextUri(
+    Uri uri, {
+    int status = HttpStatus.movedTemporarily,
+    bool checkApiPath = true,
+  }) async {
+    if (isClosed) {
+      return '';
+    }
+    isClosed = true;
+    await response.redirect(
+      uri,
+      status: status,
+    );
+    return "Wait to redirect!?";
+  }
+
+  /// Redirects the response to the given path.
+  ///
+  /// Determines whether the path is a full URL or a relative path. If the path is a relative path and
+  /// `checkApiPath` is true, it prefixes the path with `/api`. Performs the redirection with the specified
+  /// HTTP status code.
+  ///
+  /// [path] - The path or URL to redirect to.
+  /// [status] - The HTTP status code to be used for the redirection. Default is 302 (moved temporarily).
+  /// [checkApiPath] - A flag indicating whether to prefix the path with `/api` if it's an API endpoint. Default is true.
+  ///
+  /// Returns a [Future<String>] with a message indicating the redirection status.
+  Future<String> redirect(
+    String path, {
+    int status = HttpStatus.movedTemporarily,
+    bool checkApiPath = true,
+  }) async {
+    if (isClosed) {
+      return '';
+    }
+    isClosed = true;
+
+    if (path.toLowerCase().startsWith("http") ||
+        path.toLowerCase().startsWith("https")) {
+      await response.redirect(
+        Uri.parse(path),
+        status: status,
+      );
+      return "Wait to redirect!?";
+    }
+
+    if (checkApiPath && isApiEndpoint) {
+      path = joinPaths(['/api', path]);
+    }
+
+    await response.redirect(
+      Uri.parse(path),
+      status: status,
+    );
+    return "Wait to redirect!?";
+  }
+
+  /// Retrieves form data from a `multipart/form-data` request.
+  ///
+  /// This method processes the multipart form data, extracting fields and files from the request.
+  /// Fields are stored as a map of strings, while files are stored as a map of byte lists.
+  ///
+  /// Returns a [Future<Map<String, dynamic>>] containing:
+  /// - `fields`: A map of form fields with their respective values.
+  /// - `files`: A map of files with their contents as byte lists.
+  Future<Map> getHeaderFormData() async {
+    final fields = <String, String>{};
+    final files = <String, List<int>>{};
+    final contentType = _rq.headers.contentType;
+    if (contentType?.mimeType == 'multipart/form-data') {
+      final transformer =
+          MimeMultipartTransformer(contentType!.parameters['boundary']!);
+
+      final parts = await transformer.bind(_rq).toList();
+
+      await Future.forEach(parts, (part) async {
+        final contentDisposition = part.headers['content-disposition'];
+        if (contentDisposition != null) {
+          final nameMatch =
+              RegExp(r'name="(.+?)"').firstMatch(contentDisposition);
+          final filenameMatch =
+              RegExp(r'filename="(.+?)"').firstMatch(contentDisposition);
+          if (filenameMatch != null) {
+            //final filename = filenameMatch.group(1);
+            final fileBytes = await part
+                .fold<List<int>>([], (bytes, data) => bytes..addAll(data));
+            files[nameMatch!.group(1)!] = fileBytes;
+          } else {
+            final value = await utf8.decodeStream(part);
+            fields[nameMatch!.group(1)!] = value;
+          }
+        }
+      });
+    }
+
+    return {
+      'fields': fields,
+      'files': files,
+    };
+  }
+
+  /// JavaScript render ID for asset management.
+  String jsRenderId = '';
+
+  /// CSS render ID for asset management.
+  String cssRenderId = '';
+
+  /// Data JavaScript render ID for asset management.
+  String dataJsId = '';
+
+  /// Local events map for testing purposes.
+  static final localEvents = <String, Object>{
+    'test': (a) => "You passed '$a'",
+  };
+
+  /// Retrieves global events and parameters for rendering.
+  ///
+  /// Constructs a map of global events and parameters for rendering purposes.
+  /// This includes configuration values, asset URLs, session data, and more.
+  ///
+  /// Returns a [Map<String, Object?>] with global parameters and events.
+  Map<String, Object?> getGlobalEvents() {
+    Map<String, Object?> params = {};
+    params['isLocalDebug'] = WaServer.config.isLocalDebug;
+    params['assets'] = {
+      'js': () {
+        if (jsRenderId.isNotEmpty) return jsRenderId;
+        jsRenderId = "<#DART-SERVER#>JS<#DART-SERVER#>";
+        return jsRenderId;
+      },
+      'css': () {
+        if (cssRenderId.isNotEmpty) return cssRenderId;
+        cssRenderId = "<#DART-SERVER#>CSS<#DART-SERVER#>";
+        return cssRenderId;
+      },
+      'dataJs': () {
+        if (dataJsId.isNotEmpty) return dataJsId;
+        dataJsId = "<#DART-SERVER#>JS-DATA<#DART-SERVER#>";
+        return dataJsId;
+        //assetManager.getDataJs();
+      },
+    };
+
+    params['render'] = () => 'TODO';
+    params['data'] = getAllData();
+    params['session'] = getAllSession();
+    params['param'] = (String path) {
+      return _params.getByPathString(path, def: '');
+    };
+    params['validator'] = (String path) {
+      return getValidator().navigation<Object>(
+        path: path,
+        def: '',
+      );
+    };
+    var events = {
+      'route': route == null ? '/' : route!.getPathRender(),
+      'uri': Uri.encodeComponent(_rq.requestedUri.toString()),
+      'path': Uri.encodeComponent(_rq.requestedUri.path),
+      'pathString': _rq.requestedUri.path,
+      'isPath': (String path) {
+        return _rq.requestedUri.path == path;
+      },
+      'endpoint': endpoint,
+      'url': (String path) {
+        return url(path);
+      },
+      'urlToLanguage': (String language) {
+        if (_rq.requestedUri.pathSegments.isNotEmpty &&
+            _rq.requestedUri.pathSegments[0] == language) {
+          return url(_rq.requestedUri.path);
+        } else if (_rq.requestedUri.pathSegments.isNotEmpty &&
+            _rq.requestedUri.pathSegments[0] == getLanguage()) {
+          var paths = _rq.requestedUri.pathSegments.sublist(1);
+          return url('/$language/${paths.join('/')}');
+        }
+        return url('/$language${_rq.requestedUri.path}');
+      },
+      'urlParam': (String path, Map<String, String> params) {
+        return url(path, params: params);
+      },
+      'getCookie': (String key, [String def = '']) {
+        return getCookie(key, def: def);
+      },
+      'ln': getLanguage(),
+      'dir': 'language.${getLanguage()}_dir'.tr.write(this),
+      'langs': () {
+        var langs = WaServer.appLanguages.keys;
+        var result = [];
+
+        for (var lang in langs) {
+          result.add({
+            'code': lang,
+            'label': 'language.${lang}_label'.tr.write(this),
+            'contry': 'language.${lang}_contry'.tr.write(this),
+          });
+        }
+
+        return result;
+      },
+      'pageTitle': route != null && route!.title.isNotEmpty
+          ? route!.title
+          : 'pages.title'.tr.write(this),
+      'setting': _setting,
+      'formChecker': ([String? name]) => formChecker(name: name),
+    };
+
+    params['\$e'] = LMap(events, def: null);
+    params['\$l'] = LMap(localEvents, def: null);
+    params['\$t'] = (String text, [Object? params]) {
+      if (params == null) {
+        return text.tr.write(this);
+      } else {
+        var json = WaJson.tryJson<String, Object?>(params);
+        if (json != null) {
+          return text.tr.write(this, json);
+        }
+      }
+
+      return text.tr.write(this);
+    };
+    addParam('timestamp_end', DateTime.now().millisecondsSinceEpoch);
+    var duration = (getParam('timestamp_end', def: 0) as int) -
+        (getParam('timestamp_start', def: 0) as int);
+    addParam('duration', duration);
+    var lmap = LMap(params, def: null);
+
+    params['\$'] = lmap;
+    return params;
+  }
+
+  /// Retrieves all session-related data.
+  ///
+  /// Constructs a map containing session and cookies data.
+  ///
+  /// Returns an [Object] with session and cookies data.
+  Object getAllSession() {
+    var res = {
+      'session': session,
+      'cookies': cookies,
+    };
+
+    return res;
+  }
+
+  /// Gets the current endpoint, normalized for slashes.
+  ///
+  /// Returns a [String] representing the normalized path of the current request URI.
+  String get endpoint => pathNorm(_rq.requestedUri.path, normSlashs: true);
+
+  /// Checks if the current endpoint starts with 'api/'.
+  ///
+  /// Returns a [bool] indicating whether the endpoint is an API endpoint.
+  bool get isApiEndpoint => endpoint.startsWith('api/');
+
+  /// Retrieves a cookie value from the request.
+  ///
+  /// Optionally decrypts the cookie value if `safe` is true.
+  ///
+  /// [key] - The name of the cookie.
+  /// [def] - The default value to return if the cookie is not found. Default is an empty string.
+  /// [safe] - A flag indicating whether to decrypt the cookie value. Default is true.
+  ///
+  /// Returns a [String] containing the cookie value.
+  String getCookie(
+    String key, {
+    String def = '',
+    bool safe = true,
+  }) {
+    for (var cookie in _rq.cookies) {
+      if (cookie.name == key) {
+        if (!safe) {
+          return cookie.value;
+        } else {
+          return cookie.value.fromSafe(WaServer.config.cookiePassword);
+        }
+      }
+    }
+
+    return def;
+  }
+
+  /// Retrieves a session value.
+  ///
+  /// [key] - The key of the session value.
+  /// [def] - The default value to return if the session key is not found. Default is an empty string.
+  ///
+  /// Returns an [Object] containing the session value or the default value.
+  Object getSession(String key, {Object? def = ''}) {
+    return session[key] ?? def;
+  }
+
+  /// Adds a value to the session.
+  ///
+  /// [key] - The key for the session value.
+  /// [value] - The value to be added to the session.
+  addSession(String key, Object value) {
+    session[key] = value;
+  }
+
+  /// Adds or updates a cookie in the response.
+  ///
+  /// Optionally encrypts the cookie value if `safe` is true.
+  ///
+  /// [key] - The name of the cookie.
+  /// [value] - The value of the cookie.
+  /// [duration] - The duration for which the cookie should be valid. Default is null.
+  /// [safe] - A flag indicating whether to encrypt the cookie value. Default is true.
+  addCookie(
+    String key,
+    String value, {
+    Duration? duration,
+    bool safe = true,
+  }) {
+    cookies.removeWhere((element) => element.name == key);
+    value = safe ? value.toSafe(WaServer.config.cookiePassword) : value;
+    var cookie = Cookie(key, value);
+    cookie.maxAge = duration?.inSeconds;
+    cookie.path = '/';
+    cookie.secure = false;
+    cookie.httpOnly = false;
+    _rq.response.cookies.add(cookie);
+    _rq.cookies.add(cookie);
+  }
+
+  /// Removes a cookie by setting its value to an empty string and expiration to a past date.
+  ///
+  /// [key] - The name of the cookie to be removed.
+  void removeCookie(String key) {
+    addCookie(key, '', duration: Duration(days: -1, seconds: -1));
+    cookies.removeWhere((element) => element.name == key);
+  }
+
+  /// Constructs a full URL by combining a base URL with a subpath and optional query parameters.
+  ///
+  /// [subPath] - The path to be appended to the base URL.
+  /// [params] - Optional query parameters to be included in the URL.
+  ///
+  /// Returns a [String] containing the full URL.
+  String url(String subPath, {Map<String, String>? params}) {
+    var pathRequest = _rq.requestedUri.origin;
+    var uri = Uri.parse(pathRequest);
+    uri = uri.resolve(subPath);
+    if (params != null) {
+      uri = uri.replace(queryParameters: params);
+    }
+
+    /// Force to HTTPS for all URLs in Deployment
+    /// When the app is localhost app does not load from HTTPS
+    if (!WaServer.config.isLocalDebug) {
+      uri = uri.replace(scheme: 'https');
+    }
+    var url = uri.toString();
+    return url;
+  }
+
+  /// Adds a single asset to the asset manager.
+  ///
+  /// [asset] - The asset to be added.
+  ///
+  /// Returns the [AssetManager] instance after adding the asset.
+  AssetManager addAsset(Asset asset) => assetManager.addAsset(asset);
+
+  /// Adds a list of assets to the asset manager.
+  ///
+  /// [assets] - The list of assets to be added.
+  ///
+  /// Returns the [AssetManager] instance after adding the assets.
+  AssetManager addAssets(List<Asset> assets) => assetManager.addAssets(assets);
+
+  /// Retrieves the list of assets currently managed by the asset manager.
+  ///
+  /// Returns a [List<Asset>] containing all managed assets.
+  List<Asset> getAssets() => assetManager.includes;
+
+  /// Generates a random alphanumeric string of a specified length.
+  ///
+  /// [length] - The length of the random string. Defaults to 8.
+  ///
+  /// Returns a [String] containing the randomly generated string.
+  String generateRandomString([int length = 8]) {
+    final random = Random();
+    const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    final charList =
+        List.generate(length, (index) => chars[random.nextInt(chars.length)]);
+    return charList.join('');
+  }
+
+  /// Generates a form checker hidden input field or a random key for form validation.
+  ///
+  /// [name] - The name attribute for the hidden input field. Defaults to 'formChecker'.
+  /// [inputHtml] - A flag indicating whether to return the HTML input element. Defaults to true.
+  ///
+  /// Returns a [String] containing either the HTML input field or the random key.
+  String formChecker({String? name, bool inputHtml = true}) {
+    name = name ?? 'formChecker';
+    final key = generateRandomString();
+    var res = '<input type="hidden" name="$name" value="$key" />';
+    addSession(
+      name,
+      {
+        'key': key,
+        'time': DateTime.now().millisecondsSinceEpoch,
+      },
+    );
+
+    return inputHtml ? res : key;
+  }
+
+  /// Validates a form submission by checking the hidden form key and timestamp.
+  ///
+  /// [name] - The name attribute for the hidden input field. Defaults to 'formChecker'.
+  ///
+  /// Returns a [bool] indicating whether the form submission is valid.
+  bool checkForm([String? name]) {
+    name = name ?? 'formChecker';
+    final dataField = data(name, def: 'unknown');
+    if (dataField != 'unknown') {
+      Map dataSession = getSession(name, def: 'unknown2') as Map;
+      if (dataField == dataSession['key']) {
+        int duration = DateTime.now().millisecondsSinceEpoch -
+            (dataSession['time'] as int);
+        if (duration / 1000 < 600) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  /// Retrieves the client's IP address from the request headers or connection information.
+  ///
+  /// This method checks the `X-Real-IP` and `X-Forwarded-For` headers, which are set by Nginx.
+  /// If these headers are not present, it falls back to the remote address of the connection.
+  ///
+  /// Returns a [String] containing the client's IP address.
+  String getIP() {
+    String? ip = headers.value('X-Real-IP');
+
+    if (ip != null) {
+      return ip;
+    }
+
+    ip = headers.value('X-Forwarded-For');
+
+    if (ip != null) {
+      return ip;
+    }
+
+    return response.connectionInfo?.remoteAddress.address ?? '127.0.0.1';
+  }
+}

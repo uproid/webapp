@@ -1,0 +1,9 @@
+{
+  "dir": "rtl",
+  "example.params": "نام من {name} است، سن من {age} است",
+  "example.path": "تست مسیر example.path برای محلی سازی",
+  "example.tstring": "آزمون رشته‌های تی TString برای بین‌المللی سازی",
+  "logo": "وب اپ",
+  "logo.title": "وب اپ",
+  "pages.title": "عنوان"
+}

@@ -1,0 +1,9 @@
+{
+  "dir": "ltr",
+  "example.params": "My name is {name}, my age is {age}",
+  "example.path": "Test path of example.path for localization",
+  "example.tstring": "Test TString objects for i18n",
+  "logo": "WebApp",
+  "logo.title": "WebApp",
+  "pages.title": "Title"
+}

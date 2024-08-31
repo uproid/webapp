@@ -1,0 +1,158 @@
+<div class="row my-5">
+  <h3>Web Route example</h3>
+  <div class="card my-3 border-0 bg-transparent">
+    <span class="card-body p-0 m-0">
+      <table class="table table-striped p-0 m-0 border rounded-3">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Path</th>
+            <th>Type</th>
+            <th>Permissions</th>
+            <th>Auth</th>
+            <th>Controller</th>
+          </tr>
+        </thead>
+        <tbody>
+          <? for route in routes?>
+          <tr>
+            <td><?= loop.index ?></td>
+            <td>
+              <a class="btn btn-sm btn-link" href="<?= route.fullPath ?>">
+                [<?= route.method ?>]
+                <?= route.fullPath ?>
+              </a>
+            </td>
+            <td><?= route.type ?></td>
+            <td><?= route.permossoions  ?></td>
+            <td><?= route.hasAuth | string ?></td>
+            <td><?= route.controller ?>.<?= route.index ?></td>
+          </tr>
+          <? endfor ?>
+        </tbody>
+      </table>
+    </span>
+  </div>
+
+  <div class="card my-3 p-0">
+    <ul class="list-group list-group-flush m-0 p-0">
+      <li class="list-group-item">
+        <div class="row">
+          <b class="col-md-2">Router</b>
+          <i class="col-md-10 text-info">example/route/web_route.dart</i>
+        </div>
+      </li>
+    </ul>
+    <div class="card-body">
+      <pre class="prettyprint border-0">
+        <code class="language-dart">
+import &#39;package:webapp/wa_route.dart&#39;;
+import &#39;../controllers/home_controller.dart&#39;;
+
+Future&lt;List&lt;WebRoute&gt;&gt; getWebRoute(WebRequest rq) async {
+  final homeController = HomeController(rq);
+  final includeController = IncludeJsController(rq);
+
+  var paths = [
+    WebRoute(
+      path: &#39;ws&#39;,
+      methods: RequestMethods.ALL,
+      rq: rq,
+      index: homeController.socket,
+    ),
+    WebRoute(
+      path: &#39;app/includes.js&#39;,
+      methods: RequestMethods.ALL,
+      rq: rq,
+      index: includeController.index,
+    ),
+    WebRoute(
+      path: &#39;example&#39;,
+      rq: rq,
+      index: () =&gt; rq.redirect(&#39;/&#39;),
+      children: [
+        WebRoute(
+          path: &#39;/form&#39;,
+          methods: RequestMethods.ALL,
+          rq: rq,
+          index: homeController.exampleForm,
+        ),
+        WebRoute(
+          path: &#39;/cookie&#39;,
+          methods: RequestMethods.ONLY_GET,
+          rq: rq,
+          index: homeController.exampleCookie,
+        ),
+        WebRoute(
+          path: &#39;/cookie&#39;,
+          methods: RequestMethods.ONLY_POST,
+          rq: rq,
+          index: homeController.exampleAddCookie,
+        ),
+        WebRoute(
+          path: &#39;/cookie&#39;,
+          methods: RequestMethods.ONLY_GET,
+          rq: rq,
+          index: homeController.exampleAddCookie,
+        ),
+        WebRoute(
+          path: &#39;/route&#39;,
+          methods: RequestMethods.ONLY_GET,
+          rq: rq,
+          index: homeController.exampleRoute,
+        ),
+        WebRoute(
+          path: &#39;/socket&#39;,
+          methods: RequestMethods.ONLY_GET,
+          rq: rq,
+          index: homeController.exampleSocket,
+        ),
+        WebRoute(
+          path: &#39;/email&#39;,
+          methods: RequestMethods.ONLY_GET,
+          rq: rq,
+          index: homeController.exampleEmail,
+        ),
+        WebRoute(
+          path: &#39;/email&#39;,
+          methods: RequestMethods.ONLY_POST,
+          rq: rq,
+          index: homeController.exampleEmailSend,
+        ),
+      ],
+    ),
+    WebRoute(
+      path: &#39;info&#39;,
+      extraPath: [&#39;api/info&#39;],
+      rq: rq,
+      index: homeController.info,
+    ),
+  ];
+
+  return [
+    WebRoute(
+      path: &#39;/&#39;,
+      rq: rq,
+      methods: RequestMethods.ALL,
+      controller: homeController,
+      children: [
+        ...paths,
+        WebRoute(
+          path: &#39;fa/*&#39;,
+          extraPath: [
+            &#39;en/*&#39;,
+            &#39;nl/*&#39;,
+          ],
+          rq: rq,
+          index: homeController.changeLanguage,
+        )
+      ],
+    ),
+  ];
+}
+          
+        </code>
+      </pre>
+    </div>
+  </div>
+</div>

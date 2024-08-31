@@ -1,0 +1,111 @@
+<div class="row my-5">
+  <h3>Test Cookies</h3>
+  <div class="card my-3 border-0 bg-transparent">
+    <div class="card-body p-0 m-0 ">
+      <table class="table table-striped p-0 m-0 border rounded-3">
+        <thead>
+          <tr>
+            <th>Key</th>
+            <th>Value</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <? for cookie in session.cookies ?>
+          <tr>
+            <td><?= cookie.name ?></td>
+            <td><?= cookie.value ?></td>
+            <td class="text-center">
+              <form method="post">
+                <input type="hidden" name="name" value="<?= cookie.name ?>" />
+                <input type="hidden" name="action" value="delete" />
+                <button type="submit" class="btn btn-sm btn-link">🗑️</button>
+              </form>
+          </tr>
+          <? endfor ?>
+        </tbody>
+        <tfoot>
+          <form method="post">
+            <tr>
+              <td>
+                <input placeholder="Cookie name" class="form-control" type="text" name="name" value="" />
+              </td>
+              <td colspan="2">
+                <div class="input-group">
+                  <input type="text" name="value" class="form-control" placeholder="Cookie value">
+                  <span class="input-group-text">
+                    <div class="form-check">
+                      <input class="form-check-input" name="safe" type="checkbox" value="1" id="flexCheckIndeterminate">
+                      <label class="form-check-label" for="flexCheckIndeterminate">
+                        Safe
+                      </label>
+                    </div>
+                  </span>
+                  <button class="btn btn-outline-primary" type="submit">Add</button>
+                </div>
+              </td>
+            </tr>
+          </form>
+        </tfoot>
+      </table>
+    </span>
+  </div>
+  <div class="card my-3 p-0">
+    <ul class="list-group list-group-flush m-0 p-0">
+      <li class="list-group-item">
+        <div class="row">
+          <b class="col-md-2">View</b>
+          <i class="col-md-10 text-info"
+            >example/widgets/example/auth.j2.html</i
+          >
+        </div>
+      </li>
+      <li class="list-group-item">
+        <div class="row">
+          <b class="col-md-2">Controller</b>
+          <i class="col-md-10 text-info"
+            >example/controllers/home_controller.dart</i
+          >
+        </div>
+      </li>
+      <li class="list-group-item">
+        <div class="row">
+          <b class="col-md-2">Authentication Controller</b>
+          <i class="col-md-10 text-info"
+            >example/controllers/auth_controller.dart</i
+          >
+        </div>
+      </li>
+      <li class="list-group-item">
+        <div class="row">
+          <b class="col-md-2">Router</b>
+          <i class="col-md-10 text-info"
+            >example/route/web_route.dart</i
+          >
+        </div>
+      </li>
+    </ul>
+    <div class="card-body">
+      <pre class="prettyprint border-0">
+        <code class="language-dart">
+Future&lt;String&gt; exampleAddCookie() async {
+  var name = rq.get&lt;String&gt;(&#39;name&#39;, def: &#39;&#39;);
+  var value = rq.get&lt;String&gt;(&#39;value&#39;, def: &#39;&#39;);
+  var safe = rq.get&lt;bool&gt;(&#39;safe&#39;, def: false);
+  var action = rq.get&lt;String&gt;(&#39;action&#39;, def: &#39;add&#39;);
+
+  if (action == &#39;delete&#39;) {
+    // Remove cookie
+    rq.removeCookie(name);                  
+  } else if (action == &#39;add&#39; &amp;&amp; name.isNotEmpty &amp;&amp; value.isNotEmpty) {
+    // Add cookie
+    rq.addCookie(name, value, safe: safe);  
+  }
+
+  return exampleCookie();
+}
+        </code>
+      </pre>
+    </div>
+  </div>
+</div>

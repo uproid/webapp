@@ -1,6 +1,6 @@
 name: webapp
 description: This is a package for fast, easy, and powerful web application development using the Dart language.
-version: 1.0.0
+version: 1.0.16
 homepage: https://uproid.com/webapp
 repository: https://github.com/uproid/webapp.git
 issue_tracker: https://github.com/uproid/webapp/issues

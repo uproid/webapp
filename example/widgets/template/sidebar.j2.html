@@ -1,0 +1,128 @@
+<!-- Sidebar -->
+<aside id="sidebar">
+  <div class="h-100 p-2">
+    <a
+      href="/"
+      class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"
+    >
+      <span class="fs-4"><?= $t('logo.title') ?></span>
+    </a>
+    <hr />
+    <ul class="nav nav-pills flex-column mb-auto p-0">
+      <li class="nav-item">
+        <a
+          href="/"
+          class="nav-link <?= 'active' if $e.isPath('/') else '' ?>"
+          aria-current="page"
+        >
+          Home
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          href="/info"
+          class="nav-link <?= 'active' if $e.isPath('/info') else '' ?>"
+          aria-current="page"
+        >
+          Info
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          href="/example/form"
+          class="nav-link <?= 'active' if $e.isPath('/example/form') else '' ?>"
+          aria-current="page"
+        >
+          Form Example
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          href="/example/cookie"
+          class="nav-link <?= 'active' if $e.isPath('/example/cookie') else '' ?>"
+          aria-current="page"
+        >
+          Cookie Example
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          href="/example/route"
+          class="nav-link <?= 'active' if $e.isPath('/example/route') else '' ?>"
+          aria-current="page"
+        >
+          Route Example
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          href="/example/socket"
+          class="nav-link <?= 'active' if $e.isPath('/example/socket') else '' ?>"
+          aria-current="page"
+        >
+          Web Socket Example
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          href="/example/email"
+          class="nav-link <?= 'active' if $e.isPath('/example/email') else '' ?>"
+          aria-current="page"
+        >
+          Email Example
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          href="/example/panel"
+          class="nav-link <?= 'active' if $e.isPath('/example/panel') else '' ?>"
+          aria-current="page"
+        >
+          Authentication Example
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          href="/example/language"
+          class="nav-link <?= 'active' if $e.isPath('/example/language') else '' ?>"
+          aria-current="page"
+        >
+          Language (i18n) Example
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link <?= 'active' if $e.isPath('/example/dump') else '' ?>"
+          data-bs-toggle="collapse"
+          href="#collapseExample"
+        >
+          <span>Debug Example</span>
+          <i class="fas fa-angle-down rotate-icon" style="transform: rotate(180deg);"></i>
+        </a>
+        <ul
+          class="collapse nav nav-pills ps-3 <?= 'show' if $e.isPath('/example/error') or $e.isPath('/example/dump') else '' ?>"
+          id="collapseExample"
+        >
+          <li class="nav-item w-100">
+            <a
+              href="/example/error"
+              class="nav-link <?= 'active' if $e.isPath('/example/error') else '' ?>"
+              aria-current="page"
+            >
+              Error
+            </a>
+          </li>
+          <li class="nav-item w-100">
+            <a
+              href="/example/dump"
+              class="nav-link <?= 'active' if $e.isPath('/example/dump') else '' ?>"
+              aria-current="page"
+            >
+              Dump variables
+            </a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</aside>

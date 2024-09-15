@@ -1,0 +1,159 @@
+<div class="row my-5">
+  <h3><?= $t('webRouteExample.title') ?></h3>
+  <div class="card my-3 border-0 bg-transparent">
+    <div class="card-body p-0 m-0">
+      <div class="table-responsive">
+        <table class="table table-striped p-0 m-0 border rounded-3">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th><?= $t('webRouteExample.path') ?></th>
+              <th><?= $t('webRouteExample.type') ?></th>
+              <th><?= $t('webRouteExample.permissions') ?></th>
+              <th><?= $t('webRouteExample.auth') ?></th>
+              <th><?= $t('webRouteExample.controller') ?></th>
+            </tr>
+          </thead>
+          <tbody>
+            <? for route in routes ?>
+            <tr>
+              <td><?= loop.index ?></td>
+              <td>
+                <a class="btn btn-sm btn-link" href="<?= route.fullPath ?>">
+                  [<?= route.method ?>]
+                  <?= route.fullPath ?>
+                </a>
+              </td>
+              <td><?= route.type ?></td>
+              <td><?= route.permissions ?></td>
+              <td><?= route.hasAuth | string ?></td>
+              <td><?= route.controller ?><?= route.index ?></td>
+            </tr>
+            <? endfor ?>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card my-3 p-0">
+    <ul class="list-group list-group-flush m-0 p-0">
+      <li class="list-group-item">
+        <div class="row">
+          <b class="col-md-2"><?= $t('webRouteExample.router') ?></b>
+          <i class="col-md-10 text-info">example/lib/route/web_route.dart</i>
+        </div>
+      </li>
+    </ul>
+    <div class="card-body">
+      <pre dir="ltr"  class="prettyprint border-0">
+        <code class="language-dart">
+import 'package:webapp/wa_route.dart';
+import '../controllers/home_controller.dart';
+
+Future<List<WebRoute>> getWebRoute(WebRequest rq) async {
+  final homeController = HomeController(rq);
+  final includeController = IncludeJsController(rq);
+
+  var paths = [
+    WebRoute(
+      path: 'ws',
+      methods: RequestMethods.ALL,
+      rq: rq,
+      index: homeController.socket,
+    ),
+    WebRoute(
+      path: 'app/includes.js',
+      methods: RequestMethods.ALL,
+      rq: rq,
+      index: includeController.index,
+    ),
+    WebRoute(
+      path: 'example',
+      rq: rq,
+      index: () => rq.redirect('/'),
+      children: [
+        WebRoute(
+          path: '/form',
+          methods: RequestMethods.ALL,
+          rq: rq,
+          index: homeController.exampleForm,
+        ),
+        WebRoute(
+          path: '/cookie',
+          methods: RequestMethods.ONLY_GET,
+          rq: rq,
+          index: homeController.exampleCookie,
+        ),
+        WebRoute(
+          path: '/cookie',
+          methods: RequestMethods.ONLY_POST,
+          rq: rq,
+          index: homeController.exampleAddCookie,
+        ),
+        WebRoute(
+          path: '/cookie',
+          methods: RequestMethods.ONLY_GET,
+          rq: rq,
+          index: homeController.exampleAddCookie,
+        ),
+        WebRoute(
+          path: '/route',
+          methods: RequestMethods.ONLY_GET,
+          rq: rq,
+          index: homeController.exampleRoute,
+        ),
+        WebRoute(
+          path: '/socket',
+          methods: RequestMethods.ONLY_GET,
+          rq: rq,
+          index: homeController.exampleSocket,
+        ),
+        WebRoute(
+          path: '/email',
+          methods: RequestMethods.ONLY_GET,
+          rq: rq,
+          index: homeController.exampleEmail,
+        ),
+        WebRoute(
+          path: '/email',
+          methods: RequestMethods.ONLY_POST,
+          rq: rq,
+          index: homeController.exampleEmailSend,
+        ),
+      ],
+    ),
+    WebRoute(
+      path: 'info',
+      extraPath: ['api/info'],
+      rq: rq,
+      index: homeController.info,
+    ),
+  ];
+
+  return [
+    WebRoute(
+      path: '/',
+      rq: rq,
+      methods: RequestMethods.ALL,
+      controller: homeController,
+      children: [
+        ...paths,
+        WebRoute(
+          path: 'fa/*',
+          extraPath: [
+            'en/*',
+            'nl/*',
+          ],
+          rq: rq,
+          index: homeController.changeLanguage,
+        )
+      ],
+    ),
+  ];
+}
+        </code>
+      </pre>
+    </div>
+  </div>
+</div>

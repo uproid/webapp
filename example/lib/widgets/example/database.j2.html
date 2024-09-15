@@ -1,0 +1,49 @@
+<div class="row my-5">
+  <h3><?= $t('database.test.title') ?></h3>
+  <div class="card my-3 border-0 bg-transparent">
+    <div class="card-body p-0 m-0 ">
+      <div class="table-responsive">
+        <table class="table table-striped p-0 m-0 border rounded-3">
+          <thead>
+            <tr>
+              <th><?= $t('database.table.header.title') ?></th>
+              <th><?= $t('database.table.header.slug') ?></th>
+              <th class="text-center"><?= $t('database.table.header.action') ?></th>
+            </tr>
+          </thead>
+          <tbody>
+            <? for record in allRecords ?>
+            <tr>
+              <td><?= record.title ?></td>
+              <td><?= record.slug ?></td>
+              <td class="text-center">
+                <a href="/example/database?page=<?= data.page if data.page else 1 ?>&action=delete&id=<?= record.id ?>" class="btn btn-sm ">🗑️</a>
+              </td>
+            </tr>
+            <? endfor ?>
+          </tbody>
+          <tfoot>
+            <form method="post">
+              <tr>
+                <td colspan="3">
+                  <div class="input-group">
+                    <input type="hidden" name="action" value="add">
+                    <input type="text" name="title" class="form-control" placeholder="<?= $t('database.table.input.placeholder.title') ?>">
+                    <button class="btn btn-outline-primary" type="submit"><?= $t('database.table.button.add') ?></button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="3">
+                  <div class="container">
+                    <?= pagination ?>
+                  </div>
+                </td>
+              </tr>
+            </form>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

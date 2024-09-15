@@ -1,0 +1,105 @@
+<div class="row my-5">
+  <h3><?= $t('cookies.test') ?></h3>
+  <div class="card my-3 border-0 bg-transparent">
+    <div class="card-body p-0 m-0 ">
+      <div class="table-responsive">
+        <table class="table table-striped p-0 m-0 border rounded-3">
+          <thead>
+            <tr>
+              <th><?= $t('cookies.key') ?></th>
+              <th><?= $t('cookies.value') ?></th>
+              <th class="text-center"><?= $t('cookies.action') ?></th>
+            </tr>
+          </thead>
+          <tbody>
+            <? for cookie in session.cookies ?>
+            <tr>
+              <td><?= cookie.name ?></td>
+              <td><?= cookie.value ?></td>
+              <td class="text-center">
+                <form method="post">
+                  <input type="hidden" name="name" value="<?= cookie.name ?>" />
+                  <input type="hidden" name="action" value="delete" />
+                  <button type="submit" class="btn btn-sm ">🗑️</button>
+                </form>
+            </tr>
+            <? endfor ?>
+          </tbody>
+          <tfoot>
+            <form method="post">
+              <tr>
+                <td>
+                  <input placeholder="<?= $t('cookies.placeholder.name') ?>" class="form-control" type="text" name="name" value="" />
+                </td>
+                <td colspan="2">
+                  <div class="input-group">
+                    <input type="text" name="value" class="form-control" placeholder="<?= $t('cookies.placeholder.value') ?>">
+                    <span class="input-group-text">
+                      <div class="form-check">
+                        <input class="form-check-input" name="safe" type="checkbox" value="1" id="flexCheckIndeterminate">
+                        <label class="form-check-label" for="flexCheckIndeterminate">
+                          <?= $t('cookies.safe') ?>
+                        </label>
+                      </div>
+                    </span>
+                    <button class="btn btn-outline-primary" type="submit"><?= $t('cookies.add') ?></button>
+                  </div>
+                </td>
+              </tr>
+            </form>
+          </tfoot>
+        </table>
+      </div>
+    </span>
+  </div>
+  <div class="card my-3 p-0">
+    <ul class="list-group list-group-flush m-0 p-0">
+      <li class="list-group-item">
+        <div class="row">
+          <b class="col-md-2"><?= $t('auth.view') ?></b>
+          <i class="col-md-10 text-info">example/lib/widgets/example/auth.j2.html</i>
+        </div>
+      </li>
+      <li class="list-group-item">
+        <div class="row">
+          <b class="col-md-2"><?= $t('auth.controller') ?></b>
+          <i class="col-md-10 text-info">example/lib/controllers/home_controller.dart</i>
+        </div>
+      </li>
+      <li class="list-group-item">
+        <div class="row">
+          <b class="col-md-2"><?= $t('auth.authController') ?></b>
+          <i class="col-md-10 text-info">example/lib/controllers/auth_controller.dart</i>
+        </div>
+      </li>
+      <li class="list-group-item">
+        <div class="row">
+          <b class="col-md-2"><?= $t('auth.router') ?></b>
+          <i class="col-md-10 text-info">example/lib/route/web_route.dart</i>
+        </div>
+      </li>
+    </ul>
+    <div class="card-body">
+      <pre dir="ltr"  class="prettyprint border-0">
+        <code class="language-dart">
+Future&lt;String&gt; exampleAddCookie() async {
+  var name = rq.get&lt;String&gt;(&#39;name&#39;, def: &#39;&#39;);
+  var value = rq.get&lt;String&gt;(&#39;value&#39;, def: &#39;&#39;);
+  var safe = rq.get&lt;bool&gt;(&#39;safe&#39;, def: false);
+  var action = rq.get&lt;String&gt;(&#39;action&#39;, def: &#39;add&#39;);
+
+  if (action == &#39;delete&#39;) {
+    // <?= $t('cookies.remove') ?>
+    rq.removeCookie(name);                  
+  } else if (action == &#39;add&#39; &amp;&amp; name.isNotEmpty &amp;&amp; value.isNotEmpty) {
+    // <?= $t('cookies.addCookie') ?>
+    rq.addCookie(name, value, safe: safe);  
+  }
+
+  return exampleCookie();
+}
+        </code>
+      </pre>
+    </div>
+  </div>
+</div>

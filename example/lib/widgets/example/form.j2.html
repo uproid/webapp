@@ -1,0 +1,131 @@
+<div class="row my-5">
+  <h3><?= $t('form.validation.title') ?></h3>
+  <div class="card card-primary bg-light my-3">
+    <span class="card-body">
+      <?= $t('form.validation.credentials.email') ?>: example@uproid.com<br />
+      <?= $t('form.validation.credentials.password') ?>: @Test123
+    </span>
+  </div>
+  <? if loginResult != true and user == null ?>
+  <div class="card my-3">
+    <div class="card-body bg-light">
+      <form method="post">
+        <div class="mb-3">
+          <label for="email" class="form-label"><?= $t('form.validation.email') ?></label>
+          <input
+            value="<?= loginForm.email.value ?>"
+            type="email"
+            name="email"
+            class="form-control <?= loginForm.email.valid ?>"
+            id="email"
+            placeholder="<?= $t('form.validation.emailPlaceholder') ?>"
+          />
+          <div class="invalid-feedback <?= 'd-block' if loginForm.email.failed else '' ?>">
+            <?= loginForm.email.errorHtml ?>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label"><?= $t('form.validation.password') ?></label>
+          <input
+            value="<?= loginForm.password.value ?>"
+            type="password"
+            name="password"
+            class="form-control <?= loginForm.password.valid ?>"
+            id="password"
+            placeholder="<?= $t('form.validation.passwordPlaceholder') ?>"
+          />
+          <div class="invalid-feedback <?= 'd-block' if loginForm.password.failed else '' ?>">
+            <?= loginForm.password.errorHtml ?>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg text-light">
+          <?= $t('form.validation.login') ?>
+        </button>
+        <? if loginError ?>
+        <div class="mt-3">
+          <div class="alert alert-danger"><?= $t('form.validation.loginError') ?></div>
+        </div>
+        <? endif ?>
+      </form>
+    </div>
+  </div>
+  <? else ?>
+  <div class="alert alert-success my-3">
+    <div class="row">
+      <div class="col">
+        <?= $t('form.validation.loginSuccess') ?> <i><?= user.name ?></i>
+      </div>
+      <div class="col text-end">
+        <a href="/logout" class="btn text-white btn-sm btn-danger"><?= $t('form.validation.logout') ?></a>
+      </div>
+    </div>
+  </div>
+  <? endif ?>
+
+  <div class="card my-3 p-0">
+    <ul class="list-group list-group-flush m-0 p-0">
+      <li class="list-group-item">
+        <div class="row">
+          <b class="col-md-2"><?= $t('form.validation.view') ?></b>
+          <i class="col-md-10 text-info">example/lib/widgets/example/form.j2.html</i>
+        </div>
+      </li>
+      <li class="list-group-item">
+        <div class="row">
+          <b class="col-md-2"><?= $t('form.validation.controller') ?></b>
+          <i class="col-md-10 text-info">example/lib/controllers/home_controller.dart</i>
+        </div>
+      </li>
+    </ul>
+    <div class="card-body">
+      <pre dir="ltr"  class="prettyprint border-0">
+        <code class="language-dart">
+Future&lt;String&gt; exampleForm() async {
+  if (rq.method == RequestMethods.POST) {
+    var loginForm = FormValidator(
+      name: &#39;loginForm&#39;,
+      rq: rq,
+      fields: {
+        &#39;email&#39;: [
+          FieldValidator.isEmailField(),
+          FieldValidator.requiredField(),
+          FieldValidator.fieldLength(min: 5, max: 255)
+        ],
+        &#39;password&#39;: [
+          (value) {
+            return FieldValidateResult(
+              success: value.toString().isPassword,
+              error:
+                  &#39;Password is not valid, it most has [Number/Char(Upper+Lower)/?@#\$!%]&#39;,
+            );
+          },
+          FieldValidator.requiredField(),
+          FieldValidator.fieldLength(min: 8, max: 255)
+        ],
+      },
+    );
+
+    var result = await loginForm.validateAndForm();
+    var loginResult = false;
+
+    if (result.result) {
+      var email = rq.get&lt;String&gt;(&#39;email&#39;, def: &#39;&#39;);
+      var password = rq.get&lt;String&gt;(&#39;password&#39;, def: &#39;&#39;);
+      if (email == &#39;example@uproid.com&#39; &amp;&amp; password == &#39;@Test123&#39;) {
+        loginResult = true;
+      }
+    }
+
+    rq.addParams({
+      &#39;loginForm&#39;: result.form,
+      &#39;loginResult&#39;: loginResult,
+    });
+  }
+
+  return renderTemplate(&#39;example/form&#39;);
+}
+        </code>
+      </pre>
+    </div>
+  </div>
+</div>

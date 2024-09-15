@@ -1,0 +1,102 @@
+<div class="row my-5">
+  <div class="row m-0 p-0">
+    <h3 class="col"><?= $t('i18n.title') ?></h3>
+    <div class="col dropstart text-end">
+      <button
+        class="btn btn-danger text-light"
+        type="button"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        <?= $e.ln | upper ?>
+      </button>
+      <ul class="dropdown-menu">
+        <li>
+          <a class="dropdown-item" href="<?= $e.urlToLanguage('en') ?>">
+            <?= $t('i18n.language.english') ?>
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item" href="<?= $e.urlToLanguage('fa') ?>">
+            <?= $t('i18n.language.persian') ?>
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item" href="<?= $e.urlToLanguage('nl') ?>">
+            <?= $t('i18n.language.dutch') ?>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="alert alert-success my-3">
+    <?= $t('i18n.exampleTString') ?>
+  </div>
+  <div class="alert alert-success my-3">
+    <?= $t('i18n.examplePath') ?>
+  </div>
+  <div class="alert alert-success my-3">
+    <?= $t('i18n.examplePathString') ?>
+  </div>
+  <div class="alert alert-success my-3">
+    <?= $t('example.params') ?>
+  </div>
+  <div class="alert alert-success my-3">
+    <?= $t('i18n.exampleParams', {'name': 'Jack', 'age': 20}) ?>
+  </div>
+  <div class="card my-3 p-0">
+    <ul class="list-group list-group-flush m-0 p-0">
+      <li class="list-group-item">
+        <div class="row">
+          <b class="col-md-2"><?= $t('i18n.view') ?></b>
+          <i class="col-md-10 text-info">example/lib/widgets/example/i18n.j2.html</i>
+        </div>
+      </li>
+      <li class="list-group-item">
+        <div class="row">
+          <b class="col-md-2"><?= $t('i18n.controller') ?></b>
+          <i class="col-md-10 text-info">example/lib/controllers/home_controller.dart</i>
+        </div>
+      </li>
+      <li class="list-group-item">
+        <div class="row">
+          <b class="col-md-2"><?= $t('i18n.languagesDirectory') ?></b>
+          <i class="col-md-10 text-info">example/lib/languages</i>
+        </div>
+      </li>
+    </ul>
+    <div class="card-body">
+      <pre dir="ltr" class="prettyprint border-0">
+        <code class="language-dart">
+// Configs:
+
+WaConfigs configs = WaConfigs(
+    languagePath: pathTo(&#39;./example/languages&#39;),
+);
+
+...
+
+Future&lt;String&gt; exampleLanguage() async {
+    rq.addParams({
+        &#39;exampleTString&#39;: TString(&#39;example.tstring&#39;).write(rq),
+        &#39;examplePathString&#39;: &#39;example.path&#39;.tr.write(rq),
+        &#39;exampleTranslateParams&#39;: &#39;example.params&#39;.tr.write(rq, {
+            &#39;name&#39;: &#39;Alexandre&#39;,
+            &#39;age&#39;: Random().nextInt(100),
+        }),
+    });
+    return renderTemplate(&#39;example/i18n&#39;);
+}
+
+...
+
+Widgets:
+
+&lt;div class=&quot;alert alert-success my-3&quot;&gt;
+    &lt;?= $t(&#39;example.params&#39;, {&#39;name&#39;: &#39;Jack&#39;, &#39;age&#39;: 20} ) ?&gt;
+&lt;/div&gt;
+</code>
+      </pre>
+    </div>
+  </div>
+</div>

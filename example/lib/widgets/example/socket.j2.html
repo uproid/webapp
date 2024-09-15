@@ -1,0 +1,37 @@
+<div class="row my-5">
+  <h3><?= $t('testWebSocket.title') ?></h3>
+  <div class="card card-primary bg-light my-3">
+    <div class="card-body">
+      <div class="row">
+        <div class="col">
+          <div class="form-group">
+            <label for="exampleFormControlTextarea1"><?= $t('testWebSocket.output') ?></label>
+            <textarea style="height: 350px" class="form-control" id="socket-output" rows="3"></textarea>
+          </div>
+        </div>
+        <template id="btn-template-client">
+          <button data-id="{id}" class="mt-1 d-flex socket-client-send btn-sm btn btn-outline-primary disable-wave">
+            {text}
+          </button>
+        </template>
+        <div id="client-list" class="col-auto pt-4"></div>
+      </div>
+      <div class="pt-3 row m-0 gap-1">
+        <button id="btn-socket-time" class="col-auto btn-sm btn btn-outline-primary disable-wave">
+          <?= $t('testWebSocket.getTime') ?>
+        </button>
+        <button id="btn-socket-fa" class="col-auto btn-sm btn btn-outline-primary disable-wave">
+          <?= $t('testWebSocket.randomMessage') ?>
+        </button>
+        <button id="btn-socket-clients" class="col-auto btn-sm btn btn-outline-primary disable-wave">
+          <?= $t('testWebSocket.clientLists') ?>
+        </button>
+        <div class="col align-self-end">
+          <button onclick="document.getElementById('socket-output').innerHTML='';document.getElementById('client-list').innerHTML=''" class="me-3 btn-sm btn btn-outline-danger float-end">
+            <?= $t('testWebSocket.clear') ?>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

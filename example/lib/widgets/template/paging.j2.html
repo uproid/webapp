@@ -1,0 +1,119 @@
+<div class="row align-items-center">
+  <div class="col-md-4 d-none d-md-block">
+    <div class="small">
+      <?= $t('pagination.showing') ?>
+      <?= (($v.page-1) * $v.pageSize)+1 if $v.total > 0 else 0 ?>
+      <?= $t('pagination.to') ?>
+      <?= $v.toEnd ?>
+      <?= $t('pagination.of') ?>
+      <?= $v.total ?>
+      <?= $t('pagination.entries') ?>
+    </div>
+  </div>
+  <? if($v.count > 1) ?>
+  <div class="col-md-8">
+    <ul class="pagination pagination-sm justify-content-end m-0">
+      <li class="page-item prev">
+        <a class="page-link <?= 'disabled' if $v.disableFirst ?>" href="?<?= $v.profix ?>=<?= 1 ?><?= $v.other ?>">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-chevron-double-left"
+            viewBox="0 0 16 16"
+            style="transform: rotate(<?= '180' if $t('dir')=='rtl' else '0' ?>deg)"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M8.354 1.646a.5.5 0 0 1 0 .708L2.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"
+            />
+            <path
+              fill-rule="evenodd"
+              d="M12.354 1.646a.5.5 0 0 1 0 .708L6.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"
+            />
+          </svg>
+        </a>
+      </li>
+      <li class="page-item prev">
+        <a
+          class="page-link  <?= 'disabled' if $v.disableFirst ?>"
+          href="?<?= $v.profix ?>=<?= $v.page - 1 ?><?= $v.other ?>"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-chevron-left"
+            viewBox="0 0 16 16"
+            style="transform: rotate(<?= '180' if $t('dir')=='rtl' else '0' ?>deg)"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"
+            />
+          </svg>
+        </a>
+      </li>
+      <? for index in range($v.rangeFrom, $v.rangeTo + 1) ?>
+      <? if index > 0 and index < $v.count+1 ?>
+      <li class="page-item <?= 'active fw-bold' if (index==$v.page) else '' ?>">
+        <a
+          class="page-link <?= 'bg-primary text-white' if (index==$v.page) else '' ?>"
+          href="?<?= $v.profix ?>=<?= index ?><?= $v.other ?>"
+          ><?= index ?></a
+        >
+      </li>
+      <? endif ?>
+      <? endfor ?>
+      <li class="page-item next">
+        <a
+          class="page-link <?= 'disabled' if $v.disableLast ?>"
+          href="?<?= $v.profix ?>=<?= $v.page + 1 ?><?= $v.other ?>"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-chevron-right"
+            viewBox="0 0 16 16"
+            style="transform: rotate(<?= '180' if $t('dir')=='rtl' else '0' ?>deg)"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"
+            />
+          </svg>
+        </a>
+      </li>
+      <li class="page-item next">
+        <a
+          class="page-link <?= 'disabled' if $v.disableLast ?>"
+          href="?<?= $v.profix ?>=<?= $v.count ?><?= $v.other ?>"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-chevron-double-right"
+            viewBox="0 0 16 16"
+            style="transform: rotate(<?= '180' if $t('dir')=='rtl' else '0' ?>deg)"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8 3.646 2.354a.5.5 0 0 1 0-.708"
+            />
+            <path
+              fill-rule="evenodd"
+              d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708"
+            />
+          </svg>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <? endif ?>
+</div>

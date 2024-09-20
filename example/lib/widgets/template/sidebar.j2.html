@@ -1,0 +1,141 @@
+<!-- Sidebar -->
+<aside id="sidebar" class="bg-body-tertiary overflow-auto">
+  <div class="h-100 p-2 position-fixed overflow-auto" style="width: 260px;">
+    <ul class="nav nav-pills flex-column mb-auto p-0">
+      <li class="nav-item">
+        <a
+          href="/"
+          class="nav-link <?= 'active' if $e.isPath('/') else '' ?>"
+          aria-current="page"
+        >
+          <?= $t('sidebar.home') ?>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          href="/info"
+          class="nav-link <?= 'active' if $e.isPath('/info') else '' ?>"
+          aria-current="page"
+        >
+          <?= $t('sidebar.info') ?>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          href="/example/form"
+          class="nav-link <?= 'active' if $e.isPath('/example/form') else '' ?>"
+          aria-current="page"
+        >
+          <?= $t('sidebar.formExample') ?>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          href="/example/cookie"
+          class="nav-link <?= 'active' if $e.isPath('/example/cookie') else '' ?>"
+          aria-current="page"
+        >
+          <?= $t('sidebar.cookieExample') ?>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          href="/example/route"
+          class="nav-link <?= 'active' if $e.isPath('/example/route') else '' ?>"
+          aria-current="page"
+        >
+          <?= $t('sidebar.routeExample') ?>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          href="/example/socket"
+          class="nav-link <?= 'active' if $e.isPath('/example/socket') else '' ?>"
+          aria-current="page"
+        >
+          <?= $t('sidebar.socketExample') ?>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          href="/example/email"
+          class="nav-link <?= 'active' if $e.isPath('/example/email') else '' ?>"
+          aria-current="page"
+        >
+          <?= $t('sidebar.emailExample') ?>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          href="/example/panel"
+          class="nav-link <?= 'active' if $e.isPath('/example/panel') else '' ?>"
+          aria-current="page"
+        >
+          <?= $t('sidebar.authExample') ?>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          href="/example/language"
+          class="nav-link <?= 'active' if $e.isPath('/example/language') else '' ?>"
+          aria-current="page"
+        >
+          <?= $t('sidebar.languageExample') ?>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link <?= 'active' if $e.isPath('/example/dump') else '' ?>"
+          data-bs-toggle="collapse"
+          href="#collapseExample"
+        >
+          <span><?= $t('sidebar.debugExample') ?></span>
+          <i class="fas fa-angle-down rotate-icon" style="transform: rotate(180deg);"></i>
+        </a>
+        <ul
+          class="collapse nav nav-pills ps-3 <?= 'show' if $e.isPath('/example/error') or $e.isPath('/example/dump') else '' ?>"
+          id="collapseExample"
+        >
+          <li class="nav-item w-100">
+            <a
+              href="/example/error"
+              class="nav-link <?= 'active' if $e.isPath('/example/error') else '' ?>"
+              aria-current="page"
+            >
+              <?= $t('sidebar.errorExample') ?>
+            </a>
+          </li>
+          <li class="nav-item w-100">
+            <a
+              href="/example/dump"
+              class="nav-link <?= 'active' if $e.isPath('/example/dump') else '' ?>"
+              aria-current="page"
+            >
+              <?= $t('sidebar.dumpExample') ?>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <? if mongoActive ?>
+      <li class="nav-item w-100"></li>
+        <a
+          href="/example/database"
+          class="nav-link <?= 'active' if $e.isPath('/example/database') else '' ?>"
+          aria-current="page"
+        >
+          <?= $t('sidebar.monogdbExample') ?>
+        </a>
+      </li>
+      <? endif ?>
+      <li class="nav-item w-100"></li>
+        <a
+          href="/example/pagination"
+          class="nav-link <?= 'active' if $e.isPath('/example/pagination') else '' ?>"
+          aria-current="page"
+        >
+          <?= $t('sidebar.paginationExample') ?>
+        </a>
+      </li>
+    </ul>
+  </div>
+</aside>

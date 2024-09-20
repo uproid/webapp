@@ -1,5 +1,5 @@
-import 'package:example/example.dart';
-import 'package:example/models/mock_user_model.dart';
+import '../example.dart';
+import '../models/mock_user_model.dart';
 import 'package:webapp/wa_route.dart';
 
 class ApiDocuments {

@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:webapp/cli/core/cmd_console.dart';
-import 'package:webapp/cli/core/cmd_controller.dart';
+import 'package:webapp/src/cli/core/cmd_console.dart';
+import 'package:webapp/src/cli/core/cmd_controller.dart';
 import 'package:webapp/src/wa_server.dart';
 
 class Main {

@@ -1,7 +1,8 @@
 import 'dart:io';
 
+import 'package:webapp/src/cli/core/cmd_console.dart';
+import 'package:webapp/src/cli/core/cmd_controller.dart';
 import 'package:webapp/src/tools/path.dart';
-import 'package:webapp/wa_cli.dart';
 import 'package:webapp/wa_server.dart';
 
 class ProjectCommands {

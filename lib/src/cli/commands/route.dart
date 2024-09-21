@@ -1,4 +1,5 @@
-import 'package:webapp/wa_cli.dart';
+import 'package:webapp/src/cli/core/cmd_console.dart';
+import 'package:webapp/src/cli/core/cmd_controller.dart';
 
 class RouteProject {
   Future<CmdConsole> route(CmdController controller) async {

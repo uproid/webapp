@@ -220,7 +220,8 @@ class WaApiController extends WaController {
       "openapi": "3.1.0",
       "info": {
         "title": "$title - OpenAPI 3.1",
-        "description": "Dart web Api documentation maker v${config.version}",
+        "description":
+            "WebApp Api documentation maker v${WaServer.info.version}",
         "contact": {"email": "info@uproid.com"},
         "license": {
           "name": "Apache 2.0",
@@ -230,10 +231,10 @@ class WaApiController extends WaController {
       },
       "externalDocs": {
         "description": "Find out more about WebApp",
-        "url": "http://uproid.com"
+        "url": rq.url("/")
       },
       "servers": [
-        {"url": config.url()}
+        {"url": rq.url("/")}
       ],
       "paths": {
         ...paths,

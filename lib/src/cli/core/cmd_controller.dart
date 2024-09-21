@@ -1,4 +1,4 @@
-import 'package:webapp/cli/core/cmd_manager.dart';
+import 'package:webapp/src/cli/core/cmd_manager.dart';
 
 import 'option.dart';
 import 'cmd_console.dart';

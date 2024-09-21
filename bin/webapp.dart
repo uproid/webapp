@@ -1,9 +1,9 @@
-import 'package:webapp/cli/commands/commands.dart';
-import 'package:webapp/cli/commands/create.dart';
-import 'package:webapp/cli/commands/main.dart';
-import 'package:webapp/cli/core/cmd_controller.dart';
-import 'package:webapp/cli/core/cmd_manager.dart';
-import 'package:webapp/cli/core/option.dart';
+import 'package:webapp/src/cli/commands/commands.dart';
+import 'package:webapp/src/cli/commands/create.dart';
+import 'package:webapp/src/cli/commands/main.dart';
+import 'package:webapp/src/cli/core/cmd_controller.dart';
+import 'package:webapp/src/cli/core/cmd_manager.dart';
+import 'package:webapp/src/cli/core/option.dart';
 
 void main(List<String> args) async {
   final cmdManager = CmdManager(

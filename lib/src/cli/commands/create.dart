@@ -1,7 +1,7 @@
 import 'dart:io';
+import 'package:webapp/src/cli/core/cmd_console.dart';
+import 'package:webapp/src/cli/core/cmd_controller.dart';
 import 'package:webapp/wa_tools.dart';
-import '../core/cmd_controller.dart';
-import '../core/cmd_console.dart';
 import 'package:http/http.dart' as http;
 import 'package:archive/archive_io.dart';
 

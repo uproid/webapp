@@ -7,7 +7,7 @@ docker compose up --build
 ## Examples
   Please refer to the documentation and the GitHub page for a comprehensive review of the examples. You can also view the example as a [Demo](https://webapp.uproid.com).
 
-### [View Examples](https://github.com/uproid/webapp/tree/master/example)  |  [Live Demo](https://webapp.uproid.com) | [Documentations](https://github.com/uproid/webapp/tree/master/docs)
+### [View Examples](https://github.com/uproid/webapp/tree/master/example)  |  [Live Demo](https://webapp.uproid.com) | [Documentations](https://github.com/uproid/webapp/tree/master/doc)
 
 ```dart
 import 'package:webapp/wa_console.dart';

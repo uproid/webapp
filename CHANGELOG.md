@@ -1,3 +1,16 @@
+## 1.0.30
+- Fixed https/http urls for requests
+- Fixed layout of example
+- Fixed bug Language directory
+- UnitTest
+- Added --path option to set path for create project in CLI
+    ```bash
+    webapp create --path ./project_path --name example
+    ```
+    ```bash
+    webapp create -p ./project_path -n example
+    ```
+
 ## 1.0.26
 - Improved the WebApp CLI
     - Fixed bug for OpenApi

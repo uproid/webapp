@@ -127,4 +127,21 @@ class ProjectCommands {
 
     return CmdConsole(help, Colors.success);
   }
+
+  Future<CmdConsole> test(CmdController controller) async {
+    var report = controller.getOption('reporter', def: '');
+
+    await Process.start(
+      'dart',
+      [
+        'test',
+        if (report.isNotEmpty) ...['--reporter', '$report'],
+      ],
+      environment: {
+        'WEBAPP_IS_TEST': 'true',
+      },
+      mode: ProcessStartMode.inheritStdio,
+    );
+    return CmdConsole("", Colors.off);
+  }
 }

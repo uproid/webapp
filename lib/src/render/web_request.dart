@@ -1156,11 +1156,9 @@ class WebRequest {
       uri = uri.replace(queryParameters: params);
     }
 
-    /// Force to HTTPS for all URLs in Deployment
-    /// When the app is localhost app does not load from HTTPS
-    if (!WaServer.config.isLocalDebug) {
-      uri = uri.replace(scheme: 'https');
-    }
+    /// When the request is HTTPS, the URL should be HTTPS as well.
+    uri = uri.replace(scheme: uri.scheme);
+
     var url = uri.toString();
     return url;
   }

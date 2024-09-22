@@ -31,12 +31,19 @@ class CreateProject {
       );
     }
 
+    var path = controller.getOption('path', def: './$name');
+    path = pathTo(path);
+
+    if (Directory(path).existsSync()) {
+      return CmdConsole("This path already exists! ($path)", Colors.error);
+    }
+
     String pathZip = await CmdConsole.progress<String>("Waitng...", () async {
       return downloadFile(projectUrl, savePath);
     });
 
     if (pathZip.isNotEmpty) {
-      var dirPrject = await extract("./$name");
+      var dirPrject = await extract(path);
       if (dirPrject.isNotEmpty) {
         await updatePacakge(
           dirPrject,

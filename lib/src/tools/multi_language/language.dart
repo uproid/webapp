@@ -29,6 +29,7 @@ class MultiLanguage {
   /// key-value pairs from the JSON files.
   Future<Map<String, Map<String, String>>> init() async {
     final directory = Directory(languagePath);
+    print(directory.path);
     Map<String, Map<String, String>> result = await _findFiles(directory, {});
     return result;
   }
@@ -47,6 +48,12 @@ class MultiLanguage {
     Directory dir,
     Map<String, Map<String, String>> result,
   ) async {
+    if (!dir.existsSync()) {
+      Console.e(
+        {'error': 'Directory of languages does not exist: ${dir.path}'},
+      );
+      return {};
+    }
     var entities = dir.listSync();
     for (var entry in entities) {
       if (entry is File) {

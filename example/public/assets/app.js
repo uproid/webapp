@@ -5,8 +5,16 @@ toggler.addEventListener("click",function(){
 
 });
 
+var lastWindowWidth = 0;
+
 window.addEventListener('resize', checkScreenSize);
 function checkScreenSize(isFirstLoad = false) {
+    if(lastWindowWidth === window.innerWidth){
+        return;
+    }
+    
+    lastWindowWidth = window.innerWidth;
+
     const element = document.getElementById("sidebar");
     if (window.innerWidth < 750) {
         if(isFirstLoad){

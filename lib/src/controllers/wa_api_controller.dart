@@ -23,7 +23,7 @@ class WaApiController extends WaController {
   /// incoming [WebRequest] `rq`.
   ///
   /// These functions are used to define the routes available for the API.
-  List<Future<List<WebRoute>> Function(WebRequest rq)> router;
+  WaServer server;
 
   /// The title of the API, used in generated documentation.
   String title;
@@ -41,7 +41,7 @@ class WaApiController extends WaController {
   /// The [security] parameter defaults to `'apiKey'`.
   WaApiController(
     super.rq, {
-    required this.router,
+    required this.server,
     required this.title,
     this.security = 'apiKey',
   });
@@ -61,12 +61,7 @@ class WaApiController extends WaController {
     }
 
     var paths = {};
-    List<WebRoute> routes = [];
-
-    for (var route in router) {
-      var addRoute = await route(rq);
-      routes = [...routes, ...addRoute];
-    }
+    List<WebRoute> routes = await server.getAllRoutes(rq);
 
     var webRoutes = _convert(routes, '', null);
 

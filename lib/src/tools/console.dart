@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:logger/logger.dart';
 
 /// A utility class for logging messages with different severity levels.
@@ -13,7 +14,12 @@ import 'package:logger/logger.dart';
 /// ```
 class Console {
   /// The [Logger] instance used for managing log messages.
-  static final _logger = Logger(level: Level.debug);
+  static final _logger = Logger(
+    level: isTestRunning() ? Level.off : Level.debug,
+    printer: PrettyPrinter(
+      printEmojis: false,
+    ),
+  );
 
   /// Logs a warning message.
   ///
@@ -76,5 +82,9 @@ class Console {
     bool inDebugMode = false;
     assert(inDebugMode = true);
     return inDebugMode;
+  }
+
+  static bool isTestRunning() {
+    return Platform.environment['WEBAPP_IS_TEST'] == 'true';
   }
 }

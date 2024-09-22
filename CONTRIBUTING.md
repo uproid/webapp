@@ -87,7 +87,7 @@ If you have any questions or need further assistance, please reach out to the ma
 
 ## Additional Resources
 
-- [Project Wiki/Documentation](https://github.com/uproid/webapp/tree/master/docs)
+- [Project Wiki/Documentation](https://github.com/uproid/webapp/tree/master/doc)
 - [Coding Style Guide](https://dart.dev/effective-dart/style)
 
 Thank you for contributing to WebApp!

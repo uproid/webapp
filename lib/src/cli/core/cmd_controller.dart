@@ -22,13 +22,13 @@ class CmdController {
     this.manager = manager;
   }
 
-  String getOption(String name) {
+  String getOption(String name, {String def = ''}) {
     for (var option in options) {
       if (option.name == name || option.shortName == name) {
-        return option.value;
+        return option.value.isEmpty ? def : option.value;
       }
     }
-    return '';
+    return def;
   }
 
   bool existsOption(String name) {

@@ -15,19 +15,19 @@ The WebApp package is crafted to facilitate:
 - **Comprehensive Tooling:** Simplify web development with built-in utilities for handling common data structures and operations.
 
 1. [Overview](#webapp-package-overview)
-2. [Installing](/docs/1.Installing.md)
-3. [Example: Start Server](/docs/2.Example-start-server.md)
-4. [Routing](/docs/3.Routing.md)
-5. [Controllers](/docs/4.Controllers.md)
-6. [Localization](/docs/5.Localization.md)
-7. [Form Validators](/docs/6.FormValidators.md)
-8. [Jinja Template Engine](/docs/7.jinja-template-engin.md)
-9. [WebSocket](/docs/8.WebSocket.md)
-10. [Cron Job](/docs/9.CronJob.md)
-11. [Database](/docs/10.Database.md)
-12. [Database Queries](/docs/11.DQ-Database-Queries.md)
-13. [MongoDB Connection](/docs/12.Mongo-db-connection.md)
-14. [Open API Documentation](/docs/13.open-api-documentation.md)
+2. [Installing](/1.Installing.md)
+3. [Example: Start Server](/doc/2.Example-start-server.md)
+4. [Routing](/doc/3.Routing.md)
+5. [Controllers](/doc/4.Controllers.md)
+6. [Localization](/doc/5.Localization.md)
+7. [Form Validators](/doc/6.FormValidators.md)
+8. [Jinja Template Engine](/doc/7.jinja-template-engin.md)
+9. [WebSocket](/doc/8.WebSocket.md)
+10. [Cron Job](/doc/9.CronJob.md)
+11. [Database](/doc/10.Database.md)
+12. [Database Queries](/doc/11.DQ-Database-Queries.md)
+13. [MongoDB Connection](/doc/12.Mongo-db-connection.md)
+14. [Open API Documentation](/doc/13.open-api-documentation.md)
 
 ## Features
 

@@ -20,7 +20,12 @@ void main(List<String> args) async {
           name: 'version',
           description: 'WebApp Version',
           shortName: 'v',
-        )
+        ),
+        Option(
+          name: 'update',
+          description: 'Update WebApp',
+          shortName: 'u',
+        ),
       ],
       run: (controller) => Main().main(controller),
     ),
@@ -29,21 +34,17 @@ void main(List<String> args) async {
         'create',
         description: 'Make new project',
         options: [
+          /// TODO We have already just one template ('example-webapp-docker')
           // Option(
           //   name: 'template',
           //   shortName: 't',
           //   description: 'Template name',
           // ),
-          // Option(
-          //   name: 'version',
-          //   shortName: 'v',
-          //   description: 'Version',
-          // ),
-          // Option(
-          //   name: 'path',
-          //   shortName: 'p',
-          //   description: 'Path of the project',
-          // ),
+          Option(
+            name: 'path',
+            shortName: 'p',
+            description: 'Path of the project',
+          ),
           Option(
             name: 'name',
             shortName: 'n',
@@ -55,52 +56,42 @@ void main(List<String> args) async {
             description: 'Use docker',
           ),
         ],
-        run: (controller) {
-          return CreateProject().create(controller);
-        },
+        run: (controller) => CreateProject().create(controller),
       ),
-      // CmdController(
-      //   'route',
-      //   description: 'Make new project',
-      //   options: [
-      //     Option(
-      //       name: 'list',
-      //       shortName: 'l',
-      //       description: 'Get list of routes',
-      //     ),
-      //   ],
-      //   run: (controller) {
-      //     return RouteProject().route(controller);
-      //   },
-      // ),
       CmdController(
         'get',
         description: 'Get pacakges of project, (dart pub get)',
-        run: (controller) {
-          return ProjectCommands().get(controller);
-        },
+        run: (controller) => ProjectCommands().get(controller),
         options: [],
       ),
       CmdController(
         'runner',
         description:
             'Build runner of project, (dart pub run build_runner build)',
-        run: (controller) {
-          return ProjectCommands().runner(controller);
-        },
+        run: (controller) => ProjectCommands().runner(controller),
         options: [],
       ),
       CmdController(
         'run',
         description: 'Run project, (dart run)',
-        run: (controller) {
-          return ProjectCommands().run(controller);
-        },
+        run: (controller) => ProjectCommands().run(controller),
         options: [
           Option(
             name: 'path',
             shortName: 'p',
             description: 'Path of app file',
+          ),
+        ],
+      ),
+      CmdController(
+        'test',
+        description: 'Unit test of project, (dart test)',
+        run: (controller) => ProjectCommands().test(controller),
+        options: [
+          Option(
+            name: 'reporter',
+            shortName: 'r',
+            description: 'Set how to print test results',
           ),
         ],
       ),

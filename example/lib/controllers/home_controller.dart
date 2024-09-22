@@ -10,7 +10,6 @@ import 'package:webapp/wa_tools.dart';
 import 'package:webapp/wa_ui.dart';
 import '../example.dart';
 import '../models/mock_user_model.dart';
-import '../route/web_route.dart';
 
 class HomeController extends WaController {
   HomeController(super.rq);
@@ -86,7 +85,7 @@ class HomeController extends WaController {
   }
 
   Future<String> exampleRoute() async {
-    var allRoutes = await getWebRoute(rq);
+    var allRoutes = await server.getAllRoutes(rq);
 
     List<Map> convert(List<WebRoute> routes, String parentPath, hasAuth) {
       var result = <Map>[];

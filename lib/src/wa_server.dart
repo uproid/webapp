@@ -67,6 +67,17 @@ class WaServer {
     return this;
   }
 
+  /// Get routing list of Server
+  /// Here you can get all routing of server that added to server
+  /// Returns a list of [WebRoute] instances.
+  Future<List<WebRoute>> getAllRoutes(WebRequest rq) async {
+    List<WebRoute> routing = [];
+    for (var webRoute in _webRoutes) {
+      routing.addAll(await webRoute(rq));
+    }
+    return routing;
+  }
+
   /// Gets the MongoDB database instance.
   ///
   /// If the database is not connected, this method will attempt to connect to MongoDB.
@@ -231,5 +242,5 @@ class WaServer {
 /// A class that holds version information for the server.
 class _Info {
   /// The version of the server.
-  final String version = '1.0.29';
+  final String version = '1.0.30';
 }

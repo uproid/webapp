@@ -23,6 +23,8 @@ class CmdConsole {
         break;
       case Colors.none:
         print(output);
+      case Colors.off:
+        break;
       default:
         print(output);
     }
@@ -184,4 +186,5 @@ enum Colors {
   error,
   success,
   info,
+  off,
 }

@@ -35,5 +35,5 @@ function createRipple(e) {
     // Remove the ripple element after some time
     setTimeout(function () {
         circle.remove();
-    }, 2000);
+    }, 1000);
 }

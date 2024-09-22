@@ -13,6 +13,15 @@ class Main {
       );
     }
 
+    if (controller.existsOption('update')) {
+      await Process.start(
+        'dart',
+        ['pub', 'global', 'activate', 'webapp'],
+        mode: ProcessStartMode.inheritStdio,
+      );
+      return CmdConsole("Update WebApp");
+    }
+
     return CmdConsole(
       controller.manager.getHelp(),
       controller.existsOption('help') ? Colors.none : Colors.warnnig,

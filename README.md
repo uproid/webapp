@@ -11,7 +11,7 @@
 
 WebApp Package is a robust Dart package designed to streamline the development of powerful web applications. Whether you're building APIs, managing databases, creating dynamic frontend widgets, or implementing real-time features, the WebApp package offers a comprehensive suite of tools to accelerate your development process. With built-in support for MongoDB, WebSockets, and seamless integration with Nginx, this package is ideal for developers seeking efficiency and scalability in their web projects.
 
-#### [View Examples](https://github.com/uproid/webapp/tree/master/example)  |  [Live Demo](https://webapp.uproid.com) | [Documentations](https://github.com/uproid/webapp/tree/master/docs)
+#### [View Examples](https://github.com/uproid/webapp/tree/master/example)  |  [Live Demo](https://webapp.uproid.com) | [Documentations](https://github.com/uproid/webapp/tree/master/doc)
 
 ## Purpose
 
@@ -26,19 +26,19 @@ The WebApp package is crafted to facilitate:
 - **Comprehensive Tooling:** Simplify web development with built-in utilities for handling common data structures and operations.
 
 1. [Overview](#webapp-package-overview)
-2. [Installing](https://github.com/uproid/webapp/tree/master/docs/1.Installing.md)
-3. [Example: Start Server](https://github.com/uproid/webapp/tree/master/docs/2.Example-start-server.md)
-4. [Routing](https://github.com/uproid/webapp/tree/master/docs/3.Routing.md)
-5. [Controllers](https://github.com/uproid/webapp/tree/master/docs/4.Controllers.md)
-6. [Localization](https://github.com/uproid/webapp/tree/master/docs/5.Localization.md)
-7. [Form Validators](https://github.com/uproid/webapp/tree/master/docs/6.FormValidators.md)
-8. [Jinja Template Engine](https://github.com/uproid/webapp/tree/master/docs/7.jinja-template-engin.md)
-9. [WebSocket](https://github.com/uproid/webapp/tree/master/docs/8.WebSocket.md)
-10. [Cron Job](https://github.com/uproid/webapp/tree/master/docs/9.CronJob.md)
-11. [Database](https://github.com/uproid/webapp/tree/master/docs/10.Database.md)
-12. [Database Queries](https://github.com/uproid/webapp/tree/master/docs/11.DQ-Database-Queries.md)
-13. [MongoDB Connection](https://github.com/uproid/webapp/tree/master/docs/12.Mongo-db-connection.md)
-14. [Open API Documentation](https://github.com/uproid/webapp/tree/master/docs/13.open-api-documentation.md)
+2. [Installing](https://github.com/uproid/webapp/tree/master/doc/1.Installing.md)
+3. [Example: Start Server](https://github.com/uproid/webapp/tree/master/doc/2.Example-start-server.md)
+4. [Routing](https://github.com/uproid/webapp/tree/master/doc/3.Routing.md)
+5. [Controllers](https://github.com/uproid/webapp/tree/master/doc/4.Controllers.md)
+6. [Localization](https://github.com/uproid/webapp/tree/master/doc/5.Localization.md)
+7. [Form Validators](https://github.com/uproid/webapp/tree/master/doc/6.FormValidators.md)
+8. [Jinja Template Engine](https://github.com/uproid/webapp/tree/master/doc/7.jinja-template-engin.md)
+9. [WebSocket](https://github.com/uproid/webapp/tree/master/doc/8.WebSocket.md)
+10. [Cron Job](https://github.com/uproid/webapp/tree/master/doc/9.CronJob.md)
+11. [Database](https://github.com/uproid/webapp/tree/master/doc/10.Database.md)
+12. [Database Queries](https://github.com/uproid/webapp/tree/master/doc/11.DQ-Database-Queries.md)
+13. [MongoDB Connection](https://github.com/uproid/webapp/tree/master/doc/12.Mongo-db-connection.md)
+14. [Open API Documentation](https://github.com/uproid/webapp/tree/master/doc/13.open-api-documentation.md)
 
 ## Features
 

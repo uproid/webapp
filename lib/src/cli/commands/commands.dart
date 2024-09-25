@@ -34,6 +34,7 @@ class ProjectCommands {
 
     var defaultApp = [
       'app.dart',
+      'server.dart',
       'dart.dart',
       'example.dart',
       'run.dart',
@@ -62,6 +63,7 @@ class ProjectCommands {
     } else {
       print("Running project from: $path");
     }
+
     var proccess = await Process.start(
       'dart',
       [
@@ -70,6 +72,7 @@ class ProjectCommands {
         path,
       ],
       mode: ProcessStartMode.inheritStdio,
+      workingDirectory: File(path).parent.parent.path,
     );
 
     var help = "Project is running (${proccess.pid})...\n\n" +

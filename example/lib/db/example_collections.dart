@@ -1,4 +1,4 @@
-import '../example.dart';
+import '../app.dart';
 import '../models/example_model.dart';
 import 'package:webapp/wa_model.dart';
 

@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'dart:math';
+import '../configs/setting.dart';
+
 import '../db/example_collections.dart';
 import '../models/example_model.dart';
 import 'package:webapp/wa_mail.dart';
@@ -8,7 +10,7 @@ import 'package:webapp/wa_route.dart';
 import 'package:webapp/wa_server.dart';
 import 'package:webapp/wa_tools.dart';
 import 'package:webapp/wa_ui.dart';
-import '../example.dart';
+import '../app.dart';
 import '../models/mock_user_model.dart';
 
 class HomeController extends WaController {
@@ -329,6 +331,8 @@ class HomeController extends WaController {
       ;
     }
 
+    rq.addParam('languages', Setting.languages);
+
     rq.addParams({
       'title': 'logo.title',
       'year': DateTime.now().year,
@@ -385,6 +389,8 @@ class HomeController extends WaController {
     if (rq.uri.pathSegments.length > 1) {
       redirectTo = joinPaths(rq.uri.pathSegments.sublist(1));
     }
+    redirectTo =
+        rq.uri.replace(path: redirectTo, scheme: null, host: null).toString();
 
     return rq.redirect("/$redirectTo");
   }

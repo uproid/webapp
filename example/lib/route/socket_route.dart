@@ -1,6 +1,6 @@
 import 'package:webapp/wa_server.dart';
 
-import '../example.dart';
+import '../app.dart';
 
 Map<String, SocketEvent> getSocketRoute() {
   var count = 0;

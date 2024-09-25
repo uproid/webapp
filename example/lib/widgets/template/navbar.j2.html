@@ -54,22 +54,15 @@
             >
               <?= $e.ln | upper ?>
             </button>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu"  dir="ltr" style="max-height: 300px; overflow-y: auto">
+              <? for key, language in languages ?>
               <li>
-                <a class="dropdown-item" href="<?= $e.urlToLanguage('en') ?>">
-                  <?= $t('languages.english') ?>
+                <a class="dropdown-item <?= 'active' if $e.ln == key ?>" href="<?= $e.urlToLanguage(key) ?>" style="display: flex; align-items: center;">
+                  <b class="me-2"><?= language.flag ?></b>
+                  <span><?= language.name ?></span>
                 </a>
               </li>
-              <li>
-                <a class="dropdown-item" href="<?= $e.urlToLanguage('fa') ?>">
-                  <?= $t('languages.persian') ?>
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="<?= $e.urlToLanguage('nl') ?>">
-                  <?= $t('languages.dutch') ?>
-                </a>
-              </li>
+              <? endfor ?>
             </ul>
           </div>
         </div>

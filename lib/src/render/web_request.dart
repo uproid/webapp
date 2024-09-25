@@ -841,6 +841,7 @@ class WebRequest {
     int status = HttpStatus.movedTemporarily,
     bool checkApiPath = true,
   }) async {
+    path = path.replaceAll('//', '/');
     if (isClosed) {
       return '';
     }
@@ -855,12 +856,14 @@ class WebRequest {
       return "Wait to redirect!?";
     }
 
+    var uri = Uri.parse(path);
     if (checkApiPath && isApiEndpoint) {
-      path = joinPaths(['/api', path]);
+      uri = uri.replace(pathSegments: ['api', ...uri.pathSegments]);
     }
 
+    uri = uri.normalizePath();
     await response.redirect(
-      Uri.parse(path),
+      uri,
       status: status,
     );
     return "Wait to redirect!?";
@@ -977,15 +980,20 @@ class WebRequest {
         return url(path);
       },
       'urlToLanguage': (String language) {
+        var res = '';
         if (_rq.requestedUri.pathSegments.isNotEmpty &&
             _rq.requestedUri.pathSegments[0] == language) {
-          return url(_rq.requestedUri.path);
+          res = url(_rq.requestedUri.path);
         } else if (_rq.requestedUri.pathSegments.isNotEmpty &&
             _rq.requestedUri.pathSegments[0] == getLanguage()) {
           var paths = _rq.requestedUri.pathSegments.sublist(1);
-          return url('/$language/${paths.join('/')}');
+          res = url('/$language/${paths.join('/')}');
+        } else {
+          res = url('/$language${_rq.requestedUri.path}');
         }
-        return url('/$language${_rq.requestedUri.path}');
+
+        res = Uri.decodeFull(uri.replace(path: res).toString());
+        return res;
       },
       'urlParam': (String path, Map<String, String> params) {
         return url(path, params: params);

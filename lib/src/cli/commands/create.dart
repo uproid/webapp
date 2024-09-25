@@ -31,11 +31,17 @@ class CreateProject {
       );
     }
 
-    var path = controller.getOption('path', def: './$name');
-    path = pathTo(path);
+    var path = controller.getOption('path', def: '$name');
+    path = Uri.parse(path).toFilePath(windows: Platform.isWindows);
 
+    CmdConsole.write(path, Colors.success);
     if (Directory(path).existsSync()) {
       return CmdConsole("This path already exists! ($path)", Colors.error);
+    }
+
+    Directory(path).createSync(recursive: true);
+    if (!Directory(path).existsSync()) {
+      return CmdConsole("Error creating this path: $path", Colors.error);
     }
 
     String pathZip = await CmdConsole.progress<String>("Waitng...", () async {

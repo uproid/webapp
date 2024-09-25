@@ -29,7 +29,6 @@ class MultiLanguage {
   /// key-value pairs from the JSON files.
   Future<Map<String, Map<String, String>>> init() async {
     final directory = Directory(languagePath);
-    print(directory.path);
     Map<String, Map<String, String>> result = await _findFiles(directory, {});
     return result;
   }

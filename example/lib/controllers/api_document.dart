@@ -1,4 +1,4 @@
-import '../example.dart';
+import '../app.dart';
 import '../models/mock_user_model.dart';
 import 'package:webapp/wa_route.dart';
 

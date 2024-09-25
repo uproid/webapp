@@ -51,23 +51,35 @@ class CmdManager {
   }
 
   String getHelp() {
-    var help = "Available commands:\n";
-
+    var help = "Available commands:";
+    var index = 1;
     for (var controller in [main, ...controllers]) {
       if (controller.name.isNotEmpty) {
-        help += "> ${controller.name}:\t${controller.description}\n\n";
+        help += "${index++}) ${controller.name}:\t${controller.description}\n";
       } else {
-        help += "${controller.description}\n\n";
+        help += "${controller.description}\n";
+      }
+      if (controller.options.isNotEmpty) {
+        help += "\n";
       }
 
+      var indexOption = 0;
       for (var option in controller.options) {
-        help += "   --${option.name}:\t${option.description}\n";
+        indexOption++;
+
+        help += "      --${option.name}\t${option.description}\n";
         if (option.shortName.isNotEmpty) {
-          help += "   -${option.shortName}\n\n";
+          help += "      -${option.shortName}\n";
         } else {
           help += "\n";
         }
+
+        if (indexOption < controller.options.length) {
+          help += "\n";
+        }
       }
+
+      help += "${'─' * 30}\n";
     }
 
     return help;

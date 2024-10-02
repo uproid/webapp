@@ -841,7 +841,6 @@ class WebRequest {
     int status = HttpStatus.movedTemporarily,
     bool checkApiPath = true,
   }) async {
-    path = path.replaceAll('//', '/');
     if (isClosed) {
       return '';
     }
@@ -855,6 +854,8 @@ class WebRequest {
       );
       return "Wait to redirect!?";
     }
+
+    path = path.replaceAll('//', '/');
 
     var uri = Uri.parse(path);
     if (checkApiPath && isApiEndpoint) {

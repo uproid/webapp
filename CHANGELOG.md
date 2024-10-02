@@ -1,3 +1,6 @@
+## 1.0.32
+- Fixed the redirection for external links/URI
+
 ## 1.0.31
 - Fixed WebApp CLI to create new project in new paths
 - Fixed example

@@ -20,7 +20,7 @@ WaConfigs configs = WaConfigs(
     port: '27017',
     user: 'root',
   ),
-  port: 8085,
+  port: (env['DOMAIN_PORT'] ?? '8085').toInt(def: 8085),
 );
 
 WaServer server = WaServer(configs: configs);

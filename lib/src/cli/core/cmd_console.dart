@@ -97,24 +97,41 @@ class CmdConsole {
 
   static Future<T> progress<T>(
     String message,
-    Future<T> Function() action,
-  ) async {
+    Future<T> Function() action, {
+    ProgressType type = ProgressType.bar,
+  }) async {
     bool isLoading = true;
     bool isWindows = Platform.isWindows;
 
     Future<void> showSpinner() async {
       String spinner(int index) {
-        var res = '';
-        var back = '█';
-        var front = '░';
-        for (var i = 0; i < 30; i++) {
-          if (i == index) {
-            res += front;
-          } else {
-            res += back;
+        if (type == ProgressType.bar) {
+          var res = '';
+          var back = '█';
+          var front = '░';
+          for (var i = 0; i < 30; i++) {
+            if (i == index) {
+              res += front;
+            } else {
+              res += back;
+            }
           }
+          return res;
+        } else if (type == ProgressType.circle) {
+          var rotating = '|/-\\';
+          return rotating[(index ~/ 1.5) % rotating.length] + ' ';
+        } else {
+          var res = '|';
+          for (var i = 0; i < 30; i++) {
+            if (i == index) {
+              res += '>';
+            } else {
+              res += '-';
+            }
+          }
+          res += '|';
+          return res;
         }
-        return res;
       }
 
       int spinnerIndex = 0;
@@ -126,7 +143,11 @@ class CmdConsole {
 
       while (isLoading) {
         stdout.write('\r$message ${spinner(spinnerIndex)}');
-        spinnerIndex = (spinnerIndex + 1) % 30;
+        if (type == ProgressType.bar) {
+          spinnerIndex = (spinnerIndex + 1) % 30;
+        } else {
+          spinnerIndex++;
+        }
         await Future.delayed(Duration(milliseconds: 50));
       }
     }
@@ -187,4 +208,10 @@ enum Colors {
   success,
   info,
   off,
+}
+
+enum ProgressType {
+  spinner,
+  bar,
+  circle,
 }

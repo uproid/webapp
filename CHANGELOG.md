@@ -1,3 +1,10 @@
+## 1.0.33
+- Added build command for CLI:
+    ```bash
+    webapp build -h
+    ```
+- Added extentions for File & Directory classes to copy directory and working with file names
+
 ## 1.0.32
 - Fixed the redirection for external links/URI
 

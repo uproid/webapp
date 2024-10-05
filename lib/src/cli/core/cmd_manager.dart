@@ -50,10 +50,11 @@ class CmdManager {
     CmdConsole.write(getHelp(), Colors.warnnig);
   }
 
-  String getHelp() {
-    var help = "Available commands:";
+  String getHelp([List<CmdController>? myControllers]) {
+    var selectedControllers = myControllers ?? [...this.controllers, main];
+    var help = "Available commands:\n";
     var index = 1;
-    for (var controller in [main, ...controllers]) {
+    for (var controller in selectedControllers) {
       if (controller.name.isNotEmpty) {
         help += "${index++}) ${controller.name}:\t${controller.description}\n";
       } else {

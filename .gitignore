@@ -8,4 +8,5 @@ mongodb
 ./pubspec.lock
 ./example/mongodb
 .DS_Store
+webapp_build
 

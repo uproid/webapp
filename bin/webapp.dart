@@ -34,12 +34,6 @@ void main(List<String> args) async {
         'create',
         description: 'Make new project',
         options: [
-          /// TODO We have already just one template ('example-webapp-docker')
-          // Option(
-          //   name: 'template',
-          //   shortName: 't',
-          //   description: 'Template name',
-          // ),
           Option(
             name: 'path',
             shortName: 'p',
@@ -80,6 +74,54 @@ void main(List<String> args) async {
             name: 'path',
             shortName: 'p',
             description: 'Path of app file',
+          ),
+        ],
+      ),
+      CmdController(
+        'build',
+        description: 'Build Project (dart compile exe)',
+        run: (controller) => ProjectCommands().build(controller),
+        options: [
+          Option(
+            name: 'appPath',
+            shortName: 'a',
+            description: 'Path of app file',
+          ),
+          Option(
+            name: 'langPath',
+            shortName: 'l',
+            description: 'Languages path',
+          ),
+          Option(
+            name: 'publicPath',
+            shortName: 'p',
+            description: 'Public path',
+          ),
+          Option(
+            name: 'widgetPath',
+            shortName: 'w',
+            description: 'Widgets path',
+          ),
+          Option(
+            name: 'envPath',
+            shortName: 'e',
+            description: 'Envitoment file (.env) path',
+          ),
+          Option(
+            name: 'output',
+            shortName: 'o',
+            description: 'Output path',
+            value: './webapp_build',
+          ),
+          Option(
+            name: 'type',
+            shortName: 't',
+            description: 'Type of build (zip, exe)',
+          ),
+          Option(
+            name: 'help',
+            shortName: 'h',
+            description: 'Show the help',
           ),
         ],
       ),

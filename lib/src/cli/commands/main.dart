@@ -1,13 +1,12 @@
 import 'dart:io';
 
-import 'package:webapp/src/cli/core/cmd_console.dart';
-import 'package:webapp/src/cli/core/cmd_controller.dart';
+import 'package:capp/capp.dart';
 import 'package:webapp/src/wa_server.dart';
 
 class Main {
-  Future<CmdConsole> main(CmdController controller) async {
+  Future<CappConsole> main(CappController controller) async {
     if (controller.existsOption('version')) {
-      return CmdConsole(
+      return CappConsole(
         "WebApp Version: v${WaServer.info.version}\n" +
             "Dart Version: v${Platform.version}",
       );
@@ -19,12 +18,12 @@ class Main {
         ['pub', 'global', 'activate', 'webapp'],
         mode: ProcessStartMode.inheritStdio,
       );
-      return CmdConsole("Update WebApp");
+      return CappConsole("Update WebApp");
     }
 
-    return CmdConsole(
+    return CappConsole(
       controller.manager.getHelp(),
-      controller.existsOption('help') ? Colors.none : Colors.warnnig,
+      controller.existsOption('help') ? CappColors.none : CappColors.warnnig,
     );
   }
 }

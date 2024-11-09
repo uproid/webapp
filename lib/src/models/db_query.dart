@@ -114,10 +114,22 @@ class DQ {
   /// var query = DQ.like('pattern', options: 'i'); // { '\$regex': 'pattern', '\$options': 'i' }
   /// ```
   static Map<String, Object?> like(String value, {String options = 'i'}) {
+    value = _escapeRegex(value);
+
     return {
       '\$regex': value,
       '\$options': options,
     };
+  }
+
+  // Escape all special regex characters
+  static String _escapeRegex(String input) {
+    return input.replaceAllMapped(
+      RegExp(r'[.*+?^${}()|[\]\\]'),
+      (match) {
+        return match.group(0) != null ? "\\${match.group(0)}" : '';
+      },
+    );
   }
 
   /// Constructs a query for a specific field.

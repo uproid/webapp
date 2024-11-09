@@ -1,17 +1,16 @@
-import 'package:webapp/src/cli/core/cmd_console.dart';
-import 'package:webapp/src/cli/core/cmd_controller.dart';
+import 'package:capp/capp.dart';
 
 class RouteProject {
-  Future<CmdConsole> route(CmdController controller) async {
+  Future<CappConsole> route(CappController controller) async {
     var showList = controller.existsOption('list');
     if (showList) {
       return _showList();
     }
 
-    return CmdConsole("Route project", Colors.success);
+    return CappConsole("Route project", CappColors.success);
   }
 
-  Future<CmdConsole> _showList() async {
-    return CmdConsole("List of routes", Colors.info);
+  Future<CappConsole> _showList() async {
+    return CappConsole("List of routes", CappColors.info);
   }
 }

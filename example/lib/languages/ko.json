@@ -133,5 +133,11 @@
     "sidebar.paginationExample": "페이지네이션 예제",
     "project.contributing": "기여",
     "project.documentation": "문서",
-    "project.github": "GitHub"
+    "project.github": "GitHub",
+    "error.field.required": "이 필드는 필수입니다",
+    "error.field.email": "잘못된 이메일 주소입니다",
+    "error.field": "유효하지 않은 값",
+    "error.field.min": "값은 {0} 이상이어야 합니다",
+    "error.field.max": "값은 {0} 이하여야 합니다",
+    "error.invalid.password": "비밀번호가 유효하지 않습니다, [숫자/문자(대문자+소문자)/?@가 포함되어야 합니다"
 }

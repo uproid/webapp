@@ -115,4 +115,8 @@ extension StringValidator on String {
   bool get isInt {
     return toInt(def: -99999999) != -99999999;
   }
+
+  bool get isDouble {
+    return double.tryParse(this) != null;
+  }
 }

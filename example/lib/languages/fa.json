@@ -133,5 +133,11 @@
   "sidebar.paginationExample": "مثال صفحه‌بندی",
   "project.contributing": "مشارکت",
   "project.documentation": "مستندات",
-  "project.github": "گیت‌هاب"
+  "project.github": "گیت‌هاب",
+  "error.field.required": "این فیلد الزامی است",
+  "error.field.email": "آدرس ایمیل نامعتبر است",
+  "error.field": "مقدار نامعتبر",
+  "error.field.min": "مقدار باید بیشتر از یا برابر با {0} باشد",
+  "error.field.max": "مقدار باید کمتر از یا برابر با {0} باشد",
+  "error.invalid.password": "رمز عبور نامعتبر است، باید شامل [عدد/حروف (بزرگ و کوچک)/؟@"
 }

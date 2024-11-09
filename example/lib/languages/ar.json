@@ -133,5 +133,11 @@
     "sidebar.paginationExample": "مثال على الترقيم",
     "project.contributing": "المساهمة",
     "project.documentation": "التوثيق",
-    "project.github": "GitHub"
+    "project.github": "GitHub",
+    "error.field.required": "هذا الحقل مطلوب",
+    "error.field.email": "عنوان البريد الإلكتروني غير صالح",
+    "error.field": "قيمة غير صالحة",
+    "error.field.min": "يجب أن تكون القيمة أكبر من أو تساوي {0}",
+    "error.field.max": "يجب أن تكون القيمة أقل من أو تساوي {0}",
+    "error.invalid.password": "كلمة المرور غير صالحة، يجب أن تحتوي على [رقم/حروف (كبيرة وصغيرة)/؟@"
 }

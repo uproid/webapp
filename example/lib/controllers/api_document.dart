@@ -1,3 +1,4 @@
+import '../db/person_collection_free.dart';
 import '../app.dart';
 import '../models/mock_user_model.dart';
 import 'package:webapp/wa_route.dart';
@@ -50,6 +51,120 @@ class ApiDocuments {
       },
       description: "Get all informations about server details.",
       parameters: _pagging,
+    );
+  }
+
+  static Future<ApiDoc> onePerson() async {
+    return ApiDoc(
+      post: ApiDoc(
+        response: {
+          '200': [
+            ApiResponse<int>('timestamp_start', def: 0),
+            ApiResponse<bool>('success', def: true),
+            ApiResponse<Map<String, String>>(
+              'data',
+              def: PersonCollectionFree.formPerson.fields.map((k, v) {
+                return MapEntry(k, v.defaultValue);
+              }),
+            ),
+          ],
+          '404': r_404,
+        },
+        description: "Update one person by id.",
+        parameters: [
+          ApiParameter<String>(
+            'id',
+            isRequired: true,
+            paramIn: ParamIn.path,
+          ),
+          ApiParameter<String>(
+            'name',
+            isRequired: false,
+            paramIn: ParamIn.header,
+          ),
+          ApiParameter<int>(
+            'age',
+            isRequired: false,
+            paramIn: ParamIn.header,
+          ),
+          ApiParameter<double>(
+            'height',
+            isRequired: false,
+            paramIn: ParamIn.header,
+          ),
+          ApiParameter<String>(
+            'email',
+            isRequired: true,
+            paramIn: ParamIn.header,
+          ),
+          ApiParameter<String>(
+            'married',
+            isRequired: false,
+            paramIn: ParamIn.header,
+            def: false,
+          ),
+        ],
+      ),
+      get: ApiDoc(
+        response: {
+          '200': [
+            ApiResponse<int>('timestamp_start', def: 0),
+            ApiResponse<Map<String, String>>(
+              'data',
+              def: PersonCollectionFree.formPerson.fields.map((k, v) {
+                return MapEntry(k, v.defaultValue);
+              }),
+            ),
+          ],
+          '404': r_404,
+        },
+        description: "Get one person by id.",
+        parameters: [
+          ApiParameter<String>('id', isRequired: true, paramIn: ParamIn.path),
+        ],
+      ),
+      delete: ApiDoc(
+        response: {
+          '200': [
+            ApiResponse<int>('timestamp_start', def: 0),
+            ApiResponse<bool>('success', def: true),
+          ],
+          '404': r_404,
+        },
+        description: "Delete one person by id.",
+        parameters: [
+          ApiParameter<String>('id', isRequired: true, paramIn: ParamIn.path),
+        ],
+      ),
+    );
+  }
+
+  static Future<ApiDoc> allPerson() async {
+    var doc = ApiDoc(
+      response: {
+        '200': [
+          ApiResponse<int>('timestamp_start', def: 0),
+          ApiResponse<List<Map<String, String>>>(
+            'data',
+            def: List.generate(
+              5,
+              (index) => PersonCollectionFree.formPerson.fields.map(
+                (k, v) {
+                  return MapEntry(k, v.defaultValue);
+                },
+              ),
+            ),
+          ),
+        ],
+        '404': r_404,
+      },
+      description: "Get one person by id.",
+      parameters: [..._pagging],
+    );
+
+    return ApiDoc(
+      get: doc,
+      post: doc,
     );
   }
 }

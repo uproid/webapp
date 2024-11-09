@@ -1,5 +1,5 @@
-import 'dart:convert';
 import 'dart:io';
+import 'package:webapp/src/tools/convertor/serializable/value_converter.dart/json_value.dart';
 import 'package:webapp/wa_server.dart';
 import 'package:webapp/src/router/wa_controller.dart';
 
@@ -35,6 +35,7 @@ class IncludeJsController extends WaController {
     var allLanguage = rq.get<bool>('allLanguage', def: false);
     Map<String, Object?> global = {
       'time': DateTime.now().toString(),
+      'allLanguage': allLanguage,
       'language': allLanguage
           ? WaServer.appLanguages
           : WaServer.appLanguages[rq.getLanguage()] ?? {},
@@ -44,19 +45,35 @@ class IncludeJsController extends WaController {
       ...params,
     };
 
-    var jsonString = json.encode(global);
+    var jsonString = WaJson.jsonEncoder(global);
     String requestScript = '''
 ;DS={
   global:$jsonString,
   tr: function (path) {
-    return request.language[path];
+    if(DS.global.allLanguage){
+      var result = DS.global.language[DS.global.ln][path];
+    } else {
+      var result = DS.global.language[path];
+    }
+    return result || path;
+  },
+  trArray: (arr) => {
+    var result = [];
+    arr.forEach((element) => {
+      result.push(DS.tr(element));
+    });
+    return result;
   },
   trParam: function (path, params) {
-    var result = request.language[path];
+    if(DS.global.allLanguage){
+      var result = DS.global.language[DS.global.ln][path];
+    } else {
+      var result = DS.global.language[path];
+    }
     for (let key in params) {
       result = result.replace(`{\${key}}`, params[key]);
     }
-    return result;
+    return result || path;
   },
   urlPath : function(path){
     return '${rq.url('/')}'+path;

@@ -1,3 +1,15 @@
+## 1.1.0
+- Resolved several bugs to enhance overall stability.
+- Implemented the Collections Free Model (CFM) for MongoDB, streamlining the development of rapid APIs, forms, and validation processes (refer to examples).
+- Enhanced existing examples for clearer guidance.
+- Integrated the Capp package to facilitate console-based operations.
+- Updated all dependencies to their latest versions to ensure compatibility and performance.
+
+## 1.0.34
+- Fixed data parsing multipart/form-data while requested emprty
+- added tryData function to WebRequest(rq) class to return null or default value as unknown data in requests.
+- Improved IncludeController for the DS variable translation (.tr(), .trArray()).
+
 ## 1.0.33
 - Added build command for CLI:
     ```bash

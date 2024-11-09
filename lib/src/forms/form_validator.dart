@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:webapp/src/tools/model_less/format_helper.dart';
 import 'package:webapp/wa_tools.dart';
 
 import '../render/web_request.dart';
@@ -297,6 +298,52 @@ class FieldValidator {
 
           if (min != null) {
             if (value.toString().toInt() < min) {
+              res = false;
+              error.add('error.field.min#{$min}');
+            }
+          }
+        }
+      } else if (isRequired) {
+        res = false;
+        error.add('error.field.required');
+      }
+
+      return FieldValidateResult(
+        success: res,
+        error: res ? '' : 'error.field',
+        errors: error,
+      );
+    };
+  }
+
+  /// Validator to check if a field is a valid number within optional bounds.
+  ///
+  /// - [max]: The maximum allowed value.
+  /// - [min]: The minimum allowed value.
+  /// - [isRequired]: Whether the field is required (non-null). Defaults to `false`.
+  static ValidatorEvent isNumberDoubleField({
+    double? max,
+    double? min,
+    bool isRequired = false,
+  }) {
+    return (value) {
+      var res = true;
+      var error = <String>[];
+
+      if (value != null) {
+        if (!value.toString().isDouble) {
+          res = false;
+          error.add('error.field.numeric');
+        } else {
+          if (max != null) {
+            if (value.toString().asDouble(def: 0) > max) {
+              res = false;
+              error.add('error.field.max#{$max}');
+            }
+          }
+
+          if (min != null) {
+            if (value.toString().asDouble(def: 0) < min) {
               res = false;
               error.add('error.field.min#{$min}');
             }

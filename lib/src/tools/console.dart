@@ -66,7 +66,7 @@ class Console {
   /// This is a private method used internally by the logging methods
   /// to print the log message.
   static void _writeLog(object) {
-    write(object);
+    if (!isDebug) write(object);
   }
 
   /// Prints the given [obj] to the console.

@@ -133,5 +133,11 @@
     "sidebar.paginationExample": "ページネーションの例",
     "project.contributing": "貢献",
     "project.documentation": "ドキュメント",
-    "project.github": "GitHub"
+    "project.github": "GitHub",
+    "error.field.required": "このフィールドは必須です",
+    "error.field.email": "無効なメールアドレスです",
+    "error.field": "無効な値",
+    "error.field.min": "値は{0}以上である必要があります",
+    "error.field.max": "値は{0}以下である必要があります",
+    "error.invalid.password": "パスワードが無効です、[数字/文字(大文字+小文字)/?@が必要です"
 }

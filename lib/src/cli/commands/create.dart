@@ -1,6 +1,5 @@
 import 'dart:io';
-import 'package:webapp/src/cli/core/cmd_console.dart';
-import 'package:webapp/src/cli/core/cmd_controller.dart';
+import 'package:capp/capp.dart';
 import 'package:webapp/wa_tools.dart';
 import 'package:http/http.dart' as http;
 import 'package:archive/archive_io.dart';
@@ -11,20 +10,20 @@ class CreateProject {
   String savePath =
       '${Directory.systemTemp.path}/template_${DateTime.timestamp().microsecondsSinceEpoch}.zip';
 
-  Future<CmdConsole> create(CmdController controller) async {
-    var result = CmdConsole("Error in creating project", Colors.error);
+  Future<CappConsole> create(CappController controller) async {
+    var result = CappConsole("Error in creating project", CappColors.error);
     var name = controller.getOption('name');
     var isDocker = controller.existsOption('docker');
     var useDocker = false;
 
     if (!isDocker) {
-      useDocker = CmdConsole.yesNo("Do you want to use docker?");
+      useDocker = CappConsole.yesNo("Do you want to use docker?");
     } else {
       useDocker = true;
     }
 
     if (name.isEmpty) {
-      name = CmdConsole.read(
+      name = CappConsole.read(
         "Enter project name:",
         isRequired: true,
         isSlug: true,
@@ -34,19 +33,23 @@ class CreateProject {
     var path = controller.getOption('path', def: '$name');
     path = Uri.parse(path).toFilePath(windows: Platform.isWindows);
 
-    CmdConsole.write(path, Colors.success);
+    CappConsole.write(path, CappColors.success);
     if (Directory(path).existsSync()) {
-      return CmdConsole("This path already exists! ($path)", Colors.error);
+      return CappConsole("This path already exists! ($path)", CappColors.error);
     }
 
     Directory(path).createSync(recursive: true);
     if (!Directory(path).existsSync()) {
-      return CmdConsole("Error creating this path: $path", Colors.error);
+      return CappConsole("Error creating this path: $path", CappColors.error);
     }
 
-    String pathZip = await CmdConsole.progress<String>("Waitng...", () async {
-      return downloadFile(projectUrl, savePath);
-    });
+    String pathZip = await CappConsole.progress<String>(
+      "Waitng...",
+      () async {
+        return downloadFile(projectUrl, savePath);
+      },
+      type: CappProgressType.circle,
+    );
 
     if (pathZip.isNotEmpty) {
       var dirPrject = await extract(path);
@@ -56,8 +59,8 @@ class CreateProject {
           name: name,
           useDocker: useDocker,
         );
-        result = CmdConsole(
-            "Project created successfully: $dirPrject", Colors.success);
+        result = CappConsole(
+            "Project created successfully: $dirPrject", CappColors.success);
       }
     }
 

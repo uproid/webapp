@@ -1,0 +1,146 @@
+<div class="row my-5">
+  <h3>Person Example</h3>
+  <div class="card my-3 border-0 bg-transparent">
+    <div class="card-body p-0 m-0">
+      <div class="table-responsive">
+        <table class="table table-striped p-0 m-0 border rounded-3">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Age</th>
+              <th class="text-center">Married</th>
+              <th class="text-center">Email</th>
+              <th class="text-center">Height</th>
+              <th class="text-center">Birthday</th>
+              <th class="text-center"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <? for person in allPerson ?>
+            <tr  class="small">
+              <td><?= person.name ?></td>
+              <td><?= person.age ?></td>
+              <td><?= person.married ?></td>
+              <td><?= person.email ?></td>
+              <td><?= person.height ?></td>
+              <td><?= person.birthday ?></td>
+              <td class="text-center">
+                <form action="/example/person/<?= person._id ?>" method="POST">
+                  <input type="hidden" name="action" value="DELETE" />
+                  <button class="btn btn-sm p-0 m-0" type="submit">🗑️</button>
+                </form>
+              </td>
+            </tr>
+            <? endfor ?>
+          </tbody>
+          <tfoot>
+            <form method="post">
+              <tr>
+                <td colspan="100%">
+                  <div class="container">
+                    <?= paging ?>
+                  </div>
+                </td>
+              </tr>
+            </form>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+    <div class="card-body mt-3 px-0 mx-0">
+      <form method="POST" action="/example/person">
+        <div class="row">
+          <!-- Name -->
+          <div class="col-md-6 mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input
+              type="text"
+              class="form-control <?= $n('form/name/valid')  ?>"
+              id="name"
+              name="name"
+              value="<?= $n('form/name/value') ?>"
+              placeholder="Enter your name"
+            />
+            <div class="invalid-feedback <?= 'd-block' if $n('form/name/failed') else '' ?>"><?= $t($n('form/name/errors/0')) ?></div>
+          </div>
+
+          <!-- Email -->
+          <div class="col-md-6 mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input
+              type="email"
+              class="form-control <?= $n('form/email/valid') ?>"
+              id="email"
+              name="email"
+              value="<?= $n('form/email/value') ?>"
+              placeholder="Enter your email"
+            />
+            <div class="invalid-feedback <?= 'd-block' if $n('form/email/failed') else '' ?>"><?= $t($n('form/email/errors/0')) ?></div>
+          </div>
+        </div>
+
+        <div class="row">
+          <!-- Age -->
+          <div class="col-md-6 mb-3">
+            <label for="age" class="form-label">Age</label>
+            <input
+              type="number"
+              class="form-control <?= $n('form/age/valid') ?>"
+              id="age"
+              name="age"
+              value="<?= $n('form/age/value') ?>"
+              placeholder="Enter your age"
+            />
+            <div class="invalid-feedback <?= 'd-block' if $n('form/age/failed') else '' ?>"><?= $t($n('form/age/errors/0')) ?></div>
+          </div>
+           <!-- Birthday -->
+          <div class="col-md-6 mb-3">
+            <label for="birthday" class="form-label">Birthday</label>
+            <input
+              type="datetime-local"
+              class="form-control <?= $n('form/birthday/valid') ?>"
+              id="birthday"
+              name="birthday"
+              value="<?= $n('form/birthday/value') ?>"
+            />
+            <div class="invalid-feedback <?= 'd-block' if $n('form/birthday/failed') else '' ?>"><?= $t($n('form/birthday/errors/0')) ?></div>
+          </div>
+        </div>
+        <!-- Height -->
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="height" class="form-label">Height</label>
+            <input
+              type="number"
+              numb
+              class="form-control <?= $n('form/height/valid') ?>"
+              id="height"
+              name="height"
+              step="0.1"
+              value="<?= $n('form/height/value') ?>"
+              placeholder="Enter your height"
+            />
+            <div class="invalid-feedback <?= 'd-block' if $n('form/height/failed') else '' ?>"><?= $t($n('form/height/errors/0')) ?></div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <!-- Marid Checkbox -->
+            <div class="form-check mt-md-5">
+              <label class="form-check-label" for="married">Married</label>
+              <input
+                name="married"
+                class="form-check-input <?= $n('form/married/valid') ?>"
+                type="checkbox"
+                value = "true"
+                <?= 'checked' if $n('form/married/value') else '' ?>
+                id="married"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-lg btn-outline-primary">Submit</button>
+      </form>
+    </div>
+  </div>
+</div>

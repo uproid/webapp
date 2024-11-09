@@ -1,6 +1,7 @@
 import 'package:dotenv/dotenv.dart';
 import 'package:webapp/src/tools/convertor/string_validator.dart';
 import 'package:webapp/src/tools/path.dart';
+import 'package:webapp/wa_console.dart';
 
 var env = DotEnv(includePlatformEnvironment: true)..load();
 
@@ -104,7 +105,11 @@ class WaConfigs {
   late final WaDBConfig dbConfig;
 
   bool get isLocalDebug {
-    return env['LOCAL_DEBUG'].toString().toBool;
+    if (env['LOCAL_DEBUG'] != null) {
+      return env['LOCAL_DEBUG'].toString().toBool;
+    } else {
+      return Console.isDebug;
+    }
   }
 
   String url({String? path}) {

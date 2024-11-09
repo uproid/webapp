@@ -133,5 +133,11 @@
   "sidebar.paginationExample": "Paginatie Voorbeeld",
   "project.contributing": "Bijdragen",
   "project.documentation": "Documentatie",
-  "project.github": "GitHub"
+  "project.github": "GitHub",
+  "error.field.required": "Dit veld is verplicht",
+  "error.field.email": "Ongeldig e-mailadres",
+  "error.field": "Ongeldige waarde",
+  "error.field.min": "Waarde moet groter dan of gelijk aan {0} zijn",
+  "error.field.max": "Waarde moet kleiner dan of gelijk aan {0} zijn",
+  "error.invalid.password": "Wachtwoord is ongeldig, het moet [Nummer/Teken (Hoofdletter+Kleine letter)/?@ bevatten"
 }

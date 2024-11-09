@@ -136,6 +136,17 @@
           <?= $t('sidebar.paginationExample') ?>
         </a>
       </li>
+      <? if mongoActive ?>
+      <li class="nav-item w-100"></li>
+        <a
+          href="/example/person"
+          class="nav-link <?= 'active' if $e.isPath('/example/person') else '' ?>"
+          aria-current="page"
+        >
+          Example Free model DB
+        </a>
+      </li>
+      <? endif ?>
     </ul>
   </div>
 </aside>

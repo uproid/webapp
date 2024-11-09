@@ -248,8 +248,8 @@ class WebRequest {
   }
 
   /// Retrieves all parsed request data including GET, POST, and FILE data.
-  Map getAllData() {
-    var map = {
+  Map<String, Object?> getAllData() {
+    var map = <String, Object?>{
       ..._dataRequest['GET']!,
       ..._dataRequest['POST'],
       'POST': _dataRequest['POST'],
@@ -280,14 +280,20 @@ class WebRequest {
   /// Retrieves the value associated with [key] from the request data, cast to type [T].
   T dataType<T>(String key, {T? def}) {
     var map = getAllData();
-    T res = map[key] ?? def;
+    T res = map[key].asCast<T>(def: def) as T;
     return res;
   }
 
   /// Retrieves file data associated with [key] from the request.
   dynamic getFile(String key) {
     var map = getAllData();
-    return map['FILE'] != null ? map['FILE'][key] : null;
+    if (map['FILE'] != null) {
+      Object? res = map['FILE'];
+      if (res is Map) {
+        return res[key];
+      }
+    }
+    return null;
   }
 
   /// Overloads the index operator to return the value for [key] using [data].
@@ -323,13 +329,30 @@ class WebRequest {
         if (def != null && res == -1) return def;
         return res as T;
       case bool:
+        if (!hasData(key)) {
+          return (def != null ? def : false) as T;
+        }
         return data(key).toBool as T;
       case String:
         var res = data(key).toString();
         if (res.isEmpty && def != null) return def;
         return res as T;
+      case double:
+        var res = data(key).toString().asDouble();
+        return res as T;
       default:
         return data(key) as T;
+    }
+  }
+
+  /// Retrieves the value of [key] as a [String] from the request data.
+  /// If the value is not found, returns [def] (default value).
+  /// This method is used to retrieve string values from the request data.
+  T? tryData<T>(String key, {T? def}) {
+    if (hasData(key)) {
+      return get<T>(key, def: def);
+    } else {
+      return def;
     }
   }
 
@@ -564,12 +587,12 @@ class WebRequest {
 
             if (object[key] != null) {
               if (object[key] is ObjectId) {
-                (object[key] as ObjectId).oid;
+                return (object[key] as ObjectId).oid;
               }
             }
             return object[key];
           } on NoSuchMethodError {
-            Console.e({
+            Console.w({
               'error': {
                 'object': object,
                 'key': key,
@@ -587,7 +610,7 @@ class WebRequest {
 
             return null;
           } catch (e) {
-            Console.e({
+            Console.w({
               'error': {
                 'object': object,
                 'key': key,
@@ -881,31 +904,37 @@ class WebRequest {
   Future<Map> getHeaderFormData() async {
     final fields = <String, String>{};
     final files = <String, List<int>>{};
-    final contentType = _rq.headers.contentType;
-    if (contentType?.mimeType == 'multipart/form-data') {
-      final transformer =
-          MimeMultipartTransformer(contentType!.parameters['boundary']!);
 
-      final parts = await transformer.bind(_rq).toList();
+    /// Parse the multipart form data. beacuse some time the requested multipart/form-data is empty
+    try {
+      final contentType = _rq.headers.contentType;
+      if (contentType?.mimeType == 'multipart/form-data') {
+        final transformer =
+            MimeMultipartTransformer(contentType!.parameters['boundary']!);
 
-      await Future.forEach(parts, (part) async {
-        final contentDisposition = part.headers['content-disposition'];
-        if (contentDisposition != null) {
-          final nameMatch =
-              RegExp(r'name="(.+?)"').firstMatch(contentDisposition);
-          final filenameMatch =
-              RegExp(r'filename="(.+?)"').firstMatch(contentDisposition);
-          if (filenameMatch != null) {
-            //final filename = filenameMatch.group(1);
-            final fileBytes = await part
-                .fold<List<int>>([], (bytes, data) => bytes..addAll(data));
-            files[nameMatch!.group(1)!] = fileBytes;
-          } else {
-            final value = await utf8.decodeStream(part);
-            fields[nameMatch!.group(1)!] = value;
+        final parts = await transformer.bind(_rq).toList();
+
+        await Future.forEach(parts, (part) async {
+          final contentDisposition = part.headers['content-disposition'];
+          if (contentDisposition != null) {
+            final nameMatch =
+                RegExp(r'name="(.+?)"').firstMatch(contentDisposition);
+            final filenameMatch =
+                RegExp(r'filename="(.+?)"').firstMatch(contentDisposition);
+            if (filenameMatch != null) {
+              //final filename = filenameMatch.group(1);
+              final fileBytes = await part
+                  .fold<List<int>>([], (bytes, data) => bytes..addAll(data));
+              files[nameMatch!.group(1)!] = fileBytes;
+            } else {
+              final value = await utf8.decodeStream(part);
+              fields[nameMatch!.group(1)!] = value;
+            }
           }
-        }
-      });
+        });
+      }
+    } catch (e) {
+      Console.w(e);
     }
 
     return {
@@ -1024,8 +1053,10 @@ class WebRequest {
       'setting': _setting,
       'formChecker': ([String? name]) => formChecker(name: name),
     };
-
     params['\$e'] = LMap(events, def: null);
+    params['\$n'] = (String path) {
+      return getParams().navigation<Object>(path: path, def: '');
+    };
     params['\$l'] = LMap(localEvents, def: null);
     params['\$t'] = (String text, [Object? params]) {
       if (params == null) {

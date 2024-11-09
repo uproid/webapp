@@ -133,5 +133,12 @@
   "sidebar.paginationExample": "Pagination Example",
   "project.contributing": "Contributing",
   "project.documentation": "Documentation",
-  "project.github": "GitHub"
+  "project.github": "GitHub",
+  "error.field.required": "This field is required",
+  "error.field.email": "Invalid email address",
+  "error.field": "Error value",
+  "error.field.min": "Value must be greater than or equal to {0}",
+  "error.field.max": "Value must be less than or equal to {0}",
+  "error.invalid.password":"Password is not valid, it most has [Number/Char(Upper+Lower)/?@",
+  "example.params.dynamic": "A = {0}, B = {1}, C = {2}, D = {3}"
 }

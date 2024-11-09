@@ -7,20 +7,20 @@
           <div class="col mb-3">
             <label for="from" class="form-label"><?= $t('email.from') ?></label>
             <input
-              value="<?= emailForm.from.value ?>"
+              value="<?= $n('emailForm/from/value') ?>"
               type="from"
               name="from"
-              class="form-control <?= emailForm.from.valid ?>"
+              class="form-control <?= $n('emailForm/from/valid') ?>"
               id="from"
             />
             <div class="invalid-feedback <?= 'd-block' if emailForm.from.failed else '' ?>">
-              <?= emailForm.from.errorHtml ?>
+              <?= $t($n('emailForm/from/errors/0')) ?>
             </div>
           </div>
           <div class="col mb-3">
             <label for="fromName" class="form-label"><?= $t('email.fromName') ?></label>
             <input
-              value="<?= emailForm.fromName.value ?>"
+              value="<?= $n('emailForm/fromName/value') ?>"
               type="fromName"
               name="fromName"
               class="form-control <?= emailForm.fromName.valid ?>"
@@ -28,7 +28,7 @@
               placeholder="<?= $t('email.placeholder.name') ?>"
             />
             <div class="invalid-feedback <?= 'd-block' if emailForm.fromName.failed else '' ?>">
-              <?= emailForm.fromName.errorHtml ?>
+              <?= $t($n('emailForm/fromName/errors/0')) ?>
             </div>
           </div>
         </div>
@@ -44,7 +44,7 @@
             placeholder="<?= $t('email.placeholder.to') ?>"
           />
           <div class="invalid-feedback <?= 'd-block' if emailForm.email.failed else '' ?>">
-            <?= emailForm.email.errorHtml ?>
+            <?= $t($n('emailForm/email/errors/0')) ?>
           </div>
         </div>
 
@@ -59,7 +59,7 @@
             placeholder="<?= $t('email.placeholder.subject') ?>"
           />
           <div class="invalid-feedback <?= 'd-block' if emailForm.subject.failed else '' ?>">
-            <?= emailForm.subject.errorHtml ?>
+            <?= $t($n('emailForm/subject/errors/0')) ?>
           </div>
         </div>
 
@@ -72,7 +72,7 @@
             placeholder="<?= $t('email.placeholder.message') ?>"
           ><?= emailForm.message.value ?></textarea>
           <div class="invalid-feedback <?= 'd-block' if emailForm.message.failed else '' ?>">
-            <?= emailForm.message.errorHtml ?>
+            <?= $t($n('emailForm/message/errors/0')) ?>
           </div>
         </div>
 
@@ -88,7 +88,7 @@
               placeholder="<?= $t('email.placeholder.host') ?>"
             />
             <div class="invalid-feedback <?= 'd-block' if emailForm.host.failed else '' ?>">
-              <?= emailForm.host.errorHtml ?>
+              <?= $t($n('emailForm/host/errors/0')) ?>
             </div>
           </div>
 
@@ -103,7 +103,7 @@
               placeholder="<?= $t('email.placeholder.port') ?>"
             />
             <div class="invalid-feedback <?= 'd-block' if emailForm.port.failed else '' ?>">
-              <?= emailForm.port.errorHtml ?>
+              <?= $t($n('emailForm/port/errors/0')) ?>
             </div>
           </div>
         </div>
@@ -120,7 +120,7 @@
               placeholder="<?= $t('email.placeholder.username') ?>"
             />
             <div class="invalid-feedback <?= 'd-block' if emailForm.username.failed else '' ?>">
-              <?= emailForm.username.errorHtml ?>
+              <?= $t($n('emailForm/username/errors/0')) ?>
             </div>
           </div>
           <div class="col mb-3">
@@ -134,7 +134,7 @@
               placeholder="<?= $t('email.placeholder.password') ?>"
             />
             <div class="invalid-feedback <?= 'd-block' if emailForm.password.failed else '' ?>">
-              <?= emailForm.password.errorHtml ?>
+              <?= $t($n('emailForm/password/errors/0')) ?>
             </div>
           </div>
         </div>

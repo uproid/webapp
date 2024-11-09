@@ -133,5 +133,11 @@
     "sidebar.paginationExample": "Paginasyon Örneği",
     "project.contributing": "Katkıda Bulunma",
     "project.documentation": "Belgeler",
-    "project.github": "GitHub"
+    "project.github": "GitHub",
+    "error.field.required": "Bu alan gereklidir",
+    "error.field.email": "Geçersiz e-posta adresi",
+    "error.field": "Geçersiz değer",
+    "error.field.min": "Değer {0} veya daha büyük olmalıdır",
+    "error.field.max": "Değer {0} veya daha küçük olmalıdır",
+    "error.invalid.password": "Şifre geçersizdir, şunları içermelidir: [Sayı/Karakter (Büyük+Küçük)/?@"
 }

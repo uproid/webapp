@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:math';
+import '../db/person_collection_free.dart';
 import '../configs/setting.dart';
-
 import '../db/example_collections.dart';
 import '../models/example_model.dart';
 import 'package:webapp/wa_mail.dart';
@@ -15,6 +15,7 @@ import '../models/mock_user_model.dart';
 
 class HomeController extends WaController {
   HomeController(super.rq);
+  var personCollection = PersonCollectionFree(db: server.db);
 
   @override
   Future<String> index() async {
@@ -36,8 +37,7 @@ class HomeController extends WaController {
             (value) {
               return FieldValidateResult(
                 success: value.toString().isPassword,
-                error:
-                    'Password is not valid, it most has [Number/Char(Upper+Lower)/?@#\$!%]',
+                error: 'error.invalid.password'.tr.write(rq),
               );
             },
             FieldValidator.requiredField(),
@@ -75,6 +75,11 @@ class HomeController extends WaController {
   }
 
   Future<String> exampleLanguage() async {
+    var a = Random().nextInt(10);
+    var b = Random().nextInt(10);
+    var c = Random().nextInt(10);
+    var d = Random().nextInt(10);
+
     rq.addParams({
       'exampleTString': TString('example.tstring').write(rq),
       'examplePathString': 'example.path'.tr.write(rq),
@@ -82,6 +87,8 @@ class HomeController extends WaController {
         'name': 'Alexandre',
         'age': Random().nextInt(100),
       }),
+      'exampleTranslateDynamic':
+          'example.params.dynamic#$a#$b#$c#$d'.tr.write(rq),
     });
     return renderTemplate('example/i18n');
   }
@@ -482,5 +489,149 @@ class HomeController extends WaController {
     }
 
     return renderTemplate('example/info');
+  }
+
+  Future<String> addNewPerson() async {
+    final res = await personCollection.insert(rq.getAllData());
+    if (res.success) {
+      rq.addParam('data', res.formValues);
+    } else {
+      rq.addParam('form', res.toJson());
+    }
+    return _renderPerson(data: {
+      'success': res.success,
+    });
+  }
+
+  Future<String> replacePerson() async {
+    final id = rq.getParam('id', def: '').toString();
+    final res = await personCollection.replaceOne(id, rq.getAllData());
+
+    if (res == null) {
+      return _renderPerson(
+        data: {'success': false},
+        status: 404,
+      );
+    }
+
+    if (res.success) {
+      rq.addParam('data', res.formValues);
+    } else {
+      rq.addParam('form', res.toJson());
+    }
+    return _renderPerson(data: {
+      'success': res.success,
+    });
+  }
+
+  Future<String> allPerson() async {
+    final countAll = await personCollection.getCount();
+    final pageSize = rq.get<int>('pageSize', def: 20);
+    final orderBy = rq.get<String>('orderBy', def: '_id');
+    final orderReverse = rq.get<bool>('orderReverse', def: true);
+
+    UIPaging paging = UIPaging(
+      rq: rq,
+      total: countAll,
+      pageSize: pageSize,
+      widget: '',
+      page: rq.get<int>('page', def: 1),
+    );
+
+    final res = await personCollection.getAll(
+      limit: paging.pageSize,
+      skip: paging.start,
+      sort: DQ.order(orderBy, orderReverse),
+    );
+
+    return _renderPerson(data: {
+      'success': res.isNotEmpty,
+      'data': res,
+      'paging': await paging.renderData(),
+    });
+  }
+
+  Future<String> onePerson() async {
+    final id = rq.getParam('id', def: '').toString();
+    final res = await personCollection.getById(id);
+    return _renderPerson(data: {
+      'success': res != null,
+      'data': res,
+    });
+  }
+
+  Future<String> updateOrDeletePerson() async {
+    final id = rq.getParam('id', def: '').toString();
+    final action = rq.get<String>('action', def: '');
+    if (action == 'DELETE') {
+      return deletePerson();
+    }
+
+    final email = rq.get<String>('email', def: '');
+    final res = await personCollection.updateField(id, 'email', email);
+    if (res == null) {
+      return _renderPerson(
+        data: {'success': false},
+        status: 404,
+      );
+    }
+    if (res.success) {
+      return _renderPerson(data: {
+        'success': res.success,
+        'data': res.formValues,
+      });
+    }
+    return _renderPerson(data: {
+      'success': res.success,
+      'form': res.toJson(),
+    });
+  }
+
+  Future<String> deletePerson() async {
+    final id = rq.getParam('id', def: '').toString();
+    final res = await personCollection.delete(id);
+    return _renderPerson(data: {
+      'success': res,
+    });
+  }
+
+  Future<String> _renderPerson({
+    required Map<String, Object?> data,
+    status = 200,
+  }) async {
+    if (rq.isApiEndpoint) {
+      return rq.renderDataParam(
+        data: data,
+        status: status,
+      );
+    }
+
+    final countAll = await personCollection.getCount();
+    final pageSize = rq.get<int>('pageSize', def: 10);
+    final orderBy = rq.get<String>('orderBy', def: '_id');
+    final orderReverse = rq.get<bool>('orderReverse', def: true);
+
+    UIPaging paging = UIPaging(
+      rq: rq,
+      total: countAll,
+      pageSize: pageSize,
+      widget: 'template/paging',
+      page: rq.get<int>('page', def: 1),
+    );
+
+    final res = await personCollection.getAll(
+      limit: paging.pageSize,
+      skip: paging.start,
+      sort: DQ.order(orderBy, orderReverse),
+    );
+
+    data = {
+      ...data,
+      'success': res.isNotEmpty,
+      'allPerson': res,
+      'paging': await paging.render(),
+    };
+    rq.addParams(data);
+    return renderTemplate('example/person');
   }
 }

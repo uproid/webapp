@@ -1,27 +1,25 @@
+import 'package:capp/capp.dart';
 import 'package:webapp/src/cli/commands/commands.dart';
 import 'package:webapp/src/cli/commands/create.dart';
 import 'package:webapp/src/cli/commands/main.dart';
-import 'package:webapp/src/cli/core/cmd_controller.dart';
-import 'package:webapp/src/cli/core/cmd_manager.dart';
-import 'package:webapp/src/cli/core/option.dart';
 
 void main(List<String> args) async {
-  final cmdManager = CmdManager(
+  final cmdManager = CappManager(
     args: args,
-    main: CmdController(
+    main: CappController(
       '',
       options: [
-        Option(
+        CappOption(
           name: 'help',
           description: 'Show the help',
           shortName: 'h',
         ),
-        Option(
+        CappOption(
           name: 'version',
           description: 'WebApp Version',
           shortName: 'v',
         ),
-        Option(
+        CappOption(
           name: 'update',
           description: 'Update WebApp',
           shortName: 'u',
@@ -30,21 +28,21 @@ void main(List<String> args) async {
       run: (controller) => Main().main(controller),
     ),
     controllers: [
-      CmdController(
+      CappController(
         'create',
         description: 'Make new project',
         options: [
-          Option(
+          CappOption(
             name: 'path',
             shortName: 'p',
             description: 'Path of the project',
           ),
-          Option(
+          CappOption(
             name: 'name',
             shortName: 'n',
             description: 'Name of project',
           ),
-          Option(
+          CappOption(
             name: 'docker',
             shortName: 'd',
             description: 'Use docker',
@@ -52,85 +50,85 @@ void main(List<String> args) async {
         ],
         run: (controller) => CreateProject().create(controller),
       ),
-      CmdController(
+      CappController(
         'get',
         description: 'Get pacakges of project, (dart pub get)',
         run: (controller) => ProjectCommands().get(controller),
         options: [],
       ),
-      CmdController(
+      CappController(
         'runner',
         description:
             'Build runner of project, (dart pub run build_runner build)',
         run: (controller) => ProjectCommands().runner(controller),
         options: [],
       ),
-      CmdController(
+      CappController(
         'run',
         description: 'Run project, (dart run)',
         run: (controller) => ProjectCommands().run(controller),
         options: [
-          Option(
+          CappOption(
             name: 'path',
             shortName: 'p',
             description: 'Path of app file',
           ),
         ],
       ),
-      CmdController(
+      CappController(
         'build',
         description: 'Build Project (dart compile exe)',
         run: (controller) => ProjectCommands().build(controller),
         options: [
-          Option(
+          CappOption(
             name: 'appPath',
             shortName: 'a',
             description: 'Path of app file',
           ),
-          Option(
+          CappOption(
             name: 'langPath',
             shortName: 'l',
             description: 'Languages path',
           ),
-          Option(
+          CappOption(
             name: 'publicPath',
             shortName: 'p',
             description: 'Public path',
           ),
-          Option(
+          CappOption(
             name: 'widgetPath',
             shortName: 'w',
             description: 'Widgets path',
           ),
-          Option(
+          CappOption(
             name: 'envPath',
             shortName: 'e',
             description: 'Envitoment file (.env) path',
           ),
-          Option(
+          CappOption(
             name: 'output',
             shortName: 'o',
             description: 'Output path',
             value: './webapp_build',
           ),
-          Option(
+          CappOption(
             name: 'type',
             shortName: 't',
             description: 'Type of build (zip, exe)',
           ),
-          Option(
+          CappOption(
             name: 'help',
             shortName: 'h',
             description: 'Show the help',
           ),
         ],
       ),
-      CmdController(
+      CappController(
         'test',
         description: 'Unit test of project, (dart test)',
         run: (controller) => ProjectCommands().test(controller),
         options: [
-          Option(
+          CappOption(
             name: 'reporter',
             shortName: 'r',
             description: 'Set how to print test results',

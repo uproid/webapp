@@ -48,10 +48,24 @@ class TString {
   ///
   /// Returns the translated string if found, otherwise returns the original key.
   String write(WebRequest rq, [Map<String, Object?> values = const {}]) {
+    var params = {...values};
+    var key = this.key;
+    if (key.contains('#')) {
+      final valuesKey = key.split('#');
+      key = valuesKey[0];
+
+      if (valuesKey.length > 1) {
+        for (var i = 1; i < valuesKey.length; i++) {
+          var val = valuesKey[i].toString();
+          val = val.replaceAll('{', '').replaceAll('}', '');
+          params[(i - 1).toString()] = val;
+        }
+      }
+    }
     final ln = rq.getLanguage();
     var language = WaServer.appLanguages[ln] ?? WaServer.appLanguages['en'];
     if (language != null && language[key] != null) {
-      var res = _repliceParams(language[key]!, values);
+      var res = _repliceParams(language[key]!, params);
       return res;
     }
     return key;

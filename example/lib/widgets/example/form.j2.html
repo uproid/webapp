@@ -21,7 +21,7 @@
             placeholder="<?= $t('form.validation.emailPlaceholder') ?>"
           />
           <div class="invalid-feedback <?= 'd-block' if loginForm.email.failed else '' ?>">
-            <?= loginForm.email.errorHtml ?>
+            <?= $t($n('loginForm/email/errors/0')) ?>
           </div>
         </div>
         <div class="mb-3">
@@ -35,7 +35,7 @@
             placeholder="<?= $t('form.validation.passwordPlaceholder') ?>"
           />
           <div class="invalid-feedback <?= 'd-block' if loginForm.password.failed else '' ?>">
-            <?= loginForm.password.errorHtml ?>
+            <?= $t($n('loginForm/password/errors/0')) ?>
           </div>
         </div>
         <button type="submit" class="btn btn-primary btn-lg text-light">

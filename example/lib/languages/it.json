@@ -133,5 +133,11 @@
     "sidebar.paginationExample": "Esempio di paginazione",
     "project.contributing": "Contribuire",
     "project.documentation": "Documentazione",
-    "project.github": "GitHub"
+    "project.github": "GitHub",
+    "error.field.required": "Questo campo è obbligatorio",
+    "error.field.email": "Indirizzo email non valido",
+    "error.field": "Valore non valido",
+    "error.field.min": "Il valore deve essere maggiore o uguale a {0}",
+    "error.field.max": "Il valore deve essere minore o uguale a {0}",
+    "error.invalid.password": "La password non è valida, deve contenere [Numero/Carattere (Maiuscolo+Minuscolo)/?@"
 }

@@ -133,5 +133,11 @@
     "sidebar.paginationExample": "Пример пагинации",
     "project.contributing": "Вклад",
     "project.documentation": "Документация",
-    "project.github": "GitHub"
+    "project.github": "GitHub",
+    "error.field.required": "Это поле обязательно для заполнения",
+    "error.field.email": "Неверный адрес электронной почты",
+    "error.field": "Недопустимое значение",
+    "error.field.min": "Значение должно быть больше или равно {0}",
+    "error.field.max": "Значение должно быть меньше или равно {0}",
+    "error.invalid.password": "Пароль недействителен, он должен содержать [Цифру/Букву (Заглавную+Строчную)/?@"
 }

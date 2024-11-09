@@ -129,7 +129,7 @@ Feel free to customize and extend the example provided with the package to fully
 ### Simple WebApp Server example:
    ```dart
    WaConfigs configs = WaConfigs(
-  widgetsPath: pathTo("./example/widgets"),
+  widgetsPath: pathTo('./example/widgets'),
   widgetsType: 'j2.html',
   languagePath: pathTo('./example/languages'),
   port: 8085,
@@ -143,8 +143,8 @@ final socketManager = SocketManager(
   event: SocketEvent(
     onConnect: (socket) {
       server.socketManager?.sendToAll(
-        "New user connected! count: ${server.socketManager?.countClients}",
-        path: "output",
+        'New user connected! count: ${server.socketManager?.countClients}',
+        path: 'output',
       );
       socket.send(
         {'message': 'Soccuess connect to socket!'},
@@ -155,8 +155,8 @@ final socketManager = SocketManager(
     onDisconnect: (socket) {
       var count = server.socketManager?.countClients ?? 0;
       server.socketManager?.sendToAll(
-        "User disconnected! count: ${count - 1}",
-        path: "output",
+        'User disconnected! count: ${count - 1}',
+        path: 'output',
       );
     },
   ),
@@ -166,7 +166,7 @@ final socketManager = SocketManager(
 void main() async {
   server.addRouting(getWebRoute);
   server.start().then((value) {
-    Console.p("Example app started: http://localhost:${value.port}");
+    Console.p('Example app started: http://localhost:${value.port}');
   });
 }
    ```

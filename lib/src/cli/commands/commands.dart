@@ -1,32 +1,31 @@
 import 'dart:io';
 
-import 'package:webapp/src/cli/core/cmd_console.dart';
-import 'package:webapp/src/cli/core/cmd_controller.dart';
+import 'package:capp/capp.dart';
 import 'package:webapp/src/tools/extensions/directory.dart';
 import 'package:webapp/src/tools/path.dart';
 import 'package:webapp/wa_server.dart';
 import 'package:archive/archive_io.dart';
 
 class ProjectCommands {
-  Future<CmdConsole> get(CmdController controller) async {
+  Future<CappConsole> get(CappController controller) async {
     await Process.start(
       'dart',
       ['pub', 'get'],
       mode: ProcessStartMode.inheritStdio,
     );
-    return CmdConsole("dart pub get", Colors.info);
+    return CappConsole("dart pub get", CappColors.info);
   }
 
-  Future<CmdConsole> runner(CmdController controller) async {
+  Future<CappConsole> runner(CappController controller) async {
     await Process.start(
       'dart',
       ['run', 'build_runner', 'build'],
       mode: ProcessStartMode.inheritStdio,
     );
-    return CmdConsole('dart run build_runner build', Colors.none);
+    return CappConsole('dart run build_runner build', CappColors.none);
   }
 
-  Future<CmdConsole> run(CmdController controller) async {
+  Future<CappConsole> run(CappController controller) async {
     var path = controller.getOption('path');
     var defaultPath = [
       './bin',
@@ -55,7 +54,7 @@ class ProjectCommands {
       }
     }
     if (path.isEmpty) {
-      path = CmdConsole.read(
+      path = CappConsole.read(
         "Enter path of app file:",
         isRequired: true,
       );
@@ -95,8 +94,8 @@ class ProjectCommands {
       String userInput = String.fromCharCodes(input).trim();
 
       if (userInput.toLowerCase() == 'r') {
-        CmdConsole.clear();
-        CmdConsole.write("Restart project...", Colors.warnnig);
+        CappConsole.clear();
+        CappConsole.write("Restart project...", CappColors.warnnig);
         proccess.kill();
         proccess = await Process.start(
           'dart',
@@ -110,30 +109,30 @@ class ProjectCommands {
       } else if (['q', 'qy', 'qq'].contains(userInput.toLowerCase())) {
         var res = true;
         if (userInput.toLowerCase() == 'q') {
-          res = CmdConsole.yesNo("Do you want to quit the project?");
+          res = CappConsole.yesNo("Do you want to quit the project?");
         }
         if (res) {
           proccess.kill();
           exit(0);
         }
       } else if (userInput.toLowerCase() == 'c') {
-        CmdConsole.clear();
+        CappConsole.clear();
       } else if (userInput.toLowerCase() == 'i') {
-        CmdConsole.write("WebApp version: v${WaServer.info.version}");
-        CmdConsole.write("Dart version: v${Platform.version}");
+        CappConsole.write("WebApp version: v${WaServer.info.version}");
+        CappConsole.write("Dart version: v${Platform.version}");
       } else {
-        CmdConsole.write(
+        CappConsole.write(
           "Unknown input: ${userInput.toLowerCase()}",
-          Colors.error,
+          CappColors.error,
         );
-        CmdConsole.write(help, Colors.success);
+        CappConsole.write(help, CappColors.success);
       }
     });
 
-    return CmdConsole(help, Colors.success);
+    return CappConsole(help, CappColors.success);
   }
 
-  Future<CmdConsole> test(CmdController controller) async {
+  Future<CappConsole> test(CappController controller) async {
     var report = controller.getOption('reporter', def: '');
 
     await Process.start(
@@ -147,29 +146,29 @@ class ProjectCommands {
       },
       mode: ProcessStartMode.inheritStdio,
     );
-    return CmdConsole("", Colors.off);
+    return CappConsole("", CappColors.off);
   }
 
-  Future<CmdConsole> build(CmdController controller) async {
+  Future<CappConsole> build(CappController controller) async {
     if (controller.existsOption('h')) {
       var help = controller.manager.getHelp([controller]);
-      return CmdConsole(help, Colors.none);
+      return CappConsole(help, CappColors.none);
     }
 
     var path = controller.getOption('appPath', def: './lib/app.dart');
     if (path.isEmpty || !File(path).existsSync()) {
-      return CmdConsole(
+      return CappConsole(
           "The path of main file dart is requirment. for example '--path ./bin/app.dart'",
-          Colors.error);
+          CappColors.error);
     }
 
     var output = controller.getOption('output', def: './webapp_build');
     if (output == './webapp_build' && Directory(output).existsSync()) {
       Directory(output).deleteSync(recursive: true);
     } else if (Directory(output).existsSync()) {
-      return CmdConsole(
+      return CappConsole(
         "The output path is requirment. for example '--output ./webapp_build'",
-        Colors.error,
+        CappColors.error,
       );
     }
     Directory(output).createSync(recursive: true);
@@ -178,10 +177,10 @@ class ProjectCommands {
     if (publicPath.isNotEmpty && Directory(publicPath).existsSync()) {
       var publicOutPutPath = joinPaths([output, 'public']);
       Directory(publicOutPutPath).createSync(recursive: true);
-      await CmdConsole.progress(
+      await CappConsole.progress(
         "Copy public files",
         () => Directory(publicPath).copyDirectory(Directory(publicOutPutPath)),
-        type: ProgressType.circle,
+        type: CappProgressType.circle,
       );
     }
 
@@ -191,10 +190,10 @@ class ProjectCommands {
     if (langPath.isNotEmpty && Directory(langPath).existsSync()) {
       var langOutPutPath = joinPaths([output, 'lib/languages']);
       Directory(langOutPutPath).createSync(recursive: true);
-      await CmdConsole.progress(
+      await CappConsole.progress(
         "Copy Language files",
         () => Directory(langPath).copyDirectory(Directory(langOutPutPath)),
-        type: ProgressType.circle,
+        type: CappProgressType.circle,
       );
     }
 
@@ -202,10 +201,10 @@ class ProjectCommands {
     if (widgetPath.isNotEmpty && Directory(widgetPath).existsSync()) {
       var widgetOutPutPath = joinPaths([output, 'lib/widgets']);
       Directory(widgetOutPutPath).createSync(recursive: true);
-      await CmdConsole.progress(
+      await CappConsole.progress(
         "Copy widgets",
         () => Directory(widgetPath).copyDirectory(Directory(widgetOutPutPath)),
-        type: ProgressType.circle,
+        type: CappProgressType.circle,
       );
     }
 
@@ -228,18 +227,18 @@ class ProjectCommands {
       mode: ProcessStartMode.inheritStdio,
     );
 
-    var result = await CmdConsole.progress<int>(
+    var result = await CappConsole.progress<int>(
       "Build project",
       () async {
         return await procces.exitCode;
       },
-      type: ProgressType.circle,
+      type: CappProgressType.circle,
     );
 
     if (result == 0) {
       var type = controller.getOption('type', def: 'exe');
       if (type == 'zip') {
-        await CmdConsole.progress(
+        await CappConsole.progress(
           "Compress output",
           () async {
             var encoder = ZipFileEncoder();
@@ -259,11 +258,12 @@ class ProjectCommands {
               'webapp_build.zip',
             ]));
           },
-          type: ProgressType.circle,
+          type: CappProgressType.circle,
         );
       }
     }
 
-    return CmdConsole('Finish build ${result == 0 ? 'OK!' : ''}', Colors.none);
+    return CappConsole(
+        'Finish build ${result == 0 ? 'OK!' : ''}', CappColors.none);
   }
 }

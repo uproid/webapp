@@ -37,6 +37,9 @@
   <div class="alert alert-success my-3">
     <?= $t('i18n.exampleParams', {'name': 'Jack', 'age': 20}) ?>
   </div>
+  <div class="alert alert-success my-3">
+    <?= $t(exampleTranslateDynamic) ?>
+  </div>
   <div class="card my-3 p-0">
     <ul class="list-group list-group-flush m-0 p-0">
       <li class="list-group-item">
@@ -77,6 +80,7 @@ Future&lt;String&gt; exampleLanguage() async {
             &#39;name&#39;: &#39;Alexandre&#39;,
             &#39;age&#39;: Random().nextInt(100),
         }),
+        'exampleTranslateDynamic': 'example.params.dynamic#$a#$b#$c#$d'.tr.write(rq),
     });
     return renderTemplate(&#39;example/i18n&#39;);
 }

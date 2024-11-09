@@ -133,5 +133,11 @@
   "sidebar.paginationExample": "分页示例",
   "project.contributing": "贡献",
   "project.documentation": "文档",
-  "project.github": "GitHub"
+  "project.github": "GitHub",
+  "error.field.required": "该字段是必填项",
+  "error.field.email": "无效的电子邮件地址",
+  "error.field": "无效值",
+  "error.field.min": "值必须大于或等于 {0}",
+  "error.field.max": "值必须小于或等于 {0}",
+  "error.invalid.password": "密码无效，必须包含 [数字/字符(大写+小写)/?@"
 }

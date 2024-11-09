@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:webapp/src/tools/model_less/format_helper.dart';
+
 import 'mode_less_array.dart';
 import 'model_less.dart';
 
@@ -14,7 +16,7 @@ extension MapFormatHelper on Map {
   /// Returns: The integer value associated with the [key] or [def] if not found or cannot be parsed.
   int asInt(String key, {int def = 0}) {
     if (keys.contains(key)) {
-      return int.tryParse(this[key].toString()) ?? def;
+      return this[key].asInt(def: def);
     }
 
     return def;
@@ -42,7 +44,7 @@ extension MapFormatHelper on Map {
   /// Returns: The double value associated with the [key] or [def] if not found or cannot be parsed.
   double asDouble(String key, {double def = 0}) {
     if (keys.contains(key)) {
-      return double.tryParse(this[key].toString()) ?? def;
+      return this[key].asDouble(def: def);
     }
 
     return def;
@@ -56,7 +58,7 @@ extension MapFormatHelper on Map {
   /// Returns: The numeric value associated with the [key] or [def] if not found or cannot be parsed.
   num asNum(String key, {num def = 0}) {
     if (keys.contains(key)) {
-      return num.tryParse(this[key].toString()) ?? def;
+      return this[key].toString().asNum(def: def);
     }
 
     return def;
@@ -108,13 +110,10 @@ extension MapFormatHelper on Map {
   ///
   /// Returns: The list of type [T] associated with the [key] or [def] if not found or cannot be parsed.
   List<T> asList<T>(String key, {List<T>? def}) {
-    try {
-      if (keys.contains(key)) {
-        return List<T>.from(this[key].map((x) => x));
-      }
-    } catch (e) {
-      return def ?? [];
+    if (keys.contains(key)) {
+      return this[key].asList<T>(def: def);
     }
+
     return def ?? [];
   }
 
@@ -248,5 +247,10 @@ extension MapFormatHelper on Map {
     } catch (e) {
       return RegExp(r'(\w+)');
     }
+  }
+
+  /// remove all null values from the map.
+  void removeNulls() {
+    this.removeWhere((key, value) => value == null);
   }
 }

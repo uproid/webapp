@@ -1,4 +1,22 @@
 var socketOutput = 0;
+const videoElement = document.getElementById('serverVideo');
+
+let sourceBuffer;
+
+const mediaSource = new MediaSource();
+videoElement.src = URL.createObjectURL(mediaSource);
+
+mediaSource.addEventListener('sourceopen', function () {
+    sourceBuffer = mediaSource.addSourceBuffer('video/webm; codecs="opus,vp8"');
+    sourceBuffer.addEventListener('updateend', function () {
+        if (videoElement.paused) {
+            videoElement.play();
+        }
+    });
+});
+const peerConnection = new RTCPeerConnection();
+let mediaRecorder;
+
 var socketEvents = {
     connected: function (data) {
         this.output({ data: 'Web Socket connected' });
@@ -32,6 +50,11 @@ var socketEvents = {
             initClientList();
         }
     },
+
+    streamServer: function (data) {
+        const rawData = new Uint8Array(data.data);
+        sourceBuffer?.appendBuffer(rawData);
+    }
 }
 
 var socket = new WebSocket("/ws");
@@ -68,3 +91,61 @@ function initClientList() {
         });
     });
 }
+
+document.getElementById('btn-stream')?.addEventListener('click', function () {
+    socket.send(JSON.stringify({ path: 'clients' }));
+});
+
+document.getElementById('btn-stop-stream')?.addEventListener('click', function () {
+    //document.getElementById('videoStream').classList.add("d-none");
+    mediaRecorder.stop();
+
+    var localVideo = document.getElementById('localVideo');
+    localVideo.pause(); // Pause the video
+    localVideo.currentTime = 0;
+
+    videoElement.pause();
+    videoElement.currentTime = 0;
+});
+
+document.getElementById('btn-socket-stream')?.addEventListener('click', function () {
+    document.getElementById('videoStream').classList.remove("d-none");
+
+    // دسترسی به دوربین و میکروفون
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+        .then((stream) => {
+            document.getElementById('localVideo').srcObject = stream;
+
+            // اضافه کردن stream به PeerConnection
+            stream.getTracks().forEach((track) => {
+                peerConnection.addTrack(track, stream);
+            });
+
+            // Send to server
+            mediaRecorder = new MediaRecorder(stream, {
+                mimeType: `video/webm; codecs="opus,vp8"`,
+                videoBitsPerSecond: 100_000, // 2.5 Mbps for video will be OK
+                audioBitsPerSecond: 6_000    // 128 kbps for audio will be OK
+            });
+            
+            mediaRecorder.ondataavailable = (event) => {
+                if (event.data.size > 0) {
+                    event.data.arrayBuffer().then((data) => {
+                        var toB64 = (buffer) => {
+                            const byteArray = new Uint8Array(buffer);
+                            var res = [];
+                            byteArray.forEach((node) => res.push(node));
+                            return res;
+                        }
+                        socket.send(JSON.stringify({
+                            path: 'stream',
+                            // JUST HERE SHOULD BE JSON event.data
+                            blob: toB64(data)
+                        }));
+                    });
+                }
+            };
+            mediaRecorder.start(1000);
+        })
+        .catch((error) => console.error('Error accessing media devices:', error));
+});

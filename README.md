@@ -11,7 +11,7 @@
 
 WebApp Package is a robust Dart package designed to streamline the development of powerful web applications. Whether you're building APIs, managing databases, creating dynamic frontend widgets, or implementing real-time features, the WebApp package offers a comprehensive suite of tools to accelerate your development process. With built-in support for MongoDB, WebSockets, and seamless integration with Nginx, this package is ideal for developers seeking efficiency and scalability in their web projects.
 
-#### [View Examples](https://github.com/uproid/webapp/tree/master/example)  |  [Live Demo](https://webapp.uproid.com) | [Documentations](https://github.com/uproid/webapp/tree/master/doc)
+#### [Examples Project](https://github.com/uproid/webapp/tree/master/example)  |  [Live Demo](https://example.uproid.com) | [Documentations](https://webapp.uproid.com)
 
 ## Purpose
 

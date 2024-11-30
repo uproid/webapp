@@ -139,5 +139,7 @@
   "error.field": "مقدار نامعتبر",
   "error.field.min": "مقدار باید بیشتر از یا برابر با {0} باشد",
   "error.field.max": "مقدار باید کمتر از یا برابر با {0} باشد",
-  "error.invalid.password": "رمز عبور نامعتبر است، باید شامل [عدد/حروف (بزرگ و کوچک)/؟@"
+  "error.invalid.password": "رمز عبور نامعتبر است، باید شامل [عدد/حروف (بزرگ و کوچک)/؟@",
+  "testWebSocket.stream": "Video Stream",
+  "testWebSocket.stopStream": "Stop"
 }

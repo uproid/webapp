@@ -50,8 +50,9 @@ extension FormatHelper on dynamic {
         return [this as T];
       }
       return def ?? [];
-    } catch (e) {}
-    return def ?? [];
+    } catch (e) {
+      return def ?? [];
+    }
   }
 
   ObjectId asObjectId({ObjectId? def}) {

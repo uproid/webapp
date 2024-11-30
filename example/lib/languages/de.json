@@ -139,5 +139,7 @@
     "error.field": "Ungültiger Wert",
     "error.field.min": "Wert muss größer oder gleich {0} sein",
     "error.field.max": "Wert muss kleiner oder gleich {0} sein",
-    "error.invalid.password": "Das Passwort ist ungültig, es muss [Zahl/Buchstabe (Groß+Klein)/?@ enthalten"
+    "error.invalid.password": "Das Passwort ist ungültig, es muss [Zahl/Buchstabe (Groß+Klein)/?@ enthalten",
+    "testWebSocket.stream": "Video Stream",
+    "testWebSocket.stopStream": "Stop"
 }

@@ -139,5 +139,7 @@
     "error.field": "قيمة غير صالحة",
     "error.field.min": "يجب أن تكون القيمة أكبر من أو تساوي {0}",
     "error.field.max": "يجب أن تكون القيمة أقل من أو تساوي {0}",
-    "error.invalid.password": "كلمة المرور غير صالحة، يجب أن تحتوي على [رقم/حروف (كبيرة وصغيرة)/؟@"
+    "error.invalid.password": "كلمة المرور غير صالحة، يجب أن تحتوي على [رقم/حروف (كبيرة وصغيرة)/؟@",
+    "testWebSocket.stream": "Video Stream",
+    "testWebSocket.stopStream": "Stop"
 }

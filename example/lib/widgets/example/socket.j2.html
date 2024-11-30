@@ -1,11 +1,15 @@
 <div class="row my-5">
-  <h3><?= $t('testWebSocket.title') ?></h3>
+  <h3>
+    <?= $t('testWebSocket.title') ?>
+  </h3>
   <div class="card card-primary bg-light my-3">
     <div class="card-body">
       <div class="row">
         <div class="col">
           <div class="form-group">
-            <label for="exampleFormControlTextarea1"><?= $t('testWebSocket.output') ?></label>
+            <label for="exampleFormControlTextarea1">
+              <?= $t('testWebSocket.output') ?>
+            </label>
             <textarea style="height: 350px" class="form-control" id="socket-output" rows="3"></textarea>
           </div>
         </div>
@@ -26,11 +30,27 @@
         <button id="btn-socket-clients" class="col-auto btn-sm btn btn-outline-primary disable-wave">
           <?= $t('testWebSocket.clientLists') ?>
         </button>
+        <button id="btn-socket-stream" class="col-auto btn-sm btn btn-success disable-wave">
+          <?= $t('testWebSocket.stream') ?>
+        </button>
         <div class="col align-self-end">
-          <button onclick="document.getElementById('socket-output').innerHTML='';document.getElementById('client-list').innerHTML=''" class="me-3 btn-sm btn btn-outline-danger float-end">
+          <button
+            onclick="document.getElementById('socket-output').innerHTML='';document.getElementById('client-list').innerHTML=''"
+            class="me-3 btn-sm btn btn-outline-danger float-end">
             <?= $t('testWebSocket.clear') ?>
           </button>
         </div>
+      </div>
+    </div>
+    <div class="card-body d-none" id="videoStream">
+      <div class="row">
+        <video class="col-6" id="localVideo" autoplay muted></video>
+        <video class="col-6" id="serverVideo" controls></video>
+      </div>
+      <div class="row mt-3 mx-0">
+        <button id="btn-stop-stream" class="col-auto btn-sm btn btn-success disable-wave">
+          <?= $t('testWebSocket.stopStream') ?>
+        </button>
       </div>
     </div>
   </div>

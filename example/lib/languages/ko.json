@@ -139,5 +139,7 @@
     "error.field": "유효하지 않은 값",
     "error.field.min": "값은 {0} 이상이어야 합니다",
     "error.field.max": "값은 {0} 이하여야 합니다",
-    "error.invalid.password": "비밀번호가 유효하지 않습니다, [숫자/문자(대문자+소문자)/?@가 포함되어야 합니다"
+    "error.invalid.password": "비밀번호가 유효하지 않습니다, [숫자/문자(대문자+소문자)/?@가 포함되어야 합니다",
+    "testWebSocket.stream": "Video Stream",
+    "testWebSocket.stopStream": "Stop"
 }

@@ -139,5 +139,7 @@
   "error.field": "Ongeldige waarde",
   "error.field.min": "Waarde moet groter dan of gelijk aan {0} zijn",
   "error.field.max": "Waarde moet kleiner dan of gelijk aan {0} zijn",
-  "error.invalid.password": "Wachtwoord is ongeldig, het moet [Nummer/Teken (Hoofdletter+Kleine letter)/?@ bevatten"
+  "error.invalid.password": "Wachtwoord is ongeldig, het moet [Nummer/Teken (Hoofdletter+Kleine letter)/?@ bevatten",
+  "testWebSocket.stream": "Video Stream",
+  "testWebSocket.stopStream": "Stop"
 }

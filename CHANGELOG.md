@@ -1,3 +1,8 @@
+## 1.1.2
+- Added fix
+- Update dependencies
+- New example regarding video streaming
+
 ## 1.1.1
 - Resolved several bugs to enhance overall stability.
 - Implemented the Collections Free Model (CFM) for MongoDB, streamlining the development of rapid APIs, forms, and validation processes (refer to examples).

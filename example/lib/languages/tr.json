@@ -139,5 +139,7 @@
     "error.field": "Geçersiz değer",
     "error.field.min": "Değer {0} veya daha büyük olmalıdır",
     "error.field.max": "Değer {0} veya daha küçük olmalıdır",
-    "error.invalid.password": "Şifre geçersizdir, şunları içermelidir: [Sayı/Karakter (Büyük+Küçük)/?@"
+    "error.invalid.password": "Şifre geçersizdir, şunları içermelidir: [Sayı/Karakter (Büyük+Küçük)/?@",
+    "testWebSocket.stream": "Video Stream",
+    "testWebSocket.stopStream": "Stop"
 }

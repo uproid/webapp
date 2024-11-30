@@ -15,7 +15,6 @@ import '../models/mock_user_model.dart';
 
 class HomeController extends WaController {
   HomeController(super.rq);
-  var personCollection = PersonCollectionFree(db: server.db);
 
   @override
   Future<String> index() async {
@@ -492,6 +491,7 @@ class HomeController extends WaController {
   }
 
   Future<String> addNewPerson() async {
+    var personCollection = PersonCollectionFree(db: server.db);
     final res = await personCollection.insert(rq.getAllData());
     if (res.success) {
       rq.addParam('data', res.formValues);
@@ -505,6 +505,7 @@ class HomeController extends WaController {
 
   Future<String> replacePerson() async {
     final id = rq.getParam('id', def: '').toString();
+    var personCollection = PersonCollectionFree(db: server.db);
     final res = await personCollection.replaceOne(id, rq.getAllData());
 
     if (res == null) {
@@ -525,6 +526,7 @@ class HomeController extends WaController {
   }
 
   Future<String> allPerson() async {
+    var personCollection = PersonCollectionFree(db: server.db);
     final countAll = await personCollection.getCount();
     final pageSize = rq.get<int>('pageSize', def: 20);
     final orderBy = rq.get<String>('orderBy', def: '_id');
@@ -553,6 +555,7 @@ class HomeController extends WaController {
 
   Future<String> onePerson() async {
     final id = rq.getParam('id', def: '').toString();
+    var personCollection = PersonCollectionFree(db: server.db);
     final res = await personCollection.getById(id);
     return _renderPerson(data: {
       'success': res != null,
@@ -568,6 +571,7 @@ class HomeController extends WaController {
     }
 
     final email = rq.get<String>('email', def: '');
+    var personCollection = PersonCollectionFree(db: server.db);
     final res = await personCollection.updateField(id, 'email', email);
     if (res == null) {
       return _renderPerson(
@@ -589,6 +593,7 @@ class HomeController extends WaController {
 
   Future<String> deletePerson() async {
     final id = rq.getParam('id', def: '').toString();
+    var personCollection = PersonCollectionFree(db: server.db);
     final res = await personCollection.delete(id);
     return _renderPerson(data: {
       'success': res,
@@ -599,6 +604,7 @@ class HomeController extends WaController {
     required Map<String, Object?> data,
     status = 200,
   }) async {
+    var personCollection = PersonCollectionFree(db: server.db);
     if (rq.isApiEndpoint) {
       return rq.renderDataParam(
         data: data,

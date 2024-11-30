@@ -139,5 +139,7 @@
     "error.field": "Недопустимое значение",
     "error.field.min": "Значение должно быть больше или равно {0}",
     "error.field.max": "Значение должно быть меньше или равно {0}",
-    "error.invalid.password": "Пароль недействителен, он должен содержать [Цифру/Букву (Заглавную+Строчную)/?@"
+    "error.invalid.password": "Пароль недействителен, он должен содержать [Цифру/Букву (Заглавную+Строчную)/?@",
+    "testWebSocket.stream": "Video Stream",
+    "testWebSocket.stopStream": "Stop"
 }

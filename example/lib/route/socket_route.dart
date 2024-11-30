@@ -48,5 +48,14 @@ Map<String, SocketEvent> getSocketRoute() {
         );
       },
     ),
+    'stream': SocketEvent(
+      onMessage: (socket, data) {
+        var blob = data['blob'];
+
+        if (blob != null) {
+          socket.send(blob, path: 'streamServer');
+        }
+      },
+    ),
   };
 }

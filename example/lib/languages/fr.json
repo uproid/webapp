@@ -139,5 +139,7 @@
     "error.field": "Valeur incorrecte",
     "error.field.min": "La valeur doit être supérieure ou égale à {0}",
     "error.field.max": "La valeur doit être inférieure ou égale à {0}",
-    "error.invalid.password": "Le mot de passe n'est pas valide, il doit contenir [Numéro/Caractère (Majuscule+Minuscule)/?@"
+    "error.invalid.password": "Le mot de passe n'est pas valide, il doit contenir [Numéro/Caractère (Majuscule+Minuscule)/?@",
+    "testWebSocket.stream": "Video Stream",
+    "testWebSocket.stopStream": "Stop"
 }

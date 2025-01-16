@@ -1,3 +1,7 @@
+## 1.1.3
+- Fixed bearer authorization in webrequest
+- Auto router paths for api, in Collections Free Models
+
 ## 1.1.2
 - Added fix
 - Update dependencies

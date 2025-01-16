@@ -242,5 +242,5 @@ class WaServer {
 /// A class that holds version information for the server.
 class _Info {
   /// The version of the server.
-  final String version = '1.1.2';
+  final String version = '1.1.3';
 }

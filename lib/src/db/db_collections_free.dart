@@ -2,6 +2,8 @@ import 'package:mongo_dart/mongo_dart.dart';
 import 'package:webapp/src/db/mongo/error_codes.dart';
 import 'package:webapp/src/forms/db_form_free.dart';
 import 'package:webapp/wa_model.dart';
+import 'package:webapp/wa_route.dart';
+import 'package:webapp/wa_ui.dart';
 
 /// An abstract class representing a MongoDB collection with utility methods.
 ///
@@ -284,6 +286,361 @@ abstract class DBCollectionFree {
     }
     res = {...resSearch, ...resFilter};
     return res;
+  }
+
+  /// Generate list of all routes for an API collection.
+  List<WebRoute> routes(
+    String path, {
+    required WebRequest rq,
+    bool useRouteAll = true,
+    bool useRouteDelete = true,
+    bool useRouteInsert = true,
+    bool useRouteUpdate = true,
+    bool useRouteGetOne = true,
+    bool paging = true,
+    int pageSize = 20,
+    bool orderReverse = true,
+    String orderBy = '_id',
+    Future<ApiDoc>? Function()? docAll,
+    Future<ApiDoc>? Function()? docDelete,
+    Future<ApiDoc>? Function()? docInsert,
+    Future<ApiDoc>? Function()? docUpdate,
+    Future<ApiDoc>? Function()? docOne,
+  }) {
+    return <WebRoute>[
+      if (useRouteAll)
+        routeGetAll(
+          '$path',
+          rq: rq,
+          paging: paging,
+          pageSize: pageSize,
+          orderReverse: orderReverse,
+          orderBy: orderBy,
+          apiDoc: docAll,
+        ),
+      if (useRouteGetOne) routeGetOne('$path/{id}', rq: rq, apiDoc: docOne),
+      if (useRouteDelete)
+        routeDeleteOne(
+          '$path/delete/{id}',
+          rq: rq,
+          apiDoc: docDelete,
+        ),
+      if (useRouteInsert) routeInsert('$path', rq: rq, apiDoc: docInsert),
+      if (useRouteUpdate) routeUpdate('$path/{id}', rq: rq, apiDoc: docUpdate),
+    ];
+  }
+
+  WebRoute routeGetAll(
+    String path, {
+    required WebRequest rq,
+    List<String> methods = const [RequestMethods.GET],
+    Future<ApiDoc>? Function()? apiDoc,
+    WaAuthController<dynamic>? auth,
+    List<String> extraPath = const [],
+    List<String> excludePaths = const [],
+    List<String> hosts = const ['*'],
+    Map<String, Object?> params = const {},
+    List<String> permissions = const [],
+    List<int> ports = const [],
+    List<WebRoute> children = const [],
+    bool paging = true,
+    int pageSize = 20,
+    bool orderReverse = true,
+    String orderBy = '_id',
+  }) {
+    final index = () async {
+      if (paging == false) {
+        var all = await getAll();
+
+        return rq.renderData(data: {
+          'success': true,
+          'data': all,
+        });
+      } else {
+        final countAll = await getCount();
+        pageSize = rq.get<int>('pageSize', def: pageSize);
+        orderBy = rq.get<String>('orderBy', def: orderBy);
+        orderReverse = rq.get<bool>('orderReverse', def: orderReverse);
+
+        UIPaging paging = UIPaging(
+          rq: rq,
+          total: countAll,
+          pageSize: pageSize,
+          widget: '',
+          page: rq.get<int>('page', def: 1),
+          orderReverse: orderReverse,
+          orderBy: orderBy,
+        );
+
+        final res = await getAll(
+          limit: paging.pageSize,
+          skip: paging.start,
+          sort: DQ.order(orderBy, orderReverse),
+        );
+
+        return rq.renderData(data: {
+          'success': true,
+          'data': res,
+          'paging': await paging.renderData(),
+        });
+      }
+    };
+
+    return WebRoute(
+      path: path,
+      methods: methods,
+      rq: rq,
+      apiDoc: apiDoc,
+      auth: auth,
+      excludePaths: excludePaths,
+      extraPath: extraPath,
+      hosts: hosts,
+      params: params,
+      permissions: permissions,
+      ports: ports,
+      index: index,
+      children: children,
+    );
+  }
+
+  WebRoute routeInsert(
+    String path, {
+    required WebRequest rq,
+    List<String> methods = const [RequestMethods.POST],
+    Future<ApiDoc>? Function()? apiDoc,
+    WaAuthController<dynamic>? auth,
+    List<String> extraPath = const [],
+    List<String> excludePaths = const [],
+    List<String> hosts = const ['*'],
+    Map<String, Object?> params = const {},
+    List<String> permissions = const [],
+    List<int> ports = const [],
+  }) {
+    final index = () async {
+      var res = await insert(rq.getAllData());
+
+      if (!res.success) {
+        return rq.renderData(
+          data: {
+            'form': res.toJson(),
+            'success': false,
+            'message': 'error',
+          },
+          status: 502,
+        );
+      }
+
+      return rq.renderData(data: {
+        'data': res.formValues(),
+        'success': true,
+        'message': 'inserted',
+      });
+    };
+
+    return WebRoute(
+      path: path,
+      methods: methods,
+      rq: rq,
+      apiDoc: apiDoc,
+      auth: auth,
+      excludePaths: excludePaths,
+      extraPath: extraPath,
+      hosts: hosts,
+      params: params,
+      permissions: permissions,
+      ports: ports,
+      index: index,
+    );
+  }
+
+  WebRoute routeUpdate(
+    String path, {
+    required WebRequest rq,
+    List<String> methods = const [RequestMethods.POST],
+    Future<ApiDoc>? Function()? apiDoc,
+    WaAuthController<dynamic>? auth,
+    List<String> extraPath = const [],
+    List<String> excludePaths = const [],
+    List<String> hosts = const ['*'],
+    Map<String, Object?> params = const {},
+    List<String> permissions = const [],
+    List<int> ports = const [],
+  }) {
+    final index = () async {
+      var id = rq.getParam('id', def: '').toString();
+
+      if (id.isEmpty) {
+        return rq.renderData(
+          data: {
+            'success': false,
+            'message': 'id is required',
+          },
+          status: 502,
+        );
+      }
+
+      var res = await replaceOne(id, rq.getAllData());
+      if (res == null) {
+        return rq.renderData(
+          data: {
+            'success': false,
+            'message': 'id not found',
+          },
+          status: 404,
+        );
+      }
+
+      if (!res.success) {
+        return rq.renderData(
+          data: {
+            'form': res.toJson(),
+            'success': false,
+            'message': 'error',
+          },
+          status: 502,
+        );
+      }
+
+      return rq.renderData(data: {
+        'data': res.formValues(),
+        'success': true,
+        'message': 'updated',
+      });
+    };
+
+    return WebRoute(
+      path: path,
+      methods: methods,
+      rq: rq,
+      apiDoc: apiDoc,
+      auth: auth,
+      excludePaths: excludePaths,
+      extraPath: extraPath,
+      hosts: hosts,
+      params: params,
+      permissions: permissions,
+      ports: ports,
+      index: index,
+    );
+  }
+
+  WebRoute routeDeleteOne(
+    String path, {
+    required WebRequest rq,
+    List<String> methods = const [RequestMethods.GET],
+    Future<ApiDoc>? Function()? apiDoc,
+    WaAuthController<dynamic>? auth,
+    List<String> extraPath = const [],
+    List<String> excludePaths = const [],
+    List<String> hosts = const ['*'],
+    Map<String, Object?> params = const {},
+    List<String> permissions = const [],
+    List<int> ports = const [],
+  }) {
+    final index = () async {
+      var id = rq.getParam('id', def: '').toString();
+
+      if (id.isEmpty) {
+        return rq.renderData(
+          data: {
+            'success': false,
+            'message': 'id is required',
+          },
+          status: 502,
+        );
+      }
+
+      var data = await delete(id);
+      if (!data) {
+        return rq.renderData(
+          data: {
+            'success': false,
+            'message': 'id not found',
+          },
+          status: 404,
+        );
+      }
+
+      return rq.renderData(data: {
+        'success': true,
+        'message': 'deleted',
+      });
+    };
+
+    return WebRoute(
+      path: path,
+      methods: methods,
+      rq: rq,
+      apiDoc: apiDoc,
+      auth: auth,
+      excludePaths: excludePaths,
+      extraPath: extraPath,
+      hosts: hosts,
+      params: params,
+      permissions: permissions,
+      ports: ports,
+      index: index,
+    );
+  }
+
+  WebRoute routeGetOne(
+    String path, {
+    required WebRequest rq,
+    List<String> methods = const [RequestMethods.GET],
+    Future<ApiDoc>? Function()? apiDoc,
+    WaAuthController<dynamic>? auth,
+    List<String> extraPath = const [],
+    List<String> excludePaths = const [],
+    List<String> hosts = const ['*'],
+    Map<String, Object?> params = const {},
+    List<String> permissions = const [],
+    List<int> ports = const [],
+  }) {
+    final index = () async {
+      var id = rq.getParam('id', def: '').toString();
+
+      if (id.isEmpty) {
+        return rq.renderData(
+          data: {
+            'success': false,
+            'message': 'id is required',
+          },
+          status: 502,
+        );
+      }
+
+      var data = await getById(id);
+      if (data == null) {
+        return rq.renderData(
+          data: {
+            'success': false,
+            'message': 'id not found',
+          },
+          status: 404,
+        );
+      }
+
+      return rq.renderData(data: {
+        'success': true,
+        'data': data,
+        'message': 'ok',
+      });
+    };
+
+    return WebRoute(
+      path: path,
+      methods: methods,
+      rq: rq,
+      apiDoc: apiDoc,
+      auth: auth,
+      excludePaths: excludePaths,
+      extraPath: extraPath,
+      hosts: hosts,
+      params: params,
+      permissions: permissions,
+      ports: ports,
+      index: index,
+    );
   }
 }
 

@@ -47,7 +47,7 @@ class Authorization {
 
     if (typeString == 'bearer') {
       return Authorization(
-        type: AuthType.basic,
+        type: AuthType.bearer,
         value: splitedAuth[1],
       );
     }

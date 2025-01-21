@@ -572,6 +572,12 @@ class WebRequest {
           'dateFormat': (DateTime dt, String format) {
             return DateFormat(format).format(dt);
           },
+          'oid': (Object? id) {
+            if (id is ObjectId?)
+              return id?.oid;
+            else
+              return id;
+          }
         },
         getAttribute: (String key, dynamic object) {
           try {
@@ -592,21 +598,13 @@ class WebRequest {
             }
             return object[key];
           } on NoSuchMethodError {
-            Console.w({
+            Console.e({
               'error': {
                 'object': object,
                 'key': key,
                 'error': 'The key "$key" on "$object" not found',
               }
             });
-
-            if (object == null) {
-              if (WaServer.config.isLocalDebug) {
-                return 'The key "$key" on "$object" not found';
-              } else {
-                return null;
-              }
-            }
 
             return null;
           } catch (e) {

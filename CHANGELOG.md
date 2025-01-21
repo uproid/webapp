@@ -1,3 +1,8 @@
+## 1.1.4
+- Fixed issue to start Database when starting project
+- Added relation field for Collection Free Model's
+- Updated dependencies
+
 ## 1.1.3
 - Fixed bearer authorization in webrequest
 - Auto router paths for api, in Collections Free Models

@@ -134,7 +134,9 @@ class WaServer {
       await Future.delayed(Duration(seconds: 30));
     }
 
-    _db = await connectMongoDb();
+    _db = await connectMongoDb().onError((_, __) {
+      throw ("Error connect to DB");
+    });
 
     server = await HttpServer.bind(
       config.ip,
@@ -227,7 +229,10 @@ class WaServer {
   /// Returns a [Future] containing the [mongo.Db] instance.
   Future<mongo.Db> connectMongoDb() async {
     var db = mongo.Db(config.dbConfig.link);
-    if (config.dbConfig.enable) await db.open();
+    if (config.dbConfig.enable)
+      await db.open().onError((err, stack) {
+        Console.e(err.toString());
+      });
     return db;
   }
 
@@ -242,5 +247,5 @@ class WaServer {
 /// A class that holds version information for the server.
 class _Info {
   /// The version of the server.
-  final String version = '1.1.3';
+  final String version = '1.1.4';
 }

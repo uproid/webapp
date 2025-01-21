@@ -37,12 +37,12 @@ abstract class DBCollectionFree {
     });
   }
 
-  FormResultFree validate(Map<String, Object?> data) {
+  Future<FormResultFree> validate(Map<String, Object?> data) async {
     return form.validate(data);
   }
 
   Future<FormResultFree> insert(Map<String, Object?> data) async {
-    var validationResult = validate(data);
+    var validationResult = await validate(data);
     if (validationResult.success) {
       var result = await collection.insertOne(validationResult.formValues());
 
@@ -64,7 +64,7 @@ abstract class DBCollectionFree {
       return null;
     }
 
-    FormResultFree validationResult = validate(data);
+    FormResultFree validationResult = await validate(data);
     if (validationResult.success) {
       var newData = validationResult.formValues();
       newData['_id'] = oid;
@@ -128,9 +128,9 @@ abstract class DBCollectionFree {
       selectedFields = selector.paramFields.keys.toList();
     }
 
-    await result.forEach((element) {
-      results.add(toModel(element, selectedFields: selectedFields));
-    });
+    await for (var element in result) {
+      results.add(await toModel(element, selectedFields: selectedFields));
+    }
 
     return results;
   }
@@ -142,6 +142,10 @@ abstract class DBCollectionFree {
   /// Returns `true` if the document exists, otherwise `false`.
   Future<bool> existId(String idField) async {
     var id = ObjectId.tryParse(idField);
+    return existOid(id);
+  }
+
+  Future<bool> existOid(ObjectId? id) async {
     if (id == null) return false;
     var count = await collection.modernCount(selector: where.id(id));
     return count.count > 0;
@@ -197,7 +201,7 @@ abstract class DBCollectionFree {
     }
 
     DBFormFree newForm = DBFormFree(fields: {field: fieldModel});
-    FormResultFree formResult = newForm.validate({field: value});
+    FormResultFree formResult = await newForm.validate({field: value});
 
     if (formResult.success) {
       await collection.updateOne(where.id(oid), modify.set(field, value));
@@ -212,29 +216,32 @@ abstract class DBCollectionFree {
 
   Future<Map<String, Object?>?> getById(String id) async {
     var oid = ObjectId.tryParse(id);
+    return getByOid(oid);
+  }
 
-    if (oid == null || !await existId(id)) {
+  Future<Map<String, Object?>?> getByOid(ObjectId? oid) async {
+    if (oid == null || !await existOid(oid)) {
       return null;
     }
 
     var res = await collection.findOne(where.id(oid));
     if (res != null) {
-      return toModel(res);
+      return await toModel(res);
     }
     return null;
   }
 
-  Map<String, Object?> toModel(
+  Future<Map<String, Object?>> toModel(
     Map<String, Object?> document, {
     List<String>? selectedFields,
-  }) {
-    FormResultFree formResult = validate(document);
+  }) async {
+    FormResultFree formResult = await validate(document);
     var res = formResult.formValues(selectedFields: selectedFields);
     return res;
   }
 
-  FormResultFree toFormResult(Map<String, Object?> document) {
-    return validate(document);
+  Future<FormResultFree> toFormResult(Map<String, Object?> document) async {
+    return await validate(document);
   }
 
   Map<String, Object?> getSearchableFilter({

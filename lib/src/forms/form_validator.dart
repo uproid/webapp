@@ -1,10 +1,10 @@
 import 'dart:convert';
-import 'package:webapp/src/tools/model_less/format_helper.dart';
+import 'package:webapp/wa_model_less.dart';
 import 'package:webapp/wa_tools.dart';
 
 import '../render/web_request.dart';
 
-typedef ValidatorEvent<T> = FieldValidateResult Function(T value);
+typedef ValidatorEvent<T> = Future<FieldValidateResult> Function(T value);
 
 /// A class for validating form data using customizable field validators.
 ///
@@ -92,7 +92,7 @@ class FormValidator {
       var success = true;
       var errors = [];
       for (var validateField in fieldEvents) {
-        FieldValidateResult check = validateField(fieldValue);
+        FieldValidateResult check = await validateField(fieldValue);
         if (!check.success) {
           success = false;
         }
@@ -193,7 +193,7 @@ class FieldValidateResult {
 /// or ensuring a field is a number or an email address.
 class FieldValidator {
   /// Validator to check if a field is required (non-null and non-empty).
-  static ValidatorEvent requiredField() => (value) {
+  static ValidatorEvent requiredField() => (value) async {
         var res = (value != null && value.toString().trim().isNotEmpty);
         return FieldValidateResult(
           success: res,
@@ -206,7 +206,7 @@ class FieldValidator {
   /// This validator expects a JSON object with language keys and checks if at least
   /// one value is non-null and non-empty.
   static ValidatorEvent requiredFieldMultiLanguage() {
-    return (value) {
+    return (value) async {
       var res = (value != null && value.toString().trim().isNotEmpty);
 
       if (!res) {
@@ -244,7 +244,7 @@ class FieldValidator {
     int? max,
     int? min,
   }) {
-    return (value) {
+    return (value) async {
       var res = true;
       var error = <String>[];
 
@@ -280,7 +280,7 @@ class FieldValidator {
     int? min,
     bool isRequired = false,
   }) {
-    return (value) {
+    return (value) async {
       var res = true;
       var error = <String>[];
 
@@ -326,7 +326,7 @@ class FieldValidator {
     double? min,
     bool isRequired = false,
   }) {
-    return (value) {
+    return (value) async {
       var res = true;
       var error = <String>[];
 
@@ -371,11 +371,36 @@ class FieldValidator {
   /// Returns:
   /// - `FieldValidateResult`: A result indicating whether the validation passed or failed,
   ///    including any associated error messages.
-  static ValidatorEvent isEmailField() => (value) {
+  static ValidatorEvent isEmailField() => (value) async {
         var res = (value != null && value.toString().trim().isEmail);
         return FieldValidateResult(
           success: res,
           error: res ? '' : 'error.field.email',
         );
       };
+
+  static ValidatorEvent hasRelation({
+    required DBCollectionFree collectionModel,
+    String relationField = '_id',
+    bool isRequired = true,
+  }) {
+    return (value) async {
+      if ((value == null || value.toString().isEmpty) && isRequired) {
+        return FieldValidateResult(
+          success: false,
+          error: 'error.field.required',
+        );
+      }
+
+      if (!isRequired) {
+        return FieldValidateResult(success: true);
+      }
+
+      var res = await collectionModel.existOid(value);
+      return FieldValidateResult(
+        success: res,
+        error: res ? '' : 'error.field.relation',
+      );
+    };
+  }
 }

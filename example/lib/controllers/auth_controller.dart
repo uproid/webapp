@@ -107,7 +107,7 @@ class AuthController extends WaAuthController<MockUserModel> {
           FieldValidator.fieldLength(min: 5, max: 255)
         ],
         'password': [
-          (value) {
+          (value) async {
             return FieldValidateResult(
               success: value.toString().isPassword,
               error: 'error.invalid.password'.tr.write(rq),

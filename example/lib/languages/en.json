@@ -142,5 +142,6 @@
   "error.invalid.password":"Password is not valid, it most has [Number/Char(Upper+Lower)/?@",
   "example.params.dynamic": "A = {0}, B = {1}, C = {2}, D = {3}",
   "testWebSocket.stream": "Video Stream",
-  "testWebSocket.stopStream": "Stop"
+  "testWebSocket.stopStream": "Stop",
+  "error.field.relation": "The value of this field is not valid"
 }

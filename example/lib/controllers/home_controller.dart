@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:math';
+import '../db/job_collection_free.dart';
 import '../db/person_collection_free.dart';
 import '../configs/setting.dart';
 import '../db/example_collections.dart';
@@ -33,7 +34,7 @@ class HomeController extends WaController {
             FieldValidator.fieldLength(min: 5, max: 255)
           ],
           'password': [
-            (value) {
+            (value) async {
               return FieldValidateResult(
                 success: value.toString().isPassword,
                 error: 'error.invalid.password'.tr.write(rq),
@@ -625,17 +626,20 @@ class HomeController extends WaController {
       page: rq.get<int>('page', def: 1),
     );
 
-    final res = await personCollection.getAll(
+    final res = await personCollection.getAllWithJob(
       limit: paging.pageSize,
       skip: paging.start,
       sort: DQ.order(orderBy, orderReverse),
     );
+
+    final jobs = await JobCollectionFree(db: server.db).getAll();
 
     data = {
       ...data,
       'success': res.isNotEmpty,
       'allPerson': res,
       'paging': await paging.render(),
+      'jobs': jobs
     };
     rq.addParams(data);
     return renderTemplate('example/person');

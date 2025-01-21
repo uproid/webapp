@@ -7,20 +7,21 @@ class DBFormFree {
 
   DBFormFree({required this.fields});
 
-  FormResultFree validate(Map<String, Object?> data) {
+  Future<FormResultFree> validate(Map<String, Object?> data) async {
     var formResult = FormResultFree(this);
 
-    fields.forEach((String key, DBFieldFree field) {
+    for (var key in fields.keys) {
+      final field = fields[key]!;
       var value = ObjectDescovery.descovr(
         data[key],
         field.type,
         def: field.defaultValue,
       );
 
-      final resultFieldValidate = field.validate(value);
+      final resultFieldValidate = await field.validate(value);
       formResult.success &= resultFieldValidate.success;
       formResult.formResult[key] = resultFieldValidate;
-    });
+    }
 
     return formResult;
   }
@@ -118,18 +119,6 @@ class FieldResultFree<T> {
     this.errors = errors ?? [];
   }
 
-  // factory FieldResultFree.fromJson(Map<String, dynamic> json) {
-  //   return FieldResultFree(
-  //     success: json['success'] ?? true,
-  //     failed: json['failed'] ?? false,
-  //     error: json['error'] ?? '',
-  //     errors: json['errors'] ?? [],
-  //     errorHtml: json['errorHtml'] ?? '',
-  //     valid: json['valid'] ?? '',
-  //     value: json['value'] ?? null,
-  //   );
-  // }
-
   Map<String, Object?> toJson() {
     return {
       'success': success,
@@ -167,7 +156,7 @@ class DBFieldFree<T> {
     this.fix = fix;
   }
 
-  FieldResultFree validate(Object? fieldValue) {
+  Future<FieldResultFree> validate(Object? fieldValue) async {
     var fieldResult = FieldResultFree(this);
     var value = ObjectDescovery.descovr(
       fieldValue,
@@ -189,8 +178,8 @@ class DBFieldFree<T> {
       fieldResult.value = value;
       fieldResult.parsedValue = value;
     } else {
-      validators.forEach((validator) {
-        FieldValidateResult result = validator(value);
+      for (var validator in validators) {
+        FieldValidateResult result = await validator(value);
         fieldResult.success &= result.success;
         fieldResult.failed = !fieldResult.success;
         if (!result.success) {
@@ -201,7 +190,7 @@ class DBFieldFree<T> {
         fieldResult.valid = fieldResult.success ? 'is-valid' : 'is-invalid';
         fieldResult.value = fieldValue;
         fieldResult.parsedValue = value;
-      });
+      }
     }
     return fieldResult;
   }

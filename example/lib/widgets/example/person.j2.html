@@ -12,20 +12,22 @@
               <th class="text-center">Email</th>
               <th class="text-center">Height</th>
               <th class="text-center">Birthday</th>
+              <th class="text-center">Job</th>
               <th class="text-center"></th>
             </tr>
           </thead>
           <tbody>
             <? for person in allPerson ?>
-            <tr  class="small">
+            <tr class="small">
               <td><?= person.name ?></td>
               <td><?= person.age ?></td>
               <td><?= person.married ?></td>
               <td><?= person.email ?></td>
               <td><?= person.height ?></td>
               <td><?= person.birthday ?></td>
+              <td><?= person.job.title | default('Unknown') ?></td>
               <td class="text-center">
-                <form action="/example/person/<?= person._id ?>" method="POST">
+                <form onsubmit="return confirm('Are you sure to delete `<?= person.name ?>`?')" action="/example/person/<?= person._id ?>" method="POST">
                   <input type="hidden" name="action" value="DELETE" />
                   <button class="btn btn-sm p-0 m-0" type="submit">🗑️</button>
                 </form>
@@ -55,13 +57,17 @@
             <label for="name" class="form-label">Name</label>
             <input
               type="text"
-              class="form-control <?= $n('form/name/valid')  ?>"
+              class="form-control <?= $n('form/name/valid') ?>"
               id="name"
               name="name"
               value="<?= $n('form/name/value') ?>"
               placeholder="Enter your name"
             />
-            <div class="invalid-feedback <?= 'd-block' if $n('form/name/failed') else '' ?>"><?= $t($n('form/name/errors/0')) ?></div>
+            <div
+              class="invalid-feedback <?= 'd-block' if $n('form/name/failed') else '' ?>"
+            >
+              <?= $t($n('form/name/errors/0')) ?>
+            </div>
           </div>
 
           <!-- Email -->
@@ -75,7 +81,11 @@
               value="<?= $n('form/email/value') ?>"
               placeholder="Enter your email"
             />
-            <div class="invalid-feedback <?= 'd-block' if $n('form/email/failed') else '' ?>"><?= $t($n('form/email/errors/0')) ?></div>
+            <div
+              class="invalid-feedback <?= 'd-block' if $n('form/email/failed') else '' ?>"
+            >
+              <?= $t($n('form/email/errors/0')) ?>
+            </div>
           </div>
         </div>
 
@@ -91,9 +101,13 @@
               value="<?= $n('form/age/value') ?>"
               placeholder="Enter your age"
             />
-            <div class="invalid-feedback <?= 'd-block' if $n('form/age/failed') else '' ?>"><?= $t($n('form/age/errors/0')) ?></div>
+            <div
+              class="invalid-feedback <?= 'd-block' if $n('form/age/failed') else '' ?>"
+            >
+              <?= $t($n('form/age/errors/0')) ?>
+            </div>
           </div>
-           <!-- Birthday -->
+          <!-- Birthday -->
           <div class="col-md-6 mb-3">
             <label for="birthday" class="form-label">Birthday</label>
             <input
@@ -103,7 +117,11 @@
               name="birthday"
               value="<?= $n('form/birthday/value') ?>"
             />
-            <div class="invalid-feedback <?= 'd-block' if $n('form/birthday/failed') else '' ?>"><?= $t($n('form/birthday/errors/0')) ?></div>
+            <div
+              class="invalid-feedback <?= 'd-block' if $n('form/birthday/failed') else '' ?>"
+            >
+              <?= $t($n('form/birthday/errors/0')) ?>
+            </div>
           </div>
         </div>
         <!-- Height -->
@@ -120,26 +138,49 @@
               value="<?= $n('form/height/value') ?>"
               placeholder="Enter your height"
             />
-            <div class="invalid-feedback <?= 'd-block' if $n('form/height/failed') else '' ?>"><?= $t($n('form/height/errors/0')) ?></div>
+            <div
+              class="invalid-feedback <?= 'd-block' if $n('form/height/failed') else '' ?>"
+            >
+              <?= $t($n('form/height/errors/0')) ?>
+            </div>
           </div>
           <div class="col-md-6 mb-3">
             <!-- Marid Checkbox -->
-            <div class="form-check mt-md-5">
-              <label class="form-check-label" for="married">Married</label>
-              <input
-                name="married"
-                class="form-check-input <?= $n('form/married/valid') ?>"
-                type="checkbox"
-                value = "true"
-                <?= 'checked' if $n('form/married/value') else '' ?>
-                id="married"
-              />
+            <label for="job_id" class="form-label">Job Title</label>
+            <select
+              class="form-select <?= $n('form/job_id/valid') ?>"
+              id="job_id"
+              name="job_id"
+            >
+              <option value="">Select Job</option>
+              <? for job in jobs  ?>
+                <option <?= 'selected' if $n('form/job_id/value')|oid == job._id else '' ?> value="<?= job._id ?>"><?= job.title ?></option>
+              <? endfor ?>
+            </select>
+            <div
+              class="invalid-feedback <?= 'd-block' if $n('form/job_id/failed') else '' ?>"
+            >
+              <?= $t($n('form/job_id/errors/0')) ?>
             </div>
           </div>
         </div>
 
-        <!-- Submit Button -->
-        <button type="submit" class="btn btn-lg btn-outline-primary">Submit</button>
+        <!-- Marid -->
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <!-- Marid Checkbox -->
+            <div class="form-check">
+              <label class="form-check-label" for="married">Married</label>
+              <input name="married" class="form-check-input
+              <?= $n('form/married/valid') ?>" type="checkbox" value = "true"
+              <?= 'checked' if $n('form/married/value') else '' ?>
+              id="married" />
+            </div>
+          </div>
+        </div>
+        <button type="submit" class=" d-flex btn btn-lg btn-outline-primary">
+          Submit
+        </button>
       </form>
     </div>
   </div>

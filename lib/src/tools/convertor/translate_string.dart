@@ -47,7 +47,7 @@ class TString {
   /// [rq] The [WebRequest] object that provides the current language context.
   ///
   /// Returns the translated string if found, otherwise returns the original key.
-  String write(WebRequest rq, [Map<String, Object?> values = const {}]) {
+  String write(WebRequest rq, [Map values = const {}]) {
     var params = {...values};
     var key = this.key;
     if (key.contains('#')) {
@@ -71,7 +71,7 @@ class TString {
     return key;
   }
 
-  String _repliceParams(String res, Map<String, Object?> values) {
+  String _repliceParams(String res, Map values) {
     values.forEach((key, value) {
       res = res.replaceAll('{$key}', value.toString());
     });

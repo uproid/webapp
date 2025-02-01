@@ -1073,7 +1073,7 @@ class WebRequest {
       if (params == null) {
         return text.tr.write(this);
       } else {
-        var json = WaJson.tryJson<String, Object?>(params);
+        var json = WaJson.tryJson(params);
         if (json != null) {
           return text.tr.write(this, json);
         }

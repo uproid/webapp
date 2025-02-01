@@ -1,3 +1,6 @@
+## 1.1.6
+- Fixed i18n with parameters
+
 ## 1.1.5
 - Added default content types for `WebRequest`
 - Improved field validators for forms

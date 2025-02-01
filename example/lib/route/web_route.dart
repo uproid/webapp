@@ -195,15 +195,7 @@ Future<List<WebRoute>> getWebRoute(WebRequest rq) async {
       extraPath: ['example/person/{id}'],
       rq: rq,
       index: homeController.onePerson,
-      methods: RequestMethods.ONLY_GET,
-      apiDoc: ApiDocuments.onePerson,
-    ),
-    WebRoute(
-      path: 'api/person/{id}',
-      extraPath: ['example/person/{id}'],
-      rq: rq,
-      index: homeController.updateOrDeletePerson,
-      methods: RequestMethods.ONLY_POST,
+      methods: RequestMethods.GET_POST,
       apiDoc: ApiDocuments.onePerson,
     ),
     WebRoute(
@@ -214,11 +206,11 @@ Future<List<WebRoute>> getWebRoute(WebRequest rq) async {
       methods: RequestMethods.ONLY_POST,
     ),
     WebRoute(
-      path: 'api/person/{id}',
-      extraPath: ['example/person/{id}'],
+      path: 'api/person/delete/{id}',
+      extraPath: ['example/person/delete/{id}'],
       rq: rq,
       index: homeController.deletePerson,
-      methods: RequestMethods.ONLY_DELETE,
+      methods: RequestMethods.ONLY_POST,
       apiDoc: ApiDocuments.onePerson,
     ),
     WebRoute(

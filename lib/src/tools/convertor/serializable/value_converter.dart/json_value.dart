@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:webapp/wa_tools.dart';
 import 'package:webapp/src/render/web_request.dart';
 import 'package:mongo_dart/mongo_dart.dart';
@@ -41,8 +40,49 @@ class WaJson {
         return obj.toString();
       }
 
+      if (obj is Map) {
+        return encodeMaps(obj, rq: rq);
+      }
+      if (obj is Symbol) {
+        return symbolToKey(obj);
+      }
+      if (obj is int) {
+        return obj;
+      }
       return obj.toString();
     });
+  }
+
+  /// Convert Symbol maps to String maps
+  static Map encodeMaps(Map obj, {WebRequest? rq}) {
+    var res = {};
+    for (Object o in obj.keys) {
+      var key = "";
+      if (o is Symbol)
+        key = symbolToKey(o);
+      else
+        key = o.toString();
+      res[key] = obj[o];
+    }
+    return res;
+  }
+
+  static String symbolToKey(Symbol symbol) {
+    var name = symbol.toString();
+    var regExp = RegExp(r'\("(.+)"\)');
+    var match = regExp.firstMatch(name)?.group(1);
+    match = match != null ? "#$match" : null;
+    return match ?? name;
+  }
+
+  static Object? _jsonEncodelEvent(
+    Object? key,
+    Object? value,
+  ) {
+    if (value is Map) {
+      return _normalizeMapKeys(value);
+    }
+    return value;
   }
 
   /// Parses a JSON-encoded string into a Dart object.
@@ -55,7 +95,27 @@ class WaJson {
   ///
   /// Returns a dynamic object representing the parsed JSON data.
   static dynamic jsonDecoder(String data) {
-    return jsonDecode(data);
+    final map = jsonDecode(
+      data,
+      reviver: _jsonEncodelEvent,
+    );
+
+    return _normalizeMapKeys(map);
+  }
+
+  static _normalizeMapKeys(Map map) {
+    var res = {};
+    for (var key in map.keys) {
+      final value = map[key];
+      if (key is String && key.startsWith("#")) {
+        key = key.substring(1);
+        res[Symbol(key)] = value;
+      } else {
+        res[key] = value;
+      }
+    }
+
+    return res;
   }
 
   /// Parses a JSON-encoded dynamic into a Dart object.

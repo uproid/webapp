@@ -44,8 +44,13 @@ class RenderViews {
         commentStart: WaServer.config.commentStart,
         commentEnd: WaServer.config.commentEnd,
         filters: {
-          'dateFormat': (DateTime dt, String format) {
-            return DateFormat(format).format(dt);
+          'dateFormat': (dynamic dt, String format) {
+            try {
+              if (dt is DateTime) return DateFormat(format).format(dt);
+            } catch (e) {
+              Console.w(e);
+            }
+            return dt.toString();
           },
         },
         getAttribute: (String key, dynamic object) {

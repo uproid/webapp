@@ -33,6 +33,25 @@ class PersonCollectionFree extends DBCollectionFree {
               FieldValidator.fieldLength(min: 3),
             ],
           ),
+          'password': DBFieldFree<String?>(
+            validators: [
+              FieldValidator.requiredField(),
+              FieldValidator.isPasswordField(),
+            ],
+          ),
+          'color': DBFieldFree<String?>(
+            validators: [
+              FieldValidator.isColorField(),
+            ],
+            defaultValue: "#FF0055",
+          ),
+          'gender': DBFieldFree<String?>(
+            validators: [
+              FieldValidator.requiredField(),
+              FieldValidator.isSelectField(['male', 'female', 'other', 'none']),
+            ],
+            defaultValue: "none",
+          ),
           'age': DBFieldFree<int?>(validators: [
             FieldValidator.requiredField(),
             FieldValidator.isNumberField(

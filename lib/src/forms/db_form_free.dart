@@ -7,10 +7,17 @@ class DBFormFree {
 
   DBFormFree({required this.fields});
 
-  Future<FormResultFree> validate(Map<String, Object?> data) async {
+  Future<FormResultFree> validate(
+    Map<String, Object?> data, {
+    List<String> onlyCheckKeys = const [],
+  }) async {
     var formResult = FormResultFree(this);
 
     for (var key in fields.keys) {
+      if (onlyCheckKeys.isNotEmpty && !onlyCheckKeys.contains(key)) {
+        continue;
+      }
+
       final field = fields[key]!;
       var value = ObjectDescovery.descovr(
         data[key],

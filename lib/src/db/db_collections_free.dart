@@ -1,8 +1,10 @@
 import 'package:mongo_dart/mongo_dart.dart';
 import 'package:webapp/src/db/mongo/error_codes.dart';
 import 'package:webapp/src/forms/db_form_free.dart';
+import 'package:webapp/wa_console.dart';
 import 'package:webapp/wa_model.dart';
 import 'package:webapp/wa_route.dart';
+import 'package:webapp/wa_tools.dart';
 import 'package:webapp/wa_ui.dart';
 
 /// An abstract class representing a MongoDB collection with utility methods.
@@ -37,8 +39,14 @@ abstract class DBCollectionFree {
     });
   }
 
-  Future<FormResultFree> validate(Map<String, Object?> data) async {
-    return form.validate(data);
+  Future<FormResultFree> validate(
+    Map<String, Object?> data, {
+    List<String> onlyCheckKeys = const [],
+  }) async {
+    return form.validate(
+      data,
+      onlyCheckKeys: onlyCheckKeys,
+    );
   }
 
   Future<FormResultFree> insert(Map<String, Object?> data) async {
@@ -79,6 +87,43 @@ abstract class DBCollectionFree {
     }
 
     return validationResult;
+  }
+
+  Future<FormResultFree?> mergeOne(
+    String id,
+    Map<String, Object?> data,
+  ) async {
+    var oldData = await getById(id);
+
+    if (oldData == null) {
+      return null;
+    }
+
+    FormResultFree validationResult = await validate(
+      data,
+      onlyCheckKeys: data.keys.toList(),
+    );
+    var newData = validationResult.formValues();
+    var mergedData = {
+      ...oldData,
+      ...newData,
+    };
+    if (validationResult.success) {
+      Console.p(mergedData);
+      var result = await collection.replaceOne(
+        where.id(id.oID!),
+        mergedData,
+        upsert: false,
+      );
+
+      var newUpdate = await getById(id);
+      if (result.isSuccess && newUpdate != null) {
+        validationResult.updateValues(newUpdate);
+      }
+      return validationResult;
+    } else {
+      return await validate(mergedData);
+    }
   }
 
   Future<int> getCount({

@@ -1,3 +1,8 @@
+## 1.1.5
+- Added default content types for `WebRequest`
+- Improved field validators for forms
+- Fixed the WaJson to encode and decode Symbol variables.
+
 ## 1.1.4
 - Fixed issue to start Database when starting project
 - Added relation field for Collection Free Model's

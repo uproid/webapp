@@ -556,39 +556,25 @@ class HomeController extends WaController {
 
   Future<String> onePerson() async {
     final id = rq.getParam('id', def: '').toString();
+    final action = rq.get<String>('action', def: '');
     var personCollection = PersonCollectionFree(db: server.db);
     final res = await personCollection.getById(id);
+    if (res != null) {
+      if (action == 'EDIT') {
+        var res = await personCollection.mergeOne(id, rq.getAllData());
+        if (res != null && res.success) {
+          return rq.redirect('/example/person');
+        } else {
+          rq.addParam('form', res?.toJson());
+        }
+      } else {
+        var personForm = await personCollection.validate(res);
+        rq.addParam('form', personForm.toJson());
+      }
+    }
     return _renderPerson(data: {
       'success': res != null,
       'data': res,
-    });
-  }
-
-  Future<String> updateOrDeletePerson() async {
-    final id = rq.getParam('id', def: '').toString();
-    final action = rq.get<String>('action', def: '');
-    if (action == 'DELETE') {
-      return deletePerson();
-    }
-
-    final email = rq.get<String>('email', def: '');
-    var personCollection = PersonCollectionFree(db: server.db);
-    final res = await personCollection.updateField(id, 'email', email);
-    if (res == null) {
-      return _renderPerson(
-        data: {'success': false},
-        status: 404,
-      );
-    }
-    if (res.success) {
-      return _renderPerson(data: {
-        'success': res.success,
-        'data': res.formValues,
-      });
-    }
-    return _renderPerson(data: {
-      'success': res.success,
-      'form': res.toJson(),
     });
   }
 

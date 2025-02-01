@@ -379,6 +379,49 @@ class FieldValidator {
         );
       };
 
+  /// Validator to check if a field contains a valid password.
+  /// The password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.
+  /// The validator checks whether the provided value is non-null, is a non-empty
+  /// string, and matches the format of a password. If the validation fails,
+  /// an error message `'error.field.password'` is returned.
+  static ValidatorEvent isPasswordField() => (value) async {
+        var res = (value != null && value.toString().trim().isPassword);
+        return FieldValidateResult(
+          success: res,
+          error: res ? '' : 'error.field.password',
+        );
+      };
+
+  /// Validator to check if a field contains a valid color code.
+  /// The color code must be a valid hexadecimal color code.
+  /// The validator checks whether the provided value is non-null, is a non-empty
+  /// string, and matches the format of a color code. If the validation fails,
+  /// an error message `'error.field.color'` is returned.
+  static ValidatorEvent isColorField() => (value) async {
+        var colorRegexp = RegExp(r'^#?([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$');
+        var res = value != null &&
+            value.toString().trim().isNotEmpty &&
+            colorRegexp.hasMatch(value.toString());
+
+        return FieldValidateResult(
+          success: res,
+          error: res ? '' : 'error.field.color',
+        );
+      };
+
+  /// Validator to check if a field contains a valid select field.
+  /// The select field must be a valid value from the list of options.
+  /// The validator checks whether the provided value is non-null, is a non-empty
+  /// string, and matches the format of a select field. If the validation fails,
+  /// an error message `'error.field.select'` is returned.
+  static ValidatorEvent isSelectField(List options) => (value) async {
+        var res = options.contains(value);
+        return FieldValidateResult(
+          success: res,
+          error: res ? '' : 'error.field.select',
+        );
+      };
+
   static ValidatorEvent hasRelation({
     required DBCollectionFree collectionModel,
     String relationField = '_id',

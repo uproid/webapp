@@ -32,12 +32,17 @@ import 'package:webapp/wa_server.dart';
 class WebRequest {
   /// The [HttpRequest] instance associated with this request.
   final HttpRequest _rq;
+  var _defaultContentType = ContentType.html;
 
   /// Manages assets like JavaScript and CSS for rendering.
   late final AssetManager assetManager = AssetManager(this);
 
   /// Indicates whether the response has been closed.
   var isClosed = false;
+
+  set contentType(ContentType contentType) {
+    _defaultContentType = contentType;
+  }
 
   /// Stores the application settings for the request.
   static Map<String, Object?> _setting = {};
@@ -506,7 +511,7 @@ class WebRequest {
 
     try {
       response.statusCode = status;
-      response.headers.contentType = ContentType.html;
+      response.headers.contentType = _defaultContentType;
     } catch (e) {
       Console.i(e);
     }
@@ -569,8 +574,13 @@ class WebRequest {
         commentStart: WaServer.config.commentStart,
         commentEnd: WaServer.config.commentEnd,
         filters: {
-          'dateFormat': (DateTime dt, String format) {
-            return DateFormat(format).format(dt);
+          'dateFormat': (dynamic dt, String format) {
+            try {
+              if (dt is DateTime) return DateFormat(format).format(dt);
+            } catch (e) {
+              Console.w(e);
+            }
+            return dt.toString();
           },
           'oid': (Object? id) {
             if (id is ObjectId?)
@@ -1050,10 +1060,13 @@ class WebRequest {
           : 'pages.title'.tr.write(this),
       'setting': _setting,
       'formChecker': ([String? name]) => formChecker(name: name),
+      'widgetPath': (String path) {
+        return "$path.${WaServer.config.widgetsType}";
+      },
     };
     params['\$e'] = LMap(events, def: null);
-    params['\$n'] = (String path) {
-      return getParams().navigation<Object>(path: path, def: '');
+    params['\$n'] = (String path, [Object? def = '']) {
+      return getParams().navigation<Object>(path: path, def: def ?? '');
     };
     params['\$l'] = LMap(localEvents, def: null);
     params['\$t'] = (String text, [Object? params]) {

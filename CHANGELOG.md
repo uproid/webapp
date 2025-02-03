@@ -1,3 +1,6 @@
+## 1.1.7
+- Added children to auto routing DbCollectionFree
+
 ## 1.1.6
 - Fixed i18n with parameters
 

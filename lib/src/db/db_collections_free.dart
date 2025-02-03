@@ -1,7 +1,6 @@
 import 'package:mongo_dart/mongo_dart.dart';
 import 'package:webapp/src/db/mongo/error_codes.dart';
 import 'package:webapp/src/forms/db_form_free.dart';
-import 'package:webapp/wa_console.dart';
 import 'package:webapp/wa_model.dart';
 import 'package:webapp/wa_route.dart';
 import 'package:webapp/wa_tools.dart';
@@ -109,7 +108,6 @@ abstract class DBCollectionFree {
       ...newData,
     };
     if (validationResult.success) {
-      Console.p(mergedData);
       var result = await collection.replaceOne(
         where.id(id.oID!),
         mergedData,
@@ -358,8 +356,15 @@ abstract class DBCollectionFree {
     Future<ApiDoc>? Function()? docInsert,
     Future<ApiDoc>? Function()? docUpdate,
     Future<ApiDoc>? Function()? docOne,
+    List<WebRoute> children = const [],
   }) {
     return <WebRoute>[
+      if (children.isNotEmpty)
+        WebRoute(
+          rq: rq,
+          path: path,
+          children: children,
+        ),
       if (useRouteAll)
         routeGetAll(
           '$path',

@@ -1,3 +1,7 @@
+## 1.1.8
+- Fixed filtering in auto routing DbCollectionFree
+- Fixed reported logs of dart analyzer
+
 ## 1.1.7
 - Added children to auto routing DbCollectionFree
 

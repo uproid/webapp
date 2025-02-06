@@ -583,10 +583,11 @@ class WebRequest {
             return dt.toString();
           },
           'oid': (Object? id) {
-            if (id is ObjectId?)
+            if (id is ObjectId?) {
               return id?.oid;
-            else
+            } else {
               return id;
+            }
           }
         },
         getAttribute: (String key, dynamic object) {

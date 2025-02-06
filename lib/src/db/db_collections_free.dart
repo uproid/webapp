@@ -387,34 +387,36 @@ abstract class DBCollectionFree {
     ];
   }
 
-  WebRoute routeGetAll(
-    String path, {
-    required WebRequest rq,
-    List<String> methods = const [RequestMethods.GET],
-    Future<ApiDoc>? Function()? apiDoc,
-    WaAuthController<dynamic>? auth,
-    List<String> extraPath = const [],
-    List<String> excludePaths = const [],
-    List<String> hosts = const ['*'],
-    Map<String, Object?> params = const {},
-    List<String> permissions = const [],
-    List<int> ports = const [],
-    List<WebRoute> children = const [],
-    bool paging = true,
-    int pageSize = 20,
-    bool orderReverse = true,
-    String orderBy = '_id',
-  }) {
+  WebRoute routeGetAll(String path,
+      {required WebRequest rq,
+      List<String> methods = const [RequestMethods.GET],
+      Future<ApiDoc>? Function()? apiDoc,
+      WaAuthController? auth,
+      List<String> extraPath = const [],
+      List<String> excludePaths = const [],
+      List<String> hosts = const ['*'],
+      Map<String, Object?> params = const {},
+      List<String> permissions = const [],
+      List<int> ports = const [],
+      List<WebRoute> children = const [],
+      bool paging = true,
+      int pageSize = 20,
+      bool orderReverse = true,
+      String orderBy = '_id'}) {
     final index = () async {
       if (paging == false) {
-        var all = await getAll();
+        var all = await getAll(
+          filter: getSearchableFilter(inputs: rq.getAllData()),
+        );
 
         return rq.renderData(data: {
           'success': true,
           'data': all,
         });
       } else {
-        final countAll = await getCount();
+        final countAll = await getCount(
+          filter: getSearchableFilter(inputs: rq.getAllData()),
+        );
         pageSize = rq.get<int>('pageSize', def: pageSize);
         orderBy = rq.get<String>('orderBy', def: orderBy);
         orderReverse = rq.get<bool>('orderReverse', def: orderReverse);
@@ -430,6 +432,7 @@ abstract class DBCollectionFree {
         );
 
         final res = await getAll(
+          filter: getSearchableFilter(inputs: rq.getAllData()),
           limit: paging.pageSize,
           skip: paging.start,
           sort: DQ.order(orderBy, orderReverse),

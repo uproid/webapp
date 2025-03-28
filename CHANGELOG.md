@@ -1,3 +1,6 @@
+## 1.1.9
+- Fixed websocket
+
 ## 1.1.8
 - Fixed filtering in auto routing DbCollectionFree
 - Fixed reported logs of dart analyzer

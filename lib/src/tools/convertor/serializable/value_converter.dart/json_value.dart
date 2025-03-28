@@ -58,10 +58,11 @@ class WaJson {
     var res = {};
     for (Object o in obj.keys) {
       var key = "";
-      if (o is Symbol)
+      if (o is Symbol) {
         key = symbolToKey(o);
-      else
+      } else {
         key = o.toString();
+      }
       res[key] = obj[o];
     }
     return res;

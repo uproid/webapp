@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:webapp/wa_server.dart';
 import 'package:webapp/src/render/web_request.dart';
 import 'package:webapp/src/tools/convertor/serializable/value_converter.dart/json_value.dart';
+import 'package:webapp/wa_console.dart';
 
 /// Manages WebSocket connections and events.
 ///
@@ -74,8 +75,10 @@ class SocketManager {
       (data) {
         var res = <String, dynamic>{};
         try {
-          res = WaJson.jsonDecoder(data);
+          Map json = WaJson.jsonDecoder(data);
+          res = Map<String, dynamic>.from(json);
         } catch (e) {
+          Console.e(e);
           res = {'path': 'error', 'data': data};
         }
 

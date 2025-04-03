@@ -43,14 +43,14 @@ class PersonCollectionFree extends DBCollectionFree {
             validators: [
               FieldValidator.isColorField(),
             ],
-            defaultValue: "#FF0055",
+            defaultValue: () => "#FF0055",
           ),
           'gender': DBFieldFree<String?>(
             validators: [
               FieldValidator.requiredField(),
               FieldValidator.isSelectField(['male', 'female', 'other', 'none']),
             ],
-            defaultValue: "none",
+            defaultValue: () => "none",
           ),
           'age': DBFieldFree<int?>(validators: [
             FieldValidator.requiredField(),
@@ -72,7 +72,7 @@ class PersonCollectionFree extends DBCollectionFree {
             ],
           ),
           'married': DBFieldFree<bool?>(
-            defaultValue: false,
+            defaultValue: () => false,
           ),
           'height': DBFieldFree<double?>(
             validators: [

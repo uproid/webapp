@@ -122,6 +122,24 @@ class DQ {
     };
   }
 
+  /// Matches documents where the field's value is case-insensitive.
+  ///
+  /// This is a specialized version of the `like` method that uses a regex pattern to match the entire string.
+
+  /// Example:
+  /// ```dart
+  /// var query = DQ.uncase('pattern'); // { '\$regex': '^pattern\$', '\$options': 'i' }
+  /// ```
+  /// This method is useful for case-insensitive exact matches.
+  static Map<String, Object?> uncase(String value) {
+    value = _escapeRegex(value);
+
+    return {
+      '\$regex': '^$value\$',
+      '\$options': 'i',
+    };
+  }
+
   // Escape all special regex characters
   static String _escapeRegex(String input) {
     return input.replaceAllMapped(

@@ -64,7 +64,7 @@ class ApiDocuments {
             ApiResponse<Map<String, String>>(
               'data',
               def: PersonCollectionFree.formPerson.fields.map((k, v) {
-                return MapEntry(k, v.defaultValue);
+                return MapEntry(k, v.defaultValue?.call());
               }),
             ),
           ],
@@ -112,7 +112,7 @@ class ApiDocuments {
             ApiResponse<Map<String, String>>(
               'data',
               def: PersonCollectionFree.formPerson.fields.map((k, v) {
-                return MapEntry(k, v.defaultValue);
+                return MapEntry(k, v.defaultValue?.call());
               }),
             ),
           ],
@@ -150,7 +150,7 @@ class ApiDocuments {
               5,
               (index) => PersonCollectionFree.formPerson.fields.map(
                 (k, v) {
-                  return MapEntry(k, v.defaultValue);
+                  return MapEntry(k, v.defaultValue?.call());
                 },
               ),
             ),

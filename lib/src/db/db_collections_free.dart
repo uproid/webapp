@@ -319,7 +319,7 @@ abstract class DBCollectionFree {
               ObjectDescovery.descovr(
                 inputs[key],
                 form.fields[key]!.type,
-                def: form.fields[key]!.defaultValue,
+                def: form.fields[key]!.defaultValue?.call(),
               ),
             ),
           );

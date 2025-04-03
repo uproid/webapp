@@ -12,7 +12,7 @@ WaConfigs configs = WaConfigs(
   languagePath: pathTo(env['LANGUAGE_PATH'] ?? "./lib/languages"),
   publicDir: pathTo(env['PUBLIC_DIR'] ?? './public'),
   dbConfig: WaDBConfig(
-    enable: env['ENABLE_DATABASE'] == 'true',
+    enable: true, //env['ENABLE_DATABASE'] == 'true',
     dbName: 'example',
     auth: 'admin',
     pass: 'PasswordMongoDB',

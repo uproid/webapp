@@ -22,7 +22,7 @@ class DBFormFree {
       var value = ObjectDescovery.descovr(
         data[key],
         field.type,
-        def: field.defaultValue,
+        def: field.defaultValue?.call(),
       );
 
       final resultFieldValidate = await field.validate(value);
@@ -55,7 +55,7 @@ class FormResultFree {
       final parsed = ObjectDescovery.descovr(
         values[key],
         formResult[key]!.field.type,
-        def: formResult[key]!.field.defaultValue,
+        def: formResult[key]!.field.defaultValue?.call(),
       );
       formResult[key]!.value = parsed;
       formResult[key]!.parsedValue = parsed;
@@ -143,7 +143,7 @@ class FieldResultFree<T> {
 class DBFieldFree<T> {
   List<ValidatorEvent> validators = [];
   Type get type => T;
-  T? defaultValue = null;
+  T Function()? defaultValue = null;
   bool readonly = true;
   bool hideJson = false;
   bool searchable = true;
@@ -168,7 +168,7 @@ class DBFieldFree<T> {
     var value = ObjectDescovery.descovr(
       fieldValue,
       type,
-      def: defaultValue,
+      def: defaultValue?.call(),
     );
 
     if (fix != null) {

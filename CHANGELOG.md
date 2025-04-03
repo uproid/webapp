@@ -1,3 +1,6 @@
+## 1.1.10
+- Fixes issues with DB Collection Free in defualt values, when the form is static
+
 ## 1.1.9
 - Fixed websocket
 

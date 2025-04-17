@@ -14,6 +14,7 @@ import 'package:webapp/wa_ui.dart';
 /// is meant to be extended by other classes for more specific collection implementations.
 abstract class DBCollectionFree {
   DBFormFree form;
+  CollectionEvent collectionEvent = CollectionEvent();
 
   /// The name of the MongoDB collection.
   String name;
@@ -55,6 +56,7 @@ abstract class DBCollectionFree {
 
       if (!result.isFailure && result.document != null) {
         validationResult.updateValues(result.document!);
+        await collectionEvent.onInsert.emit(result.document);
       } else {
         validationResult.updateFromMongoResponse(result.serverResponses);
       }
@@ -82,6 +84,7 @@ abstract class DBCollectionFree {
       var newUpdate = await getById(id);
       if (result.isSuccess && newUpdate != null) {
         validationResult.updateValues(newUpdate);
+        await collectionEvent.onUpdate.emit(newUpdate);
       }
     }
 
@@ -117,6 +120,7 @@ abstract class DBCollectionFree {
       var newUpdate = await getById(id);
       if (result.isSuccess && newUpdate != null) {
         validationResult.updateValues(newUpdate);
+        await collectionEvent.onUpdate.emit(newUpdate);
       }
       return validationResult;
     } else {
@@ -202,11 +206,25 @@ abstract class DBCollectionFree {
   Future<bool> delete(String id) async {
     var oid = ObjectId.tryParse(id);
     if (oid != null) {
-      var res = await collection.deleteOne(where.id(oid));
-      return res.success && res.nRemoved == 1;
+      return deleteOid(oid);
     }
 
     return false;
+  }
+
+  /// Deletes a document from the collection by its ID.
+  ///
+  /// The [id] should be a valid MongoDB ObjectId string.
+  ///
+  /// Returns `true` if the deletion was successful, otherwise `false`.
+  Future<bool> deleteOid(ObjectId oid) async {
+    var oldData = await getByOid(oid);
+    var res = await collection.deleteOne(where.id(oid));
+    var result = res.success && res.nRemoved == 1;
+    if (result && oldData != null) {
+      await collectionEvent.onDelete.emit(oldData);
+    }
+    return result;
   }
 
   /// Creates a copy of a document by its ID and inserts it as a new document.
@@ -219,7 +237,10 @@ abstract class DBCollectionFree {
       var data = await collection.findOne(where.id(oid));
       if (data != null) {
         data.remove('_id');
-        await collection.insertOne(data);
+        var result = await collection.insertOne(data);
+        if (result.isSuccess) {
+          await collectionEvent.onInsert.emit(result.document);
+        }
       }
     }
   }
@@ -250,6 +271,7 @@ abstract class DBCollectionFree {
       await collection.updateOne(where.id(oid), modify.set(field, value));
       var newData = await getById(id);
       if (newData != null) {
+        await collectionEvent.onUpdate.emit(newData);
         return toFormResult(newData);
       }
     }
@@ -701,6 +723,55 @@ abstract class DBCollectionFree {
       ports: ports,
       index: index,
     );
+  }
+}
+
+class CollectionEvent {
+  /// Event triggered when a document is inserted into the collection.
+  final Event<Map<String, Object?>> onInsert = Event<Map<String, Object?>>();
+
+  /// Event triggered when a document is updated in the collection.
+  final Event<Map<String, Object?>> onUpdate = Event<Map<String, Object?>>();
+
+  /// Event triggered when a document is deleted from the collection.
+  final Event<Map<String, Object?>> onDelete = Event<Map<String, Object?>>();
+}
+
+typedef EventFunction<R> = void Function(R data);
+typedef EventAsyncFunction<R> = Future<void> Function(R data);
+
+class Event<T> {
+  /// List of listeners for the event.
+  final List<EventFunction<T>> _listeners = [];
+  final List<EventAsyncFunction<T>> _asyncListeners = [];
+
+  /// Adds a listener to the event.
+  Event addListener(EventFunction listener) {
+    _listeners.add(listener);
+    return this;
+  }
+
+  /// Adds an asynchronous listener to the event.
+  Event addAsyncListener(EventAsyncFunction listener) {
+    _asyncListeners.add(listener);
+    return this;
+  }
+
+  /// Emits the event, calling all registered listeners.
+  Future<int> emit([dynamic data]) async {
+    var i = 0;
+
+    for (var listener in _listeners) {
+      listener(data);
+      i++;
+    }
+
+    for (var asyncListener in _asyncListeners) {
+      await asyncListener(data);
+      i++;
+    }
+
+    return i;
   }
 }
 

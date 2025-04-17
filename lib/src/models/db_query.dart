@@ -211,4 +211,186 @@ class DQ {
   static Map<String, Object?> sum(String field) {
     return {'\$sum': '\$$field'};
   }
+
+  static Map<String, Object> lookup({
+    required String from,
+    required String localField,
+    String foreignField = '_id',
+    String? as,
+  }) {
+    if (as == null) {
+      as = '${from}_info';
+    }
+
+    return {
+      '\$lookup': {
+        'from': "$from",
+        'localField': "$localField",
+        'foreignField': "$foreignField",
+        'as': "$as"
+      }
+    };
+  }
+
+  static Map<String, Object> unwind({
+    required String path,
+    String? as,
+    bool? preserveNullAndEmptyArrays,
+  }) {
+    if (as == null && preserveNullAndEmptyArrays == null) {
+      return {'\$unwind': "\$$path"};
+    }
+
+    return {
+      '\$unwind': {
+        'path': "\$$path",
+        if (preserveNullAndEmptyArrays != null)
+          'preserveNullAndEmptyArrays': preserveNullAndEmptyArrays,
+        if (as != null) 'as': "$as"
+      }
+    };
+  }
+
+  static Map<String, Object> match(List<Map<String, Object?>> matches) {
+    return {
+      '\$match': {for (var match in matches) ...match}
+    };
+  }
+
+  static Map<String, Object?> gt(Object? value) {
+    return {
+      '\$gt': value,
+    };
+  }
+
+  static Map<String, Object?> gte(Object? value) {
+    return {
+      '\$gte': value,
+    };
+  }
+
+  static Map<String, Object?> lt(Object? value) {
+    return {
+      '\$lt': value,
+    };
+  }
+
+  static Map<String, Object?> lte(Object? value) {
+    return {
+      '\$lte': value,
+    };
+  }
+
+  static List<Map<String, Object>> pipeline(
+    List<Map<String, Object>> query,
+  ) {
+    return [...query];
+  }
+
+  static Map<String, Object> project(Map<String, Object> fields) {
+    return {
+      '\$project': {
+        ...fields,
+      }
+    };
+  }
+
+  static Map<String, Object> sort(Map<String, int> fields) {
+    return {
+      '\$sort': {
+        ...fields,
+      }
+    };
+  }
+
+  static Map<String, Object> sortList(List<Map<String, int>> fields) {
+    return {
+      '\$sort': {
+        for (var field in fields) ...field,
+      }
+    };
+  }
+
+  static Map<String, Object> sortOne(String field, [bool desc = true]) {
+    return sortList([
+      sortField(field, desc),
+    ]);
+  }
+
+  static Map<String, int> sortField(String field, [bool desc = true]) {
+    return {
+      field: desc ? -1 : 1,
+    };
+  }
+
+  static Map<String, Object> limit(int limit) {
+    return {
+      '\$limit': limit,
+    };
+  }
+
+  static Map<String, Object> skip(int skip) {
+    if (skip < 0) {
+      skip = 0;
+    }
+    return {
+      '\$skip': skip,
+    };
+  }
+
+  static Map<String, Object> count(String field) {
+    return {
+      '\$count': field,
+    };
+  }
+
+  static Map<String, Object> dateToString({
+    required Object field,
+    String format = '%Y-%m-%d %H:%M:%S',
+    Object? onNull,
+    Object? onError,
+    String? timezone,
+  }) {
+    return {
+      '\$dateToString': {
+        'format': format,
+        'date': field,
+        if (timezone != null) 'timezone': timezone,
+        if (onNull != null) 'onNull': onNull,
+        if (onError != null) 'onError': onError,
+      }
+    };
+  }
+
+  static Map<String, Object> toDate(
+    String field,
+  ) {
+    return {'\$toDate': "\$$field"};
+  }
+
+  static Map<String, Object> sumQuery(
+    Object query,
+  ) {
+    return {
+      '\$sum': query,
+    };
+  }
+
+  static Map<String, Object> cond({
+    required Object ifCond,
+    required Object thenCond,
+    required Object elseCond,
+  }) {
+    return {
+      '\$cond': {
+        'if': ifCond,
+        'then': thenCond,
+        'else': elseCond,
+      }
+    };
+  }
+
+  static String $field(String field) {
+    return "\$$field";
+  }
 }

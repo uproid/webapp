@@ -1,3 +1,6 @@
+## 1.1.11
+- Event listeners for insert, update, and delete documents in MongoDB collections for DBCollectionFree.
+
 ## 1.1.10
 - Fixes issues with DB Collection Free in defualt values, when the form is static
 

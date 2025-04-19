@@ -1,7 +1,6 @@
-import 'package:example/db/job_collection_free.dart';
-import 'package:example/db/person_collection_free.dart';
+import 'db/job_collection_free.dart';
+import 'db/person_collection_free.dart';
 import 'package:webapp/wa_model_less.dart';
-
 import 'db/example_collections.dart';
 import 'models/example_model.dart';
 import 'package:webapp/wa_console.dart';

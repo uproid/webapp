@@ -585,10 +585,12 @@ class WebRequest {
           'oid': (Object? id) {
             if (id is ObjectId?) {
               return id?.oid;
+            } else if (id is List<ObjectId?>) {
+              return List<String>.from(id.map((e) => e?.oid));
             } else {
               return id;
             }
-          }
+          },
         },
         getAttribute: (String key, dynamic object) {
           try {

@@ -128,6 +128,30 @@
           </div>
         </div>
 
+        <div class="col-md-6 mb-3">
+          <!-- Marid Checkbox -->
+          <label for="job_id" class="form-label">Skils</label>
+
+          <div class="row">
+            <? set oids = $n('form/jobs/value') | oid ?>
+            <? for job in jobs  ?>
+              <div class="col-md-6 mb-3">
+                <input 
+                  type="checkbox" 
+                  id="jobs_<?= job._id ?>" 
+                  name="jobs[]" 
+                  value="<?= job._id | oid ?>" 
+                  <?= 'checked' if ((job._id) in oids) else '' ?>
+                />
+                <label for="jobs_<?= job._id|oid ?>" class="form-check-label">
+                  <?= job.title ?>
+                </label>
+              </div>
+            <? endfor ?>
+          </div>
+          <?= $t($n('form/jobs/errors/0')) ?>
+        </div>
+
         <div class="row">
           <div class="col-md-6 mb-3">
             <label for="password" class="form-label">Password</label>
@@ -191,8 +215,6 @@
             <input type="color" class="form-control form-control-color <?= $n('form/married/valid') ?>" id="color" name="color" value="<?= $n('form/color/value','#FF0055') ?>" title="Choose your color">
           </div>
         </div>
-
-        
     </div>
     <div class="card-footer">
       <button type="submit" class="btn btn-md btn-primary text-white">

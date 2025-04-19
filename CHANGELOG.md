@@ -1,3 +1,6 @@
+## 1.1.12
+- Fixes #6 issue, Using `List<ObjectId>` in mongodb collections as a field
+
 ## 1.1.11
 - Event listeners for insert, update, and delete documents in MongoDB collections for DBCollectionFree.
 

@@ -1,4 +1,5 @@
 import 'package:mongo_dart/mongo_dart.dart';
+import 'package:webapp/src/tools/console.dart';
 import 'package:webapp/src/tools/convertor/convert_strings.dart';
 import 'package:webapp/src/tools/convertor/string_validator.dart';
 
@@ -31,6 +32,22 @@ extension FormatHelper on dynamic {
 
   List<T> asList<T>({List<T>? def}) {
     try {
+      if (T == ObjectId) {
+        final res = <ObjectId>[];
+
+        for (var e in this) {
+          if (e is ObjectId) {
+            res.add(e);
+          } else if (e is String) {
+            ObjectId? oid = e.toString().oID;
+            if (oid != null) {
+              res.add(oid);
+            }
+          }
+        }
+
+        return res as List<T>;
+      }
       if (this is List) {
         return List<T>.from(this.map((x) => x));
       }
@@ -51,6 +68,7 @@ extension FormatHelper on dynamic {
       }
       return def ?? [];
     } catch (e) {
+      Console.e(e);
       return def ?? [];
     }
   }

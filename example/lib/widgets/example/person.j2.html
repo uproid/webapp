@@ -14,6 +14,7 @@
               <th>Height</th>
               <th>Birthday</th>
               <th>Job</th>
+              <th>Skils</th>
               <th class="text-end">Action</th>
             </tr>
           </thead>
@@ -32,6 +33,7 @@
               <td><?= person.height ?></td>
               <td><?= person.birthday | dateFormat('dd/MM/yyyy, HH:mm') ?></td>
               <td><?= person.job.title | default('Unknown') ?></td>
+              <td><?= person.jobs|length ?></td>
               <td>
                 <div class="d-flex justify-content-end">
                   <form class="d-flex" onsubmit="return confirm('Are you sure to delete `<?= person.name ?>`?')" action="/example/person/delete/<?= person._id ?>" method="POST">

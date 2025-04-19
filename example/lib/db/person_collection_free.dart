@@ -27,6 +27,9 @@ class PersonCollectionFree extends DBCollectionFree {
               ),
             ],
           ),
+          'jobs': DBFieldFree<List<ObjectId>>(
+            defaultValue: () => [],
+          ),
           'name': DBFieldFree<String?>(
             validators: [
               FieldValidator.requiredField(),

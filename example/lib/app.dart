@@ -1,3 +1,7 @@
+import 'package:example/db/job_collection_free.dart';
+import 'package:example/db/person_collection_free.dart';
+import 'package:webapp/wa_model_less.dart';
+
 import 'db/example_collections.dart';
 import 'models/example_model.dart';
 import 'package:webapp/wa_console.dart';
@@ -23,7 +27,9 @@ WaConfigs configs = WaConfigs(
   port: (env['DOMAIN_PORT'] ?? '8085').toInt(def: 8085),
 );
 
-WaServer server = WaServer(configs: configs);
+final server = WaServer(configs: configs);
+var jobCollectionFree = JobCollectionFree(db: server.db);
+var personCollectionFree = PersonCollectionFree(db: server.db);
 
 final socketManager = SocketManager(
   server,
@@ -85,4 +91,8 @@ void main() async {
       delayFirstMoment: true,
     ).start(),
   );
+}
+
+printDB() {
+  DBCollectionFree.printDesign();
 }

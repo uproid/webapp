@@ -7,8 +7,16 @@ class JobCollectionFree extends DBCollectionFree {
       : super(
           name: 'job',
           form: formPerson,
+          indexes: {
+            'title': DBIndex(
+              name: '_title_',
+              key: 'title',
+              background: false,
+              unique: true,
+              sparse: false,
+            ),
+          },
         );
-
   static DBFormFree get formPerson => DBFormFree(
         fields: {
           '_id': DBFieldFree<ObjectId>(

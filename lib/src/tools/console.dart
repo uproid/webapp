@@ -21,6 +21,23 @@ class Console {
     ),
   );
 
+  static void json(object) {
+    var log = Logger(
+      level: isTestRunning() ? Level.off : Level.debug,
+      printer: PrettyPrinter(
+        printEmojis: false,
+        noBoxingByDefault: true,
+        excludeBox: {},
+        colors: true,
+        methodCount: 0,
+      ),
+    );
+
+    log.f("=" * 50 + '\n');
+    log.f(object);
+    log.f('\n' + "=" * 50);
+  }
+
   /// Logs a warning message.
   ///
   /// The [object] parameter can be any type of object to be logged.

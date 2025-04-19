@@ -1,3 +1,7 @@
+## 1.1.13
+- Add index for fields of `DBCollectionFree`
+- Add `Console.json(Object)` function to logs.
+
 ## 1.1.12
 - Fixes #6 issue, Using `List<ObjectId>` in mongodb collections as a field
 

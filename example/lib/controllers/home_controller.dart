@@ -1,7 +1,5 @@
 import 'dart:io';
 import 'dart:math';
-import '../db/job_collection_free.dart';
-import '../db/person_collection_free.dart';
 import '../configs/setting.dart';
 import '../db/example_collections.dart';
 import '../models/example_model.dart';
@@ -492,8 +490,7 @@ class HomeController extends WaController {
   }
 
   Future<String> addNewPerson() async {
-    var personCollection = PersonCollectionFree(db: server.db);
-    final res = await personCollection.insert(rq.getAllData());
+    final res = await personCollectionFree.insert(rq.getAllData());
     if (res.success) {
       rq.addParam('data', res.formValues);
     } else {
@@ -506,8 +503,7 @@ class HomeController extends WaController {
 
   Future<String> replacePerson() async {
     final id = rq.getParam('id', def: '').toString();
-    var personCollection = PersonCollectionFree(db: server.db);
-    final res = await personCollection.replaceOne(id, rq.getAllData());
+    final res = await personCollectionFree.replaceOne(id, rq.getAllData());
 
     if (res == null) {
       return _renderPerson(
@@ -527,8 +523,7 @@ class HomeController extends WaController {
   }
 
   Future<String> allPerson() async {
-    var personCollection = PersonCollectionFree(db: server.db);
-    final countAll = await personCollection.getCount();
+    final countAll = await personCollectionFree.getCount();
     final pageSize = rq.get<int>('pageSize', def: 20);
     final orderBy = rq.get<String>('orderBy', def: '_id');
     final orderReverse = rq.get<bool>('orderReverse', def: true);
@@ -541,7 +536,7 @@ class HomeController extends WaController {
       page: rq.get<int>('page', def: 1),
     );
 
-    final res = await personCollection.getAll(
+    final res = await personCollectionFree.getAll(
       limit: paging.pageSize,
       skip: paging.start,
       sort: DQ.order(orderBy, orderReverse),
@@ -557,18 +552,17 @@ class HomeController extends WaController {
   Future<String> onePerson() async {
     final id = rq.getParam('id', def: '').toString();
     final action = rq.get<String>('action', def: '');
-    var personCollection = PersonCollectionFree(db: server.db);
-    final res = await personCollection.getById(id);
+    final res = await personCollectionFree.getById(id);
     if (res != null) {
       if (action == 'EDIT') {
-        var res = await personCollection.mergeOne(id, rq.getAllData());
+        var res = await personCollectionFree.mergeOne(id, rq.getAllData());
         if (res != null && res.success) {
           return rq.redirect('/example/person');
         } else {
           rq.addParam('form', res?.toJson());
         }
       } else {
-        var personForm = await personCollection.validate(res);
+        var personForm = await personCollectionFree.validate(res);
         rq.addParam('form', personForm.toJson());
       }
     }
@@ -580,8 +574,7 @@ class HomeController extends WaController {
 
   Future<String> deletePerson() async {
     final id = rq.getParam('id', def: '').toString();
-    var personCollection = PersonCollectionFree(db: server.db);
-    final res = await personCollection.delete(id);
+    final res = await personCollectionFree.delete(id);
     return _renderPerson(data: {
       'success': res,
     });
@@ -591,7 +584,6 @@ class HomeController extends WaController {
     required Map<String, Object?> data,
     status = 200,
   }) async {
-    var personCollection = PersonCollectionFree(db: server.db);
     if (rq.isApiEndpoint) {
       return rq.renderDataParam(
         data: data,
@@ -599,7 +591,7 @@ class HomeController extends WaController {
       );
     }
 
-    final countAll = await personCollection.getCount();
+    final countAll = await personCollectionFree.getCount();
     final pageSize = rq.get<int>('pageSize', def: 10);
     final orderBy = rq.get<String>('orderBy', def: '_id');
     final orderReverse = rq.get<bool>('orderReverse', def: true);
@@ -612,13 +604,13 @@ class HomeController extends WaController {
       page: rq.get<int>('page', def: 1),
     );
 
-    final res = await personCollection.getAllWithJob(
+    final res = await personCollectionFree.getAllWithJob(
       limit: paging.pageSize,
       skip: paging.start,
       sort: DQ.order(orderBy, orderReverse),
     );
 
-    final jobs = await JobCollectionFree(db: server.db).getAll();
+    final jobs = await jobCollectionFree.getAll();
 
     data = {
       ...data,

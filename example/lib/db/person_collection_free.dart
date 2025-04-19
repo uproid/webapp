@@ -1,5 +1,4 @@
 import '../app.dart';
-import '../db/job_collection_free.dart';
 import 'package:webapp/wa_model_less.dart';
 import 'package:webapp/wa_ui.dart';
 import 'package:mongo_dart/mongo_dart.dart';
@@ -9,7 +8,18 @@ class PersonCollectionFree extends DBCollectionFree {
       : super(
           name: 'person',
           form: formPerson,
+          indexes: allIndexes,
         );
+
+  static get allIndexes => <String, DBIndex>{
+        'email': DBIndex(
+          name: '_email_',
+          key: 'email',
+          background: false,
+          unique: true,
+          sparse: false,
+        ),
+      };
 
   static DBFormFree get formPerson => DBFormFree(
         fields: {
@@ -21,7 +31,7 @@ class PersonCollectionFree extends DBCollectionFree {
             defaultValue: null,
             validators: [
               FieldValidator.hasRelation(
-                collectionModel: JobCollectionFree(db: server.db),
+                collectionModel: jobCollectionFree,
                 relationField: '_id',
                 isRequired: true,
               ),
@@ -126,7 +136,7 @@ class PersonCollectionFree extends DBCollectionFree {
     for (var person in res) {
       var jobId = person['job_id'];
       if (jobId != null && jobId is ObjectId) {
-        person['job'] = await JobCollectionFree(db: db).getByOid(jobId);
+        person['job'] = await jobCollectionFree.getByOid(jobId);
       } else {
         person['job'] = null;
       }

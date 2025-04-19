@@ -1,6 +1,8 @@
+import 'package:capp/capp.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 import 'package:webapp/src/db/mongo/error_codes.dart';
 import 'package:webapp/src/forms/db_form_free.dart';
+import 'package:webapp/wa_console.dart';
 import 'package:webapp/wa_model.dart';
 import 'package:webapp/wa_route.dart';
 import 'package:webapp/wa_tools.dart';
@@ -13,8 +15,50 @@ import 'package:webapp/wa_ui.dart';
 /// the existence of a document by its ID, updating fields, and more. This class
 /// is meant to be extended by other classes for more specific collection implementations.
 abstract class DBCollectionFree {
+  static final List<DBCollectionFree> _allCollectionFree = [];
+
+  static void printDesign() async {
+    CappConsole.clear();
+    var json = <String, Object?>{};
+    for (var collection in _allCollectionFree) {
+      var jsonCollection = <String, Object?>{};
+      var fieldsJson = <String, Object?>{};
+      for (var field in collection.form.fields.entries) {
+        var fieldModel = field.value;
+        fieldsJson.addAll({
+          field.key: {
+            'type': fieldModel.type,
+            'default': fieldModel.defaultValue?.call(),
+            'readonly': fieldModel.readonly,
+            'searchable': fieldModel.searchable,
+            'filterable': fieldModel.filterable,
+            'validators': fieldModel.validators.length,
+            'isHiddenJson': fieldModel.hideJson,
+          },
+        });
+      }
+
+      jsonCollection.addAll({
+        'name': collection.name,
+        'db': collection.db.databaseName,
+        'count': await collection.collection.count(),
+        'fields': fieldsJson,
+        'events': {
+          'onInsert': collection.collectionEvent.onInsert._listeners.length,
+          'onUpdate': collection.collectionEvent.onUpdate._listeners.length,
+          'onDelete': collection.collectionEvent.onDelete._listeners.length,
+        },
+        'indexes': await collection.collection.getIndexes(),
+      });
+      json[collection.name] = jsonCollection;
+    }
+
+    Console.json(json);
+  }
+
   DBFormFree form;
   CollectionEvent collectionEvent = CollectionEvent();
+  var indexes = <String, DBIndex>{};
 
   /// The name of the MongoDB collection.
   String name;
@@ -31,12 +75,45 @@ abstract class DBCollectionFree {
   ///
   /// When initialized, the constructor checks if the collection exists in the database,
   /// and creates it if it does not already exist.
-  DBCollectionFree({required this.name, required this.db, required this.form}) {
+  DBCollectionFree({
+    required this.name,
+    required this.db,
+    required this.form,
+    this.indexes = const {},
+  }) {
+    _allCollectionFree.add(this);
+
     db.getCollectionNames().then((coll) async {
       if (!coll.contains(name)) {
         await db.createCollection(name);
       }
+      _renewIndexes();
     });
+  }
+
+  void _renewIndexes() async {
+    if (indexes.isNotEmpty) {
+      collection.getIndexes().then((res) async {
+        res.forEach((e) async => await collection.dropIndexes(e));
+
+        for (var key in indexes.keys) {
+          var index = indexes[key]!;
+          index.name ??= "_${key}_";
+
+          collection.createIndex(
+            background: index.background,
+            dropDups: index.dropDups,
+            keys: index.keys,
+            name: index.name,
+            partialFilterExpression: index.partialFilterExpression,
+            sparse: index.sparse,
+            unique: index.unique,
+            modernReply: index.modernReply,
+            key: index.key,
+          );
+        }
+      });
+    }
   }
 
   Future<FormResultFree> validate(
@@ -805,4 +882,28 @@ class MongoErrorResponse {
 
     return res;
   }
+}
+
+class DBIndex {
+  String? key;
+  Map<String, dynamic>? keys;
+  bool? unique;
+  bool? sparse;
+  bool? background;
+  bool? dropDups;
+  Map<String, dynamic>? partialFilterExpression;
+  String? name;
+  bool? modernReply;
+
+  DBIndex({
+    this.key,
+    this.keys,
+    this.unique,
+    this.sparse,
+    this.background,
+    this.dropDups,
+    this.partialFilterExpression,
+    this.name,
+    this.modernReply,
+  });
 }

@@ -94,13 +94,14 @@ abstract class DBCollectionFree {
   void _renewIndexes() async {
     if (indexes.isNotEmpty) {
       collection.getIndexes().then((res) async {
-        res.forEach((e) async => await collection.dropIndexes(e));
-
+        for (var oldIndex in res) {
+          await collection.dropIndexes(oldIndex['name']);
+        }
         for (var key in indexes.keys) {
           var index = indexes[key]!;
           index.name ??= "_${key}_";
 
-          collection.createIndex(
+          await createIndex(
             background: index.background,
             dropDups: index.dropDups,
             keys: index.keys,
@@ -110,10 +111,71 @@ abstract class DBCollectionFree {
             unique: index.unique,
             modernReply: index.modernReply,
             key: index.key,
+            collation: index.collation,
           );
         }
       });
     }
+  }
+
+  Future<Map<String, dynamic>> createIndex({
+    String? key,
+    Map<String, dynamic>? keys,
+    bool? unique,
+    bool? sparse,
+    bool? background,
+    bool? dropDups,
+    Map<String, dynamic>? partialFilterExpression,
+    String? name,
+    bool? modernReply,
+    Map<dynamic, dynamic>? collation,
+  }) async {
+    if (!db.masterConnection.serverCapabilities.supportsOpMsg) {
+      throw MongoDartError('Use createIndex() method on db (before 3.6)');
+    }
+
+    modernReply ??= true;
+    var indexOptions = CreateIndexOptions(
+      collection,
+      uniqueIndex: unique == true,
+      sparseIndex: sparse == true,
+      background: background == true,
+      dropDuplicatedEntries: dropDups == true,
+      partialFilterExpression: partialFilterExpression,
+      indexName: name,
+      collation: collation,
+    );
+
+    var indexOperation =
+        CreateIndexOperation(db, collection, _setKeys(key, keys), indexOptions);
+
+    var res = await indexOperation.execute();
+    if (res[keyOk] == 0.0) {
+      // It should be better to create a MongoDartError,
+      // but, for compatibility reasons, we throw the received map.
+      throw res;
+    }
+    if (modernReply) {
+      return res;
+    }
+    return db.getLastError();
+  }
+
+  Map<String, dynamic> _setKeys(String? key, Map<String, dynamic>? keys) {
+    if (key != null && keys != null) {
+      throw ArgumentError('Only one parameter must be set: key or keys');
+    }
+
+    if (key != null) {
+      keys = {};
+      keys[key] = 1;
+    }
+
+    if (keys == null) {
+      throw ArgumentError('key or keys parameter must be set');
+    }
+
+    return keys;
   }
 
   Future<FormResultFree> validate(
@@ -234,7 +296,7 @@ abstract class DBCollectionFree {
     skip = skip < 1 ? null : skip;
 
     var results = <Map<String, Object?>>[];
-    var result = collection.modernFind(
+    var result = await collection.modernFind(
       selector: selector,
       filter: filter,
       findOptions: findOptions,
@@ -252,7 +314,7 @@ abstract class DBCollectionFree {
       selectedFields = selector.paramFields.keys.toList();
     }
 
-    await for (var element in result) {
+    for (var element in await result.toList()) {
       results.add(await toModel(element, selectedFields: selectedFields));
     }
 
@@ -894,6 +956,7 @@ class DBIndex {
   Map<String, dynamic>? partialFilterExpression;
   String? name;
   bool? modernReply;
+  Map<dynamic, dynamic>? collation;
 
   DBIndex({
     this.key,
@@ -905,5 +968,6 @@ class DBIndex {
     this.partialFilterExpression,
     this.name,
     this.modernReply,
+    this.collation,
   });
 }

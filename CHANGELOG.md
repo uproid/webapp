@@ -1,4 +1,9 @@
-## 1.1.13
+## 1.1.15
+- Fixes an error on getAll function of `DBCollectionFree`
+- Fixes renew indexes of mongodb collections (`DBCollectionFree`) after run app 
+- Add `collation` option for Indexes of `DBCollectionFree`
+
+## 1.1.14
 - Add index for fields of `DBCollectionFree`
 - Add `Console.json(Object)` function to logs.
 

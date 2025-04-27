@@ -18,6 +18,10 @@ class PersonCollectionFree extends DBCollectionFree {
           background: false,
           unique: true,
           sparse: false,
+          collation: {
+            'locale': 'en',
+            'strength': 2,
+          },
         ),
       };
 

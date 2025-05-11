@@ -1,3 +1,7 @@
+## 1.1.17 & 1.1.16
+- Added custome error layout for `WebRequest`
+- Fixes reports of dart analyze
+
 ## 1.1.15
 - Fixes an error on getAll function of `DBCollectionFree`
 - Fixes renew indexes of mongodb collections (`DBCollectionFree`) after run app 

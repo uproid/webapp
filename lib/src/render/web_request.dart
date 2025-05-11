@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'package:webapp/src/widgets/wa_string_widget.dart';
 import 'package:webapp/src/widgets/widget_dump.dart';
 import 'package:webapp/wa_model_less.dart';
 import 'package:webapp/src/render/asset_manager.dart';
@@ -33,6 +34,7 @@ class WebRequest {
   /// The [HttpRequest] instance associated with this request.
   final HttpRequest _rq;
   var _defaultContentType = ContentType.html;
+  static WaStringWidget errorWidget = ErrorWidget();
 
   /// Manages assets like JavaScript and CSS for rendering.
   late final AssetManager assetManager = AssetManager(this);
@@ -394,7 +396,7 @@ class WebRequest {
     addParam('status', status);
 
     return renderView(
-      path: ErrorWidget().layout,
+      path: errorWidget.layout,
       status: status,
       isFile: false,
       toData: toData,

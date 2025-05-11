@@ -296,7 +296,7 @@ abstract class DBCollectionFree {
     skip = skip < 1 ? null : skip;
 
     var results = <Map<String, Object?>>[];
-    var result = await collection.modernFind(
+    var result = collection.modernFind(
       selector: selector,
       filter: filter,
       findOptions: findOptions,

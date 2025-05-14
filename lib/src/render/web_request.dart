@@ -55,6 +55,11 @@ class WebRequest {
   /// Constructor to initialize the WebRequest with the given [HttpRequest].
   WebRequest(this._rq);
 
+  @override
+  String toString() {
+    return 'Instance of WebRequest: ${_rq.method} ${_rq.uri}';
+  }
+
   /// Provides access to the underlying [HttpRequest].
   HttpRequest get httpRequest => _rq;
 
@@ -1070,6 +1075,7 @@ class WebRequest {
       },
     };
     params['\$e'] = LMap(events, def: null);
+    params['\$rq'] = this;
     params['\$n'] = (String path, [Object? def = '']) {
       return getParams().navigation<Object>(path: path, def: def ?? '');
     };

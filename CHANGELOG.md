@@ -1,3 +1,6 @@
+## 1.1.18
+- added $rq so that the current WebRequest can be accessed within templates. This will be useful for developing Local Events.
+
 ## 1.1.17 & 1.1.16
 - Added custome error layout for `WebRequest`
 - Fixes reports of dart analyze

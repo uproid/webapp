@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:webapp/wa_server.dart';
 import 'package:webapp/wa_tools.dart';
 import 'package:webapp/wa_model_less.dart';
@@ -118,7 +119,7 @@ void main() {
     test("Test Path", () {
       expect(
         joinPaths(["uproid.com", "ln", "en"]),
-        "uproid.com/ln/en",
+        Platform.isWindows ? "uproid.com\\ln\\en" : "uproid.com/ln/en",
         reason: "Error joinPaths",
       );
 

@@ -1,11 +1,11 @@
 # WebApp Package
 
-[![pub package](https://img.shields.io/pub/v/webapp.svg)](https://pub.dev/packages/webapp)
-[![Dev](https://img.shields.io/pub/v/webapp.svg?label=dev&include_prereleases)](https://pub.dev/packages/webapp)
+[![pub package](https://img.shields.io/pub/v/sqler.svg)](https://pub.dev/packages/sqler)
+[![Dev](https://img.shields.io/pub/v/sqler.svg?label=dev&include_prereleases)](https://pub.dev/packages/sqler)
 [![Donate](https://img.shields.io/badge/Donate-Buy%20Me%20A%20Coffee-pink.svg)](https://buymeacoffee.com/fardziao)
-[![issues-closed](https://img.shields.io/github/issues-closed/uproid/webapp?color=green)](https://github.com/uproid/webapp/issues?q=is%3Aissue+is%3Aclosed) 
-[![issues-open](https://img.shields.io/github/issues-raw/uproid/webapp)](https://github.com/uproid/webapp/issues) 
-[![Contributions](https://img.shields.io/github/contributors/uproid/webapp)](https://github.com/uproid/webapp/blob/master/CONTRIBUTING.md)
+[![issues-closed](https://img.shields.io/github/issues-closed/uproid/sqler?color=green)](https://github.com/uproid/sqler/issues?q=is%3Aissue+is%3Aclosed) 
+[![issues-open](https://img.shields.io/github/issues-raw/uproid/sqler)](https://github.com/uproid/sqler/issues) 
+[![Contributions](https://img.shields.io/github/contributors/uproid/sqler)](https://github.com/uproid/sqler/blob/master/CONTRIBUTING.md)
 
 # WebApp Package Overview
 

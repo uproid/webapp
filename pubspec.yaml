@@ -17,16 +17,11 @@ funding:
   - https://github.com/sponsors/uproid
 
 topics:
-  - application
-  - server
-  - backend
-  - database
   - webapp
-  - mongodb
-  - mysql
-  - websocket
+  - server
   - api
-  - framework
+  - database
+  - websocket
   
 sdk:
   dart:

@@ -1,15 +1,3 @@
-## 2.0.0
-
-- Added Mysql database
-- Added Sqler query generator
-- Fixed some issus on FormValidators
-- Fixed localy filters for templates
-- Fixed localy events for templates
-- Updated documentaions
-- Updated Example and template
-- Added Migration functionality for Mysql
-- Added cli input handlers while running app.
-
 ## 1.1.18
 - added $rq so that the current WebRequest can be accessed within templates. This will be useful for developing Local Events.
 

@@ -75,7 +75,6 @@ class MysqlBooks {
         QSelect('b.author', as: 'author'),
         QSelect('b.published_date', as: 'published_date'),
         QSelect('b.category_id', as: 'category_id'),
-        QSelect('categories.title', as: 'categories_title'),
         QSelect('b.id', as: 'id'),
       ])
       ..join(
@@ -139,7 +138,7 @@ class MysqlBooks {
         filter['filter_title'].toString().isNotEmpty) {
       where.add(
         Condition(
-          QField('title'),
+          QField('b.title'),
           QO.LIKE,
           QVarLike(filter['filter_title']),
         ),

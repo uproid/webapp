@@ -5,148 +5,160 @@
       <li class="nav-item">
         <a
           href="/"
-          class="nav-link <?= 'active' if $e.isPath('/') else '' ?>"
+          class="nav-link {{ 'active' if $e.isPath('/') else '' }}"
           aria-current="page"
         >
-          <?= $t('sidebar.home') ?>
+          {{ $t('sidebar.home') }}
         </a>
       </li>
       <li class="nav-item">
         <a
           href="/info"
-          class="nav-link <?= 'active' if $e.isPath('/info') else '' ?>"
+          class="nav-link {{ 'active' if $e.isPath('/info') else '' }}"
           aria-current="page"
         >
-          <?= $t('sidebar.info') ?>
+          {{ $t('sidebar.info') }}
         </a>
       </li>
       <li class="nav-item">
         <a
           href="/example/form"
-          class="nav-link <?= 'active' if $e.isPath('/example/form') else '' ?>"
+          class="nav-link {{ 'active' if $e.isPath('/example/form') else '' }}"
           aria-current="page"
         >
-          <?= $t('sidebar.formExample') ?>
+          {{ $t('sidebar.formExample') }}
         </a>
       </li>
       <li class="nav-item">
         <a
           href="/example/cookie"
-          class="nav-link <?= 'active' if $e.isPath('/example/cookie') else '' ?>"
+          class="nav-link {{ 'active' if $e.isPath('/example/cookie') else '' }}"
           aria-current="page"
         >
-          <?= $t('sidebar.cookieExample') ?>
+          {{ $t('sidebar.cookieExample') }}
         </a>
       </li>
       <li class="nav-item">
         <a
           href="/example/route"
-          class="nav-link <?= 'active' if $e.isPath('/example/route') else '' ?>"
+          class="nav-link {{ 'active' if $e.isPath('/example/route') else '' }}"
           aria-current="page"
         >
-          <?= $t('sidebar.routeExample') ?>
+          {{ $t('sidebar.routeExample') }}
         </a>
       </li>
       <li class="nav-item">
         <a
           href="/example/socket"
-          class="nav-link <?= 'active' if $e.isPath('/example/socket') else '' ?>"
+          class="nav-link {{ 'active' if $e.isPath('/example/socket') else '' }}"
           aria-current="page"
         >
-          <?= $t('sidebar.socketExample') ?>
+          {{ $t('sidebar.socketExample') }}
         </a>
       </li>
       <li class="nav-item">
         <a
           href="/example/email"
-          class="nav-link <?= 'active' if $e.isPath('/example/email') else '' ?>"
+          class="nav-link {{ 'active' if $e.isPath('/example/email') else '' }}"
           aria-current="page"
         >
-          <?= $t('sidebar.emailExample') ?>
+          {{ $t('sidebar.emailExample') }}
         </a>
       </li>
       <li class="nav-item">
         <a
           href="/example/panel"
-          class="nav-link <?= 'active' if $e.isPath('/example/panel') else '' ?>"
+          class="nav-link {{ 'active' if $e.isPath('/example/panel') else '' }}"
           aria-current="page"
         >
-          <?= $t('sidebar.authExample') ?>
+          {{ $t('sidebar.authExample') }}
         </a>
       </li>
       <li class="nav-item">
         <a
           href="/example/language"
-          class="nav-link <?= 'active' if $e.isPath('/example/language') else '' ?>"
+          class="nav-link {{ 'active' if $e.isPath('/example/language') else '' }}"
           aria-current="page"
         >
-          <?= $t('sidebar.languageExample') ?>
+          {{ $t('sidebar.languageExample') }}
         </a>
       </li>
       <li class="nav-item">
-        <a
-          class="nav-link <?= 'active' if $e.isPath('/example/dump') else '' ?>"
-          data-bs-toggle="collapse"
-          href="#collapseExample"
-        >
-          <span><?= $t('sidebar.debugExample') ?></span>
-          <i class="fas fa-angle-down rotate-icon" style="transform: rotate(180deg);"></i>
+        <a class="nav-link collapsed d-flex justify-content-between align-items-center" 
+          data-bs-toggle="collapse" 
+          href="#collapseExample" 
+          style="overflow: hidden; position: relative;" 
+          aria-expanded="false">
+          
+          <span>Debug Example</span>
+          <i class="fas fa-angle-down rotate-icon"></i>
         </a>
         <ul
-          class="collapse nav nav-pills ps-3 <?= 'show' if $e.isPath('/example/error') or $e.isPath('/example/dump') else '' ?>"
+          class="collapse nav nav-pills ps-3 {{ 'show' if $e.isPath('/example/error') or $e.isPath('/example/dump') else '' }}"
           id="collapseExample"
         >
           <li class="nav-item w-100">
             <a
               href="/example/error"
-              class="nav-link <?= 'active' if $e.isPath('/example/error') else '' ?>"
+              class="nav-link {{ 'active' if $e.isPath('/example/error') else '' }}"
               aria-current="page"
             >
-              <?= $t('sidebar.errorExample') ?>
+              {{ $t('sidebar.errorExample') }}
             </a>
           </li>
           <li class="nav-item w-100">
             <a
               href="/example/dump"
-              class="nav-link <?= 'active' if $e.isPath('/example/dump') else '' ?>"
+              class="nav-link {{ 'active' if $e.isPath('/example/dump') else '' }}"
               aria-current="page"
             >
-              <?= $t('sidebar.dumpExample') ?>
+              {{ $t('sidebar.dumpExample') }}
             </a>
           </li>
         </ul>
       </li>
-      <? if mongoActive ?>
+      {% if mongoActive %}
       <li class="nav-item w-100"></li>
         <a
           href="/example/database"
-          class="nav-link <?= 'active' if $e.isPath('/example/database') else '' ?>"
+          class="nav-link {{ 'active' if $e.isPath('/example/database') else '' }}"
           aria-current="page"
         >
-          <?= $t('sidebar.monogdbExample') ?>
+          {{ $t('sidebar.monogdbExample') }}
         </a>
       </li>
-      <? endif ?>
+      {% endif %}
       <li class="nav-item w-100"></li>
         <a
           href="/example/pagination"
-          class="nav-link <?= 'active' if $e.isPath('/example/pagination') else '' ?>"
+          class="nav-link {{ 'active' if $e.isPath('/example/pagination') else '' }}"
           aria-current="page"
         >
-          <?= $t('sidebar.paginationExample') ?>
+          {{ $t('sidebar.paginationExample') }}
         </a>
       </li>
-      <? if mongoActive ?>
+      {% if mongoActive %}
       <li class="nav-item w-100"></li>
         <a
           href="/example/person"
-          class="nav-link <?= 'active' if $e.isPath('/example/person') else '' ?>"
+          class="nav-link {{ 'active' if $e.isPath('/example/person') else '' }}"
           aria-current="page"
         >
           Example Free model DB
         </a>
       </li>
-      <? endif ?>
+      {% endif %}
+      {% if mysqlActive %}
+      <li class="nav-item w-100"></li>
+        <a
+          href="/example/mysql"
+          class="nav-link {{ 'active' if $e.isPath('/example/mysql') else '' }}"
+          aria-current="page"
+        >
+          {{ $t('MySQL Example') }}
+        </a>
+      </li>
+      {% endif %}
     </ul>
   </div>
 </aside>

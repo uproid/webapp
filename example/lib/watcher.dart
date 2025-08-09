@@ -8,9 +8,9 @@ import 'package:watcher/watcher.dart';
 import 'package:stream_transform/stream_transform.dart';
 import 'app.dart' as app;
 
-main() async {
+main([List<String>? args]) async {
   runZonedGuarded(() async {
-    app.main();
+    app.main(args);
 
     var observatoryUri = (await dev.Service.getInfo()).serverUri;
     if (observatoryUri != null) {

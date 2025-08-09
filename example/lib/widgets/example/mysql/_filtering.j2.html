@@ -1,0 +1,77 @@
+<form method="get" action="http://localhost:8085/example/mysql">
+    <th style="max-width: 80px;">
+        <input
+        class="form-control form-control-sm 
+        {{ 'is-valid' if $n('filter_books/filter_b.id/value') else '' }}
+        {{ $n('filter_books/filter_b.id/valid') }}"
+        type="number"
+        name="filter_b.id"
+        placeholder="ID"
+        value="{{ $n('filter_books/filter_b.id/value') }}"
+        />
+    </th>
+    <th>
+        <input
+        class="form-control form-control-sm
+        {{ 'is-valid' if $n('filter_books/filter_title/value') else '' }}
+        {{ $n('filter_books/filter_title/valid') }}
+        "
+        type="text"
+        name="filter_title"
+        placeholder="Title"
+        value="{{ $n('filter_books/filter_title/value') }}"
+        />
+    </th>
+    <th>
+        <input
+        class="form-control form-control-sm 
+        {{ 'is-valid' if $n('filter_books/filter_author/value') else '' }}
+        {{ $n('filter_books/filter_author/valid') }}
+        "
+        type="text"
+        name="filter_author"
+        placeholder="Author"
+        value="{{ $n('filter_books/filter_author/value') }}"
+        />
+    </th>
+    <th>
+        <input
+        class="form-control form-control-sm
+        {{ 'is-valid' if $n('filter_books/filter_published_date/value') else '' }}
+        {{ $n('filter_books/filter_published_date/valid') }}
+        "
+        type="date"
+        name="filter_published_date"
+        placeholder="Published Date"
+        value="{{ $n('filter_books/filter_published_date/value') }}"
+        />
+    </th>
+    <th>
+        <select
+            class="form-select 
+                form-select-sm 
+                {{ 'is-valid' if $n('filter_books/filter_category_id/value') else '' }}
+                {{ $n('filter_books/filter_category_id/valid') }}
+            "
+            name="filter_category_id"
+            aria-label="Filter Category ID"
+            value="{{ $n('filter_books/filter_category_id/value') }}"
+        >
+            {% set selected = $n('filter_books/filter_category_id/value')  %}
+            <option value="">All Categories</option>
+            {% for category in categories %}
+                <option value="{{ category.id }}" {{ 'selected' if selected == category.id else '' }}>{{ category.title }}</option>
+            {% endfor %}
+        </select>
+    </th>
+    <th colspan="2" class="text-end">
+        {% set filterIsDirty = $l.existUrlQuery($rq,['filter_b.id','filter_title', 'filter_author', 'filter_published_date', 'filter_category_id']) %}
+        <a href="{{ $l.removeUrlQuery($rq,['page','filter_b.id','filter_title', 'filter_author', 'filter_published_date', 'filter_category_id']) }}" 
+            class="btn btn-sm btn{{ '' if filterIsDirty else '-outline' }}-dark " 
+            type="reset"
+        >
+            {{ $t('Reset') }}
+        </a>
+        <input class="btn btn-sm text-white btn-primary" type="submit" value="{{ $t('Filter') }}" />
+    </th>
+</form>

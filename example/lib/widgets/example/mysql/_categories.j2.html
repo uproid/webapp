@@ -1,0 +1,73 @@
+<div class="mt-5">
+  <h3>{{ $t('Example MySQL Categories') }}</h3>
+  <div class="table-responsive mt-4">
+    <table class="table table-striped p-0 m-0 border">
+      <thead>
+        <tr>
+          <th scope="col" class="col-1">{{ $t('ID') }}</th>
+          <th scope="col" class="col-9">{{ $t('Title') }}</th>
+          <th scope="col" class="text-center col-2">{{ $t('Books Count') }}</th>
+          <th scope="col" class="text-center col-1">{{ $t('Actions') }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for category in categories|default([]) %}
+        <tr>
+          <td>{{ category.id }}</td>
+          <td>{{ category.title }}</td>
+          <td class="text-center">
+            <a
+                class="btn btn-sm btn-outline-info"
+                href="{{ $l.updateUrlQuery($rq, {'filter_category_id': category.id|s}) }}"
+            >{{ category.count_books }}</a>
+          </td>
+          <td>
+            <a
+              href="{{ $l.updateUrlQuery($rq, {'id': category.id|s, 'action': 'delete_category'|s}) }}"
+              class="btn btn-sm"
+            >
+              <i class="fas fa-trash text-danger"></i>
+            </a>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="4" class="text-center">
+            {{ $t('No categories found') }}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="4">
+            <form
+              method="POST"
+              action="{{ $l.updateUrlQuery($rq, {'action': 'add_category'}) }}"
+            >
+              <div class="input-group">
+                <input
+                  type="text"
+                  class="form-control {{ $n('form/title/valid') }}"
+                  name="title"
+                  placeholder="Title"
+                  required
+                  value="{{ $n('form/title/value') }}"
+                />
+
+                <button class="btn btn-outline-primary" type="submit">
+                  {{ $t('database.table.button.add') }}
+                </button>
+              </div>
+              <div
+                class="invalid-feedback {{ '' if $n('form/title/success') else 'd-block' }}"
+              >
+                {{ $n('form/title/errors/0') }}
+              </div>
+            </form>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>

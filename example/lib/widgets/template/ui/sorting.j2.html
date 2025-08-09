@@ -1,0 +1,13 @@
+{% set asc = ((data.order == 'asc') and (data.sort == sortby)) %}
+<a href="{{ $l.updateUrlQuery($rq, {'sort': sortby, 'order': 'desc' if asc else 'asc'}) }}" class="text-decoration-none d-flex align-items-center">
+    {{ $t(title) }}
+    {% if data.sort == sortby %}
+        {% if data.order != 'asc' %}
+            <i class="fas fa-sort-up ms-2"></i>
+        {% else %}
+            <i class="fas fa-sort-down ms-2"></i>
+        {% endif %}
+    {% else %}
+        <i class="fas fa-sort ms-2 text-gray"></i>
+    {% endif %}
+</a>

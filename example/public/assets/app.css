@@ -1872,6 +1872,11 @@
   color: var(--bs-secondary-color) !important;
 }
 
+.text-gray {
+  --bs-text-opacity: 1;
+  color: #cecece !important;
+}
+
 .text-black-50 {
   --bs-text-opacity: 1;
   color: rgba(0, 0, 0, 0.5) !important;

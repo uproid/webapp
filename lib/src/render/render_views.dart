@@ -1,10 +1,10 @@
 import 'dart:io';
 
+import 'package:webapp/src/render/web_request.dart';
 import 'package:webapp/wa_console.dart';
 import 'package:webapp/wa_server.dart';
 import 'package:webapp/wa_tools.dart';
 import 'package:webapp/wa_model_less.dart';
-import 'package:intl/intl.dart';
 import 'package:jinja/jinja.dart';
 import 'package:jinja/loaders.dart';
 import 'package:mongo_dart/mongo_dart.dart';
@@ -43,16 +43,7 @@ class RenderViews {
         variableEnd: WaServer.config.variableEnd,
         commentStart: WaServer.config.commentStart,
         commentEnd: WaServer.config.commentEnd,
-        filters: {
-          'dateFormat': (dynamic dt, String format) {
-            try {
-              if (dt is DateTime) return DateFormat(format).format(dt);
-            } catch (e) {
-              Console.w(e);
-            }
-            return dt.toString();
-          },
-        },
+        filters: WebRequest.layoutFilters,
         getAttribute: (String key, dynamic object) {
           try {
             if (object is TString) {

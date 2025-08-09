@@ -109,7 +109,7 @@ void main() async {
   }
 
   server.addRouting(routing);
-  var httpServer = await server.start().then((value) {
+  var httpServer = await server.start([], false).then((value) {
     Console.p("Example app started: http://localhost:${value.port}");
     return value;
   });

@@ -1,140 +1,146 @@
+{% extends 'template/template.j2.html' %}
+{% block title %}
+    {{ $t('sidebar.emailExample') }}
+{% endblock %}
+
+{% block content %}
 <div class="row my-5">
-  <h3><?= $t('email.test') ?></h3>
-  <div class="card card-primary">
-    <div class="card-body bg-light">
+  <h3>{{ $t('email.test') }}</h3>
+  <div class="card card-primary  bg-light">
+    <div class="card-body">
       <form method="post">
         <div class="row">
           <div class="col mb-3">
-            <label for="from" class="form-label"><?= $t('email.from') ?></label>
+            <label for="from" class="form-label">{{ $t('email.from') }}</label>
             <input
-              value="<?= $n('emailForm/from/value') ?>"
+              value="{{ $n('emailForm/from/value') }}"
               type="from"
               name="from"
-              class="form-control <?= $n('emailForm/from/valid') ?>"
+              class="form-control {{ $n('emailForm/from/valid') }}"
               id="from"
             />
-            <div class="invalid-feedback <?= 'd-block' if emailForm.from.failed else '' ?>">
-              <?= $t($n('emailForm/from/errors/0')) ?>
+            <div class="invalid-feedback {{ 'd-block' if emailForm.from.failed else '' }}">
+              {{ $t($n('emailForm/from/errors/0')) }}
             </div>
           </div>
           <div class="col mb-3">
-            <label for="fromName" class="form-label"><?= $t('email.fromName') ?></label>
+            <label for="fromName" class="form-label">{{ $t('email.fromName') }}</label>
             <input
-              value="<?= $n('emailForm/fromName/value') ?>"
+              value="{{ $n('emailForm/fromName/value') }}"
               type="fromName"
               name="fromName"
-              class="form-control <?= emailForm.fromName.valid ?>"
+              class="form-control {{ emailForm.fromName.valid }}"
               id="fromName"
-              placeholder="<?= $t('email.placeholder.name') ?>"
+              placeholder="{{ $t('email.placeholder.name') }}"
             />
-            <div class="invalid-feedback <?= 'd-block' if emailForm.fromName.failed else '' ?>">
-              <?= $t($n('emailForm/fromName/errors/0')) ?>
+            <div class="invalid-feedback {{ 'd-block' if emailForm.fromName.failed else '' }}">
+              {{ $t($n('emailForm/fromName/errors/0')) }}
             </div>
           </div>
         </div>
 
         <div class="mb-3">
-          <label for="email" class="form-label"><?= $t('email.to') ?></label>
+          <label for="email" class="form-label">{{ $t('email.to') }}</label>
           <input
-            value="<?= emailForm.email.value ?>"
+            value="{{ emailForm.email.value }}"
             type="email"
             name="email"
-            class="form-control <?= emailForm.email.valid ?>"
+            class="form-control {{ emailForm.email.valid }}"
             id="email"
-            placeholder="<?= $t('email.placeholder.to') ?>"
+            placeholder="{{ $t('email.placeholder.to') }}"
           />
-          <div class="invalid-feedback <?= 'd-block' if emailForm.email.failed else '' ?>">
-            <?= $t($n('emailForm/email/errors/0')) ?>
+          <div class="invalid-feedback {{ 'd-block' if emailForm.email.failed else '' }}">
+            {{ $t($n('emailForm/email/errors/0')) }}
           </div>
         </div>
 
         <div class="mb-3">
-          <label for="subject" class="form-label"><?= $t('email.subject') ?></label>
+          <label for="subject" class="form-label">{{ $t('email.subject') }}</label>
           <input
-            value="<?= emailForm.subject.value ?>"
+            value="{{ emailForm.subject.value }}"
             type="text"
             name="subject"
-            class="form-control <?= emailForm.subject.valid ?>"
+            class="form-control {{ emailForm.subject.valid }}"
             id="subject"
-            placeholder="<?= $t('email.placeholder.subject') ?>"
+            placeholder="{{ $t('email.placeholder.subject') }}"
           />
-          <div class="invalid-feedback <?= 'd-block' if emailForm.subject.failed else '' ?>">
-            <?= $t($n('emailForm/subject/errors/0')) ?>
+          <div class="invalid-feedback {{ 'd-block' if emailForm.subject.failed else '' }}">
+            {{ $t($n('emailForm/subject/errors/0')) }}
           </div>
         </div>
 
         <div class="mb-3">
-          <label for="message" class="form-label"><?= $t('email.message') ?></label>
+          <label for="message" class="form-label">{{ $t('email.message') }}</label>
           <textarea
             name="message"
-            class="form-control <?= emailForm.message.valid ?>"
+            class="form-control {{ emailForm.message.valid }}"
             id="message"
-            placeholder="<?= $t('email.placeholder.message') ?>"
-          ><?= emailForm.message.value ?></textarea>
-          <div class="invalid-feedback <?= 'd-block' if emailForm.message.failed else '' ?>">
-            <?= $t($n('emailForm/message/errors/0')) ?>
+            placeholder="{{ $t('email.placeholder.message') }}"
+          >{{ emailForm.message.value }}</textarea>
+          <div class="invalid-feedback {{ 'd-block' if emailForm.message.failed else '' }}">
+            {{ $t($n('emailForm/message/errors/0')) }}
           </div>
         </div>
 
         <div class="row">
           <div class="col mb-3">
-            <label for="host" class="form-label"><?= $t('email.host') ?></label>
+            <label for="host" class="form-label">{{ $t('email.host') }}</label>
             <input
-              value="<?= emailForm.host.value ?>"
+              value="{{ emailForm.host.value }}"
               type="text"
               name="host"
-              class="form-control <?= emailForm.host.valid ?>"
+              class="form-control {{ emailForm.host.valid }}"
               id="host"
-              placeholder="<?= $t('email.placeholder.host') ?>"
+              placeholder="{{ $t('email.placeholder.host') }}"
             />
-            <div class="invalid-feedback <?= 'd-block' if emailForm.host.failed else '' ?>">
-              <?= $t($n('emailForm/host/errors/0')) ?>
+            <div class="invalid-feedback {{ 'd-block' if emailForm.host.failed else '' }}">
+              {{ $t($n('emailForm/host/errors/0')) }}
             </div>
           </div>
 
           <div class="col-auto mb-3">
-            <label for="port" class="form-label"><?= $t('email.port') ?></label>
+            <label for="port" class="form-label">{{ $t('email.port') }}</label>
             <input
-              value="<?= emailForm.port.value if emailForm.port.value else '1025' ?>"
+              value="{{ emailForm.port.value if emailForm.port.value else '1025' }}"
               type="number"
               name="port"
-              class="form-control <?= emailForm.port.valid ?>"
+              class="form-control {{ emailForm.port.valid }}"
               id="port"
-              placeholder="<?= $t('email.placeholder.port') ?>"
+              placeholder="{{ $t('email.placeholder.port') }}"
             />
-            <div class="invalid-feedback <?= 'd-block' if emailForm.port.failed else '' ?>">
-              <?= $t($n('emailForm/port/errors/0')) ?>
+            <div class="invalid-feedback {{ 'd-block' if emailForm.port.failed else '' }}">
+              {{ $t($n('emailForm/port/errors/0')) }}
             </div>
           </div>
         </div>
 
         <div class="row">
           <div class="col mb-3">
-            <label for="username" class="form-label"><?= $t('email.username') ?></label>
+            <label for="username" class="form-label">{{ $t('email.username') }}</label>
             <input
-              value="<?= emailForm.username.value ?>"
+              value="{{ emailForm.username.value }}"
               type="text"
               name="username"
-              class="form-control <?= emailForm.username.valid ?>"
+              class="form-control {{ emailForm.username.valid }}"
               id="username"
-              placeholder="<?= $t('email.placeholder.username') ?>"
+              placeholder="{{ $t('email.placeholder.username') }}"
             />
-            <div class="invalid-feedback <?= 'd-block' if emailForm.username.failed else '' ?>">
-              <?= $t($n('emailForm/username/errors/0')) ?>
+            <div class="invalid-feedback {{ 'd-block' if emailForm.username.failed else '' }}">
+              {{ $t($n('emailForm/username/errors/0')) }}
             </div>
           </div>
           <div class="col mb-3">
-            <label for="password" class="form-label"><?= $t('email.password') ?></label>
+            <label for="password" class="form-label">{{ $t('email.password') }}</label>
             <input
-              value="<?= emailForm.password.value ?>"
+              value="{{ emailForm.password.value }}"
               type="password"
               name="password"
-              class="form-control <?= emailForm.password.valid ?>"
+              class="form-control {{ emailForm.password.valid }}"
               id="password"
-              placeholder="<?= $t('email.placeholder.password') ?>"
+              placeholder="{{ $t('email.placeholder.password') }}"
             />
-            <div class="invalid-feedback <?= 'd-block' if emailForm.password.failed else '' ?>">
-              <?= $t($n('emailForm/password/errors/0')) ?>
+            <div class="invalid-feedback {{ 'd-block' if emailForm.password.failed else '' }}">
+              {{ $t($n('emailForm/password/errors/0')) }}
             </div>
           </div>
         </div>
@@ -142,42 +148,43 @@
         <div class="row">
           <div class="col mb-3">
             <input
-              value="<?= emailForm.allowInsecure.value ?>"
+              value="{{ emailForm.allowInsecure.value }}"
               type="checkbox"
               name="allowInsecure"
-              class="form-check-input <?= emailForm.allowInsecure.valid ?>"
+              class="form-check-input {{ emailForm.allowInsecure.valid }}"
               id="allowInsecure"
             />
-            <label for="allowInsecure" class="form-label ms-2 "><?= $t('email.allowInsecure') ?></label>
+            <label for="allowInsecure" class="form-label ms-2 ">{{ $t('email.allowInsecure') }}</label>
           </div>
           <div class="col mb-3">
             <input
-              value="<?= emailForm.ssl.value ?>"
+              value="{{ emailForm.ssl.value }}"
               type="checkbox"
               name="ssl"
-              class="form-check-input <?= emailForm.ssl.valid ?>"
+              class="form-check-input {{ emailForm.ssl.valid }}"
               id="ssl"
             />
-            <label for="ssl" class="ms-2 form-label"><?= $t('email.ssl') ?></label>
+            <label for="ssl" class="ms-2 form-label">{{ $t('email.ssl') }}</label>
           </div>
         </div>
 
-        <? if sendEmailSuccess ?>
+        {% if sendEmailSuccess %}
         <div class="alert alert-success">
-          <?= $t('email.success') ?>
+          {{ $t('email.success') }}
         </div>
-        <? endif ?>
+        {% endif %}
 
-        <? if sendEmailFailed ?>
+        {% if sendEmailFailed %}
         <div class="alert alert-danger">
-          <?= $t('email.failed') ?>
+          {{ $t('email.failed') }}
         </div>
-        <? endif ?>
+        {% endif %}
 
         <button type="submit" class="btn btn-primary text-light">
-          <?= $t('email.send') ?>
+          {{ $t('email.send') }}
         </button>
       </form>
     </div>
   </div>
 </div>
+{% endblock %}

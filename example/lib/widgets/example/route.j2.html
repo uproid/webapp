@@ -1,5 +1,12 @@
+{% extends 'template/template.j2.html' %}
+
+{% block title %}
+    {{ $t('sidebar.routeExample') }}
+{% endblock %}
+
+{% block content %}
 <div class="row my-5">
-  <h3><?= $t('webRouteExample.title') ?></h3>
+  <h3>{{ $t('webRouteExample.title') }}</h3>
   <div class="card my-3 border-0 bg-transparent">
     <div class="card-body p-0 m-0">
       <div class="table-responsive">
@@ -7,29 +14,29 @@
           <thead>
             <tr>
               <th>#</th>
-              <th><?= $t('webRouteExample.path') ?></th>
-              <th><?= $t('webRouteExample.type') ?></th>
-              <th><?= $t('webRouteExample.permissions') ?></th>
-              <th><?= $t('webRouteExample.auth') ?></th>
-              <th><?= $t('webRouteExample.controller') ?></th>
+              <th>{{ $t('webRouteExample.path') }}</th>
+              <th>{{ $t('webRouteExample.type') }}</th>
+              <th>{{ $t('webRouteExample.permissions') }}</th>
+              <th>{{ $t('webRouteExample.auth') }}</th>
+              <th>{{ $t('webRouteExample.controller') }}</th>
             </tr>
           </thead>
           <tbody>
-            <? for route in routes ?>
+            {% for route in routes %}
             <tr>
-              <td><?= loop.index ?></td>
+              <td>{{ loop.index }}</td>
               <td>
-                <a class="btn btn-sm btn-link" href="<?= route.fullPath ?>">
-                  [<?= route.method ?>]
-                  <?= route.fullPath ?>
+                <a class="btn btn-sm btn-link" href="{{ route.fullPath }}">
+                  [{{ route.method }}]
+                  {{ route.fullPath }}
                 </a>
               </td>
-              <td><?= route.type ?></td>
-              <td><?= route.permissions ?></td>
-              <td><?= route.hasAuth | string ?></td>
-              <td><?= route.controller ?><?= route.index ?></td>
+              <td>{{ route.type }}</td>
+              <td>{{ route.permissions }}</td>
+              <td>{{ route.hasAuth | string }}</td>
+              <td>{{ route.controller }}{{ route.index }}</td>
             </tr>
-            <? endfor ?>
+            {% endfor %}
           </tbody>
         </table>
       </div>
@@ -40,7 +47,7 @@
     <ul class="list-group list-group-flush m-0 p-0">
       <li class="list-group-item">
         <div class="row">
-          <b class="col-md-2"><?= $t('webRouteExample.router') ?></b>
+          <b class="col-md-2">{{ $t('webRouteExample.router') }}</b>
           <i class="col-md-10 text-info">example/lib/route/web_route.dart</i>
         </div>
       </li>
@@ -157,3 +164,4 @@ Future<List<WebRoute>> getWebRoute(WebRequest rq) async {
     </div>
   </div>
 </div>
+{% endblock %}

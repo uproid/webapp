@@ -1,7 +1,13 @@
+{% extends 'template/template.j2.html' %}
+{% block title %}
+    {{ $t('Example Free model DB') }}
+{% endblock %}
+
+{% block content %}
 <div class="row my-5">
   <h3>Person Example</h3>
   <div class="my-3 border-0 bg-transparent">
-    <? if data._id == null ?>
+    {% if data._id == null %}
     <div class="p-0 m-0">
       <div class="card table-responsive">
         <table class="table table-striped p-0 m-0 table-border-0 rounded">
@@ -19,41 +25,41 @@
             </tr>
           </thead>
           <tbody>
-            <? for person in allPerson ?>
+            {% for person in allPerson %}
             <tr class="small">
               <td>
                 <div>
-                  <span style="background-color: <?= person.color ?>;" class="badge p-1 py-0 rounded-pill">&nbsp;</span>
-                  <?= person.name ?>
+                  <span style="background-color: {{ person.color }};" class="badge p-1 py-0 rounded-pill">&nbsp;</span>
+                  {{ person.name }}
                 </div>
               </td>
-              <td><?= person.age ?></td>
-              <td><?= person.married ?></td>
-              <td><?= person.email ?></td>
-              <td><?= person.height ?></td>
-              <td><?= person.birthday | dateFormat('dd/MM/yyyy, HH:mm') ?></td>
-              <td><?= person.job.title | default('Unknown') ?></td>
-              <td><?= person.jobs|length ?></td>
+              <td>{{ person.age }}</td>
+              <td>{{ person.married }}</td>
+              <td>{{ person.email }}</td>
+              <td>{{ person.height }}</td>
+              <td>{{ person.birthday | dateFormat('dd/MM/yyyy, HH:mm') }}</td>
+              <td>{{ person.job.title | default('Unknown') }}</td>
+              <td>{{ person.jobs|length }}</td>
               <td>
                 <div class="d-flex justify-content-end">
-                  <form class="d-flex" onsubmit="return confirm('Are you sure to delete `<?= person.name ?>`?')" action="/example/person/delete/<?= person._id ?>" method="POST">
+                  <form class="d-flex" onsubmit="return confirm('Are you sure to delete `{{ person.name }}`?')" action="/example/person/delete/{{ person._id }}" method="POST">
                     <input type="hidden" name="action" value="DELETE" />
                     <button class="btn btn-sm btn-outline-light rounded-pill p-1 m-0 border-0" type="submit">🗑️</button>
                   </form>
-                  <a class="btn btn-sm btn-outline-light rounded-pill p-1 m-0 border-0" href="/example/person/<?= person._id ?>">
+                  <a class="btn btn-sm btn-outline-light rounded-pill p-1 m-0 border-0" href="/example/person/{{ person._id }}">
                     ✏️
                   </a>
                 </div>
               </td>
             </tr>
-            <? endfor ?>
+            {% endfor %}
           </tbody>
           <tfoot>
             <form method="post">
               <tr>
                 <td class="border-0" colspan="100%">
                   <div class="container">
-                    <?= paging ?>
+                    {{ paging }}
                   </div>
                 </td>
               </tr>
@@ -62,9 +68,10 @@
         </table>
       </div>
     </div>
-    <? endif ?>
+    {% endif %}
     <div class="card bg-white mt-3 px-0 mx-0">
-      <? include $e.widgetPath('example/forms/form_person') ?>
+      {% include $e.widgetPath('example/forms/form_person') %}
     </div>
   </div>
 </div>
+{% endblock %}

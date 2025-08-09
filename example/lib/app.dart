@@ -18,7 +18,7 @@ WaConfigs configs = WaConfigs(
   languagePath: pathTo(env['LANGUAGE_PATH'] ?? "./lib/languages"),
   publicDir: pathTo(env['PUBLIC_DIR'] ?? './public'),
   dbConfig: WaDBConfig(
-    enable: false, //env['ENABLE_DATABASE'] == 'true',
+    enable: true, //env['ENABLE_DATABASE'] == 'true',
     dbName: 'example',
     auth: 'admin',
     pass: 'PasswordMongoDB',
@@ -29,7 +29,7 @@ WaConfigs configs = WaConfigs(
   port: (env['DOMAIN_PORT'] ?? '8085').toInt(def: 8085),
   mysqlConfig: WaMysqlConfig(
     enable: true,
-    host: 'localhost',
+    host: env['MYSQL_HOST'] ?? 'localhost',
     port: 3306,
     user: 'example_user',
     pass: 'example_password',

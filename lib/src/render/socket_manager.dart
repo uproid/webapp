@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:webapp/wa_server.dart';
 import 'package:webapp/src/render/web_request.dart';
-import 'package:webapp/src/tools/convertor/serializable/value_converter/json_value.dart';
+import 'package:webapp/src/tools/convertor/serializable/value_converter.dart/json_value.dart';
 import 'package:webapp/wa_console.dart';
 
 /// Manages WebSocket connections and events.

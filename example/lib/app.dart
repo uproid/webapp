@@ -1,6 +1,3 @@
-import '../core/local_events.dart';
-import 'package:webapp/wa_route.dart';
-
 import 'db/job_collection_free.dart';
 import 'db/person_collection_free.dart';
 import 'package:webapp/wa_model_less.dart';
@@ -27,20 +24,6 @@ WaConfigs configs = WaConfigs(
     user: 'root',
   ),
   port: (env['DOMAIN_PORT'] ?? '8085').toInt(def: 8085),
-  mysqlConfig: WaMysqlConfig(
-    enable: true,
-    host: env['MYSQL_HOST'] ?? 'localhost',
-    port: 3306,
-    user: 'example_user',
-    pass: 'example_password',
-    databaseName: 'example_db',
-  ),
-  blockStart: "{%",
-  blockEnd: "%}",
-  variableStart: "{{",
-  variableEnd: "}}",
-  commentStart: "{#",
-  commentEnd: "#}",
 );
 
 final server = WaServer(configs: configs);
@@ -72,11 +55,9 @@ final socketManager = SocketManager(
   routes: getSocketRoute(),
 );
 
-void main([List<String>? args]) async {
+void main() async {
   server.addRouting(getWebRoute);
-  WebRequest.localEvents.addAll(localEvents);
-  WebRequest.addLocalLayoutFilters(localLayoutFilters);
-  server.start(args).then((value) {
+  server.start().then((value) {
     Console.p("Example app started: http://localhost:${value.port}");
   });
 

@@ -48,7 +48,6 @@ class WaConfigs {
     this.commentStart = '<?#',
     this.commentEnd = '?>',
     this.cookiePassword = "password",
-    WaMysqlConfig? mysqlConfig,
   }) {
     this.appPath = appPath ?? pathApp;
     this.dbPath = dbPath ?? pathTo("db");
@@ -65,7 +64,6 @@ class WaConfigs {
       port: this.domainPort,
     );
     this.dbConfig = dbConfig ?? WaDBConfig();
-    this.mysqlConfig = mysqlConfig ?? WaMysqlConfig();
     this.languages = languages ?? WaDBConfig.defaultLanguages.keys.toList();
   }
 
@@ -105,7 +103,6 @@ class WaConfigs {
   late final String commentEnd;
   late final String cookiePassword;
   late final WaDBConfig dbConfig;
-  late final WaMysqlConfig mysqlConfig;
 
   bool get isLocalDebug {
     if (env['LOCAL_DEBUG'] != null) {
@@ -126,39 +123,6 @@ class WaConfigs {
     }
 
     return uri.replace(path: path).toString();
-  }
-}
-
-class WaMysqlConfig {
-  bool enable = false;
-  String host = 'localhost';
-  int port = 3306;
-  String user = 'database_username';
-  String pass = 'database_password';
-  bool secure = true;
-  String databaseName = "database_name";
-  String collation = 'utf8mb4_general_ci';
-
-  WaMysqlConfig({
-    String? host,
-    int? port,
-    String? user,
-    String? pass,
-    bool? secure = true,
-    String? databaseName,
-    String? collation,
-    bool? enable,
-  }) {
-    this.user = user ?? env['MYSQL_USER'] ?? 'database_username';
-    this.pass = pass ?? env['MYSQL_PASS'] ?? 'database_password';
-    this.secure = secure ?? env['MYSQL_SECURE']?.toBool ?? true;
-    this.host = host ?? env['MYSQL_HOST'] ?? 'localhost';
-    this.port = port ?? env['MYSQL_PORT']?.toInt() ?? 3306;
-    this.databaseName =
-        databaseName ?? env['MYSQL_DATABASE'] ?? 'database_name';
-    this.collation =
-        collation ?? env['MYSQL_COLLATION'] ?? 'utf8mb4_general_ci';
-    this.enable = enable ?? false;
   }
 }
 

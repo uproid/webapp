@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:webapp/src/tools/convertor/serializable/value_converter/json_value.dart';
+import 'package:webapp/src/tools/convertor/serializable/value_converter.dart/json_value.dart';
 
 void main() {
   group('Group WaJson', () {

@@ -1,10 +1,5 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
-import 'package:capp/capp.dart';
-import 'package:mysql_client/mysql_client.dart';
-import 'package:webapp/src/db/mysql/mysql_migration.dart';
-import 'package:webapp/src/tools/convertor/string_validator.dart';
 import 'package:webapp/wa_server.dart';
 import 'package:webapp/src/render/web_request.dart';
 import 'package:webapp/src/router/route.dart';
@@ -20,9 +15,6 @@ import 'package:mongo_dart/mongo_dart.dart' as mongo;
 /// handling routes, connecting to MongoDB, and managing scheduled tasks (cron jobs). It also provides methods
 /// for adding routing functions and stopping the server.
 class WaServer {
-  /// A list of command-line arguments passed to the server.
-  List<String> _args = [];
-
   /// Provides information about the version of the server.
   static final info = _Info();
 
@@ -40,9 +32,6 @@ class WaServer {
 
   /// The MongoDB database instance.
   mongo.Db? _db;
-
-  /// The MySQL database connection instance.
-  MySQLConnection? _mysqlDb;
 
   /// A list of [WaCron] instances representing scheduled tasks.
   final List<WaCron> crons = [];
@@ -102,13 +91,6 @@ class WaServer {
     return _db!;
   }
 
-  MySQLConnection get mysqlDb {
-    if (_mysqlDb == null || !_mysqlDb!.connected) {
-      connectMysqlDb();
-    }
-    return _mysqlDb!;
-  }
-
   /// Stops the server and closes the database connection.
   ///
   /// The [force] parameter specifies whether to forcefully close the server.
@@ -127,19 +109,16 @@ class WaServer {
   /// Otherwise, it runs normally.
   ///
   /// Returns a [Future] containing the [HttpServer] instance.
-  /// If [awaitCommands] is true, it will also handle command-line inputs.
-  Future<HttpServer> start([List<String>? args, bool awaitCommands = true]) {
-    this._args = args ?? [];
+  Future<HttpServer> start() {
     if (config.noStop) {
-      return runZonedGuarded(() => _run(args, awaitCommands: awaitCommands),
-          (error, stack) {
+      return runZonedGuarded(() => _run(), (error, stack) {
         Console.e({
           'error': error,
           'stack': stack.toString().split("#"),
         });
       })!;
     } else {
-      return _run(args);
+      return _run();
     }
   }
 
@@ -148,8 +127,7 @@ class WaServer {
   /// This method is called internally by [start]. It waits for the database to load and sets up request handling.
   ///
   /// Returns a [Future] containing the [HttpServer] instance.
-  Future<HttpServer> _run(List<String>? args,
-      {bool awaitCommands = true}) async {
+  Future<HttpServer> _run() async {
     appLanguages = await MultiLanguage(config.languagePath).init();
     // Waiting to load database after a few secounds in live or staging
     if (!config.isLocalDebug) {
@@ -157,10 +135,8 @@ class WaServer {
     }
 
     _db = await connectMongoDb().onError((_, __) {
-      throw ("Error connect to MongoDB");
+      throw ("Error connect to DB");
     });
-
-    await connectMysqlDb();
 
     server = await HttpServer.bind(
       config.ip,
@@ -178,9 +154,6 @@ class WaServer {
     });
 
     await handleRequests(server!);
-    if (awaitCommands) {
-      await handleCommands(server!);
-    }
     return server!;
   }
 
@@ -249,101 +222,6 @@ class WaServer {
     });
   }
 
-  /// Handles commands for the server, such as starting or stopping the server.
-  Future<void> handleCommands(HttpServer server) async {
-    if (this._args.isNotEmpty) {
-      Console.p("Server started with arguments: ${this._args.join(', ')}");
-    }
-    await _runCommands(this._args);
-    final input = stdin.transform(utf8.decoder);
-    await for (String line in input.transform(LineSplitter())) {
-      line = line.trim();
-      line = line.replaceAll(RegExp('  '), ' ');
-      if (line.isNotEmpty) {
-        await _runCommands(line.split(' '));
-      }
-    }
-  }
-
-  Future<void> _runCommands(List<String> args) async {
-    if (args.isEmpty) {
-      return;
-    }
-
-    final cmdManager = CappManager(
-      args: args,
-      main: CappController(
-        '',
-        options: [
-          CappOption(
-            name: 'help',
-            shortName: 'h',
-            description: 'Show help',
-          ),
-        ],
-        run: (c) async {
-          return CappConsole(c.manager.getHelp(), CappColors.warnnig);
-        },
-      ),
-      controllers: [
-        CappController(
-          'migrate',
-          options: [
-            CappOption(
-              name: 'init',
-              shortName: 'i',
-              description: 'Init migration',
-            ),
-            CappOption(
-              name: 'create',
-              shortName: 'c',
-              description: 'Create migration',
-            ),
-            CappOption(
-              name: 'rollback',
-              shortName: 'r',
-              description: 'Rollback migration',
-            ),
-          ],
-          description: 'Migration commands',
-          run: (c) async {
-            if (c.existsOption('init')) {
-              var res = await CappConsole.progress<String>(
-                "Initializing migration...",
-                () async => MysqlMigration(mysqlDb).migrateInit(),
-              );
-              return CappConsole(res);
-            }
-
-            if (c.existsOption('create')) {
-              var res = await CappConsole.progress<String>(
-                "Creating migration...",
-                () async => MysqlMigration(mysqlDb).migrateCreate(),
-              );
-              return CappConsole(res);
-            }
-
-            if (c.existsOption('rollback')) {
-              int deep = c.getOption('rollback', def: '1').toInt(def: 1);
-              var res = await CappConsole.progress<String>(
-                "Rolling back migration...",
-                () async => MysqlMigration(mysqlDb).migrateRollback(deep),
-              );
-              return CappConsole(res);
-            }
-
-            return CappConsole(
-              "Please run the migration commands",
-              CappColors.warnnig,
-            );
-          },
-        ),
-      ],
-    );
-
-    cmdManager.process();
-  }
-
   /// Connects to MongoDB using the connection string from the configuration.
   ///
   /// If [config.dbConfig.enable] is true, the database connection is opened.
@@ -359,29 +237,6 @@ class WaServer {
     return db;
   }
 
-  /// Connects to MySQL using the connection string from the configuration.
-  Future<void> connectMysqlDb() async {
-    if (config.mysqlConfig.enable) {
-      _mysqlDb = await MySQLConnection.createConnection(
-        host: config.mysqlConfig.host,
-        port: config.mysqlConfig.port,
-        userName: config.mysqlConfig.user,
-        password: config.mysqlConfig.pass,
-        databaseName: config.mysqlConfig.databaseName,
-        secure: config.mysqlConfig.secure,
-        collation: config.mysqlConfig.collation,
-      );
-      _mysqlDb!.onClose(
-        () => Console.e("MySQL connection closed"),
-      );
-      if (config.mysqlConfig.enable) {
-        await _mysqlDb!.connect().onError((err, stack) {
-          Console.e(err.toString());
-        });
-      }
-    }
-  }
-
   /// Registers a [WaCron] instance to be scheduled.
   ///
   /// The [cron] parameter is the [WaCron] instance to be registered.
@@ -393,5 +248,5 @@ class WaServer {
 /// A class that holds version information for the server.
 class _Info {
   /// The version of the server.
-  final String version = '1.1.19';
+  final String version = '1.1.18';
 }

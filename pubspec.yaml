@@ -1,5 +1,5 @@
 name: webapp
-description: The WebApp package simplifies fast and efficient server-side web app development with Dart, offering tools for APIs, databases, WebSockets, and scalable projects
+description: The WebApp package simplifies fast and efficient server-side web app development with Dart, offering tools for APIs, MongoDB/MySQL databases, WebSockets, and scalable projects
 
 version: 1.1.19
 homepage: https://webapp.uproid.com/
@@ -22,6 +22,11 @@ topics:
   - backend
   - database
   - webapp
+  - mongodb
+  - mysql
+  - websocket
+  - api
+  - framework
   
 sdk:
   dart:

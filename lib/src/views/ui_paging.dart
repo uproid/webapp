@@ -35,11 +35,6 @@ class UIPaging extends WaView {
   /// Whether the ordering should be in reverse (descending).
   bool orderReverse;
 
-  int get offset {
-    var res = (page - 1) * pageSize;
-    return res > 0 ? res : 0;
-  }
-
   /// Calculates the starting index for the current page based on [page] and [pageSize].
   ///
   /// The start index is adjusted if the page exceeds the total number of items.
@@ -183,7 +178,6 @@ class UIPaging extends WaView {
       'disableFirst': page - 1 <= 0,
       'disableLast': page - count >= 0,
       'other': other.isEmpty ? "" : "&$other",
-      'otherQuery': otherQuery,
       'orderBy': orderBy,
       'orderReverse': orderReverse,
     };

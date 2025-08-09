@@ -9,7 +9,7 @@
 
 # WebApp Package Overview
 
-WebApp Package is a robust Dart package designed to streamline the development of powerful web applications. Whether you're building APIs, managing databases, creating dynamic frontend widgets, or implementing real-time features, the WebApp package offers a comprehensive suite of tools to accelerate your development process. With built-in support for MongoDB, MySQL, WebSockets, and seamless integration with Nginx, this package is ideal for developers seeking efficiency and scalability in their web projects.
+WebApp Package is a robust Dart package designed to streamline the development of powerful web applications. Whether you're building APIs, managing databases, creating dynamic frontend widgets, or implementing real-time features, the WebApp package offers a comprehensive suite of tools to accelerate your development process. With built-in support for MongoDB, WebSockets, and seamless integration with Nginx, this package is ideal for developers seeking efficiency and scalability in their web projects.
 
 #### [Examples Project](https://github.com/uproid/webapp/tree/master/example)  |  [Live Demo](https://example.uproid.com) | [Documentations](https://webapp.uproid.com)
 
@@ -20,7 +20,6 @@ The WebApp package is crafted to facilitate:
 - **Rapid API Development:** Quickly create and manage APIs, reducing development time.
 - **Efficient Project Structuring:** Organize web projects for better maintainability and scalability.
 - **MongoDB Integration:** Utilize MongoDB for efficient data storage and retrieval.
-- **MySQL Support:** Full MySQL database integration with query building, migrations, and table management.
 - **Frontend Widget Creation:** Develop reusable widgets for dynamic frontend interfaces.
 - **WebSocket Implementation:** Build interactive, real-time features with ease.
 - **Nginx Integration:** Deploy and manage your web application seamlessly with Nginx.
@@ -39,8 +38,7 @@ The WebApp package is crafted to facilitate:
 11. [Database](https://github.com/uproid/webapp/tree/master/doc/10.Database.md)
 12. [Database Queries](https://github.com/uproid/webapp/tree/master/doc/11.DQ-Database-Queries.md)
 13. [MongoDB Connection](https://github.com/uproid/webapp/tree/master/doc/12.Mongo-db-connection.md)
-14. [MySQL Database Support](https://github.com/uproid/webapp/tree/master/doc/14.MySQL-Database-Support.md)
-15. [Open API Documentation](https://github.com/uproid/webapp/tree/master/doc/13.open-api-documentation.md)
+14. [Open API Documentation](https://github.com/uproid/webapp/tree/master/doc/13.open-api-documentation.md)
 
 ## Features
 
@@ -50,54 +48,46 @@ The WebApp package provides a streamlined framework for setting up and managing 
 ### 2. MongoDB Support
 Integrate MongoDB seamlessly into your web application. The package offers tools to connect to MongoDB instances, perform CRUD operations, and manage data efficiently, ensuring robust backend support for your projects.
 
-### 3. MySQL Database Support
-Full-featured MySQL integration with comprehensive database management tools. Includes:
-- **MySQL Query Builder**: Type-safe SQL query construction with fluent API
-- **Database Migrations**: Automated schema management and version control
-- **Table Management**: Create, modify, and manage MySQL tables programmatically
-- **Connection Management**: Efficient connection pooling and management
-- **Advanced SQL Features**: Support for joins, subqueries, aggregations, and complex conditions
-
-### 4. OpenAPI v3.0 Documentation Generation
+### 3. OpenAPI v3.0 Documentation Generation
 Automatically generate OpenAPI v3.0 documentation for your APIs. This feature facilitates the use of UI tools like Swagger, providing an interactive interface for testing and exploring your APIs, enhancing developer and client experience.
 
-### 5. Database Models and MongoDB Query Support
+### 4. Database Models and MongoDB Query Support
 Create database models that map directly to your MongoDB collections. The package simplifies defining data schemas and building complex queries, enabling efficient data operations such as filtering, sorting, and aggregating within your Dart code.
 
-### 6. Frontend Widget Creation
+### 5. Frontend Widget Creation
 Develop and manage reusable frontend widgets to render dynamic content. The package supports the creation of interactive UI components, enhancing the user experience and ensuring consistency across your web application.
 
-### 7. WebSocket Support
+### 6. WebSocket Support
 Implement real-time communication features using WebSockets. Whether you're building chat applications, live data feeds, or interactive dashboards, the WebApp package makes adding WebSocket functionality straightforward and efficient.
 
-### 8. Nginx Compatibility
+### 7. Nginx Compatibility
 Deploy your Dart web application with ease using Nginx. The package is designed to work seamlessly with Nginx, providing robust and scalable server management suitable for production environments.
 
-### 9. SMTP Email Sending
+### 8. SMTP Email Sending
 Send emails directly from your web application using the Simple Mail Transfer Protocol (SMTP). This feature is essential for functionalities like user registration, password recovery, and sending notifications.
 
-### 10. Comprehensive Data Handling Tools
+### 9. Comprehensive Data Handling Tools
 Simplify web development with built-in tools for managing common data structures such as Strings, Maps, and Lists. These utilities include string encoding and manipulation, as well as efficient handling of Maps and Lists, reducing the need for additional packages.
 
-### 11. Advanced Routing with Authentication and Permissions
+### 10. Advanced Routing with Authentication and Permissions
 Handle client-side request routing effectively with built-in support for managing authentication and permissions. Define secure routes and control access to various parts of your application effortlessly.
 
-### 12. Easy Socket Request Development
+### 11. Easy Socket Request Development
 Develop and manage Socket requests with ease. The WebApp package provides intuitive APIs to handle Socket connections, enabling real-time data exchange and interactive features in your web application.
 
-### 13. MVC Architecture for Scalability
+### 12. MVC Architecture for Scalability
 Scale large projects effortlessly using the Model-View-Controller (MVC) architecture. Extend the provided classes such as `WaController`, `DBModel`, and `DBCollection` to structure your application logically and maintainably.
 
-### 14. Form Validators
+### 13. Form Validators
 Utilize built-in FormValidators to manage and validate client-side data on the server. This feature ensures data integrity and security by validating API requests and user inputs effectively.
 
-### 15. CronJob Development
+### 14. CronJob Development
 Implement scheduled tasks quickly using the `WaCron` class. Automate routine operations, such as data backups or periodic data processing, with minimal configuration.
 
-### 16. Flexible Output Rendering
+### 15. Flexible Output Rendering
 Render client requests using various methods, including JSON, HTML, Text, Widgets, and variable dumps. The package supports multiple output formats, allowing you to present data in the most appropriate form for your users.
 
-### 17. Asset Management
+### 16. Asset Management
 Manage and include assets effortlessly during request rendering. Extend the `Layout` class and use the `include_controller` to add and manage assets, ensuring your application resources are well-organized and easily accessible.
 
 
@@ -115,7 +105,7 @@ This project is licensed under the [MIT License](../LICENSE).
 
 ### Install WebApp package
    ```bash
-   dart pub add webapp
+   dart pub get webapp
    ```
 
 ### Install WebApp CLI
@@ -200,28 +190,6 @@ void main() async {
      ssl: true,
      allowInsecure: false,
    );
-   ```
-
-### MySQL Database example:
-   ```dart
-   import 'package:webapp/wa_mysql.dart';
-   
-   // Create a query using the MySQL Query Builder
-   var query = Q()
-     .selects([QSelectAll()])
-     .from(QField('users'))
-     .where(WhereOne(QField('status'), QO.EQ, QVar('active')))
-     .orderBy(QOrder('created_at', desc: true))
-     .limit(10);
-   
-   // Generate SQL
-   String sql = query.toSQL();
-   // Output: SELECT * FROM `users` WHERE ( `status` = 'active' ) ORDER BY `created_at` DESC LIMIT 10
-   
-   // Database migrations
-   var migration = MysqlMigration(mysqlConnection);
-   await migration.migrate(); // Run pending migrations
-   await migration.rollback(); // Rollback last migration
    ```
 
 ## Routing example:

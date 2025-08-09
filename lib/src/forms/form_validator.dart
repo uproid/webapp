@@ -6,20 +6,6 @@ import '../render/web_request.dart';
 
 typedef ValidatorEvent<T> = Future<FieldValidateResult> Function(T value);
 
-extension SimpleValidatorEvent<T> on ValidatorEvent<T> {
-  /// Converts the validator event to a `FieldValidator` instance.
-  Future<String> Function(dynamic value) toSimple() {
-    return (value) async {
-      var res = await this(value);
-      if (res.success) {
-        return '';
-      } else {
-        return res.error.isNotEmpty ? res.error : res.errors.join(',');
-      }
-    };
-  }
-}
-
 /// A class for validating form data using customizable field validators.
 ///
 /// The `FormValidator` class allows defining validation rules for form fields
@@ -27,7 +13,7 @@ extension SimpleValidatorEvent<T> on ValidatorEvent<T> {
 /// reporting and formatting for easy form validation and feedback display.
 class FormValidator {
   /// The web request instance containing the form data to validate.
-  WebRequest? rq;
+  WebRequest rq;
 
   /// A map of field names to a list of validator events that will be applied to them.
   Map<String, List<ValidatorEvent>> fields;
@@ -42,7 +28,7 @@ class FormValidator {
   String name;
 
   /// Additional data that can be used in validation, not coming directly from the request.
-  Map<String, Object?> extraData;
+  Map<String, Object> extraData;
 
   /// Constructor to initialize the `FormValidator`.
   ///
@@ -54,19 +40,13 @@ class FormValidator {
   /// - [success]: The value to mark a field as valid. (optional, defaults to an empty string)
   /// - [extraData]: Additional data to be considered during validation. (optional, defaults to an empty map)
   FormValidator({
+    required this.rq,
     required this.fields,
     required this.name,
-    this.rq,
     this.failed = 'is-invalid',
     this.success = '',
     this.extraData = const {},
-  }) {
-    if (rq == null && extraData.isEmpty) {
-      throw ArgumentError(
-        'WebRequest or extraData is required for FormValidator',
-      );
-    }
-  }
+  });
 
   /// Validates the form data and returns a boolean result.
   ///
@@ -98,9 +78,9 @@ class FormValidator {
 
     for (var fieldName in fields.keys) {
       var fieldResult = <String, dynamic>{};
-      Object? fieldValue;
-      if (data.isEmpty && rq != null) {
-        fieldValue = rq!.data(fieldName);
+      Object fieldValue;
+      if (data.isEmpty) {
+        fieldValue = rq.data(fieldName);
       } else {
         fieldValue = data[fieldName] ?? extraData[fieldName];
       }
@@ -147,7 +127,7 @@ class FormValidator {
       }
     });
 
-    rq?.addValidator(name, thisForm);
+    rq.addValidator(name, thisForm);
 
     return (result: result, form: thisForm);
   }
@@ -175,32 +155,6 @@ class FormValidator {
     final emptyValidator = FormValidator(rq: rq, fields: fields, name: name);
     await emptyValidator.validate(data: data);
     return emptyValidator;
-  }
-
-  static Map<String, Object?> extractValues(
-    Map<String, Object?> form,
-  ) {
-    var extraData = <String, Object?>{};
-    form.forEach((key, value) {
-      if (value is Map<String, Object?>) {
-        extraData[key] = value['value'];
-      }
-    });
-    return extraData;
-  }
-
-  static Map<String, String> extractString(Map<String, Object?> form,
-      [bool allowEmpty = false]) {
-    var extraData = <String, String>{};
-    form.forEach((key, value) {
-      if (value is Map<String, Object?>) {
-        if (!allowEmpty && (value['value'] == null || value['value'] == '')) {
-          return;
-        }
-        extraData[key] = value['value']?.toString() ?? '';
-      }
-    });
-    return extraData;
   }
 }
 
@@ -329,10 +283,6 @@ class FieldValidator {
     return (value) async {
       var res = true;
       var error = <String>[];
-
-      if (value.toString().trim().isEmpty) {
-        value = null;
-      }
 
       if (value != null) {
         if (!value.toString().isInt) {
@@ -496,69 +446,4 @@ class FieldValidator {
       );
     };
   }
-
-  static ValidatorEvent contains(List values, {bool isRequired = true}) {
-    return (value) async {
-      if ((value == null || value.toString().isEmpty) && isRequired) {
-        return FieldValidateResult(
-          success: false,
-          error: 'error.field.required',
-        );
-      }
-
-      if ((value == null || value.toString().isEmpty) && !isRequired) {
-        return FieldValidateResult(success: true);
-      }
-
-      var res = values.contains(value);
-      return FieldValidateResult(
-        success: res,
-        error: res ? '' : 'error.field.contains',
-      );
-    };
-  }
-
-  static ValidatorEvent isDateField({
-    bool isRequired = true,
-    bool checkUtc = false,
-  }) {
-    return (value) async {
-      if ((value == null || value.toString().isEmpty)) {
-        return FieldValidateResult(
-          success: !isRequired,
-          error: isRequired ? 'error.field.required' : '',
-        );
-      }
-
-      var date = DateTime.tryParse(value.toString());
-      if (date == null || date.year.toString().length != 4) {
-        return FieldValidateResult(
-          success: false,
-          error: 'error.field.date',
-        );
-      }
-
-      if (checkUtc && !date.isUtc) {
-        return FieldValidateResult(
-          success: false,
-          error: 'error.field.date',
-        );
-      }
-
-      return FieldValidateResult(success: true);
-    };
-  }
-}
-
-class FormResult {
-  Map<String, dynamic> form;
-  bool result;
-  var errors = <String>[];
-
-  FormResult({
-    required this.form,
-    required this.result,
-  });
-
-  get json => WaJson.jsonEncoder(this.form);
 }

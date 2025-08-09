@@ -14,7 +14,7 @@ import 'package:webapp/src/router/web_route.dart';
 import 'package:webapp/src/tools/console.dart';
 import 'package:webapp/src/tools/convertor/query_string.dart';
 import 'package:webapp/src/tools/convertor/safe_string.dart';
-import 'package:webapp/src/tools/convertor/serializable/value_converter.dart/json_value.dart';
+import 'package:webapp/src/tools/convertor/serializable/value_converter/json_value.dart';
 import 'package:webapp/src/tools/convertor/string_validator.dart';
 import 'package:webapp/src/tools/convertor/translate_string.dart';
 import 'package:webapp/src/tools/path.dart';
@@ -206,7 +206,8 @@ class WebRequest {
 
     // For GET
     var params = _rq.uri.queryParameters;
-    get.addAll(params);
+    get.addAll(_safeValue<Map<String, dynamic>>(params));
+
     // For POST or PUT
     if (method == RequestMethods.POST || method == RequestMethods.PUT) {
       // Form Forms
@@ -217,7 +218,7 @@ class WebRequest {
         try {
           content = await utf8.decoder.bind(stream).join();
           var body = QueryString.parse(content);
-          post.addAll(body);
+          post.addAll(_safeValue(body));
         } catch (e) {
           Console.e(e);
         }
@@ -226,7 +227,7 @@ class WebRequest {
           .toLowerCase()
           .contains("multipart/form-data")) {
         var data = await getHeaderFormData();
-        post.addAll(data['fields']);
+        post.addAll(_safeValue(data['fields']));
         file.addAll(data['files']);
       } else if (headers.contentType
           .toString()
@@ -235,7 +236,7 @@ class WebRequest {
         try {
           content = await utf8.decoder.bind(stream).join();
           var data = jsonDecode(content);
-          post.addAll(data);
+          post.addAll(_safeValue(data));
         } catch (e) {
           Console.e(e);
         }
@@ -257,6 +258,21 @@ class WebRequest {
     };
 
     return _dataRequest;
+  }
+
+  /// Safely converts values to a map, ensuring no null values are included.
+  R _safeValue<R>(R value) {
+    if (value is String) {
+      return htmlEscape.convert(value) as R;
+    }
+    if (value is Map) {
+      return value.map((key, val) => MapEntry(key.toString(), _safeValue(val)))
+          as R;
+    }
+    if (value is List) {
+      return value.map((e) => _safeValue(e)).toList() as R;
+    }
+    return value;
   }
 
   /// Retrieves all parsed request data including GET, POST, and FILE data.
@@ -580,25 +596,7 @@ class WebRequest {
         variableEnd: WaServer.config.variableEnd,
         commentStart: WaServer.config.commentStart,
         commentEnd: WaServer.config.commentEnd,
-        filters: {
-          'dateFormat': (dynamic dt, String format) {
-            try {
-              if (dt is DateTime) return DateFormat(format).format(dt);
-            } catch (e) {
-              Console.w(e);
-            }
-            return dt.toString();
-          },
-          'oid': (Object? id) {
-            if (id is ObjectId?) {
-              return id?.oid;
-            } else if (id is List<ObjectId?>) {
-              return List<String>.from(id.map((e) => e?.oid));
-            } else {
-              return id;
-            }
-          },
-        },
+        filters: _layoutFilters,
         getAttribute: (String key, dynamic object) {
           try {
             if (object is TString) {
@@ -653,6 +651,136 @@ class WebRequest {
     }
     var renderString = template.render(params);
     return renderString;
+  }
+
+  /// Renders a template with the given parameters and configuration.
+  ///
+  /// This method supports rendering from a file or a raw template string. It can handle
+  /// different types of rendering based on the [isFile] and [toData] parameters. It also
+  /// manages the localization and filtering of data.
+  ///
+  /// [path] - The path or content of the template to be rendered. If [isFile] is true, this should be the file path.
+  /// [viewParams] - A map of parameters to be passed to the template. Default is an empty map.
+  /// [isFile] - A flag indicating whether [path] refers to a file (true) or a string template (false). Default is true.
+  /// [status] - The HTTP status code to be used. Default is 200.
+  ///
+  /// Returns a [Future<String>] containing the rendered template as a string.
+  String renderAsync({
+    required String path,
+    Map<String, Object?> viewParams = const {},
+    bool isFile = true,
+    int status = 200,
+  }) {
+    if (isClosed) return '';
+
+    if (isFile) {
+      File file = File(joinPaths([
+        WaServer.config.widgetsPath,
+        "$path.${WaServer.config.widgetsType}",
+      ]));
+
+      if (!file.existsSync()) {
+        if (WaServer.config.isLocalDebug) {
+          return "The path: ${file.path} is not correct!";
+        } else {
+          return "The path: ${file.uri.pathSegments.last} is not correct!";
+        }
+      }
+    }
+
+    var env = Environment(
+        globals: getGlobalEvents(),
+        autoReload: false,
+        loader: FileSystemLoader(paths: <String>[WaServer.config.widgetsPath]),
+        leftStripBlocks: false,
+        trimBlocks: false,
+        blockStart: WaServer.config.blockStart,
+        blockEnd: WaServer.config.blockEnd,
+        variableStart: WaServer.config.variableStart,
+        variableEnd: WaServer.config.variableEnd,
+        commentStart: WaServer.config.commentStart,
+        commentEnd: WaServer.config.commentEnd,
+        filters: _layoutFilters,
+        getAttribute: (String key, dynamic object) {
+          try {
+            if (object is TString) {
+              return object.write(this);
+            }
+            if (object is String && key == 'tr') {
+              return object.tr.write(this);
+            }
+            if (object is Cookie) {
+              return key == 'name' ? object.name : object.value;
+            }
+
+            if (object[key] != null) {
+              if (object[key] is ObjectId) {
+                return (object[key] as ObjectId).oid;
+              }
+            }
+            return object[key];
+          } on NoSuchMethodError {
+            Console.e({
+              'error': {
+                'object': object,
+                'key': key,
+                'error': 'The key "$key" on "$object" not found',
+              }
+            });
+
+            return null;
+          } catch (e) {
+            Console.w({
+              'error': {
+                'object': object,
+                'key': key,
+                'error': e,
+              }
+            });
+            return null;
+          }
+        });
+    var params = getParams();
+    params.addAll(viewParams);
+    Template template;
+    if (isFile) {
+      template = env.getTemplate(File(
+        joinPaths([
+          WaServer.config.widgetsPath,
+          "$path.${WaServer.config.widgetsType}",
+        ]),
+      ).path);
+    } else {
+      template = env.fromString(path);
+    }
+    var renderString = template.render(params);
+    return renderString;
+  }
+
+  static Map<String, Function> _layoutFilters = {
+    'dateFormat': (dynamic dt, String format) {
+      try {
+        if (dt is DateTime) return DateFormat(format).format(dt);
+        if (dt is String) return DateFormat(format).format(DateTime.parse(dt));
+      } catch (e) {
+        Console.e(e);
+      }
+      return dt.toString();
+    },
+    'oid': (Object? id) {
+      if (id is ObjectId?) {
+        return id?.oid;
+      } else if (id is List<ObjectId?>) {
+        return List<String>.from(id.map((e) => e?.oid));
+      } else {
+        return id;
+      }
+    },
+  };
+
+  static Map<String, Function> get layoutFilters => _layoutFilters;
+  static addLocalLayoutFilters(Map<String, Function> filters) {
+    _layoutFilters.addAll(filters);
   }
 
   /// currently it just support the Basic Authentication
@@ -1018,6 +1146,7 @@ class WebRequest {
     var events = {
       'route': route == null ? '/' : route!.getPathRender(),
       'uri': Uri.encodeComponent(_rq.requestedUri.toString()),
+      'uriString': _rq.requestedUri.toString(),
       'path': Uri.encodeComponent(_rq.requestedUri.path),
       'pathString': _rq.requestedUri.path,
       'isPath': (String path) {
@@ -1072,6 +1201,12 @@ class WebRequest {
       'formChecker': ([String? name]) => formChecker(name: name),
       'widgetPath': (String path) {
         return "$path.${WaServer.config.widgetsType}";
+      },
+      'randomString': ([int? length]) {
+        return generateRandomString(length ?? 4);
+      },
+      'toString': (dynamic value) {
+        return value.toString();
       },
     };
     params['\$e'] = LMap(events, def: null);
@@ -1140,6 +1275,7 @@ class WebRequest {
     String def = '',
     bool safe = true,
   }) {
+    key = fixCookieName(key);
     for (var cookie in _rq.cookies) {
       if (cookie.name == key) {
         if (!safe) {
@@ -1151,6 +1287,24 @@ class WebRequest {
     }
 
     return def;
+  }
+
+  String fixCookieName(String key) {
+    key = key.trim();
+    final validChars = RegExp(r"[!#$%&'*+\-.^_`|~0-9a-zA-Z]");
+
+    final buffer = StringBuffer();
+
+    for (int i = 0; i < key.length; i++) {
+      final char = key[i];
+      if (validChars.hasMatch(char)) {
+        buffer.write(char);
+      } else {
+        buffer.write('_');
+      }
+    }
+
+    return buffer.toString();
   }
 
   /// Retrieves a session value.
@@ -1185,6 +1339,7 @@ class WebRequest {
     Duration? duration,
     bool safe = true,
   }) {
+    key = fixCookieName(key);
     cookies.removeWhere((element) => element.name == key);
     value = safe ? value.toSafe(WaServer.config.cookiePassword) : value;
     var cookie = Cookie(key, value);

@@ -5,7 +5,7 @@
         class="button-sidebar btn text-white"
         type="button"
         data-bs-theme="dark"
-        aria-label="<?= $t('navbar.toggleSidebar') ?>"
+        aria-label="{{ $t('navbar.toggleSidebar') }}"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -21,9 +21,9 @@
           />
         </svg>
       </button>
-      <a class="text-white btn btn-small" href="<?= $e.url('/') ?>">
-        <span class="text-white navbar-brand"><?= $t('logo.title') ?></span>
-        <span style="font-size: 12px"><?= version ?></span>
+      <a class="text-white btn btn-small" href="{{ $e.url('/') }}">
+        <span class="text-white navbar-brand">{{ $t('logo.title') }}</span>
+        <span style="font-size: 12px">{{ version }}</span>
       </a>
       <div class="d-flex me-0 ms-auto">
         <div class="d-flex justify-content-end" role="search">
@@ -52,17 +52,17 @@
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              <?= $e.ln | upper ?>
+              {{ $e.ln | upper }}
             </button>
             <ul class="dropdown-menu"  dir="ltr" style="max-height: 300px; overflow-y: auto">
-              <? for key, language in languages ?>
+              {% for key, language in languages %}
               <li>
-                <a class="dropdown-item <?= 'active' if $e.ln == key ?>" href="<?= $e.urlToLanguage(key) ?>" style="display: flex; align-items: center;">
-                  <b class="me-2"><?= language.flag ?></b>
-                  <span><?= language.name ?></span>
+                <a class="dropdown-item {{ 'active' if $e.ln == key }}" href="{{ $e.urlToLanguage(key) }}" style="display: flex; align-items: center;">
+                  <b class="me-2">{{ language.flag }}</b>
+                  <span>{{ language.name }}</span>
                 </a>
               </li>
-              <? endfor ?>
+              {% endfor %}
             </ul>
           </div>
         </div>
@@ -70,15 +70,3 @@
     </div>
   </div>
 </nav>
-
-<div class="wrapper">
-  <? include 'template/sidebar.j2.html' ?>
-  <!-- Main Component -->
-  <div class="main">
-    <main class="content px-3 py-2">
-      <div class="container">
-        <? include widget + '.j2.html' ?>
-      </div>
-    </main>
-  </div>
-</div>

@@ -1,38 +1,50 @@
+{% extends 'template/template.j2.html' %} 
+{% block title %} 
+{{ $t('sidebar.authExample') }} 
+{% endblock %} {% block content %}
 <div class="row my-5">
-  <h3><?= $t('auth.test') ?></h3>
+  <h3>{{ $t('auth.test') }}</h3>
   <div class="card card-primary bg-light my-3">
     <span class="card-body">
-      <?= $t('auth.welcome') ?>
-      <span class="text-primary"><?= user.name ?></span>
+      {{ $t('auth.welcome') }}
+      <span class="text-primary">{{ user.name }}</span>
       <br />
     </span>
   </div>
   <div class="col">
-    <a href="/logout" class="btn btn-danger text-white"><?= $t('auth.logout') ?></a>
+    <a href="/logout" class="btn btn-danger text-white"
+      >{{ $t('auth.logout') }}</a
+    >
   </div>
   <div class="card my-3 p-0">
     <ul class="list-group list-group-flush m-0 p-0">
       <li class="list-group-item">
         <div class="row">
-          <b class="col-md-2"><?= $t('auth.view') ?></b>
-          <i class="col-md-10 text-info">example/lib/widgets/example/auth.j2.html</i>
+          <b class="col-md-2">{{ $t('auth.view') }}</b>
+          <i class="col-md-10 text-info"
+            >example/lib/widgets/example/auth.j2.html</i
+          >
         </div>
       </li>
       <li class="list-group-item">
         <div class="row">
-          <b class="col-md-2"><?= $t('auth.controller') ?></b>
-          <i class="col-md-10 text-info">example/lib/controllers/home_controller.dart</i>
+          <b class="col-md-2">{{ $t('auth.controller') }}</b>
+          <i class="col-md-10 text-info"
+            >example/lib/controllers/home_controller.dart</i
+          >
         </div>
       </li>
       <li class="list-group-item">
         <div class="row">
-          <b class="col-md-2"><?= $t('auth.authController') ?></b>
-          <i class="col-md-10 text-info">example/lib/controllers/auth_controller.dart</i>
+          <b class="col-md-2">{{ $t('auth.authController') }}</b>
+          <i class="col-md-10 text-info"
+            >example/lib/controllers/auth_controller.dart</i
+          >
         </div>
       </li>
       <li class="list-group-item">
         <div class="row">
-          <b class="col-md-2"><?= $t('auth.router') ?></b>
+          <b class="col-md-2">{{ $t('auth.router') }}</b>
           <i class="col-md-10 text-info">example/lib/route/web_route.dart</i>
         </div>
       </li>
@@ -41,7 +53,7 @@
       <pre dir="ltr" class="prettyprint border-0">
         <code class="language-dart">
 ...
-/// <?= $t('auth.routeExample') ?>
+/// {{ $t('auth.routeExample') }}
 WebRoute(
   path: &#39;example/panel&#39;,
   methods: RequestMethods.ALL,
@@ -51,7 +63,7 @@ WebRoute(
   permissions: [&#39;admin&#39;],
 ),
 
-/// <?= $t('auth.logoutRoute') ?>
+/// {{ $t('auth.logoutRoute') }}
 WebRoute(
   path: &#39;logout&#39;,
   methods: RequestMethods.ALL,
@@ -64,3 +76,4 @@ WebRoute(
     </div>
   </div>
 </div>
+{% endblock %}

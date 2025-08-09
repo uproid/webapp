@@ -1,3 +1,6 @@
+import '../core/local_events.dart';
+import 'package:webapp/wa_route.dart';
+
 import 'db/job_collection_free.dart';
 import 'db/person_collection_free.dart';
 import 'package:webapp/wa_model_less.dart';
@@ -15,7 +18,7 @@ WaConfigs configs = WaConfigs(
   languagePath: pathTo(env['LANGUAGE_PATH'] ?? "./lib/languages"),
   publicDir: pathTo(env['PUBLIC_DIR'] ?? './public'),
   dbConfig: WaDBConfig(
-    enable: true, //env['ENABLE_DATABASE'] == 'true',
+    enable: false, //env['ENABLE_DATABASE'] == 'true',
     dbName: 'example',
     auth: 'admin',
     pass: 'PasswordMongoDB',
@@ -24,6 +27,20 @@ WaConfigs configs = WaConfigs(
     user: 'root',
   ),
   port: (env['DOMAIN_PORT'] ?? '8085').toInt(def: 8085),
+  mysqlConfig: WaMysqlConfig(
+    enable: true,
+    host: 'localhost',
+    port: 3306,
+    user: 'example_user',
+    pass: 'example_password',
+    databaseName: 'example_db',
+  ),
+  blockStart: "{%",
+  blockEnd: "%}",
+  variableStart: "{{",
+  variableEnd: "}}",
+  commentStart: "{#",
+  commentEnd: "#}",
 );
 
 final server = WaServer(configs: configs);
@@ -55,9 +72,11 @@ final socketManager = SocketManager(
   routes: getSocketRoute(),
 );
 
-void main() async {
+void main([List<String>? args]) async {
   server.addRouting(getWebRoute);
-  server.start().then((value) {
+  WebRequest.localEvents.addAll(localEvents);
+  WebRequest.addLocalLayoutFilters(localLayoutFilters);
+  server.start(args).then((value) {
     Console.p("Example app started: http://localhost:${value.port}");
   });
 

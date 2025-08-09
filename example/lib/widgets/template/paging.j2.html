@@ -1,20 +1,20 @@
 <div class="row align-items-center">
   <div class="col-md-4 d-none d-md-block">
     <div class="small">
-      <?= $t('pagination.showing') ?>
-      <?= (($v.page-1) * $v.pageSize)+1 if $v.total > 0 else 0 ?>
-      <?= $t('pagination.to') ?>
-      <?= $v.toEnd ?>
-      <?= $t('pagination.of') ?>
-      <?= $v.total ?>
-      <?= $t('pagination.entries') ?>
+      {{ $t('pagination.showing') }}
+      {{ (($v.page-1) * $v.pageSize)+1 if $v.total > 0 else 0 }}
+      {{ $t('pagination.to') }}
+      {{ $v.toEnd }}
+      {{ $t('pagination.of') }}
+      {{ $v.total }}
+      {{ $t('pagination.entries') }}
     </div>
   </div>
-  <? if($v.count > 1) ?>
+  {% if($v.count > 1) %}
   <div class="col-md-8">
     <ul class="pagination pagination-sm justify-content-end m-0">
       <li class="page-item prev">
-        <a class="page-link <?= 'disabled' if $v.disableFirst ?>" href="?<?= $v.profix ?>=<?= 1 ?><?= $v.other ?>">
+        <a class="page-link {{ 'disabled' if $v.disableFirst }}" href="?{{ $v.profix }}={{ 1 }}{{ $v.other }}">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
@@ -22,7 +22,7 @@
             fill="currentColor"
             class="bi bi-chevron-double-left"
             viewBox="0 0 16 16"
-            style="transform: rotate(<?= '180' if $t('dir')=='rtl' else '0' ?>deg)"
+            style="transform: rotate({{ '180' if $t('dir')=='rtl' else '0' }}deg)"
           >
             <path
               fill-rule="evenodd"
@@ -37,8 +37,8 @@
       </li>
       <li class="page-item prev">
         <a
-          class="page-link  <?= 'disabled' if $v.disableFirst ?>"
-          href="?<?= $v.profix ?>=<?= $v.page - 1 ?><?= $v.other ?>"
+          class="page-link  {{ 'disabled' if $v.disableFirst }}"
+          href="?{{ $v.profix }}={{ $v.page - 1 }}{{ $v.other }}"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -47,7 +47,7 @@
             fill="currentColor"
             class="bi bi-chevron-left"
             viewBox="0 0 16 16"
-            style="transform: rotate(<?= '180' if $t('dir')=='rtl' else '0' ?>deg)"
+            style="transform: rotate({{ '180' if $t('dir')=='rtl' else '0' }}deg)"
           >
             <path
               fill-rule="evenodd"
@@ -56,21 +56,21 @@
           </svg>
         </a>
       </li>
-      <? for index in range($v.rangeFrom, $v.rangeTo + 1) ?>
-      <? if index > 0 and index < $v.count+1 ?>
-      <li class="page-item <?= 'active fw-bold' if (index==$v.page) else '' ?>">
+      {% for index in range($v.rangeFrom, $v.rangeTo + 1) %}
+      {% if index > 0 and index < $v.count+1 %}
+      <li class="page-item {{ 'active fw-bold' if (index==$v.page) else '' }}">
         <a
-          class="page-link <?= 'bg-primary text-white' if (index==$v.page) else '' ?>"
-          href="?<?= $v.profix ?>=<?= index ?><?= $v.other ?>"
-          ><?= index ?></a
+          class="page-link {{ 'bg-primary text-white' if (index==$v.page) else '' }}"
+          href="?{{ $v.profix }}={{ index }}{{ $v.other }}"
+          >{{ index }}</a
         >
       </li>
-      <? endif ?>
-      <? endfor ?>
+      {% endif %}
+      {% endfor %}
       <li class="page-item next">
         <a
-          class="page-link <?= 'disabled' if $v.disableLast ?>"
-          href="?<?= $v.profix ?>=<?= $v.page + 1 ?><?= $v.other ?>"
+          class="page-link {{ 'disabled' if $v.disableLast }}"
+          href="?{{ $v.profix }}={{ $v.page + 1 }}{{ $v.other }}"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -79,7 +79,7 @@
             fill="currentColor"
             class="bi bi-chevron-right"
             viewBox="0 0 16 16"
-            style="transform: rotate(<?= '180' if $t('dir')=='rtl' else '0' ?>deg)"
+            style="transform: rotate({{ '180' if $t('dir')=='rtl' else '0' }}deg)"
           >
             <path
               fill-rule="evenodd"
@@ -90,8 +90,8 @@
       </li>
       <li class="page-item next">
         <a
-          class="page-link <?= 'disabled' if $v.disableLast ?>"
-          href="?<?= $v.profix ?>=<?= $v.count ?><?= $v.other ?>"
+          class="page-link {{ 'disabled' if $v.disableLast }}"
+          href="?{{ $v.profix }}={{ $v.count }}{{ $v.other }}"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -100,7 +100,7 @@
             fill="currentColor"
             class="bi bi-chevron-double-right"
             viewBox="0 0 16 16"
-            style="transform: rotate(<?= '180' if $t('dir')=='rtl' else '0' ?>deg)"
+            style="transform: rotate({{ '180' if $t('dir')=='rtl' else '0' }}deg)"
           >
             <path
               fill-rule="evenodd"
@@ -115,5 +115,5 @@
       </li>
     </ul>
   </div>
-  <? endif ?>
+  {% endif %}
 </div>

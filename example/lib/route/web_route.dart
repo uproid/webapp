@@ -165,6 +165,13 @@ Future<List<WebRoute>> getWebRoute(WebRequest rq) async {
       ],
     ),
     WebRoute(
+      path: 'example/mysql',
+      extraPath: ['api/example/mysql'],
+      rq: rq,
+      methods: RequestMethods.GET_POST,
+      index: homeController.exampleMysql,
+    ),
+    WebRoute(
       path: 'info',
       extraPath: ['api/info'],
       rq: rq,

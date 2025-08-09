@@ -1,0 +1,136 @@
+{% extends 'template/template.j2.html' %} {% block title %} {{ $t('Example MySQL') }} {% endblock %} 
+
+{% block content %}
+<div class="row my-5">
+  <h3>{{ $t('Example MySQL') }}</h3>
+  <div class="card my-3 border-0 bg-transparent">
+    <div class="card-body p-0 m-0">
+      <div class="table-responsive">
+        <table class="table table-striped p-0 m-0 border">
+          <thead>
+            <tr>
+              <th colspan="6" class="text-end">
+                <div class="">
+                  {% set pageSize = data.pageSize | default("10") %}
+                  {% set randonString = $e.randomString() %}
+                  <div class="d-inline-flex align-items-center gap-2 float-end">
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteSelectedBooks_{{randonString}}()">{{ $t('Delete Selected') }}</button>
+                    <select class="form-select form-select-sm w-auto" name="pageSize" onchange="changePageSize_{{randonString}}(this.value)">
+                      <option {{ 'selected' if pageSize == '10' else '' }}>10</option>
+                      <option {{ 'selected' if pageSize == '20' else '' }}>20</option>
+                      <option {{ 'selected' if pageSize == '50' else '' }}>50</option>
+                      <option {{ 'selected' if pageSize == '100' else '' }}>100</option>
+                    </select>
+                  </div>
+                  <script>
+                    function changePageSize_{{randonString}}(value) {
+                      var url = new URL(window.location.href);
+                      url.searchParams.set('pageSize', value);
+                      window.location.href = url.toString();
+                    }
+                    function deleteSelectedBooks_{{randonString}}() {
+                      var selectedBooks = [];
+                      $('input[name="selected_books"]:checked').each(function() {
+                        selectedBooks.push($(this).val());
+                      });
+                      if (selectedBooks.length > 0) {
+                        if (confirm("{{ $t('Are you sure you want to delete the selected books?') }}")) {
+                          var form = document.createElement('form');
+                          form.method = 'POST';
+                          form.style.display = 'none';
+
+                          var actionInput = document.createElement('input');
+                          actionInput.type = 'hidden';
+                          actionInput.name = 'action';
+                          actionInput.value = 'delete_all';
+                          form.appendChild(actionInput);
+
+                          var booksInput = document.createElement('input');
+                          booksInput.type = 'hidden';
+                          booksInput.name = 'selected_books';
+                          booksInput.value = selectedBooks.join(',');
+                          form.appendChild(booksInput);
+
+                          document.body.appendChild(form);
+                          form.submit();
+                        }
+                      } else {
+                        alert("{{ $t('No books selected for deletion.') }}");
+                      }
+                    }
+                  </script>
+                </div>
+              </th>
+            </tr>
+            <tr>
+              <th>
+                <div class="d-flex">
+                  <input class="form-check-input" type="checkbox" id="select_all" onchange="$(`input[name='selected_books']`).prop('checked', this.checked);" />&nbsp;
+                  {{ $l.macro($rq,"/template/ui/sorting", {'sortby': 'b.id', 'title': 'ID'} ) }}
+                </div>
+              </th>
+              <th>
+                {{ $l.macro($rq,"/template/ui/sorting", {'sortby': 'title', 'title': 'Title'} ) }}
+              </th>
+              <th>
+                {{ $l.macro($rq,"/template/ui/sorting", {'sortby': 'author', 'title': 'Author'} ) }}
+              </th>
+              <th>
+                {{ $l.macro($rq,"/template/ui/sorting", {'sortby': 'published_date', 'title': 'Published Date'} ) }}
+              </th>
+              <th>
+                {{ $l.macro($rq,"/template/ui/sorting", {'sortby': 'category_id', 'title': 'Category ID'} ) }}
+              </th>
+              <th class="text-center">
+                {{ $t('database.table.header.action') }}
+              </th>
+            </tr>
+            <tr>
+              {% include 'example/mysql/_filtering.j2.html' %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for book in books %}
+            <tr>
+              <td><input class="form-check-input" type="checkbox" name="selected_books" value="{{ book.id }}" />&nbsp;{{ book.id }}</td>
+              <td>{{ book.title }}</td>
+              <td>{{ book.author }}</td>
+              <td>{{ book.published_date | dateFormat('dd/MM/y') }}</td>
+              <td>{{ book.categories_title }}</td>
+              <td class="text-center">
+                <a
+                  href="{{ $l.updateUrlQuery($rq, {'id':book.id|s, 'action': 'delete'|s}) }}"
+                  class="btn btn-sm"
+                >
+                  <i class="fas fa-trash text-danger"></i>
+                </a>
+                <a
+                  href="{{ $l.updateUrlQuery($rq, {'id':book.id|s, 'action': 'edit'|s}) }}"
+                  class="btn btn-sm"
+                >
+                  <i class="fas fa-edit text-primary"></i>
+                </a>
+              </td>
+            </tr>
+            {% else %}
+            <tr>
+              <td colspan="6" class="p-0 m-0">
+                <div class="p-4 fs-5 text-muted text-center bg-gray">
+                  {{ $t('No records found') }}
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+          <tfoot>
+            {% include 'example/mysql/_form_edit.j2.html' %}
+          </tfoot>
+        </table>
+      </div>
+
+      {% include 'example/mysql/_categories.j2.html' %}
+
+    </div>
+  </div>
+</div>
+{% endblock %}

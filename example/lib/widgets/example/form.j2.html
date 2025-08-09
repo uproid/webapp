@@ -1,78 +1,84 @@
+{% extends 'template/template.j2.html' %}
+{% block title %}
+    {{ $t('sidebar.formExample') }}
+{% endblock %}
+
+{% block content %}
 <div class="row my-5">
-  <h3><?= $t('form.validation.title') ?></h3>
+  <h3>{{ $t('form.validation.title') }}</h3>
   <div class="card card-primary bg-light my-3">
     <span class="card-body">
-      <?= $t('form.validation.credentials.email') ?>: example@uproid.com<br />
-      <?= $t('form.validation.credentials.password') ?>: @Test123
+      {{ $t('form.validation.credentials.email') }}: example@uproid.com<br />
+      {{ $t('form.validation.credentials.password') }}: @Test123
     </span>
   </div>
-  <? if loginResult != true and user == null ?>
-  <div class="card my-3">
-    <div class="card-body bg-light">
+  {% if loginResult != true and user == null %}
+  <div class="card my-3 bg-light">
+    <div class="card-body">
       <form method="post">
         <div class="mb-3">
-          <label for="email" class="form-label"><?= $t('form.validation.email') ?></label>
+          <label for="email" class="form-label">{{ $t('form.validation.email') }}</label>
           <input
-            value="<?= loginForm.email.value ?>"
+            value="{{ loginForm.email.value }}"
             type="email"
             name="email"
-            class="form-control <?= loginForm.email.valid ?>"
+            class="form-control {{ loginForm.email.valid }}"
             id="email"
-            placeholder="<?= $t('form.validation.emailPlaceholder') ?>"
+            placeholder="{{ $t('form.validation.emailPlaceholder') }}"
           />
-          <div class="invalid-feedback <?= 'd-block' if loginForm.email.failed else '' ?>">
-            <?= $t($n('loginForm/email/errors/0')) ?>
+          <div class="invalid-feedback {{ 'd-block' if loginForm.email.failed else '' }}">
+            {{ $t($n('loginForm/email/errors/0')) }}
           </div>
         </div>
         <div class="mb-3">
-          <label for="password" class="form-label"><?= $t('form.validation.password') ?></label>
+          <label for="password" class="form-label">{{ $t('form.validation.password') }}</label>
           <input
-            value="<?= loginForm.password.value ?>"
+            value="{{ loginForm.password.value }}"
             type="password"
             name="password"
-            class="form-control <?= loginForm.password.valid ?>"
+            class="form-control {{ loginForm.password.valid }}"
             id="password"
-            placeholder="<?= $t('form.validation.passwordPlaceholder') ?>"
+            placeholder="{{ $t('form.validation.passwordPlaceholder') }}"
           />
-          <div class="invalid-feedback <?= 'd-block' if loginForm.password.failed else '' ?>">
-            <?= $t($n('loginForm/password/errors/0')) ?>
+          <div class="invalid-feedback {{ 'd-block' if loginForm.password.failed else '' }}">
+            {{ $t($n('loginForm/password/errors/0')) }}
           </div>
         </div>
         <button type="submit" class="btn btn-primary btn-lg text-light">
-          <?= $t('form.validation.login') ?>
+          {{ $t('form.validation.login') }}
         </button>
-        <? if loginError ?>
+        {% if loginError %}
         <div class="mt-3">
-          <div class="alert alert-danger"><?= $t('form.validation.loginError') ?></div>
+          <div class="alert alert-danger">{{ $t('form.validation.loginError') }}</div>
         </div>
-        <? endif ?>
+        {% endif %}
       </form>
     </div>
   </div>
-  <? else ?>
+  {% else %}
   <div class="alert alert-success my-3">
     <div class="row">
       <div class="col">
-        <?= $t('form.validation.loginSuccess') ?> <i><?= user.name ?></i>
+        {{ $t('form.validation.loginSuccess') }} <i>{{ user.name }}</i>
       </div>
       <div class="col text-end">
-        <a href="/logout" class="btn text-white btn-sm btn-danger"><?= $t('form.validation.logout') ?></a>
+        <a href="/logout" class="btn text-white btn-sm btn-danger">{{ $t('form.validation.logout') }}</a>
       </div>
     </div>
   </div>
-  <? endif ?>
+  {% endif %}
 
   <div class="card my-3 p-0">
     <ul class="list-group list-group-flush m-0 p-0">
       <li class="list-group-item">
         <div class="row">
-          <b class="col-md-2"><?= $t('form.validation.view') ?></b>
+          <b class="col-md-2">{{ $t('form.validation.view') }}</b>
           <i class="col-md-10 text-info">example/lib/widgets/example/form.j2.html</i>
         </div>
       </li>
       <li class="list-group-item">
         <div class="row">
-          <b class="col-md-2"><?= $t('form.validation.controller') ?></b>
+          <b class="col-md-2">{{ $t('form.validation.controller') }}</b>
           <i class="col-md-10 text-info">example/lib/controllers/home_controller.dart</i>
         </div>
       </li>
@@ -129,3 +135,4 @@ Future&lt;String&gt; exampleForm() async {
     </div>
   </div>
 </div>
+{% endblock %}

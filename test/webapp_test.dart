@@ -265,7 +265,8 @@ void main() {
     int i = 0;
     test("Cron job", () async {
       var cronJob = WaCron(
-        schedule: "*/1 * * * * *",
+        schedule: WaCron.evrySecond(),
+        delayFirstMoment: false,
         onCron: (count, cron) async {
           if (count >= 5) {
             cron.close();

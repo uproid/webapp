@@ -1,5 +1,8 @@
 import 'dart:io';
 import 'dart:math';
+import '../db/mysql/mysql_books.dart';
+import '../db/mysql/mysql_categories.dart';
+import 'package:webapp/wa_mysql.dart';
 import '../configs/setting.dart';
 import '../db/example_collections.dart';
 import '../models/example_model.dart';
@@ -17,7 +20,7 @@ class HomeController extends WaController {
 
   @override
   Future<String> index() async {
-    return renderTemplate('index');
+    return renderTemplate('template/home');
   }
 
   Future<String> exampleForm() async {
@@ -329,7 +332,7 @@ class HomeController extends WaController {
     return renderTemplate('example/email');
   }
 
-  Future<String> renderTemplate(String widget) async {
+  Future<String> renderTemplate(String widget, {bool toData = false}) async {
     MockUserModel? user;
     if (rq.session.containsKey('user')) {
       user = MockUserModel();
@@ -343,11 +346,11 @@ class HomeController extends WaController {
       'year': DateTime.now().year,
       'user': await user?.toParams(),
       'mongoActive': server.db.isConnected,
+      'mysqlActive': server.mysqlDb.connected,
       'version': 'v${WaServer.info.version}',
     });
 
-    rq.addParam('widget', widget);
-    return rq.renderView(path: "template/home");
+    return rq.renderView(path: widget, toData: toData);
   }
 
   Future<String> exampleError() async {
@@ -442,8 +445,16 @@ class HomeController extends WaController {
             "${Platform.operatingSystem.toUpperCase()} ${Platform.operatingSystemVersion}",
       },
       'Database': {
-        'DB name': configs.dbConfig.dbName,
-        'Collections': collectionNames.join(', '),
+        'MongoDB connected': server.db.isConnected,
+        if (configs.isLocalDebug)
+          'MongoDB Host': "${configs.dbConfig.host}:${configs.dbConfig.port}",
+        'MongoDB DB name': configs.dbConfig.dbName,
+        'MongoDB Collections': collectionNames.join(', '),
+        'MySQL connected': server.mysqlDb.connected,
+        if (configs.isLocalDebug)
+          'MySQL Host':
+              "${configs.mysqlConfig.host}:${configs.mysqlConfig.port}",
+        'MySQL DB name': configs.mysqlConfig.databaseName,
       },
       'Date & Time': {
         'Idle Timeout': server.server!.idleTimeout,
@@ -621,5 +632,194 @@ class HomeController extends WaController {
     };
     rq.addParams(data);
     return renderTemplate('example/person');
+  }
+
+  Future<String> exampleMysql() async {
+    MysqlBooks tableBooks = MysqlBooks(server.mysqlDb);
+    MysqlCategories tableCategories = MysqlCategories(server.mysqlDb);
+    final action = rq.get<String>('action', def: '');
+    rq.addParam('action', action);
+
+    if (action == 'add_category') {
+      final title = rq.get<String>('title', def: '');
+      if (title.isNotEmpty) {
+        var res = await tableCategories.addNewCategory(title: title);
+        if (res.success) {
+          this.addFlash('Category added successfully');
+        } else {
+          this.addFlash(
+            'Error adding category: ${res.errorMsg}',
+            type: FlashType.ERROR,
+          );
+        }
+      } else {
+        this.addFlash('Category title is required', type: FlashType.ERROR);
+      }
+    } else if (action == 'delete_category') {
+      final id = rq.get<String>('id', def: '');
+      await tableCategories.deleteCategory(id);
+      this.addFlash('Category deleted successfully');
+    } else if (action == 'delete') {
+      final id = rq.get<String>('id', def: '');
+      await tableBooks.deleteBook(id);
+
+      this.addFlash('Book deleted successfully', type: FlashType.ERROR);
+    } else if (action == 'delete_all') {
+      var ids = rq.get<String>('selected_books', def: '').split(',');
+      await tableBooks.deleteAllBooks(ids);
+    } else if (action == 'add' || action == 'edit' || action == 'update') {
+      var book = null;
+      var bookId = rq.get<String>('id', def: '');
+
+      rq.addParam('id', bookId);
+
+      if (action == 'edit' || action == 'update') {
+        book = await tableBooks.getBookById(bookId);
+      }
+
+      var data = <String, dynamic>{};
+      switch (action) {
+        case 'edit':
+          data = book ?? {};
+          break;
+        default:
+          data = rq.getAllData();
+      }
+
+      var validate = await tableBooks.table.formValidateUI(data);
+      if ((action == "update" || action == "add") && validate.result) {
+        final title = rq.get<String>('title', def: '');
+        final author = rq.get<String>('author', def: '');
+        final publishedDate = rq.get<String>('published_date', def: '');
+        final categoryId = rq.get<String?>('category_id', def: null);
+        MySqlResult res;
+
+        if (action == "update" && book != null) {
+          res = await tableBooks.updateBook(
+            id: bookId,
+            title: title,
+            author: author,
+            publishedDate: publishedDate,
+            categoryId: categoryId,
+          );
+        } else if (action == "add") {
+          res = await tableBooks.addNewBook(
+            title: title,
+            author: author,
+            publishedDate: publishedDate,
+            categoryId: categoryId,
+          );
+        } else {
+          return rq.redirect('/example/mysql/overview');
+        }
+
+        if (res.success) {
+          this.addFlash('Book added successfully');
+        } else {
+          this.addFlash(
+            'Error adding book: ${res.errorMsg}',
+            type: FlashType.ERROR,
+          );
+        }
+      } else {
+        rq.addParam('form', validate.form);
+      }
+    }
+
+    var sort = rq.get<String>('sort', def: 'b.id');
+    var order = rq.get<String>('order', def: 'asc');
+
+    var formFilter = FormValidator(
+      rq: rq,
+      fields: {
+        'filter_b.id': [
+          FieldValidator.isNumberField(isRequired: false),
+        ],
+        'filter_published_date': [
+          FieldValidator.isDateField(isRequired: false),
+        ],
+        'filter_category_id': [
+          FieldValidator.isNumberField(isRequired: false),
+        ],
+        'filter_count': [
+          FieldValidator.isNumberField(isRequired: false),
+        ],
+        'filter_title': [],
+        'filter_author': [],
+      },
+      name: 'filter_books',
+    );
+    var filter = await formFilter.validateAndForm();
+    rq.addParam('filter_books', filter.form);
+    var page = rq.get<int>('page', def: 1);
+    var pageSize = rq.get<int>('pageSize', def: 10);
+
+    var paging = UIPaging(
+      rq: rq,
+      widget: 'template/paging',
+      page: page,
+      total: 10,
+      pageSize: pageSize,
+      otherQuery: {
+        ...FormValidator.extractString(filter.form),
+        'pageSize': pageSize.toString(),
+        'sort': sort,
+        'order': order,
+      },
+    );
+
+    var books = await tableBooks.getAllBooks(
+      sort,
+      order,
+      filters: filter.result ? FormValidator.extractValues(filter.form) : {},
+      limit: paging.pageSize,
+      offset: paging.offset,
+    );
+    paging.total = books.count;
+    var categories = await tableCategories.getAllCategories(
+      'id',
+      'ASC',
+    );
+    rq.addParam('books', books.rows.assoc);
+    rq.addParam('categories', categories.rows.assoc);
+    rq.addParam('count_total', books.count);
+    rq.addParam('paging', await paging.render(toData: rq.isApiEndpoint));
+
+    if (rq.isApiEndpoint) {
+      return rq.renderDataParam();
+    }
+
+    return renderTemplate('example/mysql/overview');
+  }
+
+  void addFlash(String text, {final type = FlashType.SUCCESS}) {
+    var flashs = rq.get<List>('flashs', def: []);
+    flashs.add({
+      'text': text,
+      'type': type.toString(),
+    });
+    rq.addParam('flashs', flashs);
+  }
+}
+
+enum FlashType {
+  SUCCESS,
+  ERROR,
+  DANGER,
+  INFO,
+  WARNING;
+
+  String toString() {
+    switch (this) {
+      case FlashType.SUCCESS:
+        return 'success';
+      case FlashType.ERROR:
+      case FlashType.DANGER:
+        return 'danger';
+      case FlashType.INFO:
+        return 'info';
+      case FlashType.WARNING:
+        return 'warning';
+    }
   }
 }

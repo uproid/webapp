@@ -1,0 +1,89 @@
+<form method="post" action="{{ $e.uriString }}">
+    <input type="hidden" name="action" value="{{ 'update' if(action == 'edit' or action == 'update') else 'add' }}" />
+    <tr>
+        <td colspan="7">
+            <div class="input-group">
+            <div class="form-control bg-light">
+                <input
+                type="text"
+                class="form-control {{ $n('form/title/valid') }}"
+                name="title"
+                placeholder="Title"
+                required
+                value="{{ $n('form/title/value') }}"
+                />
+                <div
+                class="invalid-feedback {{ '' if $n('form/title/success') else 'd-block' }}"
+                >
+                {{ $n('form/title/errors/0') }}
+                </div>
+            </div>
+            <div class="form-control bg-light">
+                <input
+                type="text"
+                class="form-control {{ $n('form/author/valid') }}"
+                name="author"
+                placeholder="Author"
+                required
+                value="{{ $n('form/author/value') }}"
+                />
+                <div
+                class="invalid-feedback {{ '' if $n('form/author/success') else 'd-block' }}"
+                >
+                {{ $n('form/author/errors/0') }}
+                </div>
+            </div>
+            <div class="form-control bg-light">
+                <input
+                type="date"
+                class="form-control {{ $n('form/published_date/valid') }}"
+                name="published_date"
+                placeholder="Published Date"
+                required
+                value="{{ $n('form/published_date/value') }}"
+                />
+                <div
+                class="invalid-feedback {{ '' if $n('form/published_date/success') else 'd-block' }}"
+                >
+                {{ $n('form/published_date/errors/0') }}
+                </div>
+            </div>
+            <div class="form-control bg-light">
+                <select
+                class="form-select {{ $n('form/category_id/valid') }}"
+                name="category_id"
+                value="{{ $n('form/category_id/value') }}"
+                >
+                <option value=""></option>
+                {% set selected = $n('form/category_id/value') %}
+                {% for category in categories %}
+                    <option value="{{ category.id }}" {{ 'selected' if selected == category.id else '' }}>
+                    {{ category.title }}
+                    </option>
+                {% endfor %}
+                </select>
+                <div
+                class="invalid-feedback {{ '' if $n('form/category_id/success') else 'd-block' }}"
+                >
+                {{ $n('form/category_id/errors/0') }}
+                </div>
+            </div>
+            {% if(action == 'edit' or action == 'update') %}
+                <input type="hidden" name="id" value="{{ id }}" />
+                <button class="btn btn-outline-primary" type="submit">
+                {{ $t('Update') }}
+                </button>
+            {% else %}
+                <button class="btn btn-outline-primary" type="submit">
+                {{ $t('database.table.button.add') }}
+                </button>
+            {% endif %}
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="7">
+            <div class="container">{{ paging }}</div>
+        </td>
+    </tr>
+</form>

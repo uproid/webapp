@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="{{ $e.ln }}" dir="{{ $t('dir') }}">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}{% endblock %} | {{ $t(title) }}</title>
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="/assets/app.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/assets/effects/wave/wave.css" />
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  {% block stylesheets %}
+  {{ assets.css() }}
+  {% endblock %}
+</head>
+
+<body>
+  {% block navbar %}
+  {% include 'template/navbar.j2.html' %}
+  {% endblock %}
+
+  <div class="wrapper">
+    {% block sidebar %}
+    {% include 'template/sidebar.j2.html' %}
+    {% endblock %}
+    <!-- Main Component -->
+    <div class="main">
+      <main class="content px-3 py-4">
+        <div class="container">
+          {% block flash %}
+          {% if $l.hasFlash($rq) %}
+          {% for flash in $l.getFlashs($rq) %}
+          <div class="alert alert-{{ flash.type }}">
+            {{ flash.text }}
+          </div>
+          {% endfor %}
+          {% endif %}
+          {% endblock %}
+          {% block content %}
+          {% endblock %}
+        </div>
+      </main>
+    </div>
+  </div>
+
+  {% block footer %}
+  {% include 'template/footer.j2.html' %}
+  {% endblock %}
+
+  {% block script %}{% endblock %}
+</body>
+
+</html>

@@ -7,7 +7,7 @@ name: Dart
 
 on:
   push:
-    branches: [ "master", "pre" ]
+    branches: [ "*" ]
 
 jobs:
   build:
@@ -34,6 +34,11 @@ jobs:
             else
               echo "No forbidden text found";
           fi
+
+      - name: Scan dependencies
+        run: |
+          apk add osv-scanner
+          osv-scanner --lockfile pubspec.lock
 
       # Consider passing '--fatal-infos' for slightly stricter analysis.
       - name: Analyze project source

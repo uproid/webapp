@@ -14,9 +14,6 @@ permissions:
   security-events: write
 
 jobs:
-  scan-pr:
-    uses: "google/osv-scanner-action/.github/workflows/osv-scanner-reusable-pr.yml@v2.2.1"
-
   build:
     runs-on: ubuntu-latest
 
@@ -41,6 +38,9 @@ jobs:
             else
               echo "No forbidden text found";
           fi
+
+      - name: Run OSV-Scanner
+        uses: "google/osv-scanner-action/.github/workflows/osv-scanner-reusable-pr.yml@v2.2.1"
 
       # Consider passing '--fatal-infos' for slightly stricter analysis.
       - name: Analyze project source

@@ -21,6 +21,7 @@ jobs:
       # https://github.com/dart-lang/setup-dart/blob/main/README.md
       # - uses: dart-lang/setup-dart@v1
       - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
+      - uses: actions/checkout@v3
 
       - name: Install dependencies
         run: dart pub get
@@ -37,8 +38,8 @@ jobs:
 
       - name: Scan dependencies
         run: |
-          apk add osv-scanner
-          osv-scanner --lockfile pubspec.lock
+          curl -sSL https://github.com/google/osv-scanner/releases/latest/download/osv-scanner_$(uname -s)_$(uname -m).tar.gz | tar -xz
+          ./osv-scanner --lockfile pubspec.lock
 
       # Consider passing '--fatal-infos' for slightly stricter analysis.
       - name: Analyze project source

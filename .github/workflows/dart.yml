@@ -29,10 +29,8 @@ jobs:
       # - name: Verify formatting
       #   run: dart format --output=none --set-exit-if-changed .
 
-      # Consider passing '--fatal-infos' for slightly stricter analysis.
-      - name: Analyze project source
-        run: dart analyze
-
+  testing:
+    steps:
       - name: Check example structure
         run: |
           forbidden_text="package:example"
@@ -42,6 +40,10 @@ jobs:
             else
               echo "No forbidden text found";
           fi
+
+      # Consider passing '--fatal-infos' for slightly stricter analysis.
+      - name: Analyze project source
+        run: dart analyze
 
       # Your project will need to have tests in test/ and a dependency on
       # package:test for this step to succeed. Note that Flutter projects will

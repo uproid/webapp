@@ -1,3 +1,5 @@
+import 'package:example/app.dart';
+
 class Setting {
   static const languages = {
     "en": {"name": "English", "flag": "🇬🇧"},

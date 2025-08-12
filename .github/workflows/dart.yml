@@ -40,7 +40,10 @@ jobs:
           fi
 
       - name: Run OSV-Scanner
-        uses: "google/osv-scanner-action/.github/workflows/osv-scanner-reusable-pr.yml@v2.2.1"
+        run: |
+          curl -sSfL https://github.com/google/osv-scanner/releases/latest/download/osv-scanner-linux-amd64 -o osv-scanner
+          chmod +x osv-scanner
+          ./osv-scanner --lockfile=pubspec.lock
 
       # Consider passing '--fatal-infos' for slightly stricter analysis.
       - name: Analyze project source

@@ -15,13 +15,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
-      # Note: This workflow uses the latest stable version of the Dart SDK.
-      # You can specify other versions if desired, see documentation here:
-      # https://github.com/dart-lang/setup-dart/blob/main/README.md
-      # - uses: dart-lang/setup-dart@v1
       - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
-      - uses: actions/checkout@v3
 
       - name: Install dependencies
         run: dart pub get
@@ -36,10 +30,10 @@ jobs:
               echo "No forbidden text found";
           fi
 
-      - name: Scan dependencies
-        run: |
-          curl -sSL https://github.com/google/osv-scanner/releases/latest/download/osv-scanner_$(uname -s)_$(uname -m).tar.gz | tar -xz
-          ./osv-scanner --lockfile pubspec.lock
+      - name: Run OSV-Scanner
+        uses: google/osv-scanner-action@v2
+        with:
+          scan-args: "--recursive"
 
       # Consider passing '--fatal-infos' for slightly stricter analysis.
       - name: Analyze project source

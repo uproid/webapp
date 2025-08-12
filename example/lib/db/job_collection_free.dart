@@ -31,4 +31,42 @@ class JobCollectionFree extends DBCollectionFree {
           ),
         },
       );
+
+  @override
+  Future<List<Map<String, Object?>>> getAll({
+    SelectorBuilder? selector,
+    Map<String, Object?>? filter,
+    FindOptions? findOptions,
+    String? hint,
+    int? skip,
+    Map<String, Object>? sort,
+    int? limit,
+    Map<String, Object>? hintDocument,
+    Map<String, Object>? projection,
+    Map<String, Object>? rawOptions,
+  }) async {
+    var res = await super.getAll(
+        selector: selector,
+        filter: filter,
+        findOptions: findOptions,
+        hint: hint,
+        skip: skip,
+        sort: sort,
+        limit: limit,
+        hintDocument: hintDocument,
+        projection: projection,
+        rawOptions: rawOptions);
+    if (res.isEmpty) {
+      super.insert({
+        'title': 'Example Job 1',
+      });
+      super.insert({
+        'title': 'Example Job 2',
+      });
+      super.insert({
+        'title': 'Example Job 3',
+      });
+    }
+    return res;
+  }
 }

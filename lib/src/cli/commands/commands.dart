@@ -95,7 +95,7 @@ class ProjectCommands {
 
       if (userInput.toLowerCase() == 'r') {
         CappConsole.clear();
-        CappConsole.write("Restart project...", CappColors.warnnig);
+        CappConsole.write("Restart project...", CappColors.warning);
         proccess.kill();
         proccess = await Process.start(
           'dart',

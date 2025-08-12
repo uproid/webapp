@@ -7,7 +7,11 @@ name: Dart
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "*" ]
+
+permissions:
+  contents: read
+  security-events: write
 
 jobs:
   build:
@@ -25,9 +29,21 @@ jobs:
       - name: Install dependencies
         run: dart pub get
 
-      # Uncomment this step to verify the use of 'dart format' on each commit.
-      # - name: Verify formatting
-      #   run: dart format --output=none --set-exit-if-changed .
+      - name: Check example structure
+        run: |
+          forbidden_text="package:example"
+          if grep -r "$forbidden_text" example/lib/; then
+              echo "Error: Forbidden text found in Dart files";
+              exit 1;
+            else
+              echo "No forbidden text found";
+          fi
+
+      - name: Run OSV-Scanner
+        run: |
+          curl -sSfL https://github.com/google/osv-scanner/releases/download/v2.2.1/osv-scanner_linux_amd64 -o osv-scanner
+          chmod +x osv-scanner
+          ./osv-scanner --lockfile=pubspec.lock
 
       # Consider passing '--fatal-infos' for slightly stricter analysis.
       - name: Analyze project source

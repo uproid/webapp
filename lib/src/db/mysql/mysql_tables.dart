@@ -437,7 +437,7 @@ class MySqlResult {
   /// Returns the number of rows in the result set.
   int get numRows => resultSet.numOfRows;
 
-  /// Returns all rows as a list of associative arrays (Map<String, dynamic>).
+  /// Returns all rows as a list of associative arrays.
   ///
   /// This is the most common way to access query results, providing
   /// column names as map keys for easy data access.

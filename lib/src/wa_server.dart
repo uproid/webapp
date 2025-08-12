@@ -282,7 +282,7 @@ class WaServer {
           ),
         ],
         run: (c) async {
-          return CappConsole(c.manager.getHelp(), CappColors.warnnig);
+          return CappConsole(c.manager.getHelp(), CappColors.warning);
         },
       ),
       controllers: [
@@ -334,7 +334,7 @@ class WaServer {
 
             return CappConsole(
               "Please run the migration commands",
-              CappColors.warnnig,
+              CappColors.warning,
             );
           },
         ),
@@ -393,5 +393,5 @@ class WaServer {
 /// A class that holds version information for the server.
 class _Info {
   /// The version of the server.
-  final String version = '1.1.19';
+  final String version = '2.0.1';
 }

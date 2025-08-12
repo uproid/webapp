@@ -75,7 +75,7 @@ class MysqlBooks {
         QSelect('b.author', as: 'author'),
         QSelect('b.published_date', as: 'published_date'),
         QSelect('b.category_id', as: 'category_id'),
-        QSelect('categories.title', as: 'categories_title'),
+        QSelect('categories.title', as: 'category_title'),
         QSelect('b.id', as: 'id'),
       ])
       ..join(
@@ -139,7 +139,7 @@ class MysqlBooks {
         filter['filter_title'].toString().isNotEmpty) {
       where.add(
         Condition(
-          QField('title'),
+          QField('b.title'),
           QO.LIKE,
           QVarLike(filter['filter_title']),
         ),
@@ -225,7 +225,9 @@ class MysqlBooks {
       'title': QVar(title),
       'author': QVar(author),
       'published_date': QVar(publishedDate),
-      'category_id': categoryId != null ? QVar(categoryId) : QNull(),
+      'category_id': categoryId != null && categoryId.trim().isNotEmpty
+          ? QVar(categoryId)
+          : QNull(),
     };
 
     return await table.insert(db, data);
@@ -244,7 +246,10 @@ class MysqlBooks {
       ..updateSet('author', QVar(author))
       ..updateSet('published_date', QVar(publishedDate))
       ..updateSet(
-          'category_id', categoryId != null ? QVar(categoryId) : QNull())
+          'category_id',
+          categoryId != null && categoryId.trim().isNotEmpty
+              ? QVar(categoryId)
+              : QNull())
       ..where(WhereOne(QField.id(), QO.EQ, QParam('id')))
       ..addParam('id', QVar(id));
     var result = await table.select(db, query);

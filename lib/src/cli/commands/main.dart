@@ -23,7 +23,7 @@ class Main {
 
     return CappConsole(
       controller.manager.getHelp(),
-      controller.existsOption('help') ? CappColors.none : CappColors.warnnig,
+      controller.existsOption('help') ? CappColors.none : CappColors.warning,
     );
   }
 }

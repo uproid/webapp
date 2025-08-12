@@ -691,7 +691,7 @@ class HomeController extends WaController {
         final title = rq.get<String>('title', def: '');
         final author = rq.get<String>('author', def: '');
         final publishedDate = rq.get<String>('published_date', def: '');
-        final categoryId = rq.get<String?>('category_id', def: null);
+        final categoryId = rq.get<String>('category_id', def: '');
         MySqlResult res;
 
         if (action == "update" && book != null) {

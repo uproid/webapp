@@ -11,3 +11,4 @@ mongodb
 webapp_build
 example/mysql_data/
 example/pubspec.lock
+pubspec.lock

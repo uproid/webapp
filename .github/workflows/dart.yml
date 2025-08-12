@@ -7,7 +7,7 @@ name: Dart
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "master", "pre" ]
 
 jobs:
   build:
@@ -32,6 +32,16 @@ jobs:
       # Consider passing '--fatal-infos' for slightly stricter analysis.
       - name: Analyze project source
         run: dart analyze
+
+      - name: Check example structure
+        run: |
+          forbidden_text="package:example"
+          if grep -r "$forbidden_text" example/lib/; then
+              echo "Error: Forbidden text found in Dart files";
+              exit 1;
+            else
+              echo "No forbidden text found";
+          fi
 
       # Your project will need to have tests in test/ and a dependency on
       # package:test for this step to succeed. Note that Flutter projects will

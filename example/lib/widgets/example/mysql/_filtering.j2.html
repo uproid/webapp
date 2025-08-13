@@ -1,7 +1,7 @@
 <form method="get" class="contents">
     <th class="p-1 align-top" style="max-width:80px;">
         <input
-            class="h-8 w-full rounded border px-2 text-xs shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 {{ 'border-emerald-500 ring-2 ring-emerald-300' if $n('filter_books/filter_b.id/value') else '' }}"
+            class="h-8 w-full rounded border px-2 text-xs shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/30 {{ 'border-emerald-500 ring-2 ring-emerald-300' if $n('filter_books/filter_b.id/value') else '' }}"
             type="number"
             name="filter_b.id"
             placeholder="ID"
@@ -10,7 +10,7 @@
     </th>
     <th class="p-1 align-top">
         <input
-            class="h-8 w-full rounded border px-2 text-xs shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 {{ 'border-emerald-500 ring-2 ring-emerald-300' if $n('filter_books/filter_title/value') else '' }}"
+            class="h-8 w-full rounded border px-2 text-xs shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/30 {{ 'border-emerald-500 ring-2 ring-emerald-300' if $n('filter_books/filter_title/value') else '' }}"
             type="text"
             name="filter_title"
             placeholder="Title"
@@ -19,7 +19,7 @@
     </th>
     <th class="p-1 align-top">
         <input
-            class="h-8 w-full rounded border px-2 text-xs shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 {{ 'border-emerald-500 ring-2 ring-emerald-300' if $n('filter_books/filter_author/value') else '' }}"
+            class="h-8 w-full rounded border px-2 text-xs shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/30 {{ 'border-emerald-500 ring-2 ring-emerald-300' if $n('filter_books/filter_author/value') else '' }}"
             type="text"
             name="filter_author"
             placeholder="Author"
@@ -28,7 +28,7 @@
     </th>
     <th class="p-1 align-top">
         <input
-            class="h-8 w-full rounded border px-2 text-xs shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 {{ 'border-emerald-500 ring-2 ring-emerald-300' if $n('filter_books/filter_published_date/value') else '' }}"
+            class="h-8 w-full rounded border px-2 text-xs shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/30 {{ 'border-emerald-500 ring-2 ring-emerald-300' if $n('filter_books/filter_published_date/value') else '' }}"
             type="date"
             name="filter_published_date"
             placeholder="Published Date"
@@ -37,7 +37,7 @@
     </th>
     <th class="p-1 align-top">
         <select
-            class="h-8 w-full rounded border px-2 text-xs shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 {{ 'border-emerald-500 ring-2 ring-emerald-300' if $n('filter_books/filter_category_id/value') else '' }}"
+            class="h-8 w-full rounded border px-2 text-xs shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/30 {{ 'border-emerald-500 ring-2 ring-emerald-300' if $n('filter_books/filter_category_id/value') else '' }}"
             name="filter_category_id"
             aria-label="Filter Category ID"
         >
@@ -56,7 +56,7 @@
             type="reset"
         >{{ $t('Reset') }}</a>
         <input
-            class="ml-2 inline-flex h-8 cursor-pointer items-center rounded-md bg-blue-600 px-3 text-xs font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+            class="ml-2 inline-flex h-8 cursor-pointer items-center rounded-md bg-primary-600 px-3 text-xs font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500/30"
             type="submit"
             value="{{ $t('Filter') }}"
         />

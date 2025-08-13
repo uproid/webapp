@@ -11,7 +11,7 @@
     {% for key, value in server | items() %}
     <details class="group rounded-lg border border-slate-200 bg-white shadow-sm">
       <summary class="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 hover:bg-slate-50">
-        <b class="text-blue-700">{{ $t('webappInfo.key', {'key': key}) }}</b>
+        <b class="text-primary-700">{{ $t('webappInfo.key', {'key': key}) }}</b>
         <i class="fas fa-chevron-down text-slate-500 transition-transform group-open:rotate-180"></i>
       </summary>
       <div class="px-4 pb-4 pt-0">

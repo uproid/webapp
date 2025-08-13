@@ -27,7 +27,7 @@
     {% include 'template/sidebar.j2.html' %}
     {% endblock %}
     <!-- Main Component -->
-    <div class="main flex-1">
+    <div class="main flex-1 ">
       <main class="content px-3 py-4 lg:px-6">
         <div class="mx-auto w-full max-w-7xl">
           {% block flash %}
@@ -36,7 +36,7 @@
           <div
             class="mb-4 rounded-md border p-4 text-sm
             {% if flash.type == 'success' %} bg-emerald-50 border-emerald-200 text-emerald-800 {% endif %}
-            {% if flash.type == 'info' %} bg-blue-50 border-blue-200 text-blue-800 {% endif %}
+            {% if flash.type == 'info' %} bg-primary-50 border-primary-200 text-primary-800 {% endif %}
             {% if flash.type == 'warning' %} bg-amber-50 border-amber-200 text-amber-900 {% endif %}
             {% if flash.type == 'danger' or flash.type == 'error' %} bg-rose-50 border-rose-200 text-rose-800 {% endif %}
             {% if flash.type != 'success' and flash.type != 'info' and flash.type != 'warning' and flash.type != 'danger' and flash.type != 'error' %} bg-slate-50 border-slate-200 text-slate-800 {% endif %}

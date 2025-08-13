@@ -10,7 +10,7 @@
                         placeholder="Title"
                         required
                         value="{{ $n('form/title/value') }}"
-                        class="h-9 rounded-md border bg-white px-3 text-xs shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 {{ 'border-rose-500 ring-2 ring-rose-300' if $n('form/title/errors/0') else 'border-slate-300' }}"
+                        class="h-9 rounded-md border bg-white px-3 text-xs shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/30 {{ 'border-rose-500 ring-2 ring-rose-300' if $n('form/title/errors/0') else 'border-slate-300' }}"
                     />
                     <div class="mt-1 text-[10px] text-rose-600 {{ '' if $n('form/title/errors/0') else 'hidden' }}">{{ $n('form/title/errors/0') }}</div>
                 </div>
@@ -21,7 +21,7 @@
                         placeholder="Author"
                         required
                         value="{{ $n('form/author/value') }}"
-                        class="h-9 rounded-md border bg-white px-3 text-xs shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 {{ 'border-rose-500 ring-2 ring-rose-300' if $n('form/author/errors/0') else 'border-slate-300' }}"
+                        class="h-9 rounded-md border bg-white px-3 text-xs shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/30 {{ 'border-rose-500 ring-2 ring-rose-300' if $n('form/author/errors/0') else 'border-slate-300' }}"
                     />
                     <div class="mt-1 text-[10px] text-rose-600 {{ '' if $n('form/author/errors/0') else 'hidden' }}">{{ $n('form/author/errors/0') }}</div>
                 </div>
@@ -32,14 +32,14 @@
                         placeholder="Published Date"
                         required
                         value="{{ $n('form/published_date/value') }}"
-                        class="h-9 rounded-md border bg-white px-3 text-xs shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 {{ 'border-rose-500 ring-2 ring-rose-300' if $n('form/published_date/errors/0') else 'border-slate-300' }}"
+                        class="h-9 rounded-md border bg-white px-3 text-xs shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/30 {{ 'border-rose-500 ring-2 ring-rose-300' if $n('form/published_date/errors/0') else 'border-slate-300' }}"
                     />
                     <div class="mt-1 text-[10px] text-rose-600 {{ '' if $n('form/published_date/errors/0') else 'hidden' }}">{{ $n('form/published_date/errors/0') }}</div>
                 </div>
                 <div class="flex min-w-[140px] flex-col">
                     <select
                         name="category_id"
-                        class="h-9 rounded-md border bg-white px-2 text-xs shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 {{ 'border-rose-500 ring-2 ring-rose-300' if $n('form/category_id/errors/0') else 'border-slate-300' }}"
+                        class="h-9 rounded-md border bg-white px-2 text-xs shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/30 {{ 'border-rose-500 ring-2 ring-rose-300' if $n('form/category_id/errors/0') else 'border-slate-300' }}"
                     >
                         <option value=""></option>
                         {% set selected = $n('form/category_id/value') %}
@@ -51,9 +51,9 @@
                 </div>
                 {% if(action == 'edit' or action == 'update') %}
                 <input type="hidden" name="id" value="{{ id }}" />
-                <button type="submit" class="inline-flex h-9 items-center rounded-md border border-blue-600 bg-blue-50 px-3 text-xs font-medium text-blue-700 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500/30">{{ $t('Update') }}</button>
+                <button type="submit" class="inline-flex h-9 items-center rounded-md border border-primary-600 bg-primary-50 px-3 text-xs font-medium text-primary-700 hover:bg-primary-100 focus:outline-none focus:ring-2 focus:ring-primary-500/30">{{ $t('Update') }}</button>
                 {% else %}
-                <button type="submit" class="inline-flex h-9 items-center rounded-md border border-blue-600 bg-blue-50 px-3 text-xs font-medium text-blue-700 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500/30">{{ $t('database.table.button.add') }}</button>
+                <button type="submit" class="inline-flex h-9 items-center rounded-md border border-primary-600 bg-primary-50 px-3 text-xs font-medium text-primary-700 hover:bg-primary-100 focus:outline-none focus:ring-2 focus:ring-primary-500/30">{{ $t('database.table.button.add') }}</button>
                 {% endif %}
             </div>
         </td>

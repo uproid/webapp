@@ -1,9 +1,9 @@
-<nav class="sticky top-0 z-50 border-b border-primary-200 bg-primary-800 text-white">
-  <div class="mx-auto w-full max-w-7xl px-3 lg:px-6">
-    <div class="flex w-full items-center justify-between gap-6 py-2">
+<nav class="sticky top-0 z-50 bg-surface/90 backdrop-blur border-b border-outline/30">
+  <div class="mx-auto w-full max-w-7xl px-4">
+    <div class="flex w-full items-center justify-between gap-4 py-2">
       <div class="flex items-center gap-3">
         <button
-          class="button-sidebar inline-flex h-10 w-10 items-center justify-center rounded-md text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30"
+          class="button-sidebar inline-flex h-10 w-10 items-center justify-center rounded-md text-on-surface hover:bg-primary-50 focus:outline-none focus:ring-2 focus:ring-primary-300"
           type="button"
           aria-label="{{ $t('navbar.toggleSidebar') }}"
           aria-controls="sidebar"
@@ -24,14 +24,14 @@
           </svg>
         </button>
 
-        <a class="inline-flex items-center gap-2 rounded-md px-2 py-1.5 text-white hover:bg-white/10" href="{{ $e.url('/') }}">
-          <span class="text-lg font-semibold">{{ $t('logo.title') }}</span>
-          <span class="text-xs opacity-75">{{ version }}</span>
+        <a class="inline-flex items-center gap-2 rounded-md px-2 py-1.5 hover:bg-primary-50 text-on-surface" href="{{ $e.url('/') }}">
+          <span class="text-lg font-semibold text-primary-600">{{ $t('logo.title') }}</span>
+          <span class="text-xs text-on-surface/60">{{ version }}</span>
         </a>
       </div>
 
       <div class="flex items-center gap-2">
-        <a href="https://github.com/uproid/webapp" class="inline-flex h-10 items-center rounded-md px-3 text-white/80 hover:bg-white/10 hover:text-white" aria-label="GitHub">
+        <a href="https://github.com/uproid/webapp" class="inline-flex h-10 items-center rounded-md px-3 text-on-surface/70 hover:bg-primary-50 hover:text-primary-700" aria-label="GitHub">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="22"
@@ -50,13 +50,13 @@
         </a>
 
   <details class="relative" dir="ltr">
-          <summary class="list-none inline-flex h-10 cursor-pointer items-center rounded-md px-3 text-white/90 hover:bg-white/10 hover:text-white">
+          <summary class="list-none inline-flex h-10 cursor-pointer items-center rounded-md px-3 text-on-surface/80 hover:bg-primary-50 hover:text-primary-700">
             {{ $e.ln | upper }}
           </summary>
-          <ul dir="ltr" class="absolute right-0 mt-2 w-48 overflow-y-auto rounded-md border border-slate-200 bg-white py-1 text-slate-700 shadow-lg ring-1 ring-black/5 max-h-72">
+          <ul dir="ltr" class="absolute right-0 mt-2 w-48 overflow-y-auto rounded-md border border-outline/30 bg-surface py-1 text-on-surface shadow-lg ring-1 ring-black/5 max-h-72">
             {% for key, language in languages %}
             <li>
-              <a class="flex items-center gap-2 px-3 py-2 text-sm hover:bg-slate-100 {{ 'bg-slate-100 font-medium' if $e.ln == key }}" href="{{ $e.urlToLanguage(key) }}">
+              <a class="flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-primary-50 {{ 'bg-primary-50 font-medium text-primary-700' if $e.ln == key }}" href="{{ $e.urlToLanguage(key) }}">
                 <b class="inline-flex w-5 items-center justify-center">{{ language.flag }}</b>
                 <span>{{ language.name }}</span>
               </a>

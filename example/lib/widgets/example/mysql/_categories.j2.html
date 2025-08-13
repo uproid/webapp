@@ -49,11 +49,11 @@
                   placeholder="Title"
                   required
                   value="{{ $n('form/title/value') }}"
-                  class="h-9 w-56 rounded-md border bg-white px-3 text-xs shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 {{ 'border-rose-500 ring-2 ring-rose-300' if $n('form/title/errors/0') else 'border-slate-300' }}"
+                  class="h-9 w-56 rounded-md border bg-white px-3 text-xs shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/30 {{ 'border-rose-500 ring-2 ring-rose-300' if $n('form/title/errors/0') else 'border-slate-300' }}"
                 />
                 <div class="mt-1 text-[10px] text-rose-600 {{ '' if $n('form/title/errors/0') else 'hidden' }}">{{ $n('form/title/errors/0') }}</div>
               </div>
-              <button type="submit" class="inline-flex h-9 items-center rounded-md border border-blue-600 bg-blue-50 px-3 text-xs font-medium text-blue-700 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500/30">
+              <button type="submit" class="inline-flex h-9 items-center rounded-md border border-primary-600 bg-primary-50 px-3 text-xs font-medium text-primary-700 hover:bg-primary-100 focus:outline-none focus:ring-2 focus:ring-primary-500/30">
                 {{ $t('database.table.button.add') }}
               </button>
             </form>

@@ -22,7 +22,7 @@
             name="email"
             id="email"
             placeholder="{{ $t('form.validation.emailPlaceholder') }}"
-            class="block h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 {{ 'border-rose-500 ring-2 ring-rose-300 focus:border-rose-500 focus:ring-rose-300' if loginForm.email.failed else '' }}"
+            class="block h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/30 {{ 'border-rose-500 ring-2 ring-rose-300 focus:border-rose-500 focus:ring-rose-300' if loginForm.email.failed else '' }}"
           />
           <div class="mt-1 hidden text-sm text-rose-700 {{ 'block' if loginForm.email.failed else '' }}">
             {{ $t($n('loginForm/email/errors/0')) }}
@@ -36,13 +36,13 @@
             name="password"
             id="password"
             placeholder="{{ $t('form.validation.passwordPlaceholder') }}"
-            class="block h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 {{ 'border-rose-500 ring-2 ring-rose-300 focus:border-rose-500 focus:ring-rose-300' if loginForm.password.failed else '' }}"
+            class="block h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/30 {{ 'border-rose-500 ring-2 ring-rose-300 focus:border-rose-500 focus:ring-rose-300' if loginForm.password.failed else '' }}"
           />
           <div class="mt-1 hidden text-sm text-rose-700 {{ 'block' if loginForm.password.failed else '' }}">
             {{ $t($n('loginForm/password/errors/0')) }}
           </div>
         </div>
-        <button type="submit" class="inline-flex items-center rounded-md bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500/30">
+        <button type="submit" class="inline-flex items-center rounded-md bg-primary-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500/30">
           {{ $t('form.validation.login') }}
         </button>
         {% if loginError %}
@@ -69,13 +69,13 @@
       <li class="px-4 py-3">
         <div class="flex flex-col gap-1 md:flex-row md:items-center md:gap-3">
           <b class="md:w-48">{{ $t('form.validation.view') }}</b>
-          <i class="text-blue-600">example/lib/widgets/example/form.j2.html</i>
+          <i class="text-primary-600">example/lib/widgets/example/form.j2.html</i>
         </div>
       </li>
       <li class="px-4 py-3">
         <div class="flex flex-col gap-1 md:flex-row md:items-center md:gap-3">
           <b class="md:w-48">{{ $t('form.validation.controller') }}</b>
-          <i class="text-blue-600">example/lib/controllers/home_controller.dart</i>
+          <i class="text-primary-600">example/lib/controllers/home_controller.dart</i>
         </div>
       </li>
     </ul>

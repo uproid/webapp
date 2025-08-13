@@ -14,7 +14,7 @@
               {% set randonString = $e.randomString() %}
               <div class="flex flex-wrap items-center justify-end gap-2">
                 <button type="button" class="inline-flex h-8 items-center rounded-md border border-rose-600 bg-rose-50 px-3 text-[11px] font-medium text-rose-700 hover:bg-rose-100 focus:outline-none focus:ring-2 focus:ring-rose-500/30" onclick="deleteSelectedBooks_{{randonString}}()">{{ $t('Delete Selected') }}</button>
-                <select name="pageSize" class="h-8 rounded-md border border-slate-300 bg-white px-2 text-[11px] shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30" onchange="changePageSize_{{randonString}}(this.value)">
+                <select name="pageSize" class="h-8 rounded-md border border-slate-300 bg-white px-2 text-[11px] shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/30" onchange="changePageSize_{{randonString}}(this.value)">
                   <option {{ 'selected' if pageSize == '10' else '' }}>10</option>
                   <option {{ 'selected' if pageSize == '20' else '' }}>20</option>
                   <option {{ 'selected' if pageSize == '50' else '' }}>50</option>
@@ -58,7 +58,7 @@
           <tr class="text-left font-semibold text-slate-700">
             <th class="px-3 py-2">
               <div class="flex items-center gap-1">
-                <input class="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500" type="checkbox" id="select_all" onchange="document.querySelectorAll(`input[name='selected_books']`).forEach(cb=>cb.checked=this.checked);" />
+                <input class="h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500" type="checkbox" id="select_all" onchange="document.querySelectorAll(`input[name='selected_books']`).forEach(cb=>cb.checked=this.checked);" />
                 {{ $l.macro($rq,"/template/ui/sorting", {'sortby': 'b.id', 'title': 'ID'} ) }}
               </div>
             </th>
@@ -75,7 +75,7 @@
         <tbody class="divide-y divide-slate-100">
           {% for book in books %}
           <tr class="hover:bg-slate-50">
-            <td class="px-3 py-2 align-top"><input class="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500" type="checkbox" name="selected_books" value="{{ book.id }}" /> <span class="ml-1 font-medium text-slate-800">{{ book.id }}</span></td>
+            <td class="px-3 py-2 align-top"><input class="h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500" type="checkbox" name="selected_books" value="{{ book.id }}" /> <span class="ml-1 font-medium text-slate-800">{{ book.id }}</span></td>
             <td class="px-3 py-2 text-slate-700">{{ book.title }}</td>
             <td class="px-3 py-2 text-slate-600">{{ book.author }}</td>
             <td class="px-3 py-2 text-slate-600">{{ book.published_date | dateFormat('dd/MM/y') }}</td>
@@ -90,7 +90,7 @@
                 >🗑️</a>
                 <a
                   href="{{ $l.updateUrlQuery($rq, {'id':book.id|s, 'action': 'edit'|s}) }}"
-                  class="inline-flex h-7 w-7 items-center justify-center rounded-full border border-blue-200 text-[11px] text-blue-600 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+                  class="inline-flex h-7 w-7 items-center justify-center rounded-full border border-primary-200 text-[11px] text-primary-600 hover:bg-primary-50 focus:outline-none focus:ring-2 focus:ring-primary-500/30"
                   title="Edit"
                 >✏️</a>
               </div>

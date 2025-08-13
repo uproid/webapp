@@ -35,14 +35,14 @@
           <tr>
             <td colspan="3" class="px-4 py-3">
               <form method="post" class="flex flex-col gap-2 sm:flex-row sm:items-center">
-                <input placeholder="{{ $t('cookies.placeholder.name') }}" class="h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 sm:max-w-xs" type="text" name="name" value="" />
+                <input placeholder="{{ $t('cookies.placeholder.name') }}" class="h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/30 sm:max-w-xs" type="text" name="name" value="" />
                 <div class="flex w-full flex-1 flex-col gap-2 sm:flex-row sm:items-center">
-                  <input type="text" name="value" class="h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30" placeholder="{{ $t('cookies.placeholder.value') }}">
+                  <input type="text" name="value" class="h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/30" placeholder="{{ $t('cookies.placeholder.value') }}">
                   <label class="inline-flex h-10 items-center gap-2 rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-700">
-                    <input class="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500" name="safe" type="checkbox" value="1">
+                    <input class="h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500" name="safe" type="checkbox" value="1">
                     <span>{{ $t('cookies.safe') }}</span>
                   </label>
-                  <button class="inline-flex h-10 items-center rounded-md border border-blue-600 px-3 text-sm font-medium text-blue-700 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500/30" type="submit">{{ $t('cookies.add') }}</button>
+                  <button class="inline-flex h-10 items-center rounded-md border border-primary-600 px-3 text-sm font-medium text-primary-700 hover:bg-primary-50 focus:outline-none focus:ring-2 focus:ring-primary-500/30" type="submit">{{ $t('cookies.add') }}</button>
                 </div>
                 <input type="hidden" name="action" value="add" />
               </form>
@@ -57,25 +57,25 @@
       <li class="px-4 py-3">
         <div class="flex flex-col gap-1 md:flex-row md:items-center md:gap-3">
           <b class="md:w-48">{{ $t('auth.view') }}</b>
-          <i class="text-blue-600">example/lib/widgets/example/auth.j2.html</i>
+          <i class="text-primary-600">example/lib/widgets/example/auth.j2.html</i>
         </div>
       </li>
       <li class="px-4 py-3">
         <div class="flex flex-col gap-1 md:flex-row md:items-center md:gap-3">
           <b class="md:w-48">{{ $t('auth.controller') }}</b>
-          <i class="text-blue-600">example/lib/controllers/home_controller.dart</i>
+          <i class="text-primary-600">example/lib/controllers/home_controller.dart</i>
         </div>
       </li>
       <li class="px-4 py-3">
         <div class="flex flex-col gap-1 md:flex-row md:items-center md:gap-3">
           <b class="md:w-48">{{ $t('auth.authController') }}</b>
-          <i class="text-blue-600">example/lib/controllers/auth_controller.dart</i>
+          <i class="text-primary-600">example/lib/controllers/auth_controller.dart</i>
         </div>
       </li>
       <li class="px-4 py-3">
         <div class="flex flex-col gap-1 md:flex-row md:items-center md:gap-3">
           <b class="md:w-48">{{ $t('auth.router') }}</b>
-          <i class="text-blue-600">example/lib/route/web_route.dart</i>
+          <i class="text-primary-600">example/lib/route/web_route.dart</i>
         </div>
       </li>
     </ul>

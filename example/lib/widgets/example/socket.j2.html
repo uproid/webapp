@@ -16,10 +16,10 @@
           <label for="socket-output" class="mb-1 block text-sm font-medium text-slate-700">
             {{ $t('testWebSocket.output') }}
           </label>
-          <textarea class="h-[350px] w-full rounded-md border border-slate-300 bg-white p-3 text-sm shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30" id="socket-output"></textarea>
+          <textarea class="h-[350px] w-full rounded-md border border-slate-300 bg-white p-3 text-sm shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/30" id="socket-output"></textarea>
         </div>
         <template id="btn-template-client">
-          <button data-id="{id}" class="socket-client-send mt-1 inline-flex items-center rounded-md border border-blue-600 px-3 py-1.5 text-sm font-medium text-blue-700 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500/30 disable-wave">
+          <button data-id="{id}" class="socket-client-send mt-1 inline-flex items-center rounded-md border border-primary-600 px-3 py-1.5 text-sm font-medium text-primary-700 hover:bg-primary-50 focus:outline-none focus:ring-2 focus:ring-primary-500/30 disable-wave">
             {text}
           </button>
         </template>
@@ -28,13 +28,13 @@
         </div>
       </div>
       <div class="mt-4 flex flex-wrap items-center gap-2">
-        <button id="btn-socket-time" class="inline-flex items-center rounded-md border border-blue-600 px-3 py-1.5 text-sm font-medium text-blue-700 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500/30 disable-wave">
+        <button id="btn-socket-time" class="inline-flex items-center rounded-md border border-primary-600 px-3 py-1.5 text-sm font-medium text-primary-700 hover:bg-primary-50 focus:outline-none focus:ring-2 focus:ring-primary-500/30 disable-wave">
           {{ $t('testWebSocket.getTime') }}
         </button>
-        <button id="btn-socket-fa" class="inline-flex items-center rounded-md border border-blue-600 px-3 py-1.5 text-sm font-medium text-blue-700 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500/30 disable-wave">
+        <button id="btn-socket-fa" class="inline-flex items-center rounded-md border border-primary-600 px-3 py-1.5 text-sm font-medium text-primary-700 hover:bg-primary-50 focus:outline-none focus:ring-2 focus:ring-primary-500/30 disable-wave">
           {{ $t('testWebSocket.randomMessage') }}
         </button>
-        <button id="btn-socket-clients" class="inline-flex items-center rounded-md border border-blue-600 px-3 py-1.5 text-sm font-medium text-blue-700 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500/30 disable-wave">
+        <button id="btn-socket-clients" class="inline-flex items-center rounded-md border border-primary-600 px-3 py-1.5 text-sm font-medium text-primary-700 hover:bg-primary-50 focus:outline-none focus:ring-2 focus:ring-primary-500/30 disable-wave">
           {{ $t('testWebSocket.clientLists') }}
         </button>
         <button id="btn-socket-stream" class="inline-flex items-center rounded-md bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 disable-wave">

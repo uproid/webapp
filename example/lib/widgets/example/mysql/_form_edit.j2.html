@@ -1,89 +1,64 @@
-<form method="post" action="{{ $e.uriString }}">
+<form method="post" action="{{ $e.uriString }}" class="contents">
     <input type="hidden" name="action" value="{{ 'update' if(action == 'edit' or action == 'update') else 'add' }}" />
     <tr>
-        <td colspan="7">
-            <div class="input-group">
-            <div class="form-control bg-light">
-                <input
-                type="text"
-                class="form-control {{ $n('form/title/valid') }}"
-                name="title"
-                placeholder="Title"
-                required
-                value="{{ $n('form/title/value') }}"
-                />
-                <div
-                class="invalid-feedback {{ '' if $n('form/title/success') else 'd-block' }}"
-                >
-                {{ $n('form/title/errors/0') }}
+        <td colspan="7" class="p-2">
+            <div class="flex flex-wrap items-start gap-2">
+                <div class="flex min-w-[160px] flex-col">
+                    <input
+                        type="text"
+                        name="title"
+                        placeholder="Title"
+                        required
+                        value="{{ $n('form/title/value') }}"
+                        class="h-9 rounded-md border bg-white px-3 text-xs shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 {{ 'border-rose-500 ring-2 ring-rose-300' if $n('form/title/errors/0') else 'border-slate-300' }}"
+                    />
+                    <div class="mt-1 text-[10px] text-rose-600 {{ '' if $n('form/title/errors/0') else 'hidden' }}">{{ $n('form/title/errors/0') }}</div>
                 </div>
-            </div>
-            <div class="form-control bg-light">
-                <input
-                type="text"
-                class="form-control {{ $n('form/author/valid') }}"
-                name="author"
-                placeholder="Author"
-                required
-                value="{{ $n('form/author/value') }}"
-                />
-                <div
-                class="invalid-feedback {{ '' if $n('form/author/success') else 'd-block' }}"
-                >
-                {{ $n('form/author/errors/0') }}
+                <div class="flex min-w-[140px] flex-col">
+                    <input
+                        type="text"
+                        name="author"
+                        placeholder="Author"
+                        required
+                        value="{{ $n('form/author/value') }}"
+                        class="h-9 rounded-md border bg-white px-3 text-xs shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 {{ 'border-rose-500 ring-2 ring-rose-300' if $n('form/author/errors/0') else 'border-slate-300' }}"
+                    />
+                    <div class="mt-1 text-[10px] text-rose-600 {{ '' if $n('form/author/errors/0') else 'hidden' }}">{{ $n('form/author/errors/0') }}</div>
                 </div>
-            </div>
-            <div class="form-control bg-light">
-                <input
-                type="date"
-                class="form-control {{ $n('form/published_date/valid') }}"
-                name="published_date"
-                placeholder="Published Date"
-                required
-                value="{{ $n('form/published_date/value') }}"
-                />
-                <div
-                class="invalid-feedback {{ '' if $n('form/published_date/success') else 'd-block' }}"
-                >
-                {{ $n('form/published_date/errors/0') }}
+                <div class="flex min-w-[160px] flex-col">
+                    <input
+                        type="date"
+                        name="published_date"
+                        placeholder="Published Date"
+                        required
+                        value="{{ $n('form/published_date/value') }}"
+                        class="h-9 rounded-md border bg-white px-3 text-xs shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 {{ 'border-rose-500 ring-2 ring-rose-300' if $n('form/published_date/errors/0') else 'border-slate-300' }}"
+                    />
+                    <div class="mt-1 text-[10px] text-rose-600 {{ '' if $n('form/published_date/errors/0') else 'hidden' }}">{{ $n('form/published_date/errors/0') }}</div>
                 </div>
-            </div>
-            <div class="form-control bg-light">
-                <select
-                class="form-select {{ $n('form/category_id/valid') }}"
-                name="category_id"
-                value="{{ $n('form/category_id/value') }}"
-                >
-                <option value=""></option>
-                {% set selected = $n('form/category_id/value') %}
-                {% for category in categories %}
-                    <option value="{{ category.id }}" {{ 'selected' if selected == category.id else '' }}>
-                    {{ category.title }}
-                    </option>
-                {% endfor %}
-                </select>
-                <div
-                class="invalid-feedback {{ '' if $n('form/category_id/success') else 'd-block' }}"
-                >
-                {{ $n('form/category_id/errors/0') }}
+                <div class="flex min-w-[140px] flex-col">
+                    <select
+                        name="category_id"
+                        class="h-9 rounded-md border bg-white px-2 text-xs shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 {{ 'border-rose-500 ring-2 ring-rose-300' if $n('form/category_id/errors/0') else 'border-slate-300' }}"
+                    >
+                        <option value=""></option>
+                        {% set selected = $n('form/category_id/value') %}
+                        {% for category in categories %}
+                            <option value="{{ category.id }}" {{ 'selected' if selected == category.id else '' }}>{{ category.title }}</option>
+                        {% endfor %}
+                    </select>
+                    <div class="mt-1 text-[10px] text-rose-600 {{ '' if $n('form/category_id/errors/0') else 'hidden' }}">{{ $n('form/category_id/errors/0') }}</div>
                 </div>
-            </div>
-            {% if(action == 'edit' or action == 'update') %}
+                {% if(action == 'edit' or action == 'update') %}
                 <input type="hidden" name="id" value="{{ id }}" />
-                <button class="btn btn-outline-primary" type="submit">
-                {{ $t('Update') }}
-                </button>
-            {% else %}
-                <button class="btn btn-outline-primary" type="submit">
-                {{ $t('database.table.button.add') }}
-                </button>
-            {% endif %}
+                <button type="submit" class="inline-flex h-9 items-center rounded-md border border-blue-600 bg-blue-50 px-3 text-xs font-medium text-blue-700 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500/30">{{ $t('Update') }}</button>
+                {% else %}
+                <button type="submit" class="inline-flex h-9 items-center rounded-md border border-blue-600 bg-blue-50 px-3 text-xs font-medium text-blue-700 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500/30">{{ $t('database.table.button.add') }}</button>
+                {% endif %}
             </div>
         </td>
     </tr>
     <tr>
-        <td colspan="7">
-            <div class="container">{{ paging }}</div>
-        </td>
+        <td colspan="7" class="p-2 text-xs text-slate-600">{{ paging }}</td>
     </tr>
 </form>

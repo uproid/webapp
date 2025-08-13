@@ -5,22 +5,22 @@
 {% endblock %}
 
 {% block content %}
-<div class="row my-5">
-  <div class="container">
-    <h1>
+<div class="my-6">
+  <div>
+    <h1 class="text-2xl font-semibold text-slate-800">
       {{ $t('welcome.message') }}
       {{ $t('logo') }}
     </h1>
   </div>
   {% if loginResult != true %}
-  <div class="card card-primary mt-4  bg-light">
-    <div class="card-body">
-      <h3>{{ $t('features.title') }}</h3>
-      <p>
+  <div class="mt-4 rounded-lg border border-slate-200 bg-white shadow-sm">
+    <div class="p-5">
+      <h3 class="text-xl font-semibold text-slate-900">{{ $t('features.title') }}</h3>
+      <p class="mt-2 text-slate-600">
         {{ $t('features.description') }}
       </p>
 
-      <ul>
+      <ul class="mt-3 list-disc space-y-1 ps-6 text-slate-700">
         <li>{{ $t('features.websocket') }}</li>
         <li>{{ $t('features.mongodb') }}</li>
         <li>{{ $t('features.cronjobs') }}</li>
@@ -31,36 +31,32 @@
         <li>{{ $t('features.fastapi') }}</li>
         <li>{{ $t('features.other') }}</li>
       </ul>
-      <div class="btn-group" role="group" aria-label="Basic outlined example">
+      <div class="mt-4 flex flex-wrap gap-2" role="group" aria-label="Basic outlined example">
         <a
           href="https://github.com/uproid/webapp"
-          type="button"
-          class="btn btn-sm btn-outline-primary"
+          class="inline-flex items-center rounded-md border border-blue-600 px-3 py-1.5 text-sm font-medium text-blue-700 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
           >{{ $t('project.github') }}</a
         >
         <a
           href="https://github.com/uproid/webapp/blob/master/CONTRIBUTING.md"
-          type="button"
-          class="btn btn-sm btn-outline-primary"
+          class="inline-flex items-center rounded-md border border-blue-600 px-3 py-1.5 text-sm font-medium text-blue-700 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
           >{{ $t('project.contributing') }}</a
         >
         <a
           href="https://github.com/uproid/webapp/tree/master/doc"
-          type="button"
-          class="btn btn-sm btn-outline-primary"
+          class="inline-flex items-center rounded-md border border-blue-600 px-3 py-1.5 text-sm font-medium text-blue-700 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
           >{{ $t('project.documentation') }}</a
         >
         <a
           href="https://pub.dev/packages/webapp"
-          type="button"
-          class="btn btn-sm btn-outline-primary"
+          class="inline-flex items-center rounded-md border border-blue-600 px-3 py-1.5 text-sm font-medium text-blue-700 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
           >Pub.dev</a
         >
       </div>
     </div>
   </div>
   {% else %}
-  <div class="alert alert-success">{{ $t('login.success') }}</div>
+  <div class="mt-4 rounded-md border border-emerald-200 bg-emerald-50 p-4 text-emerald-800">{{ $t('login.success') }}</div>
   {% endif %}
 </div>
 {% endblock %}

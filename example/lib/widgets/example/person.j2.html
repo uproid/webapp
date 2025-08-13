@@ -1,75 +1,76 @@
 {% extends 'template/template.j2.html' %}
 {% block title %}
-    {{ $t('Example Free model DB') }}
+  {{ $t('Example Free model DB') }}
 {% endblock %}
 
 {% block content %}
-<div class="row my-5">
-  <h3>Person Example</h3>
-  <div class="my-3 border-0 bg-transparent">
-    {% if data._id == null %}
-    <div class="p-0 m-0">
-      <div class="card table-responsive">
-        <table class="table table-striped p-0 m-0 table-border-0 rounded">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Age</th>
-              <th>Married</th>
-              <th>Email</th>
-              <th>Height</th>
-              <th>Birthday</th>
-              <th>Job</th>
-              <th>Skils</th>
-              <th class="text-end">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for person in allPerson %}
-            <tr class="small">
-              <td>
-                <div>
-                  <span style="background-color: {{ person.color }};" class="badge p-1 py-0 rounded-pill">&nbsp;</span>
-                  {{ person.name }}
-                </div>
-              </td>
-              <td>{{ person.age }}</td>
-              <td>{{ person.married }}</td>
-              <td>{{ person.email }}</td>
-              <td>{{ person.height }}</td>
-              <td>{{ person.birthday | dateFormat('dd/MM/yyyy, HH:mm') }}</td>
-              <td>{{ person.job.title | default('Unknown') }}</td>
-              <td>{{ person.jobs|length }}</td>
-              <td>
-                <div class="d-flex justify-content-end">
-                  <form class="d-flex" onsubmit="return confirm('Are you sure to delete `{{ person.name }}`?')" action="/example/person/delete/{{ person._id }}" method="POST">
-                    <input type="hidden" name="action" value="DELETE" />
-                    <button class="btn btn-sm btn-outline-light rounded-pill p-1 m-0 border-0" type="submit">🗑️</button>
-                  </form>
-                  <a class="btn btn-sm btn-outline-light rounded-pill p-1 m-0 border-0" href="/example/person/{{ person._id }}">
-                    ✏️
-                  </a>
-                </div>
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-          <tfoot>
-            <form method="post">
-              <tr>
-                <td class="border-0" colspan="100%">
-                  <div class="container">
-                    {{ paging }}
-                  </div>
-                </td>
-              </tr>
-            </form>
-          </tfoot>
-        </table>
-      </div>
+<div class="my-6 space-y-6">
+  <h3 class="text-xl font-semibold text-slate-800">Person Example</h3>
+
+  {% if data._id == null %}
+  <div class="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
+    <div class="overflow-x-auto">
+      <table class="min-w-full text-xs md:text-sm divide-y divide-slate-200">
+        <thead class="bg-slate-50">
+          <tr class="text-left font-semibold text-slate-700">
+            <th class="px-3 py-2">Name</th>
+            <th class="px-3 py-2">Age</th>
+            <th class="px-3 py-2">Married</th>
+            <th class="px-3 py-2">Email</th>
+            <th class="px-3 py-2">Height</th>
+            <th class="px-3 py-2">Birthday</th>
+            <th class="px-3 py-2">Job</th>
+            <th class="px-3 py-2">Skils</th>
+            <th class="px-3 py-2 text-end">Action</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          {% for person in allPerson %}
+          <tr class="hover:bg-slate-50">
+            <td class="px-3 py-2 font-medium text-slate-800">
+              <span style="background-color: {{ person.color }};" class="mr-2 inline-block h-3 w-3 rounded-full align-middle"></span>
+              {{ person.name }}
+            </td>
+            <td class="px-3 py-2 text-slate-600">{{ person.age }}</td>
+            <td class="px-3 py-2 text-slate-600">{{ person.married }}</td>
+            <td class="px-3 py-2 text-slate-600">{{ person.email }}</td>
+            <td class="px-3 py-2 text-slate-600">{{ person.height }}</td>
+            <td class="px-3 py-2 text-slate-600">{{ person.birthday | dateFormat('dd/MM/yyyy, HH:mm') }}</td>
+            <td class="px-3 py-2 text-slate-600">{{ person.job.title | default('Unknown') }}</td>
+            <td class="px-3 py-2 text-slate-600">{{ person.jobs|length }}</td>
+            <td class="px-3 py-2 text-right">
+              <div class="flex items-center justify-end gap-2">
+                <form onsubmit="return confirm('Are you sure to delete `{{ person.name }}`?')" action="/example/person/delete/{{ person._id }}" method="POST">
+                  <input type="hidden" name="action" value="DELETE" />
+                  <button type="submit" class="inline-flex h-7 w-7 items-center justify-center rounded-full border border-slate-200 text-[11px] text-rose-600 hover:bg-rose-50 focus:outline-none focus:ring-2 focus:ring-rose-500/30" title="Delete">
+                    🗑️
+                  </button>
+                </form>
+                <a href="/example/person/{{ person._id }}" class="inline-flex h-7 w-7 items-center justify-center rounded-full border border-slate-200 text-[11px] text-blue-600 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500/30" title="Edit">✏️</a>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+          {% if not allPerson or allPerson|length == 0 %}
+          <tr>
+            <td colspan="100%" class="px-3 py-8 text-center text-slate-500">No persons found.</td>
+          </tr>
+          {% endif %}
+        </tbody>
+        <tfoot class="bg-slate-50">
+          <tr>
+            <td colspan="100%" class="px-3 py-3 text-sm text-slate-600">
+              {{ paging }}
+            </td>
+          </tr>
+        </tfoot>
+      </table>
     </div>
-    {% endif %}
-    <div class="card bg-white mt-3 px-0 mx-0">
+  </div>
+  {% endif %}
+
+  <div class="rounded-lg border border-slate-200 bg-white shadow-sm">
+    <div class="p-5">
       {% include $e.widgetPath('example/forms/form_person') %}
     </div>
   </div>

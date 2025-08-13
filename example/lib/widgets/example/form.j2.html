@@ -4,87 +4,83 @@
 {% endblock %}
 
 {% block content %}
-<div class="row my-5">
-  <h3>{{ $t('form.validation.title') }}</h3>
-  <div class="card card-primary bg-light my-3">
-    <span class="card-body">
-      {{ $t('form.validation.credentials.email') }}: example@uproid.com<br />
-      {{ $t('form.validation.credentials.password') }}: @Test123
-    </span>
+<div class="my-6">
+  <h3 class="text-xl font-semibold text-slate-800">{{ $t('form.validation.title') }}</h3>
+  <div class="my-3 rounded-md border border-slate-200 bg-slate-50 p-3 text-slate-700">
+    {{ $t('form.validation.credentials.email') }}: example@uproid.com<br />
+    {{ $t('form.validation.credentials.password') }}: @Test123
   </div>
   {% if loginResult != true and user == null %}
-  <div class="card my-3 bg-light">
-    <div class="card-body">
-      <form method="post">
-        <div class="mb-3">
-          <label for="email" class="form-label">{{ $t('form.validation.email') }}</label>
+  <div class="my-3 rounded-lg border border-slate-200 bg-white shadow-sm">
+    <div class="p-5">
+      <form method="post" class="space-y-4">
+        <div>
+          <label for="email" class="mb-1 block text-sm font-medium text-slate-700">{{ $t('form.validation.email') }}</label>
           <input
             value="{{ loginForm.email.value }}"
             type="email"
             name="email"
-            class="form-control {{ loginForm.email.valid }}"
             id="email"
             placeholder="{{ $t('form.validation.emailPlaceholder') }}"
+            class="block h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 {{ 'border-rose-500 ring-2 ring-rose-300 focus:border-rose-500 focus:ring-rose-300' if loginForm.email.failed else '' }}"
           />
-          <div class="invalid-feedback {{ 'd-block' if loginForm.email.failed else '' }}">
+          <div class="mt-1 hidden text-sm text-rose-700 {{ 'block' if loginForm.email.failed else '' }}">
             {{ $t($n('loginForm/email/errors/0')) }}
           </div>
         </div>
-        <div class="mb-3">
-          <label for="password" class="form-label">{{ $t('form.validation.password') }}</label>
+        <div>
+          <label for="password" class="mb-1 block text-sm font-medium text-slate-700">{{ $t('form.validation.password') }}</label>
           <input
             value="{{ loginForm.password.value }}"
             type="password"
             name="password"
-            class="form-control {{ loginForm.password.valid }}"
             id="password"
             placeholder="{{ $t('form.validation.passwordPlaceholder') }}"
+            class="block h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 {{ 'border-rose-500 ring-2 ring-rose-300 focus:border-rose-500 focus:ring-rose-300' if loginForm.password.failed else '' }}"
           />
-          <div class="invalid-feedback {{ 'd-block' if loginForm.password.failed else '' }}">
+          <div class="mt-1 hidden text-sm text-rose-700 {{ 'block' if loginForm.password.failed else '' }}">
             {{ $t($n('loginForm/password/errors/0')) }}
           </div>
         </div>
-        <button type="submit" class="btn btn-primary btn-lg text-light">
+        <button type="submit" class="inline-flex items-center rounded-md bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500/30">
           {{ $t('form.validation.login') }}
         </button>
         {% if loginError %}
-        <div class="mt-3">
-          <div class="alert alert-danger">{{ $t('form.validation.loginError') }}</div>
-        </div>
+        <div class="mt-3 rounded-md border border-rose-200 bg-rose-50 p-3 text-rose-800">{{ $t('form.validation.loginError') }}</div>
         {% endif %}
       </form>
     </div>
   </div>
   {% else %}
-  <div class="alert alert-success my-3">
-    <div class="row">
-      <div class="col">
+  <div class="my-3 rounded-md border border-emerald-200 bg-emerald-50 p-3 text-emerald-800">
+    <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <div>
         {{ $t('form.validation.loginSuccess') }} <i>{{ user.name }}</i>
       </div>
-      <div class="col text-end">
-        <a href="/logout" class="btn text-white btn-sm btn-danger">{{ $t('form.validation.logout') }}</a>
+      <div class="text-left sm:text-right">
+        <a href="/logout" class="inline-flex items-center rounded-md bg-rose-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-500/30">{{ $t('form.validation.logout') }}</a>
       </div>
     </div>
   </div>
   {% endif %}
 
-  <div class="card my-3 p-0">
-    <ul class="list-group list-group-flush m-0 p-0">
-      <li class="list-group-item">
-        <div class="row">
-          <b class="col-md-2">{{ $t('form.validation.view') }}</b>
-          <i class="col-md-10 text-info">example/lib/widgets/example/form.j2.html</i>
+  <div class="my-3 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
+    <ul class="divide-y divide-slate-200">
+      <li class="px-4 py-3">
+        <div class="flex flex-col gap-1 md:flex-row md:items-center md:gap-3">
+          <b class="md:w-48">{{ $t('form.validation.view') }}</b>
+          <i class="text-blue-600">example/lib/widgets/example/form.j2.html</i>
         </div>
       </li>
-      <li class="list-group-item">
-        <div class="row">
-          <b class="col-md-2">{{ $t('form.validation.controller') }}</b>
-          <i class="col-md-10 text-info">example/lib/controllers/home_controller.dart</i>
+      <li class="px-4 py-3">
+        <div class="flex flex-col gap-1 md:flex-row md:items-center md:gap-3">
+          <b class="md:w-48">{{ $t('form.validation.controller') }}</b>
+          <i class="text-blue-600">example/lib/controllers/home_controller.dart</i>
         </div>
       </li>
     </ul>
-    <div class="card-body">
-      <pre dir="ltr"  class="prettyprint border-0">
+    <div class="p-4">
+      <pre dir="ltr" class="prettyprint border-0">
         <code class="language-dart">
 Future&lt;String&gt; exampleForm() async {
   if (rq.method == RequestMethods.POST) {

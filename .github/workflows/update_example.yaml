@@ -1,0 +1,21 @@
+name: Sync example repo
+on:
+  push:
+    branches:
+      - master
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Push example
+        run: |
+          git config --global user.name "uproid"
+          git config --global user.email "info@uproid.com"
+
+          cd example
+          git init
+          git remote add origin https://<TOKEN>@github.com/uproid/example-webapp-docker.git
+          git add .
+          git commit -m "Update from main repo"
+          git push --force origin main

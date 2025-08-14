@@ -5,7 +5,7 @@
     <div class="flex w-full items-center justify-between gap-4 py-2  px-[12px]">
       <div class="flex items-center gap-3">
         <button
-          class="button-sidebar hover:text-primary-100 inline-flex h-10 w-10 items-center justify-center rounded-md text-primary-200 hover:bg-primary-800 focus:outline-none focus:ring-2 focus:ring-primary-400"
+          class="wave button-sidebar hover:text-primary-100 inline-flex h-10 w-10 items-center justify-center rounded-md text-primary-200 hover:bg-primary-800 focus:outline-none focus:ring-2 focus:ring-primary-400"
           type="button"
           aria-label="{{ $t('navbar.toggleSidebar') }}"
           aria-controls="sidebar"
@@ -27,7 +27,7 @@
         </button>
 
         <a
-          class="inline-flex items-center gap-2 rounded-md px-2 py-1.5 text-primary-200"
+          class="wave inline-flex items-center gap-2 rounded-md px-2 py-1.5 text-primary-200"
           href="{{ $e.url('/') }}"
         >
           <span
@@ -41,7 +41,7 @@
       <div class="flex items-center gap-2">
         <a
           href="https://github.com/uproid/webapp"
-          class="inline-flex h-10 items-center rounded-md px-3 text-primary-200 hover:bg-primary-800 hover:text-primary-100"
+          class="wave inline-flex h-10 items-center rounded-md px-3 text-primary-200 hover:bg-primary-800 hover:text-primary-100"
           aria-label="GitHub"
         >
           <svg
@@ -61,20 +61,19 @@
           </svg>
         </a>
 
-        <details class="relative" dir="ltr">
+        <details class="relative" dir="{{ 'ltr' if $t('dir') == 'rtl' else 'rtl' }}">
           <summary
             class="list-none inline-flex h-10 cursor-pointer items-center rounded-md px-3 text-primary-200 hover:bg-primary-800 hover:text-primary-100"
           >
             {{ $e.ln | upper }}
           </summary>
           <ul
-            dir="ltr"
-            class="absolute right-0 mt-2 w-48 overflow-y-auto rounded-md border border-outline/30 bg-surface py-1 text-on-surface shadow-lg ring-1 ring-black/5 max-h-72"
+            class="absolute <?=  ?> mt-2 w-48 overflow-y-auto rounded-md border border-outline/30 bg-surface py-1 text-on-surface shadow-lg ring-1 ring-black/5 max-h-72"
           >
             {% for key, language in languages %}
             <li>
               <a
-                class="flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-primary-50 {{ 'bg-primary-50 font-medium text-primary-700' if $e.ln == key }}"
+                class="wave flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-primary-50 {{ 'bg-primary-50 font-medium text-primary-700' if $e.ln == key }}"
                 href="{{ $e.urlToLanguage(key) }}"
               >
                 <b class="inline-flex w-5 items-center justify-center"

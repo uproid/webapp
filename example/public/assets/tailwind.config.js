@@ -3,25 +3,30 @@
  * Run the build (see package.json scripts) to generate assets/generated-tailwind.css
  */
 module.exports = {
-		content: [
-			'../../lib/**/*.j2.html',              // all Jinja templates
-			'../../lib/widgets/template/**/*.j2.html', // explicit template dir
-			'../../lib/widgets/example/**/*.j2.html',  // example widgets
-			'../../lib/**/*.dart',
-			'../../lib/**/*.html',
-			'../../lib/**/*.js',
-			'../../lib/**/*.ts',
-			'../../lib/**/*.vue',
-			'../../lib/**/*.svelte',
-			'../../lib/**/*.jsx',
-			'../../lib/**/*.tsx'
-		],
+	content: [
+		'../../lib/**/*.j2.html',              // all Jinja templates
+		'../../lib/widgets/template/**/*.j2.html', // explicit template dir
+		'../../lib/widgets/example/**/*.j2.html',  // example widgets
+		'../../lib/**/*.dart',
+		'../../lib/**/*.html',
+		'../../lib/**/*.js',
+		'../../lib/**/*.ts',
+		'../../lib/**/*.vue',
+		'../../lib/**/*.svelte',
+		'../../lib/**/*.jsx',
+		'../../lib/**/*.tsx'
+	],
 	theme: {
+		ripple: theme => ({
+			colors: theme('colors'),
+			modifierTransition: 'background 0.2s',
+			activeTransition: 'background 0.1s'
+		}),
 		extend: {
 			colors: {
 				/* Material Design 3 baseline (seed primary = #6750A4) */
 				primary: {
-					50:  '#f5edff',
+					50: '#f5edff',
 					100: '#eaddff',
 					200: '#d0bcff',
 					300: '#b69df8',
@@ -34,7 +39,7 @@ module.exports = {
 					950: '#1d102b'
 				},
 				secondary: {
-					50:  '#f5f2fa',
+					50: '#f5f2fa',
 					100: '#e7e0ec',
 					200: '#cbc4cf',
 					300: '#b0a9b4',
@@ -47,7 +52,7 @@ module.exports = {
 					950: '#1d1322'
 				},
 				tertiary: {
-					50:  '#f4faf3',
+					50: '#f4faf3',
 					100: '#dcefe0',
 					200: '#c2e3ca',
 					300: '#a8d7b3',
@@ -60,7 +65,7 @@ module.exports = {
 					950: '#063614'
 				},
 				error: {
-					50:  '#fef1f1',
+					50: '#fef1f1',
 					100: '#fcd4d5',
 					200: '#f9b8ba',
 					300: '#f69b9f',
@@ -73,20 +78,20 @@ module.exports = {
 					950: '#410002'
 				},
 				neutral: {
-					50:  '#f9f9fb',
+					50: '#f9f9fb',
 					100: '#f1f0f4',
-						200: '#e4e2e8',
-						300: '#d6d5dc',
-						400: '#c9c8d1',
-						500: '#b0afb8',
-						600: '#96959f',
-						700: '#7d7c86',
-						800: '#64636c',
-						900: '#4b4a53',
-						950: '#2f2e37'
+					200: '#e4e2e8',
+					300: '#d6d5dc',
+					400: '#c9c8d1',
+					500: '#b0afb8',
+					600: '#96959f',
+					700: '#7d7c86',
+					800: '#64636c',
+					900: '#4b4a53',
+					950: '#2f2e37'
 				},
 				'neutral-variant': {
-					50:  '#f6f5f9',
+					50: '#f6f5f9',
 					100: '#ebeaf0',
 					200: '#dcdbe3',
 					300: '#cdccd6',
@@ -112,9 +117,8 @@ module.exports = {
 			}
 		}
 	},
-		safelist: [
-			'bg-primary-600','border-primary-600','text-white','text-on-surface','text-primary-700',
-			'hover:bg-primary-50','focus:ring-primary-500/30'
-		],
-		plugins: []
+	safelist: [
+		'bg-primary-600', 'border-primary-600', 'text-white', 'text-on-surface', 'text-primary-700',
+		'hover:bg-primary-50', 'focus:ring-primary-500/30'
+	],
 };

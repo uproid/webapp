@@ -52,11 +52,11 @@
         {% set filterIsDirty = $l.existUrlQuery($rq,['filter_b.id','filter_title', 'filter_author', 'filter_published_date', 'filter_category_id']) %}
         <a
             href="{{ $l.removeUrlQuery($rq,['page','filter_b.id','filter_title', 'filter_author', 'filter_published_date', 'filter_category_id']) }}"
-            class="inline-flex h-8 items-center rounded-md border px-3 text-xs font-medium shadow-sm {{ 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50' if not filterIsDirty else 'border-slate-700 bg-slate-700 text-white hover:bg-slate-800' }}"
+            class="wave inline-flex h-8 items-center rounded-md border px-3 text-xs font-medium shadow-sm {{ 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50' if not filterIsDirty else 'border-slate-700 bg-slate-700 text-white hover:bg-slate-800' }}"
             type="reset"
         >{{ $t('Reset') }}</a>
         <input
-            class="ml-2 inline-flex h-8 cursor-pointer items-center rounded-md bg-primary-600 px-3 text-xs font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500/30"
+            class="wave ml-2 inline-flex h-8 cursor-pointer items-center rounded-md bg-primary-600 px-3 text-xs font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500/30"
             type="submit"
             value="{{ $t('Filter') }}"
         />

@@ -25,7 +25,7 @@
               <form method="post" class="inline">
                 <input type="hidden" name="name" value="{{ cookie.name }}" />
                 <input type="hidden" name="action" value="delete" />
-                <button type="submit" class="inline-flex h-8 w-8 items-center justify-center rounded-md text-slate-600 hover:bg-slate-100 hover:text-rose-600 focus:outline-none focus:ring-2 focus:ring-rose-500/30" aria-label="{{ $t('cookies.remove') }}">🗑️</button>
+                <button type="submit" class="wave inline-flex h-8 w-8 items-center justify-center rounded-md text-slate-600 hover:bg-slate-100 hover:text-rose-600 focus:outline-none focus:ring-2 focus:ring-rose-500/30" aria-label="{{ $t('cookies.remove') }}">🗑️</button>
               </form>
             </td>
           </tr>
@@ -42,7 +42,7 @@
                     <input class="h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500" name="safe" type="checkbox" value="1">
                     <span>{{ $t('cookies.safe') }}</span>
                   </label>
-                  <button class="inline-flex h-10 items-center rounded-md border border-primary-600 px-3 text-sm font-medium text-primary-700 hover:bg-primary-50 focus:outline-none focus:ring-2 focus:ring-primary-500/30" type="submit">{{ $t('cookies.add') }}</button>
+                  <button class="wave inline-flex h-10 items-center rounded-md border border-primary-600 px-3 text-sm font-medium text-primary-700 hover:bg-primary-50 focus:outline-none focus:ring-2 focus:ring-primary-500/30" type="submit">{{ $t('cookies.add') }}</button>
                 </div>
                 <input type="hidden" name="action" value="add" />
               </form>

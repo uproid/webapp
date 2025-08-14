@@ -42,11 +42,11 @@
               <div class="flex items-center justify-end gap-2">
                 <form onsubmit="return confirm('Are you sure to delete `{{ person.name }}`?')" action="/example/person/delete/{{ person._id }}" method="POST">
                   <input type="hidden" name="action" value="DELETE" />
-                  <button type="submit" class="inline-flex h-7 w-7 items-center justify-center rounded-full border border-slate-200 text-[11px] text-rose-600 hover:bg-rose-50 focus:outline-none focus:ring-2 focus:ring-rose-500/30" title="Delete">
+                  <button type="submit" class="wave inline-flex h-7 w-7 items-center justify-center rounded-full border border-slate-200 text-[11px] text-rose-600 hover:bg-rose-50 focus:outline-none focus:ring-2 focus:ring-rose-500/30" title="Delete">
                     🗑️
                   </button>
                 </form>
-                <a href="/example/person/{{ person._id }}" class="inline-flex h-7 w-7 items-center justify-center rounded-full border border-slate-200 text-[11px] text-primary-600 hover:bg-primary-50 focus:outline-none focus:ring-2 focus:ring-primary-500/30" title="Edit">✏️</a>
+                <a href="/example/person/{{ person._id }}" class="wave inline-flex h-7 w-7 items-center justify-center rounded-full border border-slate-200 text-[11px] text-primary-600 hover:bg-primary-50 focus:outline-none focus:ring-2 focus:ring-primary-500/30" title="Edit">✏️</a>
               </div>
             </td>
           </tr>

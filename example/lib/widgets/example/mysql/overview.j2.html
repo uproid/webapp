@@ -13,7 +13,7 @@
               {% set pageSize = data.pageSize | default("10") %}
               {% set randonString = $e.randomString() %}
               <div class="flex flex-wrap items-center justify-end gap-2">
-                <button type="button" class="inline-flex h-8 items-center rounded-md border border-rose-600 bg-rose-50 px-3 text-[11px] font-medium text-rose-700 hover:bg-rose-100 focus:outline-none focus:ring-2 focus:ring-rose-500/30" onclick="deleteSelectedBooks_{{randonString}}()">{{ $t('Delete Selected') }}</button>
+                <button type="button" class="wave inline-flex h-8 items-center rounded-md border border-rose-600 bg-rose-50 px-3 text-[11px] font-medium text-rose-700 hover:bg-rose-100 focus:outline-none focus:ring-2 focus:ring-rose-500/30" onclick="deleteSelectedBooks_{{randonString}}()">{{ $t('Delete Selected') }}</button>
                 <select name="pageSize" class="h-8 rounded-md border border-slate-300 bg-white px-2 text-[11px] shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/30" onchange="changePageSize_{{randonString}}(this.value)">
                   <option {{ 'selected' if pageSize == '10' else '' }}>10</option>
                   <option {{ 'selected' if pageSize == '20' else '' }}>20</option>
@@ -85,12 +85,12 @@
                 <a
                   data-href="{{ $l.updateUrlQuery($rq, {'id':book.id|s, 'action': 'delete'|s}) }}"
                   data-message="{{ $t('Are you sure you want to delete this book?') ~ ' (' ~ book.title ~ ')' }}"
-                  class="js-delete-links inline-flex h-7 w-7 items-center justify-center rounded-full border border-rose-200 text-[11px] text-rose-600 hover:bg-rose-50 focus:outline-none focus:ring-2 focus:ring-rose-500/30"
+                  class="wave js-delete-links inline-flex h-7 w-7 items-center justify-center rounded-full border border-rose-200 text-[11px] text-rose-600 hover:bg-rose-50 focus:outline-none focus:ring-2 focus:ring-rose-500/30"
                   title="Delete"
                 >🗑️</a>
                 <a
                   href="{{ $l.updateUrlQuery($rq, {'id':book.id|s, 'action': 'edit'|s}) }}"
-                  class="inline-flex h-7 w-7 items-center justify-center rounded-full border border-primary-200 text-[11px] text-primary-600 hover:bg-primary-50 focus:outline-none focus:ring-2 focus:ring-primary-500/30"
+                  class="wave inline-flex h-7 w-7 items-center justify-center rounded-full border border-primary-200 text-[11px] text-primary-600 hover:bg-primary-50 focus:outline-none focus:ring-2 focus:ring-primary-500/30"
                   title="Edit"
                 >✏️</a>
               </div>

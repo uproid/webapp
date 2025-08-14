@@ -1,0 +1,44 @@
+services:
+  webapp:
+    hostname: webapp
+    container_name: webapp
+    image: dart:stable
+    restart: always
+    ports:
+      - "8085:8085"
+      - "8181:8181"
+    build:
+      context: .
+    volumes:
+      - ./lib/:/www/lib/
+      - ./public/:/www/public/
+  
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    hostname: mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: PasswordMongoDB
+    ports:
+      - "27018:27017"
+    volumes:
+      - ${PWD-.}/mongodb:/data/db
+
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    hostname: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example_password
+      MYSQL_DATABASE: example_db
+      MYSQL_USER: example_user
+      MYSQL_PASSWORD: example_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - ${PWD-.}/mysql:/var/lib/mysql
+    networks:
+      - default

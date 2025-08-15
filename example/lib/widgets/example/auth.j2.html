@@ -1,56 +1,53 @@
-{% extends 'template/template.j2.html' %} 
-{% block title %} 
-{{ $t('sidebar.authExample') }} 
-{% endblock %} {% block content %}
-<div class="row my-5">
-  <h3>{{ $t('auth.test') }}</h3>
-  <div class="card card-primary bg-light my-3">
-    <span class="card-body">
+{% extends 'template/template.j2.html' %}
+{% block title %}
+{{ $t('sidebar.authExample') }}
+{% endblock %}
+{% block content %}
+<div class="my-6 space-y-6">
+  <h3 class="text-xl font-semibold text-slate-800">{{ $t('auth.test') }}</h3>
+
+  <div class="rounded-lg border border-slate-200 bg-white shadow-sm">
+    <div class="p-4 text-sm text-slate-700">
       {{ $t('auth.welcome') }}
-      <span class="text-primary">{{ user.name }}</span>
-      <br />
-    </span>
+      <span class="font-medium text-primary-600">{{ user.name }}</span>
+    </div>
   </div>
-  <div class="col">
-    <a href="/logout" class="btn btn-danger text-white"
-      >{{ $t('auth.logout') }}</a
-    >
+
+  <div>
+    <a href="/logout" class="wave inline-flex items-center rounded-md bg-rose-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-500/30">
+      {{ $t('auth.logout') }}
+    </a>
   </div>
-  <div class="card my-3 p-0">
-    <ul class="list-group list-group-flush m-0 p-0">
-      <li class="list-group-item">
-        <div class="row">
-          <b class="col-md-2">{{ $t('auth.view') }}</b>
-          <i class="col-md-10 text-info"
-            >example/lib/widgets/example/auth.j2.html</i
-          >
+
+  <div class="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
+    <ul class="divide-y divide-slate-200 text-sm">
+      <li class="p-3 hover:bg-slate-50">
+        <div class="flex flex-col gap-1 md:flex-row md:items-center">
+          <b class="w-40 shrink-0 text-slate-700">{{ $t('auth.view') }}</b>
+          <i class="text-primary-600">example/lib/widgets/example/auth.j2.html</i>
         </div>
       </li>
-      <li class="list-group-item">
-        <div class="row">
-          <b class="col-md-2">{{ $t('auth.controller') }}</b>
-          <i class="col-md-10 text-info"
-            >example/lib/controllers/home_controller.dart</i
-          >
+      <li class="p-3 hover:bg-slate-50">
+        <div class="flex flex-col gap-1 md:flex-row md:items-center">
+          <b class="w-40 shrink-0 text-slate-700">{{ $t('auth.controller') }}</b>
+          <i class="text-primary-600">example/lib/controllers/home_controller.dart</i>
         </div>
       </li>
-      <li class="list-group-item">
-        <div class="row">
-          <b class="col-md-2">{{ $t('auth.authController') }}</b>
-          <i class="col-md-10 text-info"
-            >example/lib/controllers/auth_controller.dart</i
-          >
+      <li class="p-3 hover:bg-slate-50">
+        <div class="flex flex-col gap-1 md:flex-row md:items-center">
+          <b class="w-40 shrink-0 text-slate-700">{{ $t('auth.authController') }}</b>
+          <i class="text-primary-600">example/lib/controllers/auth_controller.dart</i>
         </div>
       </li>
-      <li class="list-group-item">
-        <div class="row">
-          <b class="col-md-2">{{ $t('auth.router') }}</b>
-          <i class="col-md-10 text-info">example/lib/route/web_route.dart</i>
+      <li class="p-3 hover:bg-slate-50">
+        <div class="flex flex-col gap-1 md:flex-row md:items-center">
+          <b class="w-40 shrink-0 text-slate-700">{{ $t('auth.router') }}</b>
+          <i class="text-primary-600">example/lib/route/web_route.dart</i>
         </div>
       </li>
     </ul>
     <div class="card-body">
-      <pre dir="ltr" class="prettyprint border-0">
+      <pre dir="ltr" class="prettyprint border-0 m-5">
         <code class="language-dart">
 ...
 /// {{ $t('auth.routeExample') }}
@@ -70,9 +67,7 @@ WebRoute(
   rq: rq,
   index: authController.logout,
 )
-...
-        </code>
-      </pre>
+...</code></pre>
     </div>
   </div>
 </div>

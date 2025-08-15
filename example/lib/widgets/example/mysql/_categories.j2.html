@@ -1,70 +1,61 @@
-<div class="mt-5">
-  <h3>{{ $t('Example MySQL Categories') }}</h3>
-  <div class="table-responsive mt-4">
-    <table class="table table-striped p-0 m-0 border">
-      <thead>
-        <tr>
-          <th scope="col" class="col-1">{{ $t('ID') }}</th>
-          <th scope="col" class="col-9">{{ $t('Title') }}</th>
-          <th scope="col" class="text-center col-2">{{ $t('Books Count') }}</th>
-          <th scope="col" class="text-center col-1">{{ $t('Actions') }}</th>
+<div class="mt-8">
+  <h3 class="text-base font-semibold text-slate-800">{{ $t('Example MySQL Categories') }}</h3>
+  <div class="mt-4 overflow-x-auto rounded-md border border-slate-200 bg-white shadow-sm">
+    <table class="min-w-full text-sm text-slate-700">
+      <thead class="bg-slate-50 text-xs uppercase tracking-wide text-slate-600">
+        <tr class="divide-x divide-slate-200">
+          <th scope="col" class="w-16 px-3 py-2 text-left font-medium">{{ $t('ID') }}</th>
+          <th scope="col" class="px-3 py-2 text-left font-medium">{{ $t('Title') }}</th>
+          <th scope="col" class="w-32 px-3 py-2 text-center font-medium">{{ $t('Books Count') }}</th>
+          <th scope="col" class="w-20 px-3 py-2 text-center font-medium">{{ $t('Actions') }}</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody class="divide-y divide-slate-200">
         {% for category in categories|default([]) %}
-        <tr>
-          <td>{{ category.id }}</td>
-          <td>{{ category.title }}</td>
-          <td class="text-center">
-            <a
-                class="btn btn-sm btn-outline-info"
+        <tr class="hover:bg-slate-50">
+          <td class="px-3 py-2 font-mono text-[13px] text-slate-500">{{ category.id }}</td>
+            <td class="px-3 py-2">{{ category.title }}</td>
+            <td class="px-3 py-2 text-center">
+              <a
+                class="wave inline-flex h-7 items-center rounded border border-cyan-600 bg-cyan-50 px-2 text-[11px] font-medium text-cyan-700 hover:bg-cyan-100 focus:outline-none focus:ring-2 focus:ring-cyan-500/30"
                 href="{{ $l.updateUrlQuery($rq, {'filter_category_id': category.id|s}) }}"
-            >{{ category.count_books }}</a>
-          </td>
-          <td>
-            <a
-              data-href="{{ $l.updateUrlQuery($rq, {'id': category.id|s, 'action': 'delete_category'|s}) }}"
-              data-message="{{ $t('Are you sure you want to delete this category?') ~ ' (' ~ category.title ~ ')' }}"
-              class="btn btn-sm js-delete-links"
-            >
-              <i class="fas fa-trash text-danger"></i>
-            </a>
-          </td>
+              >{{ category.count_books }}</a>
+            </td>
+            <td class="px-3 py-2 text-center">
+              <a
+                data-href="{{ $l.updateUrlQuery($rq, {'id': category.id|s, 'action': 'delete_category'|s}) }}"
+                data-message="{{ $t('Are you sure you want to delete this category?') ~ ' (' ~ category.title ~ ')' }}"
+                class="wave js-delete-links inline-flex h-7 w-7 items-center justify-center rounded border border-transparent text-rose-600 hover:border-rose-200 hover:bg-rose-50 hover:text-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-500/30"
+                aria-label="{{ $t('Delete') }}"
+              >
+                <i class="fas fa-trash text-[13px]"></i>
+              </a>
+            </td>
         </tr>
         {% else %}
         <tr>
-          <td colspan="4" class="text-center">
-            {{ $t('No categories found') }}
-          </td>
+          <td colspan="4" class="px-3 py-6 text-center text-sm text-slate-500">{{ $t('No categories found') }}</td>
         </tr>
         {% endfor %}
       </tbody>
-      <tfoot>
+      <tfoot class="bg-slate-50/60">
         <tr>
-          <td colspan="4">
-            <form
-              method="POST"
-              action="{{ $l.updateUrlQuery($rq, {'action': 'add_category'}) }}"
-            >
-              <div class="input-group">
+          <td colspan="4" class="px-3 py-3">
+            <form method="POST" action="{{ $l.updateUrlQuery($rq, {'action': 'add_category'}) }}" class="flex flex-wrap items-start gap-2">
+              <div class="flex flex-col">
                 <input
                   type="text"
-                  class="form-control {{ $n('form/title/valid') }}"
                   name="title"
                   placeholder="Title"
                   required
                   value="{{ $n('form/title/value') }}"
+                  class="h-9 w-56 rounded-md border bg-white px-3 text-xs shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/30 {{ 'border-rose-500 ring-2 ring-rose-300' if $n('form/title/errors/0') else 'border-slate-300' }}"
                 />
-
-                <button class="btn btn-outline-primary" type="submit">
-                  {{ $t('database.table.button.add') }}
-                </button>
+                <div class="mt-1 text-[10px] text-rose-600 {{ '' if $n('form/title/errors/0') else 'hidden' }}">{{ $n('form/title/errors/0') }}</div>
               </div>
-              <div
-                class="invalid-feedback {{ '' if $n('form/title/success') else 'd-block' }}"
-              >
-                {{ $n('form/title/errors/0') }}
-              </div>
+              <button type="submit" class="wave inline-flex h-9 items-center rounded-md border border-primary-600 bg-primary-50 px-3 text-xs font-medium text-primary-700 hover:bg-primary-100 focus:outline-none focus:ring-2 focus:ring-primary-500/30">
+                {{ $t('database.table.button.add') }}
+              </button>
             </form>
           </td>
         </tr>

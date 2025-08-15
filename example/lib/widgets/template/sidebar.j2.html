@@ -1,161 +1,179 @@
 <!-- Sidebar -->
-<aside id="sidebar" class="bg-body-tertiary overflow-auto">
-  <div class="h-100 p-2 position-fixed overflow-auto" style="width: 260px;">
-    <ul class="nav nav-pills flex-column mb-auto p-0">
-      <li class="nav-item">
+{% set dir = $t('dir') %}
+<aside id="sidebar" class="fixed top-[56px] ltr:left-0 rtl:right-0 bottom-0 z-40 w-[240px] overflow-y-auto ltr:border-r rtl:border-l border-outline/20 bg-surface text-on-surface/90 transform transition-transform duration-300 ease-in-out will-change-transform shadow-sm {{ 'translate-x-full' if dir=='rtl' else '-translate-x-full' }} no-transition" aria-hidden="true">
+  <div class="min-h-screen overflow-y-auto p-2">
+    <ul class="flex list-none flex-col gap-1 p-0">
+      <li>
         <a
           href="/"
-          class="nav-link {{ 'active' if $e.isPath('/') else '' }}"
+          class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/') else '' }}"
           aria-current="page"
         >
-          {{ $t('sidebar.home') }}
+          <i class="fa-solid fa-house w-5 text-black"></i>
+          <span>{{ $t('sidebar.home') }}</span>
         </a>
       </li>
-      <li class="nav-item">
+      <li>
         <a
           href="/info"
-          class="nav-link {{ 'active' if $e.isPath('/info') else '' }}"
+          class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/info') else '' }}"
           aria-current="page"
         >
-          {{ $t('sidebar.info') }}
+          <i class="fa-solid fa-circle-info w-5 text-black"></i>
+          <span>{{ $t('sidebar.info') }}</span>
         </a>
       </li>
-      <li class="nav-item">
+      <li>
         <a
           href="/example/form"
-          class="nav-link {{ 'active' if $e.isPath('/example/form') else '' }}"
+          class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/form') else '' }}"
           aria-current="page"
         >
-          {{ $t('sidebar.formExample') }}
+          <i class="fa-solid fa-pen-to-square w-5 text-black"></i>
+          <span>{{ $t('sidebar.formExample') }}</span>
         </a>
       </li>
-      <li class="nav-item">
+      <li>
         <a
           href="/example/cookie"
-          class="nav-link {{ 'active' if $e.isPath('/example/cookie') else '' }}"
+          class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/cookie') else '' }}"
           aria-current="page"
         >
-          {{ $t('sidebar.cookieExample') }}
+          <i class="fa-solid fa-cookie-bite w-5 text-black"></i>
+          <span>{{ $t('sidebar.cookieExample') }}</span>
         </a>
       </li>
-      <li class="nav-item">
+      <li>
         <a
           href="/example/route"
-          class="nav-link {{ 'active' if $e.isPath('/example/route') else '' }}"
+          class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/route') else '' }}"
           aria-current="page"
         >
-          {{ $t('sidebar.routeExample') }}
+          <i class="fa-solid fa-route w-5 text-black"></i>
+          <span>{{ $t('sidebar.routeExample') }}</span>
         </a>
       </li>
-      <li class="nav-item">
+      <li>
         <a
           href="/example/socket"
-          class="nav-link {{ 'active' if $e.isPath('/example/socket') else '' }}"
+          class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/socket') else '' }}"
           aria-current="page"
         >
-          {{ $t('sidebar.socketExample') }}
+          <i class="fa-solid fa-plug w-5 text-black"></i>
+          <span>{{ $t('sidebar.socketExample') }}</span>
         </a>
       </li>
-      <li class="nav-item">
+      <li>
         <a
           href="/example/email"
-          class="nav-link {{ 'active' if $e.isPath('/example/email') else '' }}"
+          class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/email') else '' }}"
           aria-current="page"
         >
-          {{ $t('sidebar.emailExample') }}
+          <i class="fa-solid fa-envelope w-5 text-black"></i>
+          <span>{{ $t('sidebar.emailExample') }}</span>
         </a>
       </li>
-      <li class="nav-item">
+      <li>
         <a
           href="/example/panel"
-          class="nav-link {{ 'active' if $e.isPath('/example/panel') else '' }}"
+          class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/panel') else '' }}"
           aria-current="page"
         >
-          {{ $t('sidebar.authExample') }}
+          <i class="fa-solid fa-user-shield w-5 text-black"></i>
+          <span>{{ $t('sidebar.authExample') }}</span>
         </a>
       </li>
-      <li class="nav-item">
+      <li>
         <a
           href="/example/language"
-          class="nav-link {{ 'active' if $e.isPath('/example/language') else '' }}"
+          class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/language') else '' }}"
           aria-current="page"
         >
-          {{ $t('sidebar.languageExample') }}
+          <i class="fa-solid fa-language w-5 text-black"></i>
+          <span>{{ $t('sidebar.languageExample') }}</span>
         </a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link collapsed d-flex justify-content-between align-items-center" 
-          data-bs-toggle="collapse" 
-          href="#collapseExample" 
-          style="overflow: hidden; position: relative;" 
-          aria-expanded="false">
-          
-          <span>Debug Example</span>
-          <i class="fas fa-angle-down rotate-icon"></i>
-        </a>
-        <ul
-          class="collapse nav nav-pills ps-3 {{ 'show' if $e.isPath('/example/error') or $e.isPath('/example/dump') else '' }}"
-          id="collapseExample"
-        >
-          <li class="nav-item w-100">
-            <a
-              href="/example/error"
-              class="nav-link {{ 'active' if $e.isPath('/example/error') else '' }}"
-              aria-current="page"
-            >
-              {{ $t('sidebar.errorExample') }}
-            </a>
-          </li>
-          <li class="nav-item w-100">
-            <a
-              href="/example/dump"
-              class="nav-link {{ 'active' if $e.isPath('/example/dump') else '' }}"
-              aria-current="page"
-            >
-              {{ $t('sidebar.dumpExample') }}
-            </a>
-          </li>
-        </ul>
+
+      <li>
+        <details class="group" {{ 'open' if $e.isPath('/example/error') or $e.isPath('/example/dump') else '' }}>
+          <summary class="flex cursor-pointer list-none items-center justify-between rounded-md px-3 py-2 text-sm hover:bg-primary-50">
+            <span class="inline-flex items-center gap-2">
+              <i class="fa-solid fa-bug w-5 text-black"></i>
+              <span>Debug Example</span>
+            </span>
+            <i class="fas fa-angle-down transition-transform group-open:rotate-180"></i>
+          </summary>
+          <ul class="mt-1 space-y-1 border-l border-outline/20 pl-4">
+            <li>
+              <a
+                href="/example/error"
+                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/error') else '' }}"
+                aria-current="page"
+              >
+                <i class="fa-solid fa-triangle-exclamation w-5 text-black"></i>
+                <span>{{ $t('sidebar.errorExample') }}</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="/example/dump"
+                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/dump') else '' }}"
+                aria-current="page"
+              >
+                <i class="fa-solid fa-code w-5 text-black"></i>
+                <span>{{ $t('sidebar.dumpExample') }}</span>
+              </a>
+            </li>
+          </ul>
+        </details>
       </li>
+
       {% if mongoActive %}
-      <li class="nav-item w-100"></li>
+      <li>
         <a
           href="/example/database"
-          class="nav-link {{ 'active' if $e.isPath('/example/database') else '' }}"
+          class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/database') else '' }}"
           aria-current="page"
         >
-          {{ $t('sidebar.monogdbExample') }}
+          <i class="fa-solid fa-database w-5 text-black"></i>
+          <span>{{ $t('sidebar.monogdbExample') }}</span>
         </a>
       </li>
       {% endif %}
-      <li class="nav-item w-100"></li>
+
+      <li>
         <a
           href="/example/pagination"
-          class="nav-link {{ 'active' if $e.isPath('/example/pagination') else '' }}"
+          class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/pagination') else '' }}"
           aria-current="page"
         >
-          {{ $t('sidebar.paginationExample') }}
+          <i class="fa-solid fa-list-ol w-5 text-black"></i>
+          <span>{{ $t('sidebar.paginationExample') }}</span>
         </a>
       </li>
+
       {% if mongoActive %}
-      <li class="nav-item w-100"></li>
+      <li>
         <a
           href="/example/person"
-          class="nav-link {{ 'active' if $e.isPath('/example/person') else '' }}"
+          class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/person') else '' }}"
           aria-current="page"
         >
-          Example Free model DB
+          <i class="fa-solid fa-user-group w-5 text-black"></i>
+          <span>Example Free model DB</span>
         </a>
       </li>
       {% endif %}
+
       {% if mysqlActive %}
-      <li class="nav-item w-100"></li>
+      <li>
         <a
           href="/example/mysql"
-          class="nav-link {{ 'active' if $e.isPath('/example/mysql') else '' }}"
+          class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/mysql') else '' }}"
           aria-current="page"
         >
-          {{ $t('MySQL Example') }}
+          <i class="fa-solid fa-database w-5 text-black"></i>
+          <span>{{ $t('MySQL Example') }}</span>
         </a>
       </li>
       {% endif %}

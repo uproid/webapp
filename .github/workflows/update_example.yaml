@@ -15,7 +15,7 @@ jobs:
 
           cd example
           git init
-          git remote add origin https://github.com/uproid/example-webapp-docker.git
+          git remote add origin https://<USEKEY>@github.com/uproid/example-webapp-docker.git
           git add .
           git commit -m "Update from main repo"
           git push --force origin main

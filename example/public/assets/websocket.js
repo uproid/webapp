@@ -97,7 +97,11 @@ if (videoElement) {
     });
 
     document.getElementById('btn-stop-stream')?.addEventListener('click', function () {
-        //document.getElementById('videoStream').classList.add("d-none");
+        const vs = document.getElementById('videoStream');
+        if (vs) {
+            vs.classList.add('d-none');
+            vs.classList.add('hidden');
+        }
         mediaRecorder.stop();
 
         var localVideo = document.getElementById('localVideo');
@@ -109,7 +113,11 @@ if (videoElement) {
     });
 
     document.getElementById('btn-socket-stream')?.addEventListener('click', function () {
-        document.getElementById('videoStream').classList.remove("d-none");
+        const vs = document.getElementById('videoStream');
+        if (vs) {
+            vs.classList.remove('d-none');
+            vs.classList.remove('hidden');
+        }
 
         // دسترسی به دوربین و میکروفون
         navigator.mediaDevices.getUserMedia({ video: true, audio: true })

@@ -18,4 +18,4 @@ jobs:
           git remote add origin https://<USEKEY>@github.com/uproid/example-webapp-docker.git
           git add .
           git commit -m "Update from main repo"
-          git push --force origin main
+          git push --force origin master

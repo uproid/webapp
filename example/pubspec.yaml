@@ -16,5 +16,5 @@ dev_dependencies:
 
 dependencies:
   webapp:
-    # path: ../
+    path: ../
   watcher:

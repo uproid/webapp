@@ -1,3 +1,5 @@
+import 'package:webapp/src/views/htmler.dart';
+
 /// An abstract class representing a basic widget that provides an HTML layout as a string.
 ///
 /// The [WaStringWidget] class serves as a base class for widgets that involve
@@ -10,4 +12,5 @@ abstract class WaStringWidget {
   /// This layout is represented as a string and is intended to be extended
   /// or overridden by subclasses to provide custom HTML content.
   final String layout = '<html></html>';
+  Tag Function(Map args)? generateHtml;
 }

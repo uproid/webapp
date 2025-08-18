@@ -1,3 +1,4 @@
+import 'package:webapp/src/views/htmler.dart';
 import 'package:webapp/wa_server.dart';
 import 'package:webapp/src/widgets/wa_string_widget.dart';
 
@@ -67,4 +68,7 @@ class DumpWodget implements WaStringWidget {
   </html>
   $_bs endif $_be
   """;
+
+  @override
+  Tag Function(Map args)? generateHtml;
 }

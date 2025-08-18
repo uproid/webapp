@@ -415,9 +415,10 @@ class WebRequest {
     }
 
     addParam('status', status);
-
     return renderView(
-      path: errorWidget.layout,
+      path: errorWidget.generateHtml != null
+          ? errorWidget.generateHtml!(getParams()).toHtml(pretty: true)
+          : errorWidget.layout,
       status: status,
       isFile: false,
       toData: toData,

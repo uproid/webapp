@@ -42,13 +42,47 @@ class ErrorWidget implements WaStringWidget {
               --color-warn: #ffc861;
               --color-text: #e6ebf1;
               --color-text-dim: #9aa4b1;
+              --row-alt: #1b2026;
+              --row-hover: #242b33;
+              --bg-global: radial-gradient(circle at 25% 15%, #1d2430, #0f1115 60%) fixed;
+              --table-head-bg: linear-gradient(90deg, #252c34, #20252c);
+              --table-head-text: var(--color-text-dim);
+              --error-box-bg: linear-gradient(135deg, #2a1217, #361a1f 55%, #331319);
+              --error-box-border: rgba(255,76,96,.45);
+              --error-box-text: #ffd9de;
               --radius-sm: 6px;
               --radius-md: 12px;
               --radius-lg: 18px;
               --shadow-sm: 0 2px 4px -1px rgba(0,0,0,.4),0 1px 1px rgba(0,0,0,.25);
               --shadow-md: 0 4px 18px -2px rgba(0,0,0,.55),0 2px 4px rgba(0,0,0,.35);
               --gradient-accent: linear-gradient(135deg,#3da9fc,#6d67ff 60%,#b44cff);
-              font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Arial, sans-serif;
+              font-family: 'Courier New', Courier, 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Arial, sans-serif;
+            }
+
+            /* Light theme overrides */
+            body[data-theme='light'] {
+              --color-bg: #fafbfc;
+              --color-bg-alt: #ffffff;
+              --color-surface: #ffffff;
+              --color-border: #e1e8f0;
+              --color-accent: #6366f1;
+              --color-accent-glow: 99, 102, 241;
+              --color-error: #ef4444;
+              --color-error-soft: #fef2f2;
+              --color-warn: #f59e0b;
+              --color-text: #1f2937;
+              --color-text-dim: #6b7280;
+              --row-alt: #f8fafc;
+              --row-hover: #f1f5f9;
+              --bg-global: linear-gradient(135deg, #ffffff 0%, #f8fafc 25%, #f1f5f9 100%);
+              --table-head-bg: linear-gradient(135deg, #f8fafc, #f1f5f9);
+              --table-head-text: #374151;
+              --error-box-bg: linear-gradient(135deg, #fef2f2, #fef7f7);
+              --error-box-border: #fecaca;
+              --error-box-text: #b91c1c;
+              --gradient-accent: linear-gradient(135deg, #6366f1, #8b5cf6 60%, #ec4899);
+              --shadow-sm: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.04);
+              --shadow-md: 0 4px 16px rgba(0,0,0,.06), 0 2px 8px rgba(0,0,0,.04);
             }
 
             * { box-sizing: border-box; }
@@ -56,10 +90,11 @@ class ErrorWidget implements WaStringWidget {
             body {
               margin: 0;
               padding: clamp(16px, 3vw, 40px);
-              background: radial-gradient(circle at 25% 15%, #1d2430, #0f1115 60%) fixed;
+              background: var(--bg-global);
               color: var(--color-text);
               -webkit-font-smoothing: antialiased;
               line-height: 1.45;
+              transition: background .4s ease, color .25s ease;
             }
 
             h1 {
@@ -117,17 +152,18 @@ class ErrorWidget implements WaStringWidget {
             }
 
             .error-box {
-              background: linear-gradient(135deg, #2a1217, #361a1f 55%, #331319);
-              border: 1px solid rgba(255,76,96,.45);
+              background: var(--error-box-bg);
+              border: 1px solid var(--error-box-border);
               border-radius: var(--radius-md);
               padding: 16px 18px 14px;
-              color: #ffd9de;
+              color: var(--error-box-text);
               font-size: .9rem;
               line-height: 1.4;
               margin: 0 0 1.5rem;
               position: relative;
               overflow: auto;
               max-height: 260px;
+              transition: background .4s ease, color .25s ease, border-color .4s ease;
             }
             .error-box::-webkit-scrollbar { width: 10px; }
             .error-box::-webkit-scrollbar-track { background: #00000022; border-radius: 10px; }
@@ -144,28 +180,81 @@ class ErrorWidget implements WaStringWidget {
               overflow: hidden;
             }
             thead th {
-              background: linear-gradient(90deg, #252c34, #20252c);
+              background: var(--table-head-bg);
               padding: 12px 14px;
               font-size: .78rem;
               letter-spacing: .15ch;
               font-weight: 600;
               text-transform: uppercase;
-              color: var(--color-text-dim);
+              color: var(--table-head-text);
               border-bottom: 1px solid var(--color-border);
+              transition: background .4s ease, color .25s ease;
             }
-            tbody th, tbody td { padding: 9px 12px; border-bottom: 1px solid #262d35; }
+            tbody th, tbody td { padding: 9px 12px; border-bottom: 1px solid var(--color-border); }
             tbody tr:last-child th, tbody tr:last-child td { border-bottom: none; }
-            tbody tr:nth-child(even) { background: #1b2026; }
-            tbody tr:hover { background: #242b33; }
+            tbody tr:nth-child(even) { background: var(--row-alt); }
+            tbody tr:hover { background: var(--row-hover); }
 
             .flag { text-align: center; width: 42px; font-size: 1.05rem; }
-            .flag[style] { box-shadow: inset 0 0 0 1px #ff4c60aa; border-radius: var(--radius-sm); }
+            .flag[style] { box-shadow: inset 0 0 0 1px #ff4c60aa; border-radius: var(--radius-sm); transition: background .4s ease; }
+            
+            /* Light mode specific overrides */
+            body[data-theme='light'] .flag[style] { box-shadow: inset 0 0 0 1px #ef4444cc; }
+            body[data-theme='light'] .flag[style*="#361a1f"] { background: #fef2f2 !important; }
+            body[data-theme='light'] td[style*='#ff6f7f'] { color: #dc2626 !important; }
+            body[data-theme='light'] .error-shell::before, 
+            body[data-theme='light'] .error-shell::after { display: none; }
+            body[data-theme='light'] h1 { 
+              filter: none; 
+              background: var(--gradient-accent);
+              -webkit-background-clip: text;
+              color: transparent;
+            }
+            body[data-theme='light'] .badge-code { 
+              background: var(--color-error-soft);
+              border-color: #fecaca;
+              box-shadow: 0 1px 3px rgba(239, 68, 68, 0.1);
+            }
+            body[data-theme='light'] .error-shell {
+              background: var(--color-bg-alt);
+              box-shadow: 0 10px 25px rgba(0,0,0,.04), 0 4px 10px rgba(0,0,0,.06);
+            }
 
             td code.vscode { color: var(--color-accent); font-weight: 500; }
 
             a { color: var(--color-accent); text-decoration: none; position: relative; }
             a::after { content:''; position:absolute; left:0; bottom:-2px; height:2px; width:100%; background: var(--gradient-accent); opacity:.35; transition:opacity .25s, transform .25s; transform:translateY(3px); }
             a:hover::after { opacity:.9; transform:translateY(0); }
+
+            /* Theme toggle (icon) */
+            .theme-toggle { position:absolute; top:14px; right:14px; z-index:5; }
+            .theme-toggle button#themeToggleBtn { 
+              width:44px; height:44px; 
+              border-radius:50%; 
+              border:1px solid var(--color-border); 
+              background: var(--color-bg-alt); 
+              cursor:pointer; 
+              display:flex; 
+              align-items:center; 
+              justify-content:center; 
+              font-size:1.2rem; 
+              color: var(--color-text-dim); 
+              box-shadow: var(--shadow-sm); 
+              transition: all .3s ease; 
+              user-select: none;
+            }
+            .theme-toggle button#themeToggleBtn:hover { 
+              color: var(--color-text); 
+              border-color: var(--color-accent); 
+              transform: rotate(15deg) scale(1.05); 
+            }
+            .theme-toggle button#themeToggleBtn:active { 
+              transform: scale(0.95); 
+            }
+            body[data-theme='light'] .theme-toggle button#themeToggleBtn { 
+              background: rgba(255,255,255,0.9); 
+              backdrop-filter: blur(8px); 
+            }
 
             /* Subtle fade-in */
             .error-shell, h1, .badge-code, table, .error-box { animation: fadeUp .6s ease; }
@@ -174,11 +263,23 @@ class ErrorWidget implements WaStringWidget {
         ])
       ]),
       h.Body(
-        attrs: {'style': 'max-width: 100%;'},
+        attrs: {'style': 'max-width: 100%;', 'data-theme': 'dark'},
         children: [
           h.Div(attrs: {
             'class': 'error-shell'
           }, children: [
+            h.Div(attrs: {
+              'class': 'theme-toggle'
+            }, children: [
+              h.Button(attrs: {
+                'id': 'themeToggleBtn',
+                'type': 'button',
+                'title': 'Toggle theme',
+                'aria-label': 'Switch between dark and light theme'
+              }, children: [
+                h.Text('🌙')
+              ])
+            ]),
             h.Div(
                 attrs: {'class': 'badge-code'},
                 children: [h.Text('STATUS $statusCode')]),
@@ -283,9 +384,37 @@ class ErrorWidget implements WaStringWidget {
             h.Script(children: [
               h.Raw("""
                 (function(){
+                  const STORAGE_KEY = 'errorTheme';
+                  const root = document.body;
+                  const btn = document.getElementById('themeToggleBtn');
+                  
+                  function applyTheme(theme){
+                    root.setAttribute('data-theme', theme);
+                    try { localStorage.setItem(STORAGE_KEY, theme); } catch(e) {}
+                    if(btn){ 
+                      btn.textContent = theme === 'dark' ? '🌙' : '☀️'; 
+                      btn.title = theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme';
+                    }
+                  }
+                  
+                  // Load saved theme or default to dark
+                  const saved = (function(){ try { return localStorage.getItem(STORAGE_KEY);} catch(e){ return null; } })();
+                  const initialTheme = (saved === 'light' || saved === 'dark') ? saved : (root.getAttribute('data-theme')||'dark');
+                  applyTheme(initialTheme);
+                  
+                  // Handle toggle click
+                  if(btn){
+                    btn.addEventListener('click', function(){
+                      const current = root.getAttribute('data-theme');
+                      const next = current === 'dark' ? 'light' : 'dark';
+                      applyTheme(next);
+                    });
+                  }
+                  
+                  // Linkify stack vscode paths
                   document.querySelectorAll('.vscode').forEach(function(element){
-                    var text = element.textContent;
-                    var regExp = /\/\/([^)*]+)/;
+                    var text = element.textContent || '';
+                    var regExp = "/\/\/([^)*]+)/";
                     var match = text.match(regExp);
                     if(match && match[1]) {
                       element.innerHTML = '<a href="vscode://file/' + match[1] + '">' + text + '</a>';

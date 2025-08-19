@@ -13,9 +13,9 @@ class ErrorWidget implements WaStringWidget {
 
   @override
   h.Tag Function(Map args)? generateHtml = (Map args) {
-    int statusCode = args['statusCode'] ?? 500;
+    int statusCode = args['status'] ?? 500;
     String title = args['title'] ?? 'Error $statusCode';
-    String error = (args['error'] ?? 'No error message available.').toString();
+    String error = (args['error'] ?? '').toString();
     List stack = args['stack'] ?? [];
 
     return h.Html(children: [
@@ -97,10 +97,10 @@ class ErrorWidget implements WaStringWidget {
               transition: background .4s ease, color .25s ease;
             }
 
-            h1 {
+            h3 {
               margin: 0 0 .75rem;
-              font-size: clamp(2.2rem, 4vw, 3.1rem);
-              font-weight: 700;
+              font-size: 2.3rem;
+              font-weight: 600;
               letter-spacing: -1px;
               background: var(--gradient-accent);
               -webkit-background-clip: text;
@@ -108,9 +108,24 @@ class ErrorWidget implements WaStringWidget {
               filter: drop-shadow(0 3px 8px rgba(var(--color-accent-glow), .35));
             }
 
-            p { margin: 0 0 1.8rem; font-size: 1.05rem; color: var(--color-text-dim); }
+            p { margin: 0 0 1.2rem; font-size: 1.05rem; color: var(--color-text-dim); }
 
             code, pre { font-family: 'Fira Mono', 'Source Code Pro', monospace; }
+
+            .error-alert {
+              display: block;
+              background: var(--color-error-soft);
+              border: 1px solid var(--color-error);
+              border-radius: var(--radius-md);
+              padding: 12px 16px;
+              color: var(--color-error);
+              font-size: .9rem;
+              line-height: 1.4;
+              margin: 0 0 1.5rem;
+              overflow: auto;
+              max-height: 260px;
+              transition: background .4s ease, color .25s ease, border-color .4s ease;
+            }
 
             .error-shell {
               max-width: 900px;
@@ -204,7 +219,7 @@ class ErrorWidget implements WaStringWidget {
             body[data-theme='light'] td[style*='#ff6f7f'] { color: #dc2626 !important; }
             body[data-theme='light'] .error-shell::before, 
             body[data-theme='light'] .error-shell::after { display: none; }
-            body[data-theme='light'] h1 { 
+            body[data-theme='light'] h3 { 
               filter: none; 
               background: var(--gradient-accent);
               -webkit-background-clip: text;
@@ -229,7 +244,7 @@ class ErrorWidget implements WaStringWidget {
             /* Theme toggle (icon) */
             .theme-toggle { position:absolute; top:14px; right:14px; z-index:5; }
             .theme-toggle button#themeToggleBtn { 
-              width:44px; height:44px; 
+              width:32px; height:32px; 
               border-radius:50%; 
               border:1px solid var(--color-border); 
               background: var(--color-bg-alt); 
@@ -237,7 +252,7 @@ class ErrorWidget implements WaStringWidget {
               display:flex; 
               align-items:center; 
               justify-content:center; 
-              font-size:1.2rem; 
+              font-size:1.0rem; 
               color: var(--color-text-dim); 
               box-shadow: var(--shadow-sm); 
               transition: all .3s ease; 
@@ -256,21 +271,29 @@ class ErrorWidget implements WaStringWidget {
               backdrop-filter: blur(8px); 
             }
 
-            /* Subtle fade-in */
-            .error-shell, h1, .badge-code, table, .error-box { animation: fadeUp .6s ease; }
-            @keyframes fadeUp { from { opacity:0; transform: translateY(14px);} to { opacity:1; transform: translateY(0);} }
+            /* Fast shake animation */
+            .error-shell, h3, .badge-code, table, .error-box { 
+              animation: shakeIn .4s ease-out; 
+            }
+            @keyframes shakeIn { 
+              0% { opacity: 0; transform: translateX(-8px); }
+              25% { opacity: 0.7; transform: translateX(4px); }
+              50% { opacity: 0.9; transform: translateX(-2px); }
+              75% { opacity: 1; transform: translateX(1px); }
+              100% { opacity: 1; transform: translateX(0); }
+            }
           """)
         ])
       ]),
       h.Body(
         attrs: {'style': 'max-width: 100%;', 'data-theme': 'dark'},
         children: [
-          h.Div(attrs: {
-            'class': 'error-shell'
-          }, children: [
-            h.Div(attrs: {
-              'class': 'theme-toggle'
-            }, children: [
+          h.Div(classes: [
+            'error-shell'
+          ], children: [
+            h.Div(classes: [
+              'theme-toggle'
+            ], children: [
               h.Button(attrs: {
                 'id': 'themeToggleBtn',
                 'type': 'button',
@@ -278,25 +301,24 @@ class ErrorWidget implements WaStringWidget {
                 'aria-label': 'Switch between dark and light theme'
               }, children: [
                 h.Text('🌙')
-              ])
+              ]),
             ]),
-            h.Div(
-                attrs: {'class': 'badge-code'},
-                children: [h.Text('STATUS $statusCode')]),
-            h.H1(children: [h.Text("<Error $statusCode />")]),
+            h.H3(children: [h.Text("< Error $statusCode />")]),
             h.P(children: [
               h.Text("Oops! Something went wrong. Please try again later."),
             ]),
             if (WaServer.config.isLocalDebug) ...[
-              h.Div(
-                attrs: {'class': 'error-box'},
-                children: [
-                  h.Code(
-                    attrs: {'style': 'word-break: break-word;'},
-                    children: [h.Text(error)],
-                  ),
-                ],
-              ),
+              if (error.isNotEmpty) ...[
+                h.Div(
+                  attrs: {},
+                  children: [
+                    h.Code(
+                      classes: ['error-alert'],
+                      children: [h.Text(error.toString())],
+                    )
+                  ],
+                ),
+              ],
               if (stack.isNotEmpty) ...[
                 h.Table(
                   attrs: {},
@@ -304,7 +326,8 @@ class ErrorWidget implements WaStringWidget {
                     h.Thead(children: [
                       h.Tr(children: [
                         h.Th(
-                          attrs: {'colspan': '3', 'class': 'text-align:center'},
+                          attrs: {'colspan': '3'},
+                          classes: ['text-align:center'],
                           children: [h.Text('Error details')],
                         )
                       ]),
@@ -316,8 +339,8 @@ class ErrorWidget implements WaStringWidget {
                             h.Tr(
                               children: [
                                 h.Th(
+                                  classes: ['flag'],
                                   attrs: {
-                                    'class': 'flag',
                                     if (stackItem
                                         .toString()
                                         .contains('file://'))
@@ -327,7 +350,13 @@ class ErrorWidget implements WaStringWidget {
                                     if (stackItem
                                         .toString()
                                         .contains('file://'))
-                                      h.Text('⛔')
+                                      h.A(
+                                        classes: ['vscode'],
+                                        attrs: {'href': 'javascript:void(0);'},
+                                        children: [
+                                          h.Text('⛔'),
+                                        ],
+                                      )
                                     else if (stackItem
                                         .toString()
                                         .contains('package:webapp'))
@@ -354,8 +383,8 @@ class ErrorWidget implements WaStringWidget {
                                     },
                                     children: [
                                       h.Code(
+                                        classes: ['vscode'],
                                         attrs: {
-                                          'class': 'vscode',
                                           'style': 'word-break: break-all;'
                                         },
                                         children: [

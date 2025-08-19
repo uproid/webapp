@@ -131,13 +131,15 @@ class WaServer {
   Future<HttpServer> start([List<String>? args, bool awaitCommands = true]) {
     this._args = args ?? [];
     if (config.noStop) {
-      return runZonedGuarded(() => _run(args, awaitCommands: awaitCommands),
-          (error, stack) {
-        Console.e({
-          'error': error,
-          'stack': stack.toString().split("#"),
-        });
-      })!;
+      return runZonedGuarded(
+        () => _run(args, awaitCommands: awaitCommands),
+        (error, stack) {
+          Console.e({
+            'error': error,
+            'stack': stack.toString().split("#"),
+          });
+        },
+      )!;
     } else {
       return _run(args);
     }

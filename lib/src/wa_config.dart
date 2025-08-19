@@ -49,6 +49,7 @@ class WaConfigs {
     this.commentEnd = '?>',
     this.cookiePassword = "password",
     WaMysqlConfig? mysqlConfig,
+    this.poweredBy = "Dart with package:webapp",
   }) {
     this.appPath = appPath ?? pathApp;
     this.dbPath = dbPath ?? pathTo("db");
@@ -86,6 +87,7 @@ class WaConfigs {
   late final String publicDir;
   final String pathFilemanager;
   late final int fakeDelay;
+  final String poweredBy;
 
   /// DOMAIN CONFIG
   late final String domain;

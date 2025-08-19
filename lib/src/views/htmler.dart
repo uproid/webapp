@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:webapp/wa_server.dart';
+
 enum TagType {
   single, // Single tag, e.g., <br />
   double, // Double tag, e.g., <div></div>
@@ -10,14 +12,20 @@ abstract class Tag {
   String _tag = "html";
   late Map<dynamic, dynamic> attrs;
   late List<Tag> children;
+  List<String> classes;
 
   @override
   String toString() {
     return toHtml();
   }
 
-  Tag({Map<dynamic, dynamic>? attrs, List<Tag>? children}) {
+  Tag({
+    Map<dynamic, dynamic>? attrs,
+    List<Tag>? children,
+    this.classes = const [],
+  }) {
     this.attrs = attrs ?? {};
+    this.attrs['class'] = classes.join(' ');
     this.children = children ?? [];
   }
 
@@ -158,6 +166,35 @@ abstract class Tag {
   }
 }
 
+class Jinja extends Tag {
+  String command;
+  Jinja(this.command);
+  @override
+  String toHtml({bool pretty = false, int indent = 0}) {
+    return "${WaServer.config.blockStart} $command ${WaServer.config.blockEnd}";
+  }
+}
+
+class JinjaVar extends Tag {
+  String command;
+  JinjaVar(this.command);
+
+  @override
+  String toHtml({bool pretty = false, int indent = 0}) {
+    return '${WaServer.config.variableStart} $command ${WaServer.config.variableEnd}';
+  }
+}
+
+class JinjaComment extends Tag {
+  String content;
+  JinjaComment(this.content);
+
+  @override
+  String toHtml({bool pretty = false, int indent = 0}) {
+    return "${WaServer.config.commentStart} $content ${WaServer.config.commentEnd}";
+  }
+}
+
 class CustomTag extends Tag {
   @override
   CustomTag(
@@ -165,6 +202,7 @@ class CustomTag extends Tag {
     super.attrs,
     super.children,
     var type = TagType.double,
+    super.classes,
   }) {
     _tag = tag;
     this.type = type;
@@ -174,25 +212,28 @@ class CustomTag extends Tag {
 abstract class SingleTag extends Tag {
   @override
   get type => TagType.single;
-  SingleTag({super.attrs});
+  SingleTag({super.attrs, super.classes});
 }
 
 class Html extends Tag {
   @override
   get _tag => "html";
-  Html({super.attrs, super.children});
+  Html({super.attrs, super.children, super.classes});
 }
 
 class Head extends Tag {
   @override
   get _tag => "head";
-  Head({super.attrs, super.children});
+  Head({super.attrs, super.children, super.classes});
 }
 
 class Raw extends Tag {
   String content;
 
-  Raw(this.content);
+  Raw(
+    this.content, {
+    super.classes,
+  });
 
   @override
   String toHtml({bool pretty = false, int indent = 0}) {
@@ -203,7 +244,7 @@ class Raw extends Tag {
 class Text extends Tag {
   String content;
 
-  Text(this.content);
+  Text(this.content, {super.classes});
 
   @override
   String toHtml({bool pretty = false, int indent = 0}) {
@@ -214,359 +255,359 @@ class Text extends Tag {
 class Div extends Tag {
   @override
   get _tag => "div";
-  Div({super.attrs, super.children});
+  Div({super.attrs, super.children, super.classes});
 }
 
 class Code extends Tag {
   @override
   get _tag => "code";
-  Code({super.attrs, super.children});
+  Code({super.attrs, super.children, super.classes});
 }
 
 class Body extends Tag {
   @override
   get _tag => "body";
-  Body({super.attrs, super.children});
+  Body({super.attrs, super.children, super.classes});
 }
 
 class Span extends Tag {
   @override
   get _tag => "span";
-  Span({super.attrs, super.children});
+  Span({super.attrs, super.children, super.classes});
 }
 
 class A extends Tag {
   @override
   get _tag => "a";
-  A({super.attrs, super.children});
+  A({super.attrs, super.children, super.classes});
 }
 
 class B extends Tag {
   @override
   get _tag => "b";
-  B({super.attrs, super.children});
+  B({super.attrs, super.children, super.classes});
 }
 
 class I extends Tag {
   @override
   get _tag => "i";
-  I({super.attrs, super.children});
+  I({super.attrs, super.children, super.classes});
 }
 
 class U extends Tag {
   @override
   get _tag => "u";
-  U({super.attrs, super.children});
+  U({super.attrs, super.children, super.classes});
 }
 
 class P extends Tag {
   @override
   get _tag => "p";
-  P({super.attrs, super.children});
+  P({super.attrs, super.children, super.classes});
 }
 
 class Br extends SingleTag {
   @override
   get _tag => "br";
-  Br({super.attrs});
+  Br({super.attrs, super.classes});
 }
 
 class Hr extends SingleTag {
   @override
   get _tag => "hr";
-  Hr({super.attrs});
+  Hr({super.attrs, super.classes});
 }
 
 class Wbr extends SingleTag {
   @override
   get _tag => "wbr";
-  Wbr({super.attrs});
+  Wbr({super.attrs, super.classes});
 }
 
 class Button extends Tag {
   @override
   get _tag => "button";
-  Button({super.attrs, super.children});
+  Button({super.attrs, super.children, super.classes});
 }
 
 class Input extends SingleTag {
   @override
   get _tag => "input";
-  Input({super.attrs});
+  Input({super.attrs, super.classes});
 }
 
 class TextArea extends Tag {
   @override
   get _tag => "textarea";
-  TextArea({super.attrs, super.children});
+  TextArea({super.attrs, super.children, super.classes});
 }
 
 class Label extends Tag {
   @override
   get _tag => "label";
-  Label({super.attrs, super.children});
+  Label({super.attrs, super.children, super.classes});
 }
 
 class Form extends Tag {
   @override
   get _tag => "form";
-  Form({super.attrs, super.children});
+  Form({super.attrs, super.children, super.classes});
 }
 
 class Select extends Tag {
   @override
   get _tag => "select";
-  Select({super.attrs, super.children});
+  Select({super.attrs, super.children, super.classes});
 }
 
 class Option extends Tag {
   @override
   get _tag => "option";
-  Option({super.attrs, super.children});
+  Option({super.attrs, super.children, super.classes});
 }
 
 class Ul extends Tag {
   @override
   get _tag => "ul";
-  Ul({super.attrs, super.children});
+  Ul({super.attrs, super.children, super.classes});
 }
 
 class Li extends Tag {
   @override
   get _tag => "li";
-  Li({super.attrs, super.children});
+  Li({super.attrs, super.children, super.classes});
 }
 
 class Center extends Tag {
   @override
   get _tag => "center";
-  Center({super.attrs, super.children});
+  Center({super.attrs, super.children, super.classes});
 }
 
 class Main extends Tag {
   @override
   get _tag => "main";
-  Main({super.attrs, super.children});
+  Main({super.attrs, super.children, super.classes});
 }
 
 class Footer extends Tag {
   @override
   get _tag => "footer";
-  Footer({super.attrs, super.children});
+  Footer({super.attrs, super.children, super.classes});
 }
 
 class Header extends Tag {
   @override
   get _tag => "header";
-  Header({super.attrs, super.children});
+  Header({super.attrs, super.children, super.classes});
 }
 
 class Nav extends Tag {
   @override
   get _tag => "nav";
-  Nav({super.attrs, super.children});
+  Nav({super.attrs, super.children, super.classes});
 }
 
 class Section extends Tag {
   @override
   get _tag => "section";
-  Section({super.attrs, super.children});
+  Section({super.attrs, super.children, super.classes});
 }
 
 class Article extends Tag {
   @override
   get _tag => "article";
-  Article({super.attrs, super.children});
+  Article({super.attrs, super.children, super.classes});
 }
 
 class Template extends Tag {
   @override
   get _tag => "template";
-  Template({super.attrs, super.children});
+  Template({super.attrs, super.children, super.classes});
 }
 
 class Aside extends Tag {
   @override
   get _tag => "aside";
-  Aside({super.attrs, super.children});
+  Aside({super.attrs, super.children, super.classes});
 }
 
 class Ol extends Tag {
   @override
   get _tag => "ol";
-  Ol({super.attrs, super.children});
+  Ol({super.attrs, super.children, super.classes});
 }
 
 class H1 extends Tag {
   @override
   get _tag => "h1";
-  H1({super.attrs, super.children});
+  H1({super.attrs, super.children, super.classes});
 }
 
 class H2 extends Tag {
   @override
   get _tag => "h2";
-  H2({super.attrs, super.children});
+  H2({super.attrs, super.children, super.classes});
 }
 
 class H3 extends Tag {
   @override
   get _tag => "h3";
-  H3({super.attrs, super.children});
+  H3({super.attrs, super.children, super.classes});
 }
 
 class H4 extends Tag {
   @override
   get _tag => "h4";
-  H4({super.attrs, super.children});
+  H4({super.attrs, super.children, super.classes});
 }
 
 class H5 extends Tag {
   @override
   get _tag => "h5";
-  H5({super.attrs, super.children});
+  H5({super.attrs, super.children, super.classes});
 }
 
 class H6 extends Tag {
   @override
   get _tag => "h6";
-  H6({super.attrs, super.children});
+  H6({super.attrs, super.children, super.classes});
 }
 
 class H7 extends Tag {
   @override
   get _tag => "h7";
-  H7({super.attrs, super.children});
+  H7({super.attrs, super.children, super.classes});
 }
 
 class Small extends Tag {
   @override
   get _tag => "small";
-  Small({super.attrs, super.children});
+  Small({super.attrs, super.children, super.classes});
 }
 
 class Meta extends SingleTag {
   @override
   get _tag => "meta";
-  Meta({super.attrs});
+  Meta({super.attrs, super.classes});
 }
 
 class Link extends SingleTag {
   @override
   get _tag => "link";
-  Link({super.attrs});
+  Link({super.attrs, super.classes});
 }
 
 class Script extends Tag {
   @override
   get _tag => "script";
-  Script({super.attrs, super.children});
+  Script({super.attrs, super.children, super.classes});
 }
 
 class Noscript extends Tag {
   @override
   get _tag => "noscript";
-  Noscript({super.attrs});
+  Noscript({super.attrs, super.classes});
 }
 
 class Title extends Tag {
   @override
   get _tag => "title";
-  Title({super.attrs, super.children});
+  Title({super.attrs, super.children, super.classes});
 }
 
 class Style extends Tag {
   @override
   get _tag => "style";
-  Style({super.attrs, super.children});
+  Style({super.attrs, super.children, super.classes});
 }
 
 class Table extends Tag {
   @override
   get _tag => "table";
-  Table({super.attrs, super.children});
+  Table({super.attrs, super.children, super.classes});
 }
 
 class Thead extends Tag {
   @override
   get _tag => "thead";
-  Thead({super.attrs, super.children});
+  Thead({super.attrs, super.children, super.classes});
 }
 
 class Tbody extends Tag {
   @override
   get _tag => "tbody";
-  Tbody({super.attrs, super.children});
+  Tbody({super.attrs, super.children, super.classes});
 }
 
 class Tr extends Tag {
   @override
   get _tag => "tr";
-  Tr({super.attrs, super.children});
+  Tr({super.attrs, super.children, super.classes});
 }
 
 class Th extends Tag {
   @override
   get _tag => "th";
-  Th({super.attrs, super.children});
+  Th({super.attrs, super.children, super.classes});
 }
 
 class Td extends Tag {
   @override
   get _tag => "td";
-  Td({super.attrs, super.children});
+  Td({super.attrs, super.children, super.classes});
 }
 
 class Caption extends Tag {
   @override
   get _tag => "caption";
-  Caption({super.attrs, super.children});
+  Caption({super.attrs, super.children, super.classes});
 }
 
 class Tfoot extends Tag {
   @override
   get _tag => "tfoot";
-  Tfoot({super.attrs, super.children});
+  Tfoot({super.attrs, super.children, super.classes});
 }
 
 class Comment extends Tag {
   @override
   get _tag => "!--";
-  Comment(String content) : super(children: [Raw(content)]);
+  Comment(String content) : super(children: [Raw(content)], classes: const []);
 }
 
 class Svg extends Tag {
   @override
   get _tag => "svg";
-  Svg({super.attrs, super.children});
+  Svg({super.attrs, super.children, super.classes});
 }
 
 class Path extends Tag {
   @override
   get _tag => "path";
-  Path({super.attrs, super.children});
+  Path({super.attrs, super.children, super.classes});
 }
 
 class Details extends Tag {
   @override
   get _tag => "details";
-  Details({super.attrs, super.children});
+  Details({super.attrs, super.children, super.classes});
 }
 
 class Summary extends Tag {
   @override
   get _tag => "summary";
-  Summary({super.attrs, super.children});
+  Summary({super.attrs, super.children, super.classes});
 }
 
 class Video extends Tag {
   @override
   get _tag => "video";
-  Video({super.attrs, super.children});
+  Video({super.attrs, super.children, super.classes});
 }
 
 class Img extends SingleTag {
   @override
   get _tag => "img";
-  Img({super.attrs});
+  Img({super.attrs, super.classes});
 }

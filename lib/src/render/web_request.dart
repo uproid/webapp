@@ -428,8 +428,9 @@ class WebRequest {
   Future<String> dump(dynamic object) async {
     addParam('output', WaJson.jsonEncoder(object));
     response.headers.contentType = ContentType.html;
+    var html = DumpWodget().generateHtml!({}).toHtml(pretty: true);
     var output = await this.renderView(
-      path: DumpWodget().layout,
+      path: html,
       isFile: false,
     );
     await writeAndClose(output);
@@ -565,7 +566,7 @@ class WebRequest {
     int status = 200,
   }) async {
     if (isClosed) return '';
-
+    response.headers.add('X-Powered-By', WaServer.config.poweredBy);
     if (toData) {
       return renderDataParam(status: status, data: viewParams);
     }

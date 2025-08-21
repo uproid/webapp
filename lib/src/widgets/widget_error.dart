@@ -18,17 +18,24 @@ class ErrorWidget implements WaStringWidget {
     String error = (args['error'] ?? '').toString();
     List stack = args['stack'] ?? [];
 
-    return h.Html(children: [
-      h.Head(children: [
-        h.Meta(attrs: {'charset': 'utf-8'}),
-        h.Meta(attrs: {'http-equiv': 'X-UA-Compatible', 'content': 'IE=edge'}),
-        h.Meta(attrs: {
-          'name': 'viewport',
-          'content': 'width=device-width, initial-scale=1'
-        }),
-        h.Title(children: [h.Text(title)]),
-        h.Style(children: [
-          h.Raw("""
+    return h.ArrayTag(
+      children: [
+        h.Doctype(),
+        h.Html(
+          children: [
+            h.Head(children: [
+              h.Meta(attrs: {'charset': 'utf-8'}),
+              h.Meta(attrs: {
+                'http-equiv': 'X-UA-Compatible',
+                'content': 'IE=edge'
+              }),
+              h.Meta(attrs: {
+                'name': 'viewport',
+                'content': 'width=device-width, initial-scale=1'
+              }),
+              h.Title(children: [h.Text(title)]),
+              h.Style(children: [
+                h.Raw("""
             /* ---------- Modern Error Page Styles ---------- */
             :root {
               --color-bg: #0f1115;
@@ -283,135 +290,143 @@ class ErrorWidget implements WaStringWidget {
               100% { opacity: 1; transform: translateX(0); }
             }
           """)
-        ])
-      ]),
-      h.Body(
-        attrs: {'style': 'max-width: 100%;', 'data-theme': 'dark'},
-        children: [
-          h.Div(classes: [
-            'error-shell'
-          ], children: [
-            h.Div(classes: [
-              'theme-toggle'
-            ], children: [
-              h.Button(attrs: {
-                'id': 'themeToggleBtn',
-                'type': 'button',
-                'title': 'Toggle theme',
-                'aria-label': 'Switch between dark and light theme'
-              }, children: [
-                h.Text('🌙')
-              ]),
+              ])
             ]),
-            h.H3(children: [h.Text("< Error $statusCode />")]),
-            h.P(children: [
-              h.Text("Oops! Something went wrong. Please try again later."),
-            ]),
-            if (WaServer.config.isLocalDebug) ...[
-              if (error.isNotEmpty) ...[
-                h.Div(
-                  attrs: {},
-                  children: [
-                    h.Code(
-                      classes: ['error-alert'],
-                      children: [h.Text(error.toString())],
-                    )
-                  ],
-                ),
-              ],
-              if (stack.isNotEmpty) ...[
-                h.Table(
-                  attrs: {},
-                  children: [
-                    h.Thead(children: [
-                      h.Tr(children: [
-                        h.Th(
-                          attrs: {'colspan': '3'},
-                          classes: ['text-align:center'],
-                          children: [h.Text('Error details')],
-                        )
-                      ]),
+            h.Body(
+              attrs: {'style': 'max-width: 100%;', 'data-theme': 'dark'},
+              children: [
+                h.Div(classes: [
+                  'error-shell'
+                ], children: [
+                  h.Div(classes: [
+                    'theme-toggle'
+                  ], children: [
+                    h.Button(attrs: {
+                      'id': 'themeToggleBtn',
+                      'type': 'button',
+                      'title': 'Toggle theme',
+                      'aria-label': 'Switch between dark and light theme'
+                    }, children: [
+                      h.Text('🌙')
                     ]),
-                    h.Tbody(
-                      children: [
-                        for (var stackItem in stack)
-                          if (stackItem.toString().isNotEmpty) ...[
-                            h.Tr(
-                              children: [
-                                h.Th(
-                                  classes: ['flag'],
-                                  attrs: {
-                                    if (stackItem
-                                        .toString()
-                                        .contains('file://'))
-                                      'style': 'background-color:#361a1f'
-                                  },
-                                  children: [
-                                    if (stackItem
-                                        .toString()
-                                        .contains('file://'))
-                                      h.A(
-                                        classes: ['vscode'],
-                                        attrs: {'href': 'javascript:void(0);'},
-                                        children: [
-                                          h.Text('⛔'),
-                                        ],
-                                      )
-                                    else if (stackItem
-                                        .toString()
-                                        .contains('package:webapp'))
-                                      h.A(
-                                        attrs: {
-                                          'target': '_blank',
-                                          'title':
-                                              'Report to WebApp Developers',
-                                          'href':
-                                              'https://github.com/uproid/webapp/issues'
-                                        },
-                                        children: [h.Text('🐛')],
-                                      )
-                                    else
-                                      h.Text('⚪')
-                                  ],
-                                ),
-                                if (stackItem
-                                    .toString()
-                                    .contains('file://')) ...[
-                                  h.Td(
-                                    attrs: {
-                                      'style': 'color:#ff6f7f; font-weight:500;'
-                                    },
+                  ]),
+                  h.H3(children: [h.Text("< Error $statusCode />")]),
+                  h.P(children: [
+                    h.Text(
+                        "Oops! Something went wrong. Please try again later."),
+                  ]),
+                  if (WaServer.config.isLocalDebug) ...[
+                    if (error.isNotEmpty) ...[
+                      h.Div(
+                        attrs: {},
+                        children: [
+                          h.Code(
+                            classes: ['error-alert'],
+                            children: [h.Text(error.toString())],
+                          )
+                        ],
+                      ),
+                    ],
+                    if (stack.isNotEmpty) ...[
+                      h.Table(
+                        attrs: {},
+                        children: [
+                          h.Thead(children: [
+                            h.Tr(children: [
+                              h.Th(
+                                attrs: {'colspan': '3'},
+                                classes: ['text-align:center'],
+                                children: [h.Text('Error details')],
+                              )
+                            ]),
+                          ]),
+                          h.Tbody(
+                            children: [
+                              for (var stackItem in stack)
+                                if (stackItem.toString().isNotEmpty) ...[
+                                  h.Tr(
                                     children: [
-                                      h.Code(
-                                        classes: ['vscode'],
+                                      h.Th(
+                                        classes: ['flag'],
                                         attrs: {
-                                          'style': 'word-break: break-all;'
+                                          if (stackItem
+                                              .toString()
+                                              .contains('file://'))
+                                            'style': 'background-color:#361a1f'
                                         },
                                         children: [
-                                          h.Text(stackItem.toString())
+                                          if (stackItem
+                                              .toString()
+                                              .contains('file://'))
+                                            h.A(
+                                              classes: ['vscode'],
+                                              attrs: {
+                                                'href': 'javascript:void(0);'
+                                              },
+                                              children: [
+                                                h.Text('⛔'),
+                                              ],
+                                            )
+                                          else if (stackItem
+                                              .toString()
+                                              .contains('package:webapp'))
+                                            h.A(
+                                              attrs: {
+                                                'target': '_blank',
+                                                'title':
+                                                    'Report to WebApp Developers',
+                                                'href':
+                                                    'https://github.com/uproid/webapp/issues'
+                                              },
+                                              children: [h.Text('🐛')],
+                                            )
+                                          else
+                                            h.Text('⚪')
                                         ],
                                       ),
+                                      if (stackItem
+                                          .toString()
+                                          .contains('file://')) ...[
+                                        h.Td(
+                                          attrs: {
+                                            'style':
+                                                'color:#ff6f7f; font-weight:500;'
+                                          },
+                                          children: [
+                                            h.Code(
+                                              classes: ['vscode'],
+                                              attrs: {
+                                                'style':
+                                                    'word-break: break-all;'
+                                              },
+                                              children: [
+                                                h.Text(stackItem.toString())
+                                              ],
+                                            ),
+                                          ],
+                                        )
+                                      ] else ...[
+                                        h.Td(
+                                          attrs: {
+                                            'style':
+                                                'color: var(--color-text-dim);'
+                                          },
+                                          children: [
+                                            h.Text(stackItem.toString())
+                                          ],
+                                        )
+                                      ]
                                     ],
-                                  )
-                                ] else ...[
-                                  h.Td(
-                                    attrs: {
-                                      'style': 'color: var(--color-text-dim);'
-                                    },
-                                    children: [h.Text(stackItem.toString())],
-                                  )
+                                  ),
                                 ]
-                              ],
-                            ),
-                          ]
-                      ],
-                    ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
                   ],
-                ),
-              ],
-            ],
-            h.Script(children: [
-              h.Raw("""
+                  h.Script(children: [
+                    h.Raw("""
                 (function(){
                   const STORAGE_KEY = 'errorTheme';
                   const root = document.body;
@@ -453,10 +468,13 @@ class ErrorWidget implements WaStringWidget {
                   });
                 })();
               """)
-            ])
-          ])
-        ],
-      ),
-    ]);
+                  ])
+                ])
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
   };
 }

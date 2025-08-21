@@ -7,10 +7,6 @@ import 'dart:math';
 import 'package:webapp/src/widgets/wa_string_widget.dart';
 import 'package:webapp/src/widgets/widget_dump.dart';
 import 'package:webapp/wa_model_less.dart';
-import 'package:webapp/src/render/asset_manager.dart';
-import 'package:webapp/src/render/authorization.dart';
-import 'package:webapp/src/router/request_methods.dart';
-import 'package:webapp/src/router/web_route.dart';
 import 'package:webapp/src/tools/console.dart';
 import 'package:webapp/src/tools/convertor/query_string.dart';
 import 'package:webapp/src/tools/convertor/safe_string.dart';
@@ -24,6 +20,7 @@ import 'package:jinja/jinja.dart';
 import 'package:jinja/loaders.dart';
 import 'package:mime/mime.dart';
 import 'package:mongo_dart/mongo_dart.dart';
+import 'package:webapp/wa_route.dart';
 import 'package:webapp/wa_server.dart';
 
 /// The `WebRequest` class handles HTTP requests and provides various methods
@@ -31,6 +28,8 @@ import 'package:webapp/wa_server.dart';
 /// methods for parsing request data, managing sessions, handling cookies,
 /// rendering views, redirecting, and more.
 class WebRequest {
+  StringBuffer buffer = StringBuffer();
+
   /// The [HttpRequest] instance associated with this request.
   final HttpRequest _rq;
   var _defaultContentType = ContentType.html;
@@ -652,6 +651,10 @@ class WebRequest {
       template = env.fromString(path);
     }
     var renderString = template.render(params);
+    if (buffer.isNotEmpty) {
+      renderString += buffer.toString();
+      buffer.clear();
+    }
     return renderString;
   }
 

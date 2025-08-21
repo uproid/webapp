@@ -1,6 +1,5 @@
 import '../core/local_events.dart';
 import 'package:webapp/wa_route.dart';
-
 import 'db/job_collection_free.dart';
 import 'db/person_collection_free.dart';
 import 'package:webapp/wa_model_less.dart';

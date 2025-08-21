@@ -4,15 +4,13 @@ import 'dart:io';
 import 'package:capp/capp.dart';
 import 'package:mysql_client/mysql_client.dart';
 import 'package:webapp/src/db/mysql/mysql_migration.dart';
-import 'package:webapp/src/tools/convertor/string_validator.dart';
+import 'package:webapp/src/widgets/widget_console.dart';
+import 'package:webapp/wa_route.dart';
 import 'package:webapp/wa_server.dart';
-import 'package:webapp/src/render/web_request.dart';
-import 'package:webapp/src/router/route.dart';
-import 'package:webapp/src/router/web_route.dart';
 import 'package:webapp/src/tools/console.dart';
 import 'package:webapp/src/tools/multi_language/language.dart';
-import 'package:webapp/src/tools/path.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
+import 'package:webapp/wa_tools.dart';
 
 /// A class that represents the web server for handling HTTP requests and database operations.
 ///
@@ -67,6 +65,8 @@ class WaServer {
     WaServer.config = configs;
   }
 
+  SocketManager? debugger;
+
   /// Adds a routing function to the server.
   ///
   /// The [router] function returns a [Future] containing a list of [WebRoute] based on the provided [WebRequest].
@@ -74,7 +74,114 @@ class WaServer {
   ///
   /// Returns the [WaServer] instance to allow method chaining.
   WaServer addRouting(Future<List<WebRoute>> Function(WebRequest rq) router) {
+    if (config.isLocalDebug) {
+      debugger = SocketManager(
+        this,
+        routes: {
+          'get_routes': SocketEvent(onMessage: (socket, data) async {
+            var res = await exploreAllRoutes(socket.rq);
+            debugger?.sendToAll({
+              'routes': res,
+            }, path: 'get_routes');
+          }),
+          'update_languages': SocketEvent(onMessage: (socket, data) async {
+            appLanguages = await MultiLanguage(config.languagePath).init();
+            await debugger?.sendToAll(
+              {'message': 'Language updated'},
+              path: 'update_languages',
+            );
+          }),
+          'restart': SocketEvent(onMessage: (socket, data) async {
+            await debugger?.sendToAll({}, path: 'restartStarted');
+            await stop(force: true);
+            await start();
+          }),
+          'get_data': SocketEvent(onMessage: (socket, data) async {
+            debugger?.sendToAll({
+              'error': {
+                'params': socket.rq.getParams(),
+                'uri': socket.rq.uri.toString(),
+                'buffer': socket.rq.buffer.toString().split('\n'),
+                'headers': socket.rq.headers.toString().split(';'),
+                'session_cookies': socket.rq.getAllSession(),
+              },
+            }, path: 'console');
+          }),
+          'reinit': SocketEvent(onMessage: (socket, data) async {
+            print("Server is restarting...");
+            this.restart();
+          }),
+        },
+      );
+
+      Console.onError.add((error, type) {
+        debugger?.sendToAll({
+          'error': error.toString(),
+          'type': type,
+        }, path: "console");
+      });
+
+      Console.onLogging.add((error, type) {
+        debugger?.sendToAll({
+          'message': error.toString(),
+          'type': type,
+        }, path: "log");
+      });
+
+      WaCron(
+        schedule: WaCron.evrySecond(1),
+        delayFirstMoment: false,
+        onCron: (index, cron) async {
+          debugger?.sendToAll({
+            'memory': ConvertSize.toLogicSizeString(ProcessInfo.currentRss),
+            'max_memory': ConvertSize.toLogicSizeString(ProcessInfo.maxRss),
+          }, path: "updateMemory");
+        },
+      ).start();
+
+      _webRoutes.add((rq) async {
+        rq.buffer.writeln("<script href='/debugger/console.js'></script>");
+
+        rq.addAsset(
+          Asset(
+            path: 'debugger/console.js',
+            rq: rq,
+          ),
+        );
+        return [
+          WebRoute(
+            path: 'debugger',
+            rq: rq,
+            index: () async {
+              await debugger?.requestHandel(rq, userId: "LOCAL_USER");
+              debugger?.sendToAll({
+                'type': 'user_connected',
+                'userId': "LOCAL_USER",
+              });
+              return rq.renderSocket();
+            },
+            children: [
+              WebRoute(
+                path: 'console.js',
+                rq: rq,
+                index: () async {
+                  return rq.renderString(
+                    text: ConsoleWidget().layout,
+                    contentType: ContentType(
+                      'text',
+                      'javascript',
+                      charset: 'utf-8',
+                    ),
+                  );
+                },
+              )
+            ],
+          )
+        ];
+      });
+    }
     _webRoutes.add(router);
+
     return this;
   }
 
@@ -118,7 +225,16 @@ class WaServer {
     }
 
     await db.close();
+    await mysqlDb.close();
+    _db = null;
+    _mysqlDb = null;
     server = null;
+  }
+
+  Future<void> restart() async {
+    await stop(force: true);
+    await Future.delayed(Duration(seconds: 2));
+    await start();
   }
 
   /// Starts the server and binds it to the specified IP and port.
@@ -389,6 +505,57 @@ class WaServer {
   /// The [cron] parameter is the [WaCron] instance to be registered.
   void registerCron(WaCron cron) {
     crons.add(cron);
+  }
+
+  Future<List<Map>> exploreAllRoutes(WebRequest rq) async {
+    var allRoutes = await this.getAllRoutes(rq);
+
+    List<Map> convert(List<WebRoute> routes, String parentPath, hasAuth) {
+      var result = <Map>[];
+
+      for (final route in routes) {
+        for (var method in route.methods) {
+          var map = route.toMap(
+            parentPath,
+            hasAuth || route.auth != null,
+            method,
+          );
+          result.addAll(map);
+        }
+        if (route.children.isNotEmpty) {
+          result.addAll(
+            convert(
+              route.children,
+              "$parentPath${route.path}",
+              hasAuth || route.auth != null,
+            ),
+          );
+
+          for (var epath in route.extraPath) {
+            result.addAll(
+              convert(
+                route.children,
+                "$parentPath$epath",
+                hasAuth || route.auth != null,
+              ),
+            );
+          }
+        }
+      }
+
+      return result;
+    }
+
+    var webRoutes = convert(allRoutes, '', false);
+    var index = 1;
+
+    webRoutes.sort(
+        (a, b) => a['fullPath'].toString().compareTo(b['fullPath'].toString()));
+    webRoutes = webRoutes.map((e) {
+      e['#'] = index++;
+      return e;
+    }).toList();
+    return webRoutes;
   }
 }
 

@@ -55,6 +55,8 @@ dependencies:
   capp: ^1.1.1
   mysql_client: ^0.0.27
   sqler: ^1.1.2
+  system_info2: ^4.0.0
+
   # sqler: 
   #   git:
   #     url: https://github.com/uproid/sqler.git

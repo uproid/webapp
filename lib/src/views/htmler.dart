@@ -25,7 +25,9 @@ abstract class Tag {
     this.classes = const [],
   }) {
     this.attrs = attrs ?? {};
-    this.attrs['class'] = classes.join(' ');
+    if (classes.isNotEmpty) {
+      this.attrs['class'] = classes.join(' ');
+    }
     this.children = children ?? [];
   }
 
@@ -168,10 +170,37 @@ abstract class Tag {
 
 class Jinja extends Tag {
   String command;
+
   Jinja(this.command);
+
   @override
   String toHtml({bool pretty = false, int indent = 0}) {
-    return "${WaServer.config.blockStart} $command ${WaServer.config.blockEnd}";
+    return '${WaServer.config.variableStart}'
+        ' $command '
+        '${WaServer.config.variableEnd}';
+  }
+}
+
+class JinjaBody extends Tag {
+  String commandUp;
+  String commandDown;
+  JinjaBody({
+    required this.commandUp,
+    required super.children,
+    required this.commandDown,
+  });
+  @override
+  String toHtml({bool pretty = false, int indent = 0}) {
+    var res = "${WaServer.config.blockStart}"
+        " $commandUp "
+        "${WaServer.config.blockEnd}";
+    for (var child in children) {
+      res += child.toHtml(pretty: pretty, indent: indent + 1);
+    }
+    res += "${WaServer.config.blockStart}"
+        " $commandDown "
+        "${WaServer.config.blockEnd}";
+    return res;
   }
 }
 
@@ -215,10 +244,36 @@ abstract class SingleTag extends Tag {
   SingleTag({super.attrs, super.classes});
 }
 
+class ArrayTag extends Tag {
+  @override
+  get _tag => "block";
+  ArrayTag({super.children});
+
+  @override
+  String toHtml({bool pretty = false, int indent = 0}) {
+    final buffer = StringBuffer();
+    for (var child in children) {
+      buffer.write(child.toHtml(pretty: pretty, indent: indent));
+    }
+    return buffer.toString();
+  }
+}
+
 class Html extends Tag {
   @override
   get _tag => "html";
   Html({super.attrs, super.children, super.classes});
+}
+
+class Doctype extends SingleTag {
+  List<String> params = <String>[];
+  @override
+  Doctype([this.params = const ['html']]);
+
+  @override
+  String toHtml({bool pretty = false, int indent = 0}) {
+    return '<!DOCTYPE ${params.join(" ")}>${pretty ? "\n" : ""}';
+  }
 }
 
 class Head extends Tag {

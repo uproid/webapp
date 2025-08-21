@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:logger/logger.dart';
 
+typedef LogCallback = void Function(Object log, String type);
+
 /// A utility class for logging messages with different severity levels.
 ///
 /// The [Console] class provides static methods for logging warnings, errors,
@@ -12,7 +14,11 @@ import 'package:logger/logger.dart';
 /// Console.i("This is an informational message.");
 /// Console.e("This is an error message.");
 /// ```
+///
 class Console {
+  static final onError = <LogCallback>[];
+  static final onLogging = <LogCallback>[];
+
   /// The [Logger] instance used for managing log messages.
   static final _logger = Logger(
     level: isTestRunning() ? Level.off : Level.debug,
@@ -43,7 +49,7 @@ class Console {
   /// The [object] parameter can be any type of object to be logged.
   static void w(object) {
     _logger.w(object);
-    _writeLog(object);
+    _writeLog(object, 'warning');
   }
 
   /// Logs an error message.
@@ -51,7 +57,10 @@ class Console {
   /// The [object] parameter can be any type of object to be logged.
   static void e(object) {
     _logger.e(object);
-    _writeLog(object);
+    _writeLog(object, 'error');
+    for (var callback in onError) {
+      callback(object, 'error');
+    }
   }
 
   /// Logs an informational message.
@@ -67,7 +76,7 @@ class Console {
   /// The [object] parameter can be any type of object to be logged.
   static void p(object) {
     _logger.f(object);
-    _writeLog(object);
+    _writeLog(object, 'fatal');
   }
 
   /// Logs a debug message.
@@ -75,15 +84,21 @@ class Console {
   /// The [object] parameter can be any type of object to be logged.
   static void d(object) {
     _logger.d(object);
-    _writeLog(object);
+    _writeLog(object, 'debug');
   }
 
   /// Writes the log to the console.
   ///
   /// This is a private method used internally by the logging methods
   /// to print the log message.
-  static void _writeLog(object) {
-    if (!isDebug) write(object);
+  static void _writeLog(object, [String type = 'info']) {
+    if (isDebug) {
+      onLogging.forEach((callback) {
+        callback(object, type);
+      });
+    } else {
+      write(object);
+    }
   }
 
   /// Prints the given [obj] to the console.

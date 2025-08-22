@@ -144,7 +144,7 @@ abstract class Tag {
     final innerIndentStr = '\t' * (indent + 1);
 
     if (type == TagType.single) {
-      return '$indentStr<$_tag$attr />\n';
+      return '$indentStr<$_tag$attr/>\n';
     }
 
     if (children.isEmpty) {

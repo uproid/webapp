@@ -651,7 +651,8 @@ class WebRequest {
       template = env.fromString(path);
     }
     var renderString = template.render(params);
-    if (buffer.isNotEmpty) {
+    if (buffer.isNotEmpty &&
+        response.headers.contentType?.mimeType == 'text/html') {
       renderString += buffer.toString();
       buffer.clear();
     }

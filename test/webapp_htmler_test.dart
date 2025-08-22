@@ -1,0 +1,66 @@
+import 'package:test/test.dart';
+import 'package:webapp/src/views/htmler.dart';
+import 'package:webapp/wa_server.dart';
+
+void main() {
+  var template = ArrayTag(
+    children: [
+      Doctype(),
+      Html(attrs: {
+        'lang': 'en'
+      }, children: [
+        Head(children: [
+          Meta(attrs: {'charset': 'UTF-8'}),
+          Meta(attrs: {
+            'name': 'viewport',
+            'content': 'width=device-width, initial-scale=1.0'
+          }),
+          Title(children: [Text('Test Page')]),
+        ]),
+        Body(children: [
+          H1(children: [Text('Hello, World!')]),
+          P(children: [Text('This is a test page.')]),
+          A(
+            attrs: {'href': 'https://example.com'},
+            children: [Text('Click here to visit example.com')],
+          ),
+        ]),
+      ]),
+    ],
+  );
+
+  group("HTML Renderer Tests", () {
+    test("Render simple HTML", () async {
+      var html = template.toHtml();
+      print(html);
+      expect(html, isNotNull);
+      expect(
+        html,
+        '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/>'
+        '<meta name="viewport" content="width=device-width, initial-s'
+        'cale=1.0"/><title>Test Page</title></head><body><h1>Hello, W'
+        'orld!</h1><p>This is a test page.</p><a href="https://exampl'
+        'e.com">Click here to visit example.com</a></body></html>',
+      );
+    });
+
+    test("Render HTML pretty", () async {
+      var html = template.toHtml(pretty: true);
+      var htmlLines = html.replaceAll('\n', '').replaceAll('\t', '');
+      var htmlMini = template.toHtml(pretty: false);
+      expect(htmlLines, htmlMini);
+    });
+
+    test('test for jinja', () async {
+      template.children[1].children[1].addChild(JinjaVar('test'));
+      WaServer.config = WaConfigs();
+
+      var html = template.toHtml();
+      expect(html, isNotNull);
+      expect(
+        html,
+        '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Test Page</title></head><body><h1>Hello, World!</h1><p>This is a test page.</p><a href="https://example.com">Click here to visit example.com</a><?= test ?></body></html>',
+      );
+    });
+  });
+}

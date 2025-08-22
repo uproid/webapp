@@ -74,7 +74,7 @@ class WaServer {
   ///
   /// Returns the [WaServer] instance to allow method chaining.
   WaServer addRouting(Future<List<WebRoute>> Function(WebRequest rq) router) {
-    if (config.isLocalDebug) {
+    if (config.enableLocalDebugger && config.isLocalDebug) {
       debugger = SocketManager(
         this,
         routes: {
@@ -232,7 +232,11 @@ class WaServer {
   }
 
   Future<void> restart() async {
-    await stop(force: true);
+    try {
+      await stop(force: true);
+    } catch (e) {
+      Console.e("Error on stop server: $e");
+    }
     await Future.delayed(Duration(seconds: 2));
     await start();
   }

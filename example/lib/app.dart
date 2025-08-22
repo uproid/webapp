@@ -40,6 +40,9 @@ WaConfigs configs = WaConfigs(
   variableEnd: "}}",
   commentStart: "{#",
   commentEnd: "#}",
+
+  /// Enable local debugger
+  enableLocalDebugger: (env['ENABLE_LOCAL_DEBUGGER'] ?? true).toString().toBool,
 );
 
 final server = WaServer(configs: configs);

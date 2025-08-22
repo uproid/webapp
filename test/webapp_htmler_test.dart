@@ -59,7 +59,12 @@ void main() {
       expect(html, isNotNull);
       expect(
         html,
-        '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Test Page</title></head><body><h1>Hello, World!</h1><p>This is a test page.</p><a href="https://example.com">Click here to visit example.com</a><?= test ?></body></html>',
+        '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/>'
+        '<meta name="viewport" content="width=device-width, initial-s'
+        'cale=1.0"/><title>Test Page</title></head><body><h1>Hello, W'
+        'orld!</h1><p>This is a test page.</p><a href="https://exampl'
+        'e.com">Click here to visit example.com</a><?= test ?></body>'
+        '</html>',
       );
     });
   });

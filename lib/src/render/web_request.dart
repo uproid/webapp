@@ -565,7 +565,7 @@ class WebRequest {
     int status = 200,
   }) async {
     if (isClosed) return '';
-    response.headers.add('X-Powered-By', WaServer.config.poweredBy);
+    // response.headers.add('X-Powered-By', WaServer.config.poweredBy);
     if (toData) {
       return renderDataParam(status: status, data: viewParams);
     }

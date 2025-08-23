@@ -975,13 +975,13 @@ class DebuggerStatusBar {
     controlSection.appendChild(controlTitle);
     
     // this.playBtn = this.createDropdownItem('AA', 'Continue');
-    // this.pauseBtn = this.createDropdownItem('||', 'Update Languages');
+    this.updateLangBtn = this.createDropdownItem('||', 'Update Languages');
     // this.stepBtn = this.createDropdownItem('DD', 'Step');
     // this.stopBtn = this.createDropdownItem('BB', 'Stop');
     this.restartBtn = this.createDropdownItem('CC', 'Restart');
     
     // controlSection.appendChild(this.playBtn);
-    // controlSection.appendChild(this.pauseBtn);
+    controlSection.appendChild(this.updateLangBtn);
     // controlSection.appendChild(this.stepBtn);
     // controlSection.appendChild(this.stopBtn);
     controlSection.appendChild(this.restartBtn);
@@ -1083,10 +1083,10 @@ class DebuggerStatusBar {
     //   this.continue();
     //   this.closeDropdown();
     // });
-    // this.pauseBtn.addEventListener('click', () => {
-    //   this.pause();
-    //   this.closeDropdown();
-    // });
+    this.updateLangBtn.addEventListener('click', () => {
+      this.updateLangBtn();
+      this.closeDropdown();
+    });
     // this.stepBtn.addEventListener('click', () => {
     //   this.step();
     //   this.closeDropdown();
@@ -1158,9 +1158,9 @@ class DebuggerStatusBar {
     this.setActiveButton(this.playBtn);
   }
   
-  pause() {
+  updateLangBtn() {
     window.socketDebugger.send(JSON.stringify({ path: 'update_languages' }));
-    this.setActiveButton(this.pauseBtn);
+    this.setActiveButton(this.updateLangBtn);
   }
   
   step() {

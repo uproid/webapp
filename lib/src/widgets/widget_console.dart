@@ -1195,7 +1195,6 @@ class DebuggerStatusBar {
   }
   
   setActiveButton(activeBtn) {
-    [this.playBtn, this.pauseBtn, this.stopBtn].forEach(btn => btn.classList.remove('active'));
     activeBtn.classList.add('active');
   }
   

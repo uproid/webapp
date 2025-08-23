@@ -1084,7 +1084,7 @@ class DebuggerStatusBar {
     //   this.closeDropdown();
     // });
     this.updateLangBtn.addEventListener('click', () => {
-      this.updateLangBtn();
+      this.updateLang();
       this.closeDropdown();
     });
     // this.stepBtn.addEventListener('click', () => {
@@ -1158,7 +1158,7 @@ class DebuggerStatusBar {
     this.setActiveButton(this.playBtn);
   }
   
-  updateLangBtn() {
+  updateLang() {
     window.socketDebugger.send(JSON.stringify({ path: 'update_languages' }));
     this.setActiveButton(this.updateLangBtn);
   }

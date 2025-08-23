@@ -114,7 +114,7 @@ class WebRequest {
     _rq.response.headers.add('Access-Control-Allow-Headers',
         'Origin, X-Requested-With, Content-Type, Accept, x-client-key, x-client-token, x-client-secret, Authorization');
     _rq.response.headers.add('Access-Control-Allow-Credentials', 'true');
-
+    _rq.response.headers.add('X-Powered-By', WaServer.config.poweredBy);
     await parseData();
     return this;
   }
@@ -565,7 +565,6 @@ class WebRequest {
     int status = 200,
   }) async {
     if (isClosed) return '';
-    // response.headers.add('X-Powered-By', WaServer.config.poweredBy);
     if (toData) {
       return renderDataParam(status: status, data: viewParams);
     }

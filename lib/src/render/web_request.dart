@@ -1382,7 +1382,7 @@ class WebRequest {
     /// When the request is HTTPS, the URL should be HTTPS as well.
     var port = _rq.uri.port;
     uri = uri.replace(scheme: uri.scheme);
-    if (port != 80 && port != 443) {
+    if (![80, 443, 0].contains(port)) {
       uri = uri.replace(port: port);
     }
     var url = uri.toString();

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:capp/capp.dart';
 import 'package:mysql_client/mysql_client.dart';
 import 'package:webapp/src/db/mysql/mysql_migration.dart';
+import 'package:webapp/src/render/mock_wsb_request.dart';
 import 'package:webapp/src/widgets/widget_console.dart';
 import 'package:webapp/wa_route.dart';
 import 'package:webapp/wa_server.dart';
@@ -374,9 +375,23 @@ class WaServer {
 
   /// Handles commands for the server, such as starting or stopping the server.
   Future<void> handleCommands(HttpServer server) async {
+    var welcomeWebApp = "\n"
+        "╔════════════════════════════════════════════════════╗\n"
+        "║  ██╗    ██╗███████╗██████╗  █████╗ ██████╗ ██████╗ ║\n"
+        "║  ██║    ██║██╔════╝██╔══██╗██╔══██╗██╔══██╗██╔══██╗║\n"
+        "║  ██║ █╗ ██║█████╗  ██████╔╝███████║██████╔╝██████╔╝║\n"
+        "║  ██║███╗██║██╔══╝  ██╔══██╗██╔══██║██╔═══╝ ██╔═══╝ ║\n"
+        "║  ╚███╔███╔╝███████╗██████╔╝██║  ██║██║     ██║     ║\n"
+        "║   ╚══╝╚══╝ ╚══════╝╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝     ║\n"
+        "╚════════════════════════════════════════════════════╝\n"
+        "  Welcome to WebApp ${info.version}...                \n";
+
+    CappConsole.write(welcomeWebApp);
+
     if (this._args.isNotEmpty) {
       Console.p("Server started with arguments: ${this._args.join(', ')}");
     }
+
     await _runCommands(this._args);
     final input = stdin.transform(utf8.decoder);
     await for (String line in input.transform(LineSplitter())) {
@@ -388,83 +403,217 @@ class WaServer {
     }
   }
 
+  CappManager _getCommandManager(List<String> args) => CappManager(
+        args: args,
+        main: CappController(
+          '',
+          options: [
+            CappOption(
+              name: 'help',
+              shortName: 'h',
+              description: 'Show help',
+            ),
+          ],
+          run: (c) async {
+            return CappConsole(c.manager.getHelp(), CappColors.warning);
+          },
+        ),
+        controllers: [
+          CappController(
+            'migrate',
+            options: [
+              CappOption(
+                name: 'init',
+                shortName: 'i',
+                description: 'Init migration',
+              ),
+              CappOption(
+                name: 'create',
+                shortName: 'c',
+                description: 'Create migration',
+              ),
+              CappOption(
+                name: 'rollback',
+                shortName: 'r',
+                description: 'Rollback migration',
+              ),
+              CappOption(
+                name: 'list',
+                shortName: 'l',
+                description: 'List migration',
+              ),
+            ],
+            description: 'Migration commands',
+            run: (c) async {
+              if (c.existsOption('init')) {
+                var res = await CappConsole.progress<List<String>>(
+                  "Initializing migration...",
+                  () async => MysqlMigration(mysqlDb).migrateInit(),
+                );
+                var index = 1;
+                var table = res.map((e) => [(index++).toString(), e]).toList();
+                if (table.isEmpty) {
+                  table.add(['No migrations to execute.']);
+                } else {
+                  table.insert(0, ['#', 'Migration Files']);
+                }
+                CappConsole.writeTable(table, color: CappColors.success);
+                return CappConsole("");
+              }
+
+              if (c.existsOption('create')) {
+                var res = await CappConsole.progress<String>(
+                  "Creating migration...",
+                  () async => MysqlMigration(mysqlDb).migrateCreate(),
+                );
+                return CappConsole(res);
+              }
+
+              if (c.existsOption('rollback')) {
+                int deep = c.getOption('rollback', def: '1').toInt(def: 1);
+                var res = await CappConsole.progress<String>(
+                  "Rolling back migration...",
+                  () async => MysqlMigration(mysqlDb).migrateRollback(deep),
+                );
+                return CappConsole(res);
+              }
+
+              if (c.existsOption('list')) {
+                var res = await MysqlMigration(mysqlDb).checkMigrationStatus();
+                res.insert(
+                    0, ["#", 'Migration Files', 'Executed', 'Created At']);
+                CappConsole.writeTable(res, color: CappColors.success);
+                return CappConsole("");
+              }
+
+              return CappConsole(
+                "Please run the migration commands",
+                CappColors.warning,
+              );
+            },
+          ),
+          CappController(
+            'language',
+            options: [
+              CappOption(
+                name: 'list',
+                shortName: 'l',
+                description: 'List languages',
+              ),
+              CappOption(
+                name: 'reload',
+                shortName: 'r',
+                description: 'Reload language',
+              )
+            ],
+            run: (c) async {
+              if (c.existsOption('list')) {
+                var languages = appLanguages.keys.toList();
+                var table = <List<String>>[];
+                var index = 1;
+                for (var lang in languages) {
+                  table.add([
+                    (index++).toString(),
+                    lang,
+                    appLanguages[lang]?.length.toString() ?? '0',
+                  ]);
+                }
+                if (table.isEmpty) {
+                  table.add(['No languages found.']);
+                } else {
+                  table.insert(0, ['#', 'Language', 'Strings']);
+                }
+                CappConsole.writeTable(table, color: CappColors.success);
+                return CappConsole("");
+              }
+
+              if (c.existsOption('reload')) {
+                var res = await CappConsole.progress<String>(
+                  "Reloading language...",
+                  () async {
+                    appLanguages =
+                        await MultiLanguage(config.languagePath).init();
+                    return appLanguages.length.toString();
+                  },
+                );
+                return CappConsole("Count of languages: ${res}");
+              }
+
+              return CappConsole("Language commands");
+            },
+          ),
+          CappController('info', options: [], run: (c) async {
+            CappConsole.writeTable(
+              [
+                ['Info', 'Details'],
+                ['WebApp version', info.version],
+                ['Dart Versions', Platform.version],
+                [
+                  'Memory Usage',
+                  ConvertSize.toLogicSizeString(ProcessInfo.currentRss)
+                ],
+                [
+                  'Max Memory Usage',
+                  ConvertSize.toLogicSizeString(ProcessInfo.maxRss)
+                ],
+                [
+                  'Socket Connections',
+                  (socketManager?.countClients ?? 0).toString(),
+                ],
+                ['Socket Users', (socketManager?.countUsers ?? 0).toString()],
+              ],
+              color: CappColors.info,
+            );
+            return CappConsole('\n');
+          }),
+          CappController(
+            'route',
+            options: [
+              CappOption(
+                name: 'all',
+                shortName: 'a',
+                description: 'Show all routes',
+              ),
+            ],
+            run: (c) async {
+              var routes = await exploreAllRoutes(FakeWebRequest());
+              var header = [
+                '#',
+                'Full Path',
+                'Methods',
+                'Type',
+                'Hosts/Ports',
+                'Auth'
+              ];
+              var table = <List<String>>[];
+              for (var route in routes) {
+                table.add([
+                  route['#'].toString(),
+                  route['fullPath'].toString(),
+                  route['method'].toString(),
+                  route['type'].toString(),
+                  route['hosts'].toString() + '/' + route['ports'].toString(),
+                  route['hasAuth'] == true ? 'Yes' : 'No',
+                ]);
+              }
+              CappConsole.writeTable([
+                ...[
+                  header,
+                  ...table,
+                ],
+              ], color: CappColors.success);
+              return CappConsole('\n');
+            },
+          )
+        ],
+      );
+
   Future<void> _runCommands(List<String> args) async {
     if (args.isEmpty) {
       return;
     }
 
-    final cmdManager = CappManager(
-      args: args,
-      main: CappController(
-        '',
-        options: [
-          CappOption(
-            name: 'help',
-            shortName: 'h',
-            description: 'Show help',
-          ),
-        ],
-        run: (c) async {
-          return CappConsole(c.manager.getHelp(), CappColors.warning);
-        },
-      ),
-      controllers: [
-        CappController(
-          'migrate',
-          options: [
-            CappOption(
-              name: 'init',
-              shortName: 'i',
-              description: 'Init migration',
-            ),
-            CappOption(
-              name: 'create',
-              shortName: 'c',
-              description: 'Create migration',
-            ),
-            CappOption(
-              name: 'rollback',
-              shortName: 'r',
-              description: 'Rollback migration',
-            ),
-          ],
-          description: 'Migration commands',
-          run: (c) async {
-            if (c.existsOption('init')) {
-              var res = await CappConsole.progress<String>(
-                "Initializing migration...",
-                () async => MysqlMigration(mysqlDb).migrateInit(),
-              );
-              return CappConsole(res);
-            }
-
-            if (c.existsOption('create')) {
-              var res = await CappConsole.progress<String>(
-                "Creating migration...",
-                () async => MysqlMigration(mysqlDb).migrateCreate(),
-              );
-              return CappConsole(res);
-            }
-
-            if (c.existsOption('rollback')) {
-              int deep = c.getOption('rollback', def: '1').toInt(def: 1);
-              var res = await CappConsole.progress<String>(
-                "Rolling back migration...",
-                () async => MysqlMigration(mysqlDb).migrateRollback(deep),
-              );
-              return CappConsole(res);
-            }
-
-            return CappConsole(
-              "Please run the migration commands",
-              CappColors.warning,
-            );
-          },
-        ),
-      ],
-    );
-
-    cmdManager.process();
+    _getCommandManager(args).process();
   }
 
   /// Connects to MongoDB using the connection string from the configuration.

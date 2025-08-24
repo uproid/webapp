@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
 import 'package:mysql_client/mysql_client.dart';
 import 'package:webapp/src/tools/console.dart';
@@ -78,10 +79,10 @@ class MysqlMigration {
   ///
   /// Returns a success message listing the executed migration files,
   /// or a message indicating no migrations were needed.
-  Future<String> migrateInit() async {
+  Future<List<String>> migrateInit() async {
     await _createTable();
     var files = await getMigrationFiles();
-    var executedFiles = [];
+    var executedFiles = <String>[];
     for (var file in files) {
       var filename = path.basename(file.path);
       var exists = await checkExcutedMigration(filename);
@@ -99,9 +100,9 @@ class MysqlMigration {
     }
 
     if (executedFiles.isEmpty) {
-      return 'No migrations to execute.';
+      return [];
     }
-    return 'Migration completed successfully:\n\n${executedFiles.join('\n')}';
+    return executedFiles;
   }
 
   /// Rolls back the most recent migrations.
@@ -239,5 +240,23 @@ class MysqlMigration {
     }
     res.sort((a, b) => a.path.compareTo(b.path));
     return res;
+  }
+
+  Future<List<List<String>>> checkMigrationStatus() async {
+    var migrationFiles = await getMigrationFiles();
+    var statusList = <List<String>>[];
+    var index = 1;
+    for (var file in migrationFiles) {
+      var fileName = path.basename(file.path);
+      var executed = await checkExcutedMigration(fileName);
+      statusList.add([
+        "${index++}",
+        fileName,
+        executed ? 'Yes' : 'No',
+        DateFormat('yyyy-MM-dd HH:mm:ss').format(file.statSync().modified),
+      ]);
+    }
+
+    return statusList;
   }
 }

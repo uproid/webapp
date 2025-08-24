@@ -1531,15 +1531,15 @@ class DebuggerStatusBar {
 
 
 // Initialize debugger when DOM is ready
-function initDebugger() {
+function initDebuggerWebpp() {
   window.debugger = new DebuggerStatusBar();
 }
 
 // Initialize based on document state
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initDebugger);
+  document.addEventListener('DOMContentLoaded', initDebuggerWebpp);
 } else {
-  initDebugger();
+  initDebuggerWebpp();
 }
 
 // Global function to open console with error data
@@ -1550,16 +1550,6 @@ window.openConsole = function(errorData) {
     console.error('Debugger not initialized yet');
   }
 };
-
-// Example usage:
-// openConsole({
-//   error: "Syntax Error",
-//   message: "Unexpected token at line 45",
-//   file: "app.js",
-//   line: 45,
-//   stack: "Error: Syntax Error\\n    at Parser.parse (app.js:45:10)\\n    at main (app.js:123:5)"
-// });
-
 
 var socketDebuggerEvents = {
     connected: function (data) {

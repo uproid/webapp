@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:capp/capp.dart';
 import 'package:mysql_client/mysql_client.dart';
 import 'package:webapp/src/db/mysql/mysql_migration.dart';
-import 'package:webapp/src/render/mock_wsb_request.dart';
+import 'package:webapp/src/render/fake_web_request.dart';
 import 'package:webapp/src/widgets/widget_console.dart';
 import 'package:webapp/wa_route.dart';
 import 'package:webapp/wa_server.dart';

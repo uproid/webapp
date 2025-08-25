@@ -16,7 +16,7 @@ dev_dependencies:
 
 dependencies:
   webapp:
-    #path: ../
+    path: ../
     # git: 
     #   url: https://github.com/uproid/webapp.git
     ##   ref: htmler

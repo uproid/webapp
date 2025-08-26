@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'package:capp/capp.dart';
 import 'package:mysql_client/mysql_client.dart';
@@ -388,37 +387,32 @@ class WaServer {
 
     CappConsole.write(welcomeWebApp);
 
-    if (this._args.isNotEmpty) {
-      Console.p("Server started with arguments: ${this._args.join(', ')}");
-    }
-
     await _runCommands(this._args);
-    final input = stdin.transform(utf8.decoder);
-    await for (String line in input.transform(LineSplitter())) {
-      line = line.trim();
-      line = line.replaceAll(RegExp('  '), ' ');
-      if (line.isNotEmpty) {
-        await _runCommands(line.split(' '));
-      }
-    }
   }
 
   CappManager _getCommandManager(List<String> args) => CappManager(
-        args: args,
         main: CappController(
           '',
-          options: [
-            CappOption(
-              name: 'help',
-              shortName: 'h',
-              description: 'Show help',
-            ),
-          ],
+          options: [],
           run: (c) async {
-            return CappConsole(c.manager.getHelp(), CappColors.warning);
+            return CappConsole.empty;
           },
         ),
+        args: args,
         controllers: [
+          CappController(
+            'help',
+            options: [
+              CappOption(
+                name: 'help',
+                shortName: 'h',
+                description: 'Show help',
+              ),
+            ],
+            run: (c) async {
+              return CappConsole(c.manager.getHelp(), CappColors.warning);
+            },
+          ),
           CappController(
             'migrate',
             options: [
@@ -604,7 +598,19 @@ class WaServer {
               ], color: CappColors.success);
               return CappConsole('\n');
             },
-          )
+          ),
+          CappController('exit', options: [], run: (c) async {
+            await CappConsole.progress(
+              "Bye bye!",
+              () async {
+                await stop(force: true);
+                await Future.delayed(Duration(seconds: 1), () {
+                  exit(0);
+                });
+              },
+              type: CappProgressType.circle,
+            );
+          })
         ],
       );
 
@@ -613,7 +619,10 @@ class WaServer {
       return;
     }
 
-    _getCommandManager(args).process();
+    return _getCommandManager(args).processWhile(
+      initArgs: args,
+      promptLabel: 'WebApp> ',
+    );
   }
 
   /// Connects to MongoDB using the connection string from the configuration.

@@ -120,7 +120,8 @@ void main() async {
       );
       var content = req.body;
       expect(
-        content.contains("<script href='/debugger/console.js'></script>"),
+        content.contains(
+            "<script href='http://localhost:${httpServer.port}/debugger/console.js'></script>"),
         true,
         reason:
             "Response success should contain '<script>' it used for debugging",

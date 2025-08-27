@@ -49,6 +49,8 @@ class WaConfigs {
     this.commentEnd = '?>',
     this.cookiePassword = "password",
     WaMysqlConfig? mysqlConfig,
+    this.poweredBy = "Dart with package:webapp",
+    this.enableLocalDebugger = false,
   }) {
     this.appPath = appPath ?? pathApp;
     this.dbPath = dbPath ?? pathTo("db");
@@ -86,6 +88,7 @@ class WaConfigs {
   late final String publicDir;
   final String pathFilemanager;
   late final int fakeDelay;
+  final String poweredBy;
 
   /// DOMAIN CONFIG
   late final String domain;
@@ -106,6 +109,18 @@ class WaConfigs {
   late final String cookiePassword;
   late final WaDBConfig dbConfig;
   late final WaMysqlConfig mysqlConfig;
+
+  /// Enable local debugger
+  /// This is useful for debugging the application in a local environment.
+  /// It allows you to inspect and modify the application state in real-time.
+  /// You can enable it by setting the [enableLocalDebugger] property to true.
+  /// the [enableLocalDebugger] property wills activate a debugger bar on frontend side.
+  /// This is useful for debugging the application in a local environment.
+  /// It allows you to inspect and modify the application state in real-time.
+  /// You can enable it by setting the [enableLocalDebugger] property to true.
+  /// Take attention that this will only work in a local environment.
+  /// dont activate it in production.
+  late bool enableLocalDebugger = false;
 
   bool get isLocalDebug {
     if (env['LOCAL_DEBUG'] != null) {

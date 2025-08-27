@@ -7,10 +7,6 @@ import 'dart:math';
 import 'package:webapp/src/widgets/wa_string_widget.dart';
 import 'package:webapp/src/widgets/widget_dump.dart';
 import 'package:webapp/wa_model_less.dart';
-import 'package:webapp/src/render/asset_manager.dart';
-import 'package:webapp/src/render/authorization.dart';
-import 'package:webapp/src/router/request_methods.dart';
-import 'package:webapp/src/router/web_route.dart';
 import 'package:webapp/src/tools/console.dart';
 import 'package:webapp/src/tools/convertor/query_string.dart';
 import 'package:webapp/src/tools/convertor/safe_string.dart';
@@ -24,6 +20,7 @@ import 'package:jinja/jinja.dart';
 import 'package:jinja/loaders.dart';
 import 'package:mime/mime.dart';
 import 'package:mongo_dart/mongo_dart.dart';
+import 'package:webapp/wa_route.dart';
 import 'package:webapp/wa_server.dart';
 
 /// The `WebRequest` class handles HTTP requests and provides various methods
@@ -31,6 +28,8 @@ import 'package:webapp/wa_server.dart';
 /// methods for parsing request data, managing sessions, handling cookies,
 /// rendering views, redirecting, and more.
 class WebRequest {
+  StringBuffer buffer = StringBuffer();
+
   /// The [HttpRequest] instance associated with this request.
   final HttpRequest _rq;
   var _defaultContentType = ContentType.html;
@@ -115,7 +114,7 @@ class WebRequest {
     _rq.response.headers.add('Access-Control-Allow-Headers',
         'Origin, X-Requested-With, Content-Type, Accept, x-client-key, x-client-token, x-client-secret, Authorization');
     _rq.response.headers.add('Access-Control-Allow-Credentials', 'true');
-
+    _rq.response.headers.add('X-Powered-By', WaServer.config.poweredBy);
     await parseData();
     return this;
   }
@@ -415,9 +414,10 @@ class WebRequest {
     }
 
     addParam('status', status);
-
     return renderView(
-      path: errorWidget.layout,
+      path: errorWidget.generateHtml != null
+          ? errorWidget.generateHtml!(getParams()).toHtml(pretty: true)
+          : errorWidget.layout,
       status: status,
       isFile: false,
       toData: toData,
@@ -427,8 +427,9 @@ class WebRequest {
   Future<String> dump(dynamic object) async {
     addParam('output', WaJson.jsonEncoder(object));
     response.headers.contentType = ContentType.html;
+    var html = DumpWodget().generateHtml!({}).toHtml(pretty: true);
     var output = await this.renderView(
-      path: DumpWodget().layout,
+      path: html,
       isFile: false,
     );
     await writeAndClose(output);
@@ -564,7 +565,6 @@ class WebRequest {
     int status = 200,
   }) async {
     if (isClosed) return '';
-
     if (toData) {
       return renderDataParam(status: status, data: viewParams);
     }
@@ -650,6 +650,11 @@ class WebRequest {
       template = env.fromString(path);
     }
     var renderString = template.render(params);
+    if (buffer.isNotEmpty &&
+        response.headers.contentType?.mimeType == 'text/html') {
+      renderString += buffer.toString();
+      buffer.clear();
+    }
     return renderString;
   }
 
@@ -1374,8 +1379,11 @@ class WebRequest {
     }
 
     /// When the request is HTTPS, the URL should be HTTPS as well.
+    var port = _rq.uri.port;
     uri = uri.replace(scheme: uri.scheme);
-
+    if (![80, 443, 0].contains(port)) {
+      uri = uri.replace(port: port);
+    }
     var url = uri.toString();
     return url;
   }

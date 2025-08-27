@@ -5,10 +5,12 @@ mongodb
 
 # Avoid committing pubspec.lock for library packages; see
 # https://dart.dev/guides/libraries/private-files#pubspeclock.
-./pubspec.lock
-./example/mongodb
+pubspec.lock
+example/mongodb
+example/mysql
 .DS_Store
 webapp_build
 example/mysql_data/
 example/pubspec.lock
 pubspec.lock
+**/node_modules/

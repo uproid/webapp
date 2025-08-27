@@ -1,18 +1,16 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'package:capp/capp.dart';
 import 'package:mysql_client/mysql_client.dart';
 import 'package:webapp/src/db/mysql/mysql_migration.dart';
-import 'package:webapp/src/tools/convertor/string_validator.dart';
+import 'package:webapp/src/render/fake_web_request.dart';
+import 'package:webapp/src/widgets/widget_console.dart';
+import 'package:webapp/wa_route.dart';
 import 'package:webapp/wa_server.dart';
-import 'package:webapp/src/render/web_request.dart';
-import 'package:webapp/src/router/route.dart';
-import 'package:webapp/src/router/web_route.dart';
 import 'package:webapp/src/tools/console.dart';
 import 'package:webapp/src/tools/multi_language/language.dart';
-import 'package:webapp/src/tools/path.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
+import 'package:webapp/wa_tools.dart';
 
 /// A class that represents the web server for handling HTTP requests and database operations.
 ///
@@ -67,6 +65,8 @@ class WaServer {
     WaServer.config = configs;
   }
 
+  SocketManager? debugger;
+
   /// Adds a routing function to the server.
   ///
   /// The [router] function returns a [Future] containing a list of [WebRoute] based on the provided [WebRequest].
@@ -74,7 +74,115 @@ class WaServer {
   ///
   /// Returns the [WaServer] instance to allow method chaining.
   WaServer addRouting(Future<List<WebRoute>> Function(WebRequest rq) router) {
+    if (config.enableLocalDebugger && config.isLocalDebug) {
+      debugger = SocketManager(
+        this,
+        routes: {
+          'get_routes': SocketEvent(onMessage: (socket, data) async {
+            var res = await exploreAllRoutes(socket.rq);
+            debugger?.sendToAll({
+              'routes': res,
+            }, path: 'get_routes');
+          }),
+          'update_languages': SocketEvent(onMessage: (socket, data) async {
+            appLanguages = await MultiLanguage(config.languagePath).init();
+            await debugger?.sendToAll(
+              {'message': 'Language updated'},
+              path: 'update_languages',
+            );
+          }),
+          'restart': SocketEvent(onMessage: (socket, data) async {
+            await debugger?.sendToAll({}, path: 'restartStarted');
+            await stop(force: true);
+            await start();
+          }),
+          'get_data': SocketEvent(onMessage: (socket, data) async {
+            debugger?.sendToAll({
+              'error': {
+                'params': socket.rq.getParams(),
+                'uri': socket.rq.uri.toString(),
+                'buffer': socket.rq.buffer.toString().split('\n'),
+                'headers': socket.rq.headers.toString().split(';'),
+                'session_cookies': socket.rq.getAllSession(),
+              },
+            }, path: 'console');
+          }),
+          'reinit': SocketEvent(onMessage: (socket, data) async {
+            print("Server is restarting...");
+            this.restart();
+          }),
+        },
+      );
+
+      Console.onError.add((error, type) {
+        debugger?.sendToAll({
+          'error': error.toString(),
+          'type': type,
+        }, path: "console");
+      });
+
+      Console.onLogging.add((error, type) {
+        debugger?.sendToAll({
+          'message': error.toString(),
+          'type': type,
+        }, path: "log");
+      });
+
+      WaCron(
+        schedule: WaCron.evrySecond(1),
+        delayFirstMoment: false,
+        onCron: (index, cron) async {
+          debugger?.sendToAll({
+            'memory': ConvertSize.toLogicSizeString(ProcessInfo.currentRss),
+            'max_memory': ConvertSize.toLogicSizeString(ProcessInfo.maxRss),
+          }, path: "updateMemory");
+        },
+      ).start();
+
+      _webRoutes.add((rq) async {
+        rq.buffer.writeln(
+            "<script href='${rq.url('/debugger/console.js')}'></script>");
+
+        rq.addAsset(
+          Asset(
+            path: rq.url('/debugger/console.js'),
+            rq: rq,
+          ),
+        );
+        return [
+          WebRoute(
+            path: 'debugger',
+            rq: rq,
+            index: () async {
+              await debugger?.requestHandel(rq, userId: "LOCAL_USER");
+              debugger?.sendToAll({
+                'type': 'user_connected',
+                'userId': "LOCAL_USER",
+              });
+              return rq.renderSocket();
+            },
+            children: [
+              WebRoute(
+                path: 'console.js',
+                rq: rq,
+                index: () async {
+                  return rq.renderString(
+                    text: ConsoleWidget().layout,
+                    contentType: ContentType(
+                      'text',
+                      'javascript',
+                      charset: 'utf-8',
+                    ),
+                  );
+                },
+              )
+            ],
+          )
+        ];
+      });
+    }
     _webRoutes.add(router);
+
     return this;
   }
 
@@ -118,7 +226,20 @@ class WaServer {
     }
 
     await db.close();
+    await mysqlDb.close();
+    _db = null;
+    _mysqlDb = null;
     server = null;
+  }
+
+  Future<void> restart() async {
+    try {
+      await stop(force: true);
+    } catch (e) {
+      Console.e("Error on stop server: $e");
+    }
+    await Future.delayed(Duration(seconds: 2));
+    await start();
   }
 
   /// Starts the server and binds it to the specified IP and port.
@@ -131,13 +252,15 @@ class WaServer {
   Future<HttpServer> start([List<String>? args, bool awaitCommands = true]) {
     this._args = args ?? [];
     if (config.noStop) {
-      return runZonedGuarded(() => _run(args, awaitCommands: awaitCommands),
-          (error, stack) {
-        Console.e({
-          'error': error,
-          'stack': stack.toString().split("#"),
-        });
-      })!;
+      return runZonedGuarded(
+        () => _run(args, awaitCommands: awaitCommands),
+        (error, stack) {
+          Console.e({
+            'error': error,
+            'stack': stack.toString().split("#"),
+          });
+        },
+      )!;
     } else {
       return _run(args);
     }
@@ -251,97 +374,255 @@ class WaServer {
 
   /// Handles commands for the server, such as starting or stopping the server.
   Future<void> handleCommands(HttpServer server) async {
-    if (this._args.isNotEmpty) {
-      Console.p("Server started with arguments: ${this._args.join(', ')}");
-    }
+    var welcomeWebApp = "\n"
+        "╔════════════════════════════════════════════════════╗\n"
+        "║  ██╗    ██╗███████╗██████╗  █████╗ ██████╗ ██████╗ ║\n"
+        "║  ██║    ██║██╔════╝██╔══██╗██╔══██╗██╔══██╗██╔══██╗║\n"
+        "║  ██║ █╗ ██║█████╗  ██████╔╝███████║██████╔╝██████╔╝║\n"
+        "║  ██║███╗██║██╔══╝  ██╔══██╗██╔══██║██╔═══╝ ██╔═══╝ ║\n"
+        "║  ╚███╔███╔╝███████╗██████╔╝██║  ██║██║     ██║     ║\n"
+        "║   ╚══╝╚══╝ ╚══════╝╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝     ║\n"
+        "╚════════════════════════════════════════════════════╝\n"
+        "  Welcome to WebApp ${info.version}...                \n";
+
+    CappConsole.write(welcomeWebApp);
+
     await _runCommands(this._args);
-    final input = stdin.transform(utf8.decoder);
-    await for (String line in input.transform(LineSplitter())) {
-      line = line.trim();
-      line = line.replaceAll(RegExp('  '), ' ');
-      if (line.isNotEmpty) {
-        await _runCommands(line.split(' '));
-      }
-    }
   }
+
+  CappManager _getCommandManager(List<String> args) => CappManager(
+        main: CappController(
+          '',
+          options: [],
+          run: (c) async {
+            return CappConsole.empty;
+          },
+        ),
+        args: args,
+        controllers: [
+          CappController(
+            'help',
+            options: [
+              CappOption(
+                name: 'help',
+                shortName: 'h',
+                description: 'Show help',
+              ),
+            ],
+            run: (c) async {
+              return CappConsole(c.manager.getHelp(), CappColors.warning);
+            },
+          ),
+          CappController(
+            'migrate',
+            options: [
+              CappOption(
+                name: 'init',
+                shortName: 'i',
+                description: 'Init migration',
+              ),
+              CappOption(
+                name: 'create',
+                shortName: 'c',
+                description: 'Create migration',
+              ),
+              CappOption(
+                name: 'rollback',
+                shortName: 'r',
+                description: 'Rollback migration',
+              ),
+              CappOption(
+                name: 'list',
+                shortName: 'l',
+                description: 'List migration',
+              ),
+            ],
+            description: 'Migration commands',
+            run: (c) async {
+              if (c.existsOption('init')) {
+                var res = await CappConsole.progress<List<String>>(
+                  "Initializing migration...",
+                  () async => MysqlMigration(mysqlDb).migrateInit(),
+                );
+                var index = 1;
+                var table = res.map((e) => [(index++).toString(), e]).toList();
+                if (table.isEmpty) {
+                  table.add(['No migrations to execute.']);
+                } else {
+                  table.insert(0, ['#', 'Migration Files']);
+                }
+                CappConsole.writeTable(table, color: CappColors.success);
+                return CappConsole("");
+              }
+
+              if (c.existsOption('create')) {
+                var res = await CappConsole.progress<String>(
+                  "Creating migration...",
+                  () async => MysqlMigration(mysqlDb).migrateCreate(),
+                );
+                return CappConsole(res);
+              }
+
+              if (c.existsOption('rollback')) {
+                int deep = c.getOption('rollback', def: '1').toInt(def: 1);
+                var res = await CappConsole.progress<String>(
+                  "Rolling back migration...",
+                  () async => MysqlMigration(mysqlDb).migrateRollback(deep),
+                );
+                return CappConsole(res);
+              }
+
+              if (c.existsOption('list')) {
+                var res = await MysqlMigration(mysqlDb).checkMigrationStatus();
+                res.insert(
+                    0, ["#", 'Migration Files', 'Executed', 'Created At']);
+                CappConsole.writeTable(res, color: CappColors.success);
+                return CappConsole("");
+              }
+
+              return CappConsole(
+                "Please run the migration commands",
+                CappColors.warning,
+              );
+            },
+          ),
+          CappController(
+            'language',
+            options: [
+              CappOption(
+                name: 'list',
+                shortName: 'l',
+                description: 'List languages',
+              ),
+              CappOption(
+                name: 'reload',
+                shortName: 'r',
+                description: 'Reload language',
+              )
+            ],
+            run: (c) async {
+              if (c.existsOption('list')) {
+                var languages = appLanguages.keys.toList();
+                var table = <List<String>>[];
+                var index = 1;
+                for (var lang in languages) {
+                  table.add([
+                    (index++).toString(),
+                    lang,
+                    appLanguages[lang]?.length.toString() ?? '0',
+                  ]);
+                }
+                if (table.isEmpty) {
+                  table.add(['No languages found.']);
+                } else {
+                  table.insert(0, ['#', 'Language', 'Strings']);
+                }
+                CappConsole.writeTable(table, color: CappColors.success);
+                return CappConsole("");
+              }
+
+              if (c.existsOption('reload')) {
+                var res = await CappConsole.progress<String>(
+                  "Reloading language...",
+                  () async {
+                    appLanguages =
+                        await MultiLanguage(config.languagePath).init();
+                    return appLanguages.length.toString();
+                  },
+                );
+                return CappConsole("Count of languages: ${res}");
+              }
+
+              return CappConsole("Language commands");
+            },
+          ),
+          CappController('info', options: [], run: (c) async {
+            CappConsole.writeTable(
+              [
+                ['Info', 'Details'],
+                ['WebApp version', info.version],
+                ['Dart Versions', Platform.version],
+                [
+                  'Memory Usage',
+                  ConvertSize.toLogicSizeString(ProcessInfo.currentRss)
+                ],
+                [
+                  'Max Memory Usage',
+                  ConvertSize.toLogicSizeString(ProcessInfo.maxRss)
+                ],
+                [
+                  'Socket Connections',
+                  (socketManager?.countClients ?? 0).toString(),
+                ],
+                ['Socket Users', (socketManager?.countUsers ?? 0).toString()],
+              ],
+              color: CappColors.info,
+            );
+            return CappConsole('\n');
+          }),
+          CappController(
+            'route',
+            options: [
+              CappOption(
+                name: 'all',
+                shortName: 'a',
+                description: 'Show all routes',
+              ),
+            ],
+            run: (c) async {
+              var routes = await exploreAllRoutes(FakeWebRequest());
+              var header = [
+                '#',
+                'Full Path',
+                'Methods',
+                'Type',
+                'Hosts/Ports',
+                'Auth'
+              ];
+              var table = <List<String>>[];
+              for (var route in routes) {
+                table.add([
+                  route['#'].toString(),
+                  route['fullPath'].toString(),
+                  route['method'].toString(),
+                  route['type'].toString(),
+                  route['hosts'].toString() + '/' + route['ports'].toString(),
+                  route['hasAuth'] == true ? 'Yes' : 'No',
+                ]);
+              }
+              CappConsole.writeTable([
+                ...[
+                  header,
+                  ...table,
+                ],
+              ], color: CappColors.success);
+              return CappConsole('\n');
+            },
+          ),
+          CappController('exit', options: [], run: (c) async {
+            await CappConsole.progress(
+              "Bye bye!",
+              () async {
+                await stop(force: true);
+                await Future.delayed(Duration(seconds: 1), () {
+                  exit(0);
+                });
+              },
+              type: CappProgressType.circle,
+            );
+          })
+        ],
+      );
 
   Future<void> _runCommands(List<String> args) async {
     if (args.isEmpty) {
       return;
     }
 
-    final cmdManager = CappManager(
-      args: args,
-      main: CappController(
-        '',
-        options: [
-          CappOption(
-            name: 'help',
-            shortName: 'h',
-            description: 'Show help',
-          ),
-        ],
-        run: (c) async {
-          return CappConsole(c.manager.getHelp(), CappColors.warning);
-        },
-      ),
-      controllers: [
-        CappController(
-          'migrate',
-          options: [
-            CappOption(
-              name: 'init',
-              shortName: 'i',
-              description: 'Init migration',
-            ),
-            CappOption(
-              name: 'create',
-              shortName: 'c',
-              description: 'Create migration',
-            ),
-            CappOption(
-              name: 'rollback',
-              shortName: 'r',
-              description: 'Rollback migration',
-            ),
-          ],
-          description: 'Migration commands',
-          run: (c) async {
-            if (c.existsOption('init')) {
-              var res = await CappConsole.progress<String>(
-                "Initializing migration...",
-                () async => MysqlMigration(mysqlDb).migrateInit(),
-              );
-              return CappConsole(res);
-            }
-
-            if (c.existsOption('create')) {
-              var res = await CappConsole.progress<String>(
-                "Creating migration...",
-                () async => MysqlMigration(mysqlDb).migrateCreate(),
-              );
-              return CappConsole(res);
-            }
-
-            if (c.existsOption('rollback')) {
-              int deep = c.getOption('rollback', def: '1').toInt(def: 1);
-              var res = await CappConsole.progress<String>(
-                "Rolling back migration...",
-                () async => MysqlMigration(mysqlDb).migrateRollback(deep),
-              );
-              return CappConsole(res);
-            }
-
-            return CappConsole(
-              "Please run the migration commands",
-              CappColors.warning,
-            );
-          },
-        ),
-      ],
+    return _getCommandManager(args).processWhile(
+      initArgs: args,
+      promptLabel: 'WebApp> ',
     );
-
-    cmdManager.process();
   }
 
   /// Connects to MongoDB using the connection string from the configuration.
@@ -387,6 +668,57 @@ class WaServer {
   /// The [cron] parameter is the [WaCron] instance to be registered.
   void registerCron(WaCron cron) {
     crons.add(cron);
+  }
+
+  Future<List<Map>> exploreAllRoutes(WebRequest rq) async {
+    var allRoutes = await this.getAllRoutes(rq);
+
+    List<Map> convert(List<WebRoute> routes, String parentPath, hasAuth) {
+      var result = <Map>[];
+
+      for (final route in routes) {
+        for (var method in route.methods) {
+          var map = route.toMap(
+            parentPath,
+            hasAuth || route.auth != null,
+            method,
+          );
+          result.addAll(map);
+        }
+        if (route.children.isNotEmpty) {
+          result.addAll(
+            convert(
+              route.children,
+              "$parentPath${route.path}",
+              hasAuth || route.auth != null,
+            ),
+          );
+
+          for (var epath in route.extraPath) {
+            result.addAll(
+              convert(
+                route.children,
+                "$parentPath$epath",
+                hasAuth || route.auth != null,
+              ),
+            );
+          }
+        }
+      }
+
+      return result;
+    }
+
+    var webRoutes = convert(allRoutes, '', false);
+    var index = 1;
+
+    webRoutes.sort(
+        (a, b) => a['fullPath'].toString().compareTo(b['fullPath'].toString()));
+    webRoutes = webRoutes.map((e) {
+      e['#'] = index++;
+      return e;
+    }).toList();
+    return webRoutes;
   }
 }
 

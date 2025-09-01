@@ -5,24 +5,24 @@ import 'package:webapp/wa_server.dart';
 void main() {
   var template = ArrayTag(
     children: [
-      Doctype(),
-      Html(attrs: {
+      $Doctype(),
+      $Html(attrs: {
         'lang': 'en'
       }, children: [
-        Head(children: [
-          Meta(attrs: {'charset': 'UTF-8'}),
-          Meta(attrs: {
+        $Head(children: [
+          $Meta(attrs: {'charset': 'UTF-8'}),
+          $Meta(attrs: {
             'name': 'viewport',
             'content': 'width=device-width, initial-scale=1.0'
           }),
-          Title(children: [Text('Test Page')]),
+          $Title(children: [$Text('Test Page')]),
         ]),
-        Body(children: [
-          H1(children: [Text('Hello, World!')]),
-          P(children: [Text('This is a test page.')]),
-          A(
+        $Body(children: [
+          $H1(children: [$Text('Hello, World!')]),
+          $P(children: [$Text('This is a test page.')]),
+          $A(
             attrs: {'href': 'https://example.com'},
-            children: [Text('Click here to visit example.com')],
+            children: [$Text('Click here to visit example.com')],
           ),
         ]),
       ]),
@@ -52,7 +52,7 @@ void main() {
     });
 
     test('test for jinja', () async {
-      template.children[1].children[1].addChild(JinjaVar('test'));
+      template.children[1].children[1].addChild($JinjaVar('test'));
       WaServer.config = WaConfigs();
 
       var html = template.toHtml();
@@ -66,6 +66,56 @@ void main() {
         'e.com">Click here to visit example.com</a><?= test ?></body>'
         '</html>',
       );
+    });
+
+    test("Test no cache", () async {
+      $Html template = $Html(
+        children: List.generate(
+          5,
+          (index) => $P(
+            children: [
+              $Text('Hello World $index'),
+            ],
+          ),
+        ),
+      );
+
+      var firstHtml = template.toHtml();
+      template.addChild($Text('Hello World'));
+      var secondHtml = template.toHtml();
+      expect(firstHtml, isNotNull);
+      expect(secondHtml, isNotNull);
+      expect(firstHtml, isNot(equals(secondHtml)));
+    });
+
+    test("Test cache", () async {
+      List<Tag> children = List.generate(
+        5,
+        (index) => $P(
+          children: [
+            $Text('Hello World $index'),
+          ],
+        ),
+      );
+
+      var template = $Html(
+        children: [
+          $Cache(
+            children: children,
+          ),
+        ],
+      );
+
+      var firstHtml = template.toHtml();
+      children.add($Text('Added Text'));
+      var secondHtml = template.toHtml();
+      template.addChild($Text('Hello World'));
+      var thirdHtml = template.toHtml();
+      expect(firstHtml, isNotNull);
+      expect(secondHtml, isNotNull);
+      expect(firstHtml, secondHtml);
+      expect(secondHtml, isNot(thirdHtml));
+      expect(firstHtml, isNot(thirdHtml));
     });
   });
 }

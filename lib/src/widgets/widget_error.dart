@@ -1,4 +1,4 @@
-import 'package:webapp/src/views/htmler.dart' as h;
+import 'package:webapp/src/views/htmler.dart';
 import 'package:webapp/wa_server.dart';
 import 'package:webapp/src/widgets/wa_string_widget.dart';
 
@@ -12,30 +12,30 @@ class ErrorWidget implements WaStringWidget {
   final String layout = '';
 
   @override
-  h.Tag Function(Map args)? generateHtml = (Map args) {
+  Tag Function(Map args)? generateHtml = (Map args) {
     int statusCode = args['status'] ?? 500;
     String title = args['title'] ?? 'Error $statusCode';
     String error = (args['error'] ?? '').toString();
     List stack = args['stack'] ?? [];
 
-    return h.ArrayTag(
+    return ArrayTag(
       children: [
-        h.Doctype(),
-        h.Html(
+        $Doctype(),
+        $Html(
           children: [
-            h.Head(children: [
-              h.Meta(attrs: {'charset': 'utf-8'}),
-              h.Meta(attrs: {
+            $Head(children: [
+              $Meta(attrs: {'charset': 'utf-8'}),
+              $Meta(attrs: {
                 'http-equiv': 'X-UA-Compatible',
                 'content': 'IE=edge'
               }),
-              h.Meta(attrs: {
+              $Meta(attrs: {
                 'name': 'viewport',
                 'content': 'width=device-width, initial-scale=1'
               }),
-              h.Title(children: [h.Text(title)]),
-              h.Style(children: [
-                h.Raw("""
+              $Title(children: [$Text(title)]),
+              $Style(children: [
+                $Raw("""
             /* ---------- Modern Error Page Styles ---------- */
             :root {
               --color-bg: #0f1115;
@@ -292,61 +292,61 @@ class ErrorWidget implements WaStringWidget {
           """)
               ])
             ]),
-            h.Body(
+            $Body(
               attrs: {'style': 'max-width: 100%;', 'data-theme': 'dark'},
               children: [
-                h.Div(classes: [
+                $Div(classes: [
                   'error-shell'
                 ], children: [
-                  h.Div(classes: [
+                  $Div(classes: [
                     'theme-toggle'
                   ], children: [
-                    h.Button(attrs: {
+                    $Button(attrs: {
                       'id': 'themeToggleBtn',
                       'type': 'button',
                       'title': 'Toggle theme',
                       'aria-label': 'Switch between dark and light theme'
                     }, children: [
-                      h.Text('🌙')
+                      $Text('🌙')
                     ]),
                   ]),
-                  h.H3(children: [h.Text("< Error $statusCode />")]),
-                  h.P(children: [
-                    h.Text(
+                  $H3(children: [$Text("< Error $statusCode />")]),
+                  $P(children: [
+                    $Text(
                         "Oops! Something went wrong. Please try again later."),
                   ]),
                   if (WaServer.config.isLocalDebug) ...[
                     if (error.isNotEmpty) ...[
-                      h.Div(
+                      $Div(
                         attrs: {},
                         children: [
-                          h.Code(
+                          $Code(
                             classes: ['error-alert'],
-                            children: [h.Text(error.toString())],
+                            children: [$Text(error.toString())],
                           )
                         ],
                       ),
                     ],
                     if (stack.isNotEmpty) ...[
-                      h.Table(
+                      $Table(
                         attrs: {},
                         children: [
-                          h.Thead(children: [
-                            h.Tr(children: [
-                              h.Th(
+                          $Thead(children: [
+                            $Tr(children: [
+                              $Th(
                                 attrs: {'colspan': '3'},
                                 classes: ['text-align:center'],
-                                children: [h.Text('Error details')],
+                                children: [$Text('Error details')],
                               )
                             ]),
                           ]),
-                          h.Tbody(
+                          $Tbody(
                             children: [
                               for (var stackItem in stack)
                                 if (stackItem.toString().isNotEmpty) ...[
-                                  h.Tr(
+                                  $Tr(
                                     children: [
-                                      h.Th(
+                                      $Th(
                                         classes: ['flag'],
                                         attrs: {
                                           if (stackItem
@@ -358,19 +358,19 @@ class ErrorWidget implements WaStringWidget {
                                           if (stackItem
                                               .toString()
                                               .contains('file://'))
-                                            h.A(
+                                            $A(
                                               classes: ['vscode'],
                                               attrs: {
                                                 'href': 'javascript:void(0);'
                                               },
                                               children: [
-                                                h.Text('⛔'),
+                                                $Text('⛔'),
                                               ],
                                             )
                                           else if (stackItem
                                               .toString()
                                               .contains('package:webapp'))
-                                            h.A(
+                                            $A(
                                               attrs: {
                                                 'target': '_blank',
                                                 'title':
@@ -378,41 +378,41 @@ class ErrorWidget implements WaStringWidget {
                                                 'href':
                                                     'https://github.com/uproid/webapp/issues'
                                               },
-                                              children: [h.Text('🐛')],
+                                              children: [$Text('🐛')],
                                             )
                                           else
-                                            h.Text('⚪')
+                                            $Text('⚪')
                                         ],
                                       ),
                                       if (stackItem
                                           .toString()
                                           .contains('file://')) ...[
-                                        h.Td(
+                                        $Td(
                                           attrs: {
                                             'style':
                                                 'color:#ff6f7f; font-weight:500;'
                                           },
                                           children: [
-                                            h.Code(
+                                            $Code(
                                               classes: ['vscode'],
                                               attrs: {
                                                 'style':
                                                     'word-break: break-all;'
                                               },
                                               children: [
-                                                h.Text(stackItem.toString())
+                                                $Text(stackItem.toString())
                                               ],
                                             ),
                                           ],
                                         )
                                       ] else ...[
-                                        h.Td(
+                                        $Td(
                                           attrs: {
                                             'style':
                                                 'color: var(--color-text-dim);'
                                           },
                                           children: [
-                                            h.Text(stackItem.toString())
+                                            $Text(stackItem.toString())
                                           ],
                                         )
                                       ]
@@ -425,8 +425,8 @@ class ErrorWidget implements WaStringWidget {
                       ),
                     ],
                   ],
-                  h.Script(children: [
-                    h.Raw("""
+                  $Script(children: [
+                    $Raw("""
                 (function(){
                   const STORAGE_KEY = 'errorTheme';
                   const root = document.body;

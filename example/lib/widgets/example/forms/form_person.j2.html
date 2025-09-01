@@ -152,7 +152,6 @@
         <input name="married" id="married" type="checkbox" value="true" class="peer sr-only" {{ 'checked' if $n('form/married/value') else '' }} />
         <div class="h-5 w-9 rounded-full bg-slate-300 transition peer-checked:bg-primary-600"></div>
         <div class="absolute left-0 top-0 h-5 w-5 translate-x-0 rounded-full bg-white shadow transition peer-checked:translate-x-4"></div>
-        <span class="ml-3 text-xs text-slate-600">{{ $t('person.form.married.yes') if $n('form/married/value') else $t('person.form.married.no') }}</span>
       </label>
     </div>
     <div>

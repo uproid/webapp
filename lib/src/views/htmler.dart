@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:webapp/wa_server.dart';
 
 enum TagType {
@@ -168,10 +167,10 @@ abstract class Tag {
   }
 }
 
-class Jinja extends Tag {
+class $Jinja extends Tag {
   String command;
 
-  Jinja(this.command);
+  $Jinja(this.command);
 
   @override
   String toHtml({bool pretty = false, int indent = 0}) {
@@ -181,10 +180,10 @@ class Jinja extends Tag {
   }
 }
 
-class JinjaBody extends Tag {
+class $JinjaBody extends Tag {
   String commandUp;
   String commandDown;
-  JinjaBody({
+  $JinjaBody({
     required this.commandUp,
     required super.children,
     required this.commandDown,
@@ -204,9 +203,9 @@ class JinjaBody extends Tag {
   }
 }
 
-class JinjaVar extends Tag {
+class $JinjaVar extends Tag {
   String command;
-  JinjaVar(this.command);
+  $JinjaVar(this.command);
 
   @override
   String toHtml({bool pretty = false, int indent = 0}) {
@@ -214,9 +213,9 @@ class JinjaVar extends Tag {
   }
 }
 
-class JinjaComment extends Tag {
+class $JinjaComment extends Tag {
   String content;
-  JinjaComment(this.content);
+  $JinjaComment(this.content);
 
   @override
   String toHtml({bool pretty = false, int indent = 0}) {
@@ -224,9 +223,9 @@ class JinjaComment extends Tag {
   }
 }
 
-class CustomTag extends Tag {
+class $CustomTag extends Tag {
   @override
-  CustomTag(
+  $CustomTag(
     String tag, {
     super.attrs,
     super.children,
@@ -259,16 +258,16 @@ class ArrayTag extends Tag {
   }
 }
 
-class Html extends Tag {
+class $Html extends Tag {
   @override
   get _tag => "html";
-  Html({super.attrs, super.children, super.classes});
+  $Html({super.attrs, super.children, super.classes});
 }
 
-class Doctype extends SingleTag {
+class $Doctype extends SingleTag {
   List<String> params = <String>[];
   @override
-  Doctype([this.params = const ['html']]);
+  $Doctype([this.params = const ['html']]);
 
   @override
   String toHtml({bool pretty = false, int indent = 0}) {
@@ -276,16 +275,16 @@ class Doctype extends SingleTag {
   }
 }
 
-class Head extends Tag {
+class $Head extends Tag {
   @override
   get _tag => "head";
-  Head({super.attrs, super.children, super.classes});
+  $Head({super.attrs, super.children, super.classes});
 }
 
-class Raw extends Tag {
+class $Raw extends Tag {
   String content;
 
-  Raw(
+  $Raw(
     this.content, {
     super.classes,
   });
@@ -296,10 +295,10 @@ class Raw extends Tag {
   }
 }
 
-class Text extends Tag {
+class $Text extends Tag {
   String content;
 
-  Text(this.content, {super.classes});
+  $Text(this.content, {super.classes});
 
   @override
   String toHtml({bool pretty = false, int indent = 0}) {
@@ -307,362 +306,378 @@ class Text extends Tag {
   }
 }
 
-class Div extends Tag {
+class $Div extends Tag {
   @override
   get _tag => "div";
-  Div({super.attrs, super.children, super.classes});
+  $Div({super.attrs, super.children, super.classes});
 }
 
-class Code extends Tag {
+class $Code extends Tag {
   @override
   get _tag => "code";
-  Code({super.attrs, super.children, super.classes});
+  $Code({super.attrs, super.children, super.classes});
 }
 
-class Body extends Tag {
+class $Body extends Tag {
   @override
   get _tag => "body";
-  Body({super.attrs, super.children, super.classes});
+  $Body({super.attrs, super.children, super.classes});
 }
 
-class Span extends Tag {
+class $Span extends Tag {
   @override
   get _tag => "span";
-  Span({super.attrs, super.children, super.classes});
+  $Span({super.attrs, super.children, super.classes});
 }
 
-class A extends Tag {
+class $A extends Tag {
   @override
   get _tag => "a";
-  A({super.attrs, super.children, super.classes});
+  $A({super.attrs, super.children, super.classes});
 }
 
-class B extends Tag {
+class $B extends Tag {
   @override
   get _tag => "b";
-  B({super.attrs, super.children, super.classes});
+  $B({super.attrs, super.children, super.classes});
 }
 
-class I extends Tag {
+class $I extends Tag {
   @override
   get _tag => "i";
-  I({super.attrs, super.children, super.classes});
+  $I({super.attrs, super.children, super.classes});
 }
 
-class U extends Tag {
+class $U extends Tag {
   @override
   get _tag => "u";
-  U({super.attrs, super.children, super.classes});
+  $U({super.attrs, super.children, super.classes});
 }
 
-class P extends Tag {
+class $P extends Tag {
   @override
   get _tag => "p";
-  P({super.attrs, super.children, super.classes});
+  $P({super.attrs, super.children, super.classes});
 }
 
-class Br extends SingleTag {
+class $Br extends SingleTag {
   @override
   get _tag => "br";
-  Br({super.attrs, super.classes});
+  $Br({super.attrs, super.classes});
 }
 
-class Hr extends SingleTag {
+class $Hr extends SingleTag {
   @override
   get _tag => "hr";
-  Hr({super.attrs, super.classes});
+  $Hr({super.attrs, super.classes});
 }
 
-class Wbr extends SingleTag {
+class $Wbr extends SingleTag {
   @override
   get _tag => "wbr";
-  Wbr({super.attrs, super.classes});
+  $Wbr({super.attrs, super.classes});
 }
 
-class Button extends Tag {
+class $Button extends Tag {
   @override
   get _tag => "button";
-  Button({super.attrs, super.children, super.classes});
+  $Button({super.attrs, super.children, super.classes});
 }
 
-class Input extends SingleTag {
+class $Input extends SingleTag {
   @override
   get _tag => "input";
-  Input({super.attrs, super.classes});
+  $Input({super.attrs, super.classes});
 }
 
-class TextArea extends Tag {
+class $TextArea extends Tag {
   @override
   get _tag => "textarea";
-  TextArea({super.attrs, super.children, super.classes});
+  $TextArea({super.attrs, super.children, super.classes});
 }
 
-class Label extends Tag {
+class $Label extends Tag {
   @override
   get _tag => "label";
-  Label({super.attrs, super.children, super.classes});
+  $Label({super.attrs, super.children, super.classes});
 }
 
-class Form extends Tag {
+class $Form extends Tag {
   @override
   get _tag => "form";
-  Form({super.attrs, super.children, super.classes});
+  $Form({super.attrs, super.children, super.classes});
 }
 
-class Select extends Tag {
+class $Select extends Tag {
   @override
   get _tag => "select";
-  Select({super.attrs, super.children, super.classes});
+  $Select({super.attrs, super.children, super.classes});
 }
 
-class Option extends Tag {
+class $Option extends Tag {
   @override
   get _tag => "option";
-  Option({super.attrs, super.children, super.classes});
+  $Option({super.attrs, super.children, super.classes});
 }
 
-class Ul extends Tag {
+class $Ul extends Tag {
   @override
   get _tag => "ul";
-  Ul({super.attrs, super.children, super.classes});
+  $Ul({super.attrs, super.children, super.classes});
 }
 
-class Li extends Tag {
+class $Li extends Tag {
   @override
   get _tag => "li";
-  Li({super.attrs, super.children, super.classes});
+  $Li({super.attrs, super.children, super.classes});
 }
 
-class Center extends Tag {
+class $Center extends Tag {
   @override
   get _tag => "center";
-  Center({super.attrs, super.children, super.classes});
+  $Center({super.attrs, super.children, super.classes});
 }
 
-class Main extends Tag {
+class $Main extends Tag {
   @override
   get _tag => "main";
-  Main({super.attrs, super.children, super.classes});
+  $Main({super.attrs, super.children, super.classes});
 }
 
-class Footer extends Tag {
+class $Footer extends Tag {
   @override
   get _tag => "footer";
-  Footer({super.attrs, super.children, super.classes});
+  $Footer({super.attrs, super.children, super.classes});
 }
 
-class Header extends Tag {
+class $Header extends Tag {
   @override
   get _tag => "header";
-  Header({super.attrs, super.children, super.classes});
+  $Header({super.attrs, super.children, super.classes});
 }
 
-class Nav extends Tag {
+class $Nav extends Tag {
   @override
   get _tag => "nav";
-  Nav({super.attrs, super.children, super.classes});
+  $Nav({super.attrs, super.children, super.classes});
 }
 
-class Section extends Tag {
+class $Section extends Tag {
   @override
   get _tag => "section";
-  Section({super.attrs, super.children, super.classes});
+  $Section({super.attrs, super.children, super.classes});
 }
 
-class Article extends Tag {
+class $Article extends Tag {
   @override
   get _tag => "article";
-  Article({super.attrs, super.children, super.classes});
+  $Article({super.attrs, super.children, super.classes});
 }
 
-class Template extends Tag {
+class $Template extends Tag {
   @override
   get _tag => "template";
-  Template({super.attrs, super.children, super.classes});
+  $Template({super.attrs, super.children, super.classes});
 }
 
-class Aside extends Tag {
+class $Aside extends Tag {
   @override
   get _tag => "aside";
-  Aside({super.attrs, super.children, super.classes});
+  $Aside({super.attrs, super.children, super.classes});
 }
 
-class Ol extends Tag {
+class $Ol extends Tag {
   @override
   get _tag => "ol";
-  Ol({super.attrs, super.children, super.classes});
+  $Ol({super.attrs, super.children, super.classes});
 }
 
-class H1 extends Tag {
+class $H1 extends Tag {
   @override
   get _tag => "h1";
-  H1({super.attrs, super.children, super.classes});
+  $H1({super.attrs, super.children, super.classes});
 }
 
-class H2 extends Tag {
+class $H2 extends Tag {
   @override
   get _tag => "h2";
-  H2({super.attrs, super.children, super.classes});
+  $H2({super.attrs, super.children, super.classes});
 }
 
-class H3 extends Tag {
+class $H3 extends Tag {
   @override
   get _tag => "h3";
-  H3({super.attrs, super.children, super.classes});
+  $H3({super.attrs, super.children, super.classes});
 }
 
-class H4 extends Tag {
+class $H4 extends Tag {
   @override
   get _tag => "h4";
-  H4({super.attrs, super.children, super.classes});
+  $H4({super.attrs, super.children, super.classes});
 }
 
-class H5 extends Tag {
+class $H5 extends Tag {
   @override
   get _tag => "h5";
-  H5({super.attrs, super.children, super.classes});
+  $H5({super.attrs, super.children, super.classes});
 }
 
-class H6 extends Tag {
+class $H6 extends Tag {
   @override
   get _tag => "h6";
-  H6({super.attrs, super.children, super.classes});
+  $H6({super.attrs, super.children, super.classes});
 }
 
-class H7 extends Tag {
+class $H7 extends Tag {
   @override
   get _tag => "h7";
-  H7({super.attrs, super.children, super.classes});
+  $H7({super.attrs, super.children, super.classes});
 }
 
-class Small extends Tag {
+class $Small extends Tag {
   @override
   get _tag => "small";
-  Small({super.attrs, super.children, super.classes});
+  $Small({super.attrs, super.children, super.classes});
 }
 
-class Meta extends SingleTag {
+class $Meta extends SingleTag {
   @override
   get _tag => "meta";
-  Meta({super.attrs, super.classes});
+  $Meta({super.attrs, super.classes});
 }
 
-class Link extends SingleTag {
+class $Link extends SingleTag {
   @override
   get _tag => "link";
-  Link({super.attrs, super.classes});
+  $Link({super.attrs, super.classes});
 }
 
-class Script extends Tag {
+class $Script extends Tag {
   @override
   get _tag => "script";
-  Script({super.attrs, super.children, super.classes});
+  $Script({super.attrs, super.children, super.classes});
 }
 
-class Noscript extends Tag {
+class $Noscript extends Tag {
   @override
   get _tag => "noscript";
-  Noscript({super.attrs, super.classes});
+  $Noscript({super.attrs, super.classes});
 }
 
-class Title extends Tag {
+class $Title extends Tag {
   @override
   get _tag => "title";
-  Title({super.attrs, super.children, super.classes});
+  $Title({super.attrs, super.children, super.classes});
 }
 
-class Style extends Tag {
+class $Style extends Tag {
   @override
   get _tag => "style";
-  Style({super.attrs, super.children, super.classes});
+  $Style({super.attrs, super.children, super.classes});
 }
 
-class Table extends Tag {
+class $Table extends Tag {
   @override
   get _tag => "table";
-  Table({super.attrs, super.children, super.classes});
+  $Table({super.attrs, super.children, super.classes});
 }
 
-class Thead extends Tag {
+class $Thead extends Tag {
   @override
   get _tag => "thead";
-  Thead({super.attrs, super.children, super.classes});
+  $Thead({super.attrs, super.children, super.classes});
 }
 
-class Tbody extends Tag {
+class $Tbody extends Tag {
   @override
   get _tag => "tbody";
-  Tbody({super.attrs, super.children, super.classes});
+  $Tbody({super.attrs, super.children, super.classes});
 }
 
-class Tr extends Tag {
+class $Tr extends Tag {
   @override
   get _tag => "tr";
-  Tr({super.attrs, super.children, super.classes});
+  $Tr({super.attrs, super.children, super.classes});
 }
 
-class Th extends Tag {
+class $Th extends Tag {
   @override
   get _tag => "th";
-  Th({super.attrs, super.children, super.classes});
+  $Th({super.attrs, super.children, super.classes});
 }
 
-class Td extends Tag {
+class $Td extends Tag {
   @override
   get _tag => "td";
-  Td({super.attrs, super.children, super.classes});
+  $Td({super.attrs, super.children, super.classes});
 }
 
-class Caption extends Tag {
+class $Caption extends Tag {
   @override
   get _tag => "caption";
-  Caption({super.attrs, super.children, super.classes});
+  $Caption({super.attrs, super.children, super.classes});
 }
 
-class Tfoot extends Tag {
+class $Tfoot extends Tag {
   @override
   get _tag => "tfoot";
-  Tfoot({super.attrs, super.children, super.classes});
+  $Tfoot({super.attrs, super.children, super.classes});
 }
 
-class Comment extends Tag {
+class $Comment extends Tag {
   @override
   get _tag => "!--";
-  Comment(String content) : super(children: [Raw(content)], classes: const []);
+  $Comment(String content)
+      : super(children: [$Raw(content)], classes: const []);
 }
 
-class Svg extends Tag {
+class $Svg extends Tag {
   @override
   get _tag => "svg";
-  Svg({super.attrs, super.children, super.classes});
+  $Svg({super.attrs, super.children, super.classes});
 }
 
-class Path extends Tag {
+class $Path extends Tag {
   @override
   get _tag => "path";
-  Path({super.attrs, super.children, super.classes});
+  $Path({super.attrs, super.children, super.classes});
 }
 
-class Details extends Tag {
+class $Details extends Tag {
   @override
   get _tag => "details";
-  Details({super.attrs, super.children, super.classes});
+  $Details({super.attrs, super.children, super.classes});
 }
 
-class Summary extends Tag {
+class $Summary extends Tag {
   @override
   get _tag => "summary";
-  Summary({super.attrs, super.children, super.classes});
+  $Summary({super.attrs, super.children, super.classes});
 }
 
-class Video extends Tag {
+class $Video extends Tag {
   @override
   get _tag => "video";
-  Video({super.attrs, super.children, super.classes});
+  $Video({super.attrs, super.children, super.classes});
 }
 
-class Img extends SingleTag {
+class $Img extends SingleTag {
   @override
   get _tag => "img";
-  Img({super.attrs, super.classes});
+  $Img({super.attrs, super.classes});
+}
+
+class $Cache extends ArrayTag {
+  String _html = '';
+  bool get isCached => _html.isNotEmpty;
+  String get cachedHtml => _html;
+
+  $Cache({super.children});
+
+  @override
+  String toHtml({bool pretty = false, int indent = 0}) {
+    if (_html.isNotEmpty) return _html;
+    _html = super.toHtml(pretty: pretty, indent: indent);
+    return _html;
+  }
 }

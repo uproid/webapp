@@ -12,7 +12,18 @@ services:
     volumes:
       - ./lib/:/www/lib/
       - ./public/:/www/public/
-  
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    hostname: nginx
+    restart: always
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./public/:/var/www/html/public
+      - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf
+
   mongodb:
     image: mongo:latest
     container_name: mongodb

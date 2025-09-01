@@ -29,7 +29,7 @@ main([List<String>? args]) async {
           .throttle(const Duration(milliseconds: 1000))
           .listen((_) async {
         await serviceClient.reloadSources(mainIsolate.id ?? '');
-        print('Reload source codes ${DateTime.now()}');
+        //print('Reload source codes ${DateTime.now()}');
       });
     } else {
       print(

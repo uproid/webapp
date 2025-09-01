@@ -9,15 +9,21 @@ ENV LOCAL_DEBUG=true
 ENV ENABLE_DATABASE=true
 
 COPY . .
+RUN rm -rf ./.dart_tool
+RUN rm -rf ./pubspec.lock
 
 # Create .env file
 RUN echo "MYSQL_HOST=mysql" > .env && \
     echo "MONGO_CONNECTION=mongodb" >> .env && \
     echo "MONGO_PORT=27017" >> .env
 
+RUN dart pub cache clean
+
 #RUN chmod -R a+rxw .
 RUN dart pub get 
-RUN dart pub get --offline 
+RUN dart pub get --offline
+RUN dart pub cache repair
+ 
 
 
 EXPOSE 8085 8181

@@ -46,6 +46,14 @@ void main() async {
             },
           ),
           WebRoute(
+            path: 'debug_test',
+            rq: rq,
+            methods: RequestMethods.ALL,
+            index: () {
+              return rq.renderView(path: "<h1>Debug Test</h1>", isFile: false);
+            },
+          ),
+          WebRoute(
             path: 'widget',
             rq: rq,
             index: () {

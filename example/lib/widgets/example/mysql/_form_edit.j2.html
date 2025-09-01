@@ -7,7 +7,7 @@
                     <input
                         type="text"
                         name="title"
-                        placeholder="Title"
+                        placeholder="{{ $t('mysql.placeholder.title') }}"
                         required
                         value="{{ $n('form/title/value') }}"
                         class="h-9 rounded-md border bg-white px-3 text-xs shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/30 {{ 'border-rose-500 ring-2 ring-rose-300' if $n('form/title/errors/0') else 'border-slate-300' }}"
@@ -18,7 +18,7 @@
                     <input
                         type="text"
                         name="author"
-                        placeholder="Author"
+                        placeholder="{{ $t('mysql.placeholder.author') }}"
                         required
                         value="{{ $n('form/author/value') }}"
                         class="h-9 rounded-md border bg-white px-3 text-xs shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/30 {{ 'border-rose-500 ring-2 ring-rose-300' if $n('form/author/errors/0') else 'border-slate-300' }}"
@@ -29,7 +29,7 @@
                     <input
                         type="date"
                         name="published_date"
-                        placeholder="Published Date"
+                        placeholder="{{ $t('mysql.placeholder.publishedDate') }}"
                         required
                         value="{{ $n('form/published_date/value') }}"
                         class="h-9 rounded-md border bg-white px-3 text-xs shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/30 {{ 'border-rose-500 ring-2 ring-rose-300' if $n('form/published_date/errors/0') else 'border-slate-300' }}"
@@ -51,7 +51,7 @@
                 </div>
                 {% if(action == 'edit' or action == 'update') %}
                 <input type="hidden" name="id" value="{{ id }}" />
-                <button type="submit" class="wave inline-flex h-9 items-center rounded-md border border-primary-600 bg-primary-50 px-3 text-xs font-medium text-primary-700 hover:bg-primary-100 focus:outline-none focus:ring-2 focus:ring-primary-500/30">{{ $t('Update') }}</button>
+                <button type="submit" class="wave inline-flex h-9 items-center rounded-md border border-primary-600 bg-primary-50 px-3 text-xs font-medium text-primary-700 hover:bg-primary-100 focus:outline-none focus:ring-2 focus:ring-primary-500/30">{{ $t('mysql.button.update') }}</button>
                 {% else %}
                 <button type="submit" class="wave inline-flex h-9 items-center rounded-md border border-primary-600 bg-primary-50 px-3 text-xs font-medium text-primary-700 hover:bg-primary-100 focus:outline-none focus:ring-2 focus:ring-primary-500/30">{{ $t('database.table.button.add') }}</button>
                 {% endif %}

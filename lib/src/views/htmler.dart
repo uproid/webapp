@@ -11,7 +11,7 @@ abstract class Tag {
   String _tag = "html";
   late Map<dynamic, dynamic> attrs;
   late List<Tag> children;
-  List<String> classes;
+  List<dynamic> classes;
 
   @override
   String toString() {
@@ -174,9 +174,9 @@ class $Jinja extends Tag {
 
   @override
   String toHtml({bool pretty = false, int indent = 0}) {
-    return '${WaServer.config.variableStart}'
+    return '${WaServer.config.blockStart}'
         ' $command '
-        '${WaServer.config.variableEnd}';
+        '${WaServer.config.blockEnd}';
   }
 }
 
@@ -201,6 +201,21 @@ class $JinjaBody extends Tag {
         "${WaServer.config.blockEnd}";
     return res;
   }
+}
+
+class $JinjaBlock extends $JinjaBody {
+  $JinjaBlock({
+    required String blockName,
+    List<Tag>? children,
+  }) : super(
+          commandUp: 'block $blockName',
+          commandDown: 'endblock',
+          children: children,
+        );
+}
+
+class $JinjaInclude extends $Jinja {
+  $JinjaInclude(String template) : super('include \'$template\'');
 }
 
 class $JinjaVar extends Tag {
@@ -679,5 +694,45 @@ class $Cache extends ArrayTag {
     if (_html.isNotEmpty) return _html;
     _html = super.toHtml(pretty: pretty, indent: indent);
     return _html;
+  }
+}
+
+class JJ {
+  static Tag $include(String template) => $JinjaInclude(template);
+  static Tag $var(String name) => $JinjaVar(name);
+  static Tag $comment(String content) => $JinjaComment(content);
+
+  static Tag $if(
+    String condition, {
+    List<Tag> then = const [],
+    List<Tag> otherwise = const [],
+  }) {
+    return $JinjaBody(
+      commandUp: 'if $condition',
+      children: [
+        ...then,
+        if (otherwise.isNotEmpty) ...[
+          $Jinja('else'),
+          ...otherwise,
+        ]
+      ],
+      commandDown: 'endif',
+    );
+  }
+
+  static Tag $shortIf(String condition, String then, [String otherwise = '']) {
+    return $JinjaVar(
+        '$then if $condition ${otherwise.isEmpty ? '' : 'else $otherwise'}');
+  }
+
+  static Tag $for(
+      {required String item,
+      required String inList,
+      List<Tag> body = const []}) {
+    return $JinjaBody(
+      commandUp: 'for $item in $inList',
+      children: body,
+      commandDown: 'endfor',
+    );
   }
 }

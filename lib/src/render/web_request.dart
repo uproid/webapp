@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'package:webapp/src/views/htmler.dart';
 import 'package:webapp/src/widgets/wa_string_widget.dart';
 import 'package:webapp/src/widgets/widget_dump.dart';
 import 'package:webapp/wa_model_less.dart';
@@ -542,6 +543,30 @@ class WebRequest {
     var renderString = await render(path: path, isFile: isFile);
     await writeAndClose(renderString);
     return renderString;
+  }
+
+  /// Renders a [Tag] object to HTML and sends it in the response.
+  /// You can use this method to render any HTML tag or widget that implements the [Tag] interface.
+  /// This method converts the [Tag] to an HTML string and then calls [renderView] to handle the response.
+  /// [status] - The HTTP status code to be used. Default is 200.
+  /// [toData] - A flag indicating whether to render the data as a parameter. Default is false.
+  /// [data] - A map of parameters to be passed to the template. Default is an empty map.
+  /// [pretty] - A flag indicating whether to pretty-print the HTML output. Default is false.
+  /// Returns a [Future<String>] containing the rendered HTML string.
+  Future<String> renderTag({
+    required Tag tag,
+    int status = 200,
+    bool toData = false,
+    Map<String, dynamic> data = const {},
+    bool pretty = false,
+  }) async {
+    return renderView(
+      path: tag.toHtml(pretty: pretty),
+      isFile: false,
+      status: status,
+      toData: toData,
+      data: data,
+    );
   }
 
   /// Renders a template with the given parameters and configuration.

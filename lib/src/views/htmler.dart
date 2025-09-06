@@ -9,12 +9,13 @@ enum TagType {
 abstract class Tag {
   TagType type = TagType.double;
   String _tag = "html";
+  String get tagName => _tag;
   late Map<dynamic, dynamic> attrs;
   late List<Tag> children;
   List<dynamic> classes;
 
   @override
-  String toString() {
+  String toString({bool pretty = false}) {
     return toHtml();
   }
 
@@ -115,72 +116,49 @@ abstract class Tag {
     return key.toString();
   }
 
-  String toHtml({bool pretty = false, int indent = 0}) {
+  String toHtml() {
     final buffer = StringBuffer();
     var attr = "";
     if (attrs.isNotEmpty) {
-      attr =
-          ' ${attrs.entries.map((e) => '${attrKey(e.key)}="${e.value.toString()}"').join(' ')}';
+      attr = attrs.entries
+          .map((e) => '${attrKey(e.key)}="${e.value.toString()}"')
+          .join(' ');
+      attr = ' $attr';
     }
 
-    // Non-pretty (compact) output — keep original behavior
-    if (!pretty) {
-      buffer.write('<$_tag$attr');
-      if (type == TagType.single) {
-        return '$buffer/>';
-      } else {
-        buffer.write('>');
-      }
-      for (var child in children) {
-        buffer.write(child.toHtml(pretty: pretty));
-      }
-      buffer.write('</$_tag>');
-      return buffer.toString();
-    }
-
-    // Pretty output
-    final indentStr = '\t' * indent;
-    final innerIndentStr = '\t' * (indent + 1);
-
+    buffer.write('<$_tag$attr');
     if (type == TagType.single) {
-      return '$indentStr<$_tag$attr/>\n';
+      return '$buffer/>';
+    } else {
+      buffer.write('>');
     }
-
-    if (children.isEmpty) {
-      return '$indentStr<$_tag$attr></$_tag>\n';
-    }
-
-    buffer.write('$indentStr<$_tag$attr>\n');
-
     for (var child in children) {
-      var childHtml = child.toHtml(pretty: true);
-      childHtml = childHtml.replaceAll('\r\n', '\n');
-      var lines = childHtml.split('\n');
-      for (var line in lines) {
-        if (line.isEmpty) continue;
-        buffer.write('$innerIndentStr$line\n');
-      }
+      buffer.write(child.toHtml());
     }
-
-    buffer.write('$indentStr</$_tag>\n');
-    return buffer.toString();
+    buffer.write('</$_tag>');
+    var res = buffer.toString();
+    return res;
   }
 }
 
-class $Jinja extends Tag {
+abstract class JinjaTag extends Tag {
+  JinjaTag({super.attrs, super.children, super.classes});
+}
+
+class $Jinja extends JinjaTag {
   String command;
 
   $Jinja(this.command);
 
   @override
-  String toHtml({bool pretty = false, int indent = 0}) {
+  String toHtml() {
     return '${WaServer.config.blockStart}'
         ' $command '
         '${WaServer.config.blockEnd}';
   }
 }
 
-class $JinjaBody extends Tag {
+class $JinjaBody extends JinjaTag {
   String commandUp;
   String commandDown;
   $JinjaBody({
@@ -189,12 +167,12 @@ class $JinjaBody extends Tag {
     required this.commandDown,
   });
   @override
-  String toHtml({bool pretty = false, int indent = 0}) {
+  String toHtml() {
     var res = "${WaServer.config.blockStart}"
         " $commandUp "
         "${WaServer.config.blockEnd}";
     for (var child in children) {
-      res += child.toHtml(pretty: pretty, indent: indent + 1);
+      res += child.toHtml();
     }
     res += "${WaServer.config.blockStart}"
         " $commandDown "
@@ -215,25 +193,25 @@ class $JinjaBlock extends $JinjaBody {
 }
 
 class $JinjaInclude extends $Jinja {
-  $JinjaInclude(String template) : super('include \'$template\'');
+  $JinjaInclude(String template) : super("include '$template'");
 }
 
-class $JinjaVar extends Tag {
+class $JinjaVar extends JinjaTag {
   String command;
   $JinjaVar(this.command);
 
   @override
-  String toHtml({bool pretty = false, int indent = 0}) {
+  String toHtml() {
     return '${WaServer.config.variableStart} $command ${WaServer.config.variableEnd}';
   }
 }
 
-class $JinjaComment extends Tag {
+class $JinjaComment extends JinjaTag {
   String content;
   $JinjaComment(this.content);
 
   @override
-  String toHtml({bool pretty = false, int indent = 0}) {
+  String toHtml() {
     return "${WaServer.config.commentStart} $content ${WaServer.config.commentEnd}";
   }
 }
@@ -264,10 +242,10 @@ class ArrayTag extends Tag {
   ArrayTag({super.children});
 
   @override
-  String toHtml({bool pretty = false, int indent = 0}) {
+  String toHtml() {
     final buffer = StringBuffer();
     for (var child in children) {
-      buffer.write(child.toHtml(pretty: pretty, indent: indent));
+      buffer.write(child.toHtml());
     }
     return buffer.toString();
   }
@@ -285,8 +263,8 @@ class $Doctype extends SingleTag {
   $Doctype([this.params = const ['html']]);
 
   @override
-  String toHtml({bool pretty = false, int indent = 0}) {
-    return '<!DOCTYPE ${params.join(" ")}>${pretty ? "\n" : ""}';
+  String toHtml() {
+    return '<!DOCTYPE ${params.join(" ")}>';
   }
 }
 
@@ -305,7 +283,7 @@ class $Raw extends Tag {
   });
 
   @override
-  String toHtml({bool pretty = false, int indent = 0}) {
+  String toHtml() {
     return content;
   }
 }
@@ -316,7 +294,7 @@ class $Text extends Tag {
   $Text(this.content, {super.classes});
 
   @override
-  String toHtml({bool pretty = false, int indent = 0}) {
+  String toHtml() {
     return htmlEscape.convert(content);
   }
 }
@@ -640,10 +618,18 @@ class $Tfoot extends Tag {
 }
 
 class $Comment extends Tag {
+  Tag content;
+
+  $Comment(this.content)
+      : super(
+          children: [],
+          classes: const [],
+        );
+
   @override
-  get _tag => "!--";
-  $Comment(String content)
-      : super(children: [$Raw(content)], classes: const []);
+  String toHtml() {
+    return '<!-- ${content.toHtml()} -->';
+  }
 }
 
 class $Svg extends Tag {
@@ -690,13 +676,21 @@ class $Cache extends ArrayTag {
   $Cache({super.children});
 
   @override
-  String toHtml({bool pretty = false, int indent = 0}) {
+  String toHtml() {
     if (_html.isNotEmpty) return _html;
-    _html = super.toHtml(pretty: pretty, indent: indent);
+    _html = super.toHtml();
     return _html;
   }
 }
 
+/// Helper class for Jinja tags
+/// With this class, you can create Jinja tags easily.
+/// Usage:
+///   JJ.$include('template.html')
+///   JJ.$var('variable_name')
+///   JJ.$if('condition', then: [JJ.$var('then_var')], otherwise: [JJ.$var('else_var')])
+///   JJ.$for(item: 'item', inList: 'items', body: [JJ.$var('item')])
+/// etc.
 class JJ {
   static Tag $include(String template) => $JinjaInclude(template);
   static Tag $var(String name) => $JinjaVar(name);

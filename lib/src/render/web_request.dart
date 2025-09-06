@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'package:webapp/src/tools/convertor/html_formatter.dart';
 import 'package:webapp/src/views/htmler.dart';
 import 'package:webapp/src/widgets/wa_string_widget.dart';
 import 'package:webapp/src/widgets/widget_dump.dart';
@@ -417,7 +418,7 @@ class WebRequest {
     addParam('status', status);
     return renderView(
       path: errorWidget.generateHtml != null
-          ? errorWidget.generateHtml!(getParams()).toHtml(pretty: true)
+          ? errorWidget.generateHtml!(getParams()).toHtml()
           : errorWidget.layout,
       status: status,
       isFile: false,
@@ -428,7 +429,7 @@ class WebRequest {
   Future<String> dump(dynamic object) async {
     addParam('output', WaJson.jsonEncoder(object));
     response.headers.contentType = ContentType.html;
-    var html = DumpWodget().generateHtml!({}).toHtml(pretty: true);
+    var html = DumpWodget().generateHtml!({}).toHtml();
     var output = await this.renderView(
       path: html,
       isFile: false,
@@ -527,6 +528,7 @@ class WebRequest {
     bool isFile = true,
     bool toData = false,
     Map<String, dynamic> data = const {},
+    bool writeAndClose = true,
   }) async {
     if (isClosed) return '';
 
@@ -541,7 +543,9 @@ class WebRequest {
       Console.i(e);
     }
     var renderString = await render(path: path, isFile: isFile);
-    await writeAndClose(renderString);
+    if (writeAndClose) {
+      await this.writeAndClose(renderString);
+    }
     return renderString;
   }
 
@@ -560,13 +564,20 @@ class WebRequest {
     Map<String, dynamic> data = const {},
     bool pretty = false,
   }) async {
-    return renderView(
-      path: tag.toHtml(pretty: pretty),
+    var htmlString = tag.toHtml();
+    htmlString = await renderView(
+      path: htmlString,
       isFile: false,
       status: status,
       toData: toData,
       data: data,
+      writeAndClose: false,
     );
+    if (pretty) {
+      htmlString = HtmlFormatter.format(htmlString, indent: '\t');
+    }
+    await writeAndClose(htmlString);
+    return htmlString;
   }
 
   /// Renders a template with the given parameters and configuration.

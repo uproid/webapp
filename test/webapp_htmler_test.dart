@@ -32,7 +32,6 @@ void main() {
   group("HTML Renderer Tests", () {
     test("Render simple HTML", () async {
       var html = template.toHtml();
-      print(html);
       expect(html, isNotNull);
       expect(
         html,
@@ -42,13 +41,6 @@ void main() {
         'orld!</h1><p>This is a test page.</p><a href="https://exampl'
         'e.com">Click here to visit example.com</a></body></html>',
       );
-    });
-
-    test("Render HTML pretty", () async {
-      var html = template.toHtml(pretty: true);
-      var htmlLines = html.replaceAll('\n', '').replaceAll('\t', '');
-      var htmlMini = template.toHtml(pretty: false);
-      expect(htmlLines, htmlMini);
     });
 
     test('test for jinja', () async {

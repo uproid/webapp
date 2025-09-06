@@ -41,6 +41,16 @@ class HtmlFormatter {
         }
 
         final tag = html.substring(i, tagEnd + 1);
+
+        // Handle special cases first
+        if (_isSpecialTag(tag)) {
+          _addIndentation(buffer, level);
+          buffer.write(tag);
+          buffer.write('\n');
+          i = tagEnd + 1;
+          continue;
+        }
+
         final tagInfo = _parseTag(tag);
 
         if (tagInfo.isClosing) {
@@ -124,7 +134,7 @@ class HtmlFormatter {
     return html.length;
   }
 
-  /// Checks if a tag contains only simple text (no nested tags)
+  /// Checks if a tag contains only simple text (no nested tags) or is empty
   /// Returns null if it's not a simple text tag, otherwise returns the full tag info
   _SimpleTagInfo? _checkIfSimpleTextTag(String html, int startIndex) {
     final tagEnd = _findTagEnd(html, startIndex);
@@ -153,19 +163,21 @@ class HtmlFormatter {
     // Check if content contains any HTML tags
     if (content.contains('<')) return null;
 
-    // Check if content is simple text (not too long and no line breaks)
+    // Check if content is empty OR simple text (not too long and no line breaks)
     final trimmedContent = content.trim();
-    if (trimmedContent.isEmpty ||
-        trimmedContent.length > 100 ||
-        trimmedContent.contains('\n')) {
-      return null;
+    if (trimmedContent.isEmpty) {
+      // Empty tag - keep on one line
+      final fullTag = openTag + closingTag;
+      final endIndex = closingTagIndex + closingTag.length;
+      return _SimpleTagInfo(fullTag: fullTag, endIndex: endIndex);
+    } else if (trimmedContent.length <= 100 && !trimmedContent.contains('\n')) {
+      // Simple text tag - keep on one line
+      final fullTag = openTag + trimmedContent + closingTag;
+      final endIndex = closingTagIndex + closingTag.length;
+      return _SimpleTagInfo(fullTag: fullTag, endIndex: endIndex);
     }
 
-    // Return the complete simple tag
-    final fullTag = openTag + trimmedContent + closingTag;
-    final endIndex = closingTagIndex + closingTag.length;
-
-    return _SimpleTagInfo(fullTag: fullTag, endIndex: endIndex);
+    return null;
   }
 
   _TagInfo _parseTag(String tag) {
@@ -212,6 +224,33 @@ class HtmlFormatter {
       'wbr'
     };
     return selfClosingTags.contains(tagName.toLowerCase());
+  }
+
+  /// Checks if a tag is a special tag that should not be nested (DOCTYPE, comments, etc.)
+  bool _isSpecialTag(String tag) {
+    final trimmed = tag.trim().toLowerCase();
+
+    // DOCTYPE declaration
+    if (trimmed.startsWith('<!doctype')) {
+      return true;
+    }
+
+    // HTML comments
+    if (trimmed.startsWith('<!--')) {
+      return true;
+    }
+
+    // XML declarations
+    if (trimmed.startsWith('<?xml')) {
+      return true;
+    }
+
+    // CDATA sections
+    if (trimmed.startsWith('<![cdata[')) {
+      return true;
+    }
+
+    return false;
   }
 
   void _addIndentation(StringBuffer buffer, int level) {

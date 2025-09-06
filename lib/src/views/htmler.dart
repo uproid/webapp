@@ -41,7 +41,7 @@ abstract class Tag {
     return this;
   }
 
-  Tag addAttr(String key, String value) {
+  Tag addAttr(String key, dynamic value) {
     attrs[key] = value;
     return this;
   }
@@ -56,9 +56,9 @@ abstract class Tag {
     return this;
   }
 
-  Tag addClass(String className) {
-    final existingClasses = attrs['class']?.split(' ') ?? [];
-    existingClasses.add(className);
+  Tag addClass(dynamic className) {
+    List existingClasses = attrs['class']?.split(' ') ?? [];
+    existingClasses.add(className.toString());
     attrs['class'] = existingClasses.join(' ');
     return this;
   }

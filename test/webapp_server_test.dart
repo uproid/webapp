@@ -2,10 +2,12 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:test/test.dart';
 import 'package:webapp/src/tools/console.dart';
+import 'package:webapp/src/views/htmler.dart';
 import 'package:webapp/wa_route.dart';
 import 'package:webapp/wa_server.dart';
 import 'package:webapp/wa_tools.dart';
 import 'package:http/http.dart' as http;
+import 'package:html/parser.dart';
 
 void main() async {
   WaServer server = WaServer(
@@ -28,6 +30,80 @@ void main() async {
         rq: rq,
         index: () => rq.renderString(text: "TEST"),
         children: [
+          WebRoute(
+            path: 'htmler',
+            rq: rq,
+            index: () {
+              rq.addParam('variable', 'VALUE');
+              rq.addParam('list', ['item1', 'item2', 'item3', 'item4']);
+              rq.addParam('condition', true);
+
+              return rq.renderTag(
+                  pretty: true,
+                  tag: $Html(
+                    attrs: {
+                      'lang': 'en',
+                    },
+                    children: [
+                      $Head(
+                        children: [
+                          $Meta(attrs: {'charset': 'UTF-8'}),
+                          $Title(children: [$Text('Test Page')]),
+                          $Meta(
+                            attrs: {
+                              'name': 'viewport',
+                              'content':
+                                  'width=device-width, initial-scale=1.0',
+                            },
+                          ),
+                          $Title(children: [$Text('Test Page')]),
+                        ],
+                      ),
+                      $Body(
+                        children: [
+                          $H1(children: [$Text('Hello, World!')]),
+                          $P(children: [$Text('This is a test page.')]),
+                          $A(
+                            attrs: {
+                              'href': 'https://example.com',
+                              'id': 'example-link',
+                            },
+                            children: [
+                              $Text('Click here to visit example.com')
+                            ],
+                          ),
+                          $B(children: [
+                            $JinjaVar('variable'),
+                          ]),
+                          JJ.$for(
+                            item: 'item',
+                            inList: 'list',
+                            body: [
+                              $Div(
+                                children: [
+                                  $Text('Item: '),
+                                  $JinjaVar('item'),
+                                ],
+                                classes: [
+                                  JJ.$shortIf(
+                                    'condition',
+                                    '"div-counter"',
+                                    '"div-false"',
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          JJ.$comment("TEST COMMENT"),
+                          $Comment($Center(children: [
+                            $Text('TEST CENTER COMMENT'),
+                          ]))
+                        ],
+                      ),
+                    ],
+                  ));
+            },
+          ),
           WebRoute(
             path: 'checkurl',
             rq: rq,
@@ -305,6 +381,59 @@ void main() async {
       data,
       "http://localhost:${httpServer.port}/test\nparamValue\ntest.translate",
       reason: "Response success should contain 'test error page'",
+    );
+    expect(req.statusCode, 200, reason: "Status code should be 200");
+  });
+
+  test('Test renderTag', () async {
+    var req = await http.get(
+      Uri.parse("http://localhost:${httpServer.port}/htmler"),
+    );
+    var html = req.body;
+    var document = parse(html);
+    var htmlElement = document.getElementsByTagName('html').first;
+    var aLink = document.getElementById('example-link');
+    var p = document.getElementsByTagName('p').first;
+    var h1 = document.getElementsByTagName('h1').first;
+    var b = document.getElementsByTagName('b').first;
+    var divs = document.getElementsByClassName('div-counter');
+
+    expect(html, isNotNull);
+    expect(
+      htmlElement.attributes['lang'],
+      equals('en'),
+    );
+    expect(
+      aLink?.attributes['href'],
+      equals('https://example.com'),
+    );
+    expect(
+      aLink?.text,
+      equals('Click here to visit example.com'),
+    );
+    expect(
+      p.text,
+      equals('This is a test page.'),
+    );
+    expect(
+      h1.text,
+      equals('Hello, World!'),
+    );
+    expect(
+      b.text,
+      equals('VALUE'),
+    );
+    expect(
+      divs.length,
+      equals(4),
+    );
+    expect(
+      html,
+      isNot(contains('TEST COMMENT')),
+    );
+    expect(
+      html,
+      contains('TEST CENTER COMMENT'),
     );
     expect(req.statusCode, 200, reason: "Status code should be 200");
   });

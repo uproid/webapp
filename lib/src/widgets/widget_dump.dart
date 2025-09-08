@@ -12,27 +12,27 @@ class DumpWodget implements WaStringWidget {
 
   @override
   Tag Function(Map args)? generateHtml = (args) {
-    var res = Html(
+    var res = $Html(
       children: [
-        JinjaBody(
+        $JinjaBody(
           commandUp: 'if output',
           children: [
-            Head(
+            $Head(
               children: [
-                Script(attrs: {
+                $Script(attrs: {
                   'src':
                       'https://pfau-software.de/json-viewer/dist/iife/index.js',
                 }),
-                Style().addChild(
-                  Raw(
+                $Style().addChild(
+                  $Raw(
                     'body { margin: 0; padding: 0; background-color: #151515; }',
                   ),
                 ),
               ],
             ),
-            Body(
+            $Body(
               children: [
-                CustomTag('andypf-json-viewer', attrs: {
+                $CustomTag('andypf-json-viewer', attrs: {
                   'indent': '2',
                   'show-data-types': 'true',
                   'show-toolbar': 'true',
@@ -42,7 +42,7 @@ class DumpWodget implements WaStringWidget {
                   'theme': 'summerfruit-dark',
                   'expanded': '2',
                 }, children: [
-                  JinjaVar("output")
+                  $JinjaVar("output")
                 ]),
               ],
             ),

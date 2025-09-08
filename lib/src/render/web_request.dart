@@ -4,6 +4,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'package:webapp/src/tools/convertor/html_formatter.dart';
+import 'package:webapp/src/views/htmler.dart';
 import 'package:webapp/src/widgets/wa_string_widget.dart';
 import 'package:webapp/src/widgets/widget_dump.dart';
 import 'package:webapp/wa_model_less.dart';
@@ -205,7 +207,7 @@ class WebRequest {
 
     // For GET
     var params = _rq.uri.queryParameters;
-    get.addAll(_safeValue<Map<String, dynamic>>(params));
+    get.addAll(_checkValues<Map<String, dynamic>>(params));
 
     // For POST or PUT
     if (method == RequestMethods.POST || method == RequestMethods.PUT) {
@@ -217,7 +219,7 @@ class WebRequest {
         try {
           content = await utf8.decoder.bind(stream).join();
           var body = QueryString.parse(content);
-          post.addAll(_safeValue(body));
+          post.addAll(_checkValues(body));
         } catch (e) {
           Console.e(e);
         }
@@ -226,7 +228,7 @@ class WebRequest {
           .toLowerCase()
           .contains("multipart/form-data")) {
         var data = await getHeaderFormData();
-        post.addAll(_safeValue(data['fields']));
+        post.addAll(_checkValues(data['fields']));
         file.addAll(data['files']);
       } else if (headers.contentType
           .toString()
@@ -235,7 +237,7 @@ class WebRequest {
         try {
           content = await utf8.decoder.bind(stream).join();
           var data = jsonDecode(content);
-          post.addAll(_safeValue(data));
+          post.addAll(_checkValues(data));
         } catch (e) {
           Console.e(e);
         }
@@ -259,19 +261,15 @@ class WebRequest {
     return _dataRequest;
   }
 
-  /// Safely converts values to a map, ensuring no null values are included.
-  R _safeValue<R>(R value) {
-    if (value is String) {
-      return htmlEscape.convert(value) as R;
-    }
-    if (value is Map) {
-      return value.map((key, val) => MapEntry(key.toString(), _safeValue(val)))
-          as R;
-    }
-    if (value is List) {
-      return value.map((e) => _safeValue(e)).toList() as R;
-    }
+  R _checkValues<R>(R value) {
     return value;
+  }
+
+  /// Safely escapes HTML special characters in the input string.
+  /// &lt;a href=&quot;javascript:alert(null)&quot;&gt;&lt;/a&gt;
+  /// Will be converted to: `&lt;a href=&quot;javascript:alert(null)&quot;&gt;&lt;/a&gt;`
+  String safe(String input) {
+    return htmlEscape.convert(input);
   }
 
   /// Retrieves all parsed request data including GET, POST, and FILE data.
@@ -416,7 +414,7 @@ class WebRequest {
     addParam('status', status);
     return renderView(
       path: errorWidget.generateHtml != null
-          ? errorWidget.generateHtml!(getParams()).toHtml(pretty: true)
+          ? errorWidget.generateHtml!(getParams()).toHtml()
           : errorWidget.layout,
       status: status,
       isFile: false,
@@ -427,7 +425,7 @@ class WebRequest {
   Future<String> dump(dynamic object) async {
     addParam('output', WaJson.jsonEncoder(object));
     response.headers.contentType = ContentType.html;
-    var html = DumpWodget().generateHtml!({}).toHtml(pretty: true);
+    var html = DumpWodget().generateHtml!({}).toHtml();
     var output = await this.renderView(
       path: html,
       isFile: false,
@@ -526,6 +524,7 @@ class WebRequest {
     bool isFile = true,
     bool toData = false,
     Map<String, dynamic> data = const {},
+    bool writeAndClose = true,
   }) async {
     if (isClosed) return '';
 
@@ -540,8 +539,41 @@ class WebRequest {
       Console.i(e);
     }
     var renderString = await render(path: path, isFile: isFile);
-    await writeAndClose(renderString);
+    if (writeAndClose) {
+      await this.writeAndClose(renderString);
+    }
     return renderString;
+  }
+
+  /// Renders a [Tag] object to HTML and sends it in the response.
+  /// You can use this method to render any HTML tag or widget that implements the [Tag] interface.
+  /// This method converts the [Tag] to an HTML string and then calls [renderView] to handle the response.
+  /// [status] - The HTTP status code to be used. Default is 200.
+  /// [toData] - A flag indicating whether to render the data as a parameter. Default is false.
+  /// [data] - A map of parameters to be passed to the template. Default is an empty map.
+  /// [pretty] - A flag indicating whether to pretty-print the HTML output. Default is false.
+  /// Returns a [Future<String>] containing the rendered HTML string.
+  Future<String> renderTag({
+    required Tag tag,
+    int status = 200,
+    bool toData = false,
+    Map<String, dynamic> data = const {},
+    bool pretty = false,
+  }) async {
+    var htmlString = tag.toHtml();
+    htmlString = await renderView(
+      path: htmlString,
+      isFile: false,
+      status: status,
+      toData: toData,
+      data: data,
+      writeAndClose: false,
+    );
+    if (pretty) {
+      htmlString = HtmlFormatter.format(htmlString, indent: '\t');
+    }
+    await writeAndClose(htmlString);
+    return htmlString;
   }
 
   /// Renders a template with the given parameters and configuration.
@@ -596,7 +628,10 @@ class WebRequest {
         variableEnd: WaServer.config.variableEnd,
         commentStart: WaServer.config.commentStart,
         commentEnd: WaServer.config.commentEnd,
-        filters: _layoutFilters,
+        filters: {
+          ..._layoutFilters,
+          'safe': (dynamic input) => safe(input.toString()),
+        },
         getAttribute: (String key, dynamic object) {
           try {
             if (object is TString) {
@@ -780,6 +815,9 @@ class WebRequest {
       } else {
         return id;
       }
+    },
+    'safe': (dynamic input) {
+      return htmlEscape.convert(input.toString());
     },
   };
 

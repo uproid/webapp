@@ -1,3 +1,4 @@
+import '../controllers/htmler_controller.dart';
 import '../configs/setting.dart';
 import '../app.dart';
 import '../controllers/api_document.dart';
@@ -7,6 +8,7 @@ import '../controllers/home_controller.dart';
 
 Future<List<WebRoute>> getWebRoute(WebRequest rq) async {
   final homeController = HomeController(rq);
+  final htmlerController = HtmlerController(rq);
   final authController = AuthController(rq, homeController);
   final includeController = IncludeJsController(rq);
   final apiController = WaApiController(
@@ -170,6 +172,13 @@ Future<List<WebRoute>> getWebRoute(WebRequest rq) async {
       rq: rq,
       methods: RequestMethods.GET_POST,
       index: homeController.exampleMysql,
+    ),
+    WebRoute(
+      path: 'example/htmler',
+      extraPath: ['api/example/htmler'],
+      rq: rq,
+      methods: RequestMethods.GET_POST,
+      index: htmlerController.exampleHtmler,
     ),
     WebRoute(
       path: 'info',

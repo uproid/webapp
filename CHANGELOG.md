@@ -1,6 +1,7 @@
 ## 2.0.2
 - Improved `Htmler` tags
 - Added `renderTag` to `WebRequest` class
+- Added safe filter for templates of jinja
 
 ## 2.0.1
 - Update Error pages style

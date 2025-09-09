@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'package:encrypt/encrypt.dart';
+import 'package:html_unescape/html_unescape.dart';
 
 /// Extension on [String] to provide additional security and sanitization methods.
 extension SafeString on String {
@@ -23,6 +25,13 @@ extension SafeString on String {
     String sanitized = replaceAll(exp, replace);
     return sanitized;
   }
+
+  /// Escapes HTML special characters in the string to their corresponding HTML entities.
+  String escape([var mode = HtmlEscapeMode.unknown]) =>
+      HtmlEscape(mode).convert(this);
+
+  /// Unescapes HTML entities in the string back to their corresponding characters.
+  String unescape() => HtmlUnescape().convert(this);
 
   /// Removes `<script>` tags and JavaScript event handlers from the string.
   ///

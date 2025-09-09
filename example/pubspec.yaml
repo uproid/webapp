@@ -15,7 +15,9 @@ dev_dependencies:
   json_serializable:
 
 dependencies:
-  webapp:
-    # path: ../
+  webapp: 
+    git: 
+      url: https://github.com/uproid/webapp.git
+      ref: dev
 
   watcher:

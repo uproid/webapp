@@ -16,8 +16,9 @@ dev_dependencies:
 
 dependencies:
   webapp: 
-    git: 
-      url: https://github.com/uproid/webapp.git
-      ref: dev
+    path: ../
+    # git: 
+    #   url: https://github.com/uproid/webapp.git
+    #   ref: dev
 
   watcher:

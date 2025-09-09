@@ -288,12 +288,12 @@ class WebRequest {
   ///
   /// The value is sanitized to prevent script injection. An optional [def]
   /// (default value) can be provided if the key is not found.
-  String data(String key, {String def = ''}) {
+  String data(String key, {String def = '', bool trim = true}) {
     var map = getAllData();
     ModelLess modelLess = ModelLess.fromMap(map);
 
     String res = modelLess.get<String>(key, def: def);
-    return res.removeScripts();
+    return trim ? res.removeScripts().trim() : res.removeScripts();
   }
 
   /// Retrieves the value associated with [key] as an object from the request data.
@@ -336,7 +336,7 @@ class WebRequest {
   /// Retrieves the value of [key] cast to type [T]. Supports type-specific operations.
   ///
   /// Supported types include [List], [bool], [int], [double], and [String].
-  T get<T>(String key, {T? def}) {
+  T get<T>(String key, {T? def, trim = true}) {
     switch (T) {
       case List:
         var res = dataObject(key, def: def);
@@ -346,36 +346,36 @@ class WebRequest {
         if (def != null) return def;
         return [] as T;
       case num:
-        var res = (num.tryParse(data(key)) ?? -1);
+        var res = (num.tryParse(data(key, trim: trim)) ?? -1);
         if (def != null && res == -1) return def;
         return res as T;
       case int:
-        var res = (int.tryParse(data(key)) ?? -1);
+        var res = (int.tryParse(data(key, trim: trim)) ?? -1);
         if (def != null && res == -1) return def;
         return res as T;
       case bool:
         if (!hasData(key)) {
           return (def != null ? def : false) as T;
         }
-        return data(key).toBool as T;
+        return data(key, trim: trim).toBool as T;
       case String:
-        var res = data(key).toString();
+        var res = data(key, trim: trim).toString();
         if (res.isEmpty && def != null) return def;
         return res as T;
       case double:
-        var res = data(key).toString().asDouble();
+        var res = data(key, trim: trim).toString().asDouble();
         return res as T;
       default:
-        return data(key) as T;
+        return data(key, trim: trim) as T;
     }
   }
 
   /// Retrieves the value of [key] as a [String] from the request data.
   /// If the value is not found, returns [def] (default value).
   /// This method is used to retrieve string values from the request data.
-  T? tryData<T>(String key, {T? def}) {
+  T? tryData<T>(String key, {T? def, bool trim = true}) {
     if (hasData(key)) {
-      return get<T>(key, def: def);
+      return get<T>(key, def: def, trim: trim);
     } else {
       return def;
     }

@@ -76,12 +76,10 @@
           {% for book in books %}
           <tr class="hover:bg-slate-50">
             <td class="px-3 py-2 align-top"><input class="h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500" type="checkbox" name="selected_books" value="{{ book.id }}" /> <span class="ml-1 font-medium text-slate-800">{{ book.id }}</span></td>
-            <td class="px-3 py-2 text-slate-700">
-              {{ book.title }}
-            </td>
+            <td class="px-3 py-2 text-slate-700">{{ book.title }}</td>
             <td class="px-3 py-2 text-slate-600">{{ book.author }}</td>
-            <td class="px-3 py-2 text-slate-600">{{ book.published_date | dateFormat('dd/MM/y')  }}</td>
-            <td class="px-3 py-2 text-slate-600"><em>{{ book.category_title  }}</em></td>
+            <td class="px-3 py-2 text-slate-600">{{ book.published_date | dateFormat('dd/MM/y') }}</td>
+            <td class="px-3 py-2 text-slate-600"><em>{{ book.category_title }}</em></td>
             <td class="px-3 py-2 text-end">
               <div class="flex items-end justify-end gap-2">
                 <a

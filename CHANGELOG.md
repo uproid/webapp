@@ -1,3 +1,7 @@
+## 2.0.3
+- Trimming the input values received through GET/POST methods
+- Enhancing security measures to mitigate XSS and injection vulnerabilities
+
 ## 2.0.2
 - Improved `Htmler` tags
 - Added `renderTag` to `WebRequest` class

@@ -631,6 +631,8 @@ class WebRequest {
         filters: {
           ..._layoutFilters,
           'safe': (dynamic input) => safe(input.toString()),
+          'unscape': (dynamic input) => input.toString().unescape(),
+          'html': (dynamic input) => input.toString().unescape(),
         },
         getAttribute: (String key, dynamic object) {
           try {
@@ -648,6 +650,9 @@ class WebRequest {
               if (object[key] is ObjectId) {
                 return (object[key] as ObjectId).oid;
               }
+            }
+            if (object[key] is String) {
+              return safe(object[key]);
             }
             return object[key];
           } on NoSuchMethodError {
@@ -1255,7 +1260,11 @@ class WebRequest {
     params['\$e'] = LMap(events, def: null);
     params['\$rq'] = this;
     params['\$n'] = (String path, [Object? def = '']) {
-      return getParams().navigation<Object>(path: path, def: def ?? '');
+      var res = getParams().navigation<Object>(path: path, def: def ?? '');
+      if (res is String) {
+        return res.escape(HtmlEscapeMode.unknown);
+      }
+      return res;
     };
     params['\$l'] = LMap(localEvents, def: null);
     params['\$t'] = (String text, [Object? params]) {

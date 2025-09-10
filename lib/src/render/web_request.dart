@@ -272,16 +272,45 @@ class WebRequest {
     return htmlEscape.convert(input);
   }
 
+  Map<String, Object?> get _allData => <String, Object?>{
+        ..._dataRequest['GET']!,
+        ..._dataRequest['POST'],
+        'POST': _dataRequest['POST'],
+        'GET': _dataRequest['GET'],
+        'FILE': _dataRequest['FILE'],
+      };
+
   /// Retrieves all parsed request data including GET, POST, and FILE data.
-  Map<String, Object?> getAllData() {
-    var map = <String, Object?>{
-      ..._dataRequest['GET']!,
-      ..._dataRequest['POST'],
-      'POST': _dataRequest['POST'],
-      'GET': _dataRequest['GET'],
-      'FILE': _dataRequest['FILE'],
-    };
-    return map;
+  Map<String, Object?> getAllData({
+    List<String> keys = const [],
+    bool trim = true,
+  }) {
+    return getAll();
+  }
+
+  /// Retrieves form data including fields and files
+  /// Returns a map with 'fields' and 'files' keys.
+  /// `keys` in 'fields' contains form fields and their values.
+  /// `trim` indicates whether to trim string values.
+  Map<String, Object?> getAll({
+    List<String> keys = const [],
+    bool trim = true,
+  }) {
+    var all = _allData;
+    if (keys.isNotEmpty) {
+      var result = <String, Object?>{};
+      for (var key in keys) {
+        result[key] = get(key, trim: trim);
+      }
+      return result;
+    } else if (trim) {
+      all.forEach((key, value) {
+        if (value is String) {
+          all[key] = value.trim();
+        }
+      });
+    }
+    return all;
   }
 
   /// Retrieves the value associated with [key] from the request data.
@@ -289,8 +318,7 @@ class WebRequest {
   /// The value is sanitized to prevent script injection. An optional [def]
   /// (default value) can be provided if the key is not found.
   String data(String key, {String def = '', bool trim = true}) {
-    var map = getAllData();
-    ModelLess modelLess = ModelLess.fromMap(map);
+    ModelLess modelLess = ModelLess.fromMap(getAll());
 
     String res = modelLess.get<String>(key, def: def);
     return trim ? res.removeScripts().trim() : res.removeScripts();
@@ -298,20 +326,20 @@ class WebRequest {
 
   /// Retrieves the value associated with [key] as an object from the request data.
   dynamic dataObject(String key, {dynamic def}) {
-    var map = getAllData();
+    var map = getAll(keys: [key]);
     return map[key] ?? def;
   }
 
   /// Retrieves the value associated with [key] from the request data, cast to type [T].
   T dataType<T>(String key, {T? def}) {
-    var map = getAllData();
+    var map = getAll();
     T res = map[key].asCast<T>(def: def) as T;
     return res;
   }
 
   /// Retrieves file data associated with [key] from the request.
   dynamic getFile(String key) {
-    var map = getAllData();
+    var map = _allData;
     if (map['FILE'] != null) {
       Object? res = map['FILE'];
       if (res is Map) {
@@ -327,11 +355,11 @@ class WebRequest {
   }
 
   /// Checks if [key] exists in the request data.
-  bool hasData(String key) => getAllData().containsKey(key);
+  bool hasData(String key) => _allData.containsKey(key);
 
   /// Checks if [key] exists and has a non-empty value in the request data.
   bool hasDataValue(String key) =>
-      getAllData().containsKey(key) && this[key].isNotEmpty;
+      _allData.containsKey(key) && this[key].isNotEmpty;
 
   /// Retrieves the value of [key] cast to type [T]. Supports type-specific operations.
   ///
@@ -1180,7 +1208,7 @@ class WebRequest {
     };
 
     params['render'] = () => 'TODO';
-    params['data'] = getAllData();
+    params['data'] = getAll();
     params['session'] = getAllSession();
     params['param'] = (String path) {
       return _params.getByPathString(path, def: '');

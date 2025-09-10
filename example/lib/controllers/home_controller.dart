@@ -371,7 +371,7 @@ class HomeController extends WaController {
           "key3": rq.getValidator(),
           "key4": {
             "key": rq.getAllSession(),
-            "key2": rq.getAllData(),
+            "key2": rq.getAll(),
             "key3": this,
           },
           "type": rq.getLanguage(),
@@ -501,7 +501,7 @@ class HomeController extends WaController {
   }
 
   Future<String> addNewPerson() async {
-    final res = await personCollectionFree.insert(rq.getAllData());
+    final res = await personCollectionFree.insert(rq.getAll());
     if (res.success) {
       rq.addParam('data', res.formValues);
     } else {
@@ -514,7 +514,7 @@ class HomeController extends WaController {
 
   Future<String> replacePerson() async {
     final id = rq.getParam('id', def: '').toString();
-    final res = await personCollectionFree.replaceOne(id, rq.getAllData());
+    final res = await personCollectionFree.replaceOne(id, rq.getAll());
 
     if (res == null) {
       return _renderPerson(
@@ -566,7 +566,7 @@ class HomeController extends WaController {
     final res = await personCollectionFree.getById(id);
     if (res != null) {
       if (action == 'EDIT') {
-        var res = await personCollectionFree.mergeOne(id, rq.getAllData());
+        var res = await personCollectionFree.mergeOne(id, rq.getAll());
         if (res != null && res.success) {
           return rq.redirect('/example/person');
         } else {
@@ -635,6 +635,7 @@ class HomeController extends WaController {
   }
 
   Future<String> exampleMysql() async {
+    print(rq.getAll());
     MysqlBooks tableBooks = MysqlBooks(server.mysqlDb);
     MysqlCategories tableCategories = MysqlCategories(server.mysqlDb);
     final action = rq.get<String>('action', def: '');
@@ -683,7 +684,7 @@ class HomeController extends WaController {
           data = book ?? {};
           break;
         default:
-          data = rq.getAllData();
+          data = rq.getAll();
       }
 
       var validate = await tableBooks.table.formValidateUI(data);

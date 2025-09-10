@@ -80,7 +80,7 @@ void main() async {
             rq: rq,
             index: () {
               return rq.renderData(data: {
-                'sended': rq.getAllData(),
+                'sended': rq.getAll(),
                 'cookies': {
                   'sessionId': rq.getCookie('sessionId', safe: false),
                   'username': rq.getCookie('username', safe: false),

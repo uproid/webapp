@@ -1079,7 +1079,7 @@ abstract class DBCollectionFree {
     final index = () async {
       if (paging == false) {
         var all = await getAll(
-          filter: getSearchableFilter(inputs: rq.getAllData()),
+          filter: getSearchableFilter(inputs: rq.getAll()),
         );
 
         return rq.renderData(data: {
@@ -1088,7 +1088,7 @@ abstract class DBCollectionFree {
         });
       } else {
         final countAll = await getCount(
-          filter: getSearchableFilter(inputs: rq.getAllData()),
+          filter: getSearchableFilter(inputs: rq.getAll()),
         );
         pageSize = rq.get<int>('pageSize', def: pageSize);
         orderBy = rq.get<String>('orderBy', def: orderBy);
@@ -1105,7 +1105,7 @@ abstract class DBCollectionFree {
         );
 
         final res = await getAll(
-          filter: getSearchableFilter(inputs: rq.getAllData()),
+          filter: getSearchableFilter(inputs: rq.getAll()),
           limit: paging.pageSize,
           skip: paging.start,
           sort: DQ.order(orderBy, orderReverse),
@@ -1189,7 +1189,7 @@ abstract class DBCollectionFree {
     List<int> ports = const [],
   }) {
     final index = () async {
-      var res = await insert(rq.getAllData());
+      var res = await insert(rq.getAll());
 
       if (!res.success) {
         return rq.renderData(
@@ -1289,7 +1289,7 @@ abstract class DBCollectionFree {
         );
       }
 
-      var res = await replaceOne(id, rq.getAllData());
+      var res = await replaceOne(id, rq.getAll());
       if (res == null) {
         return rq.renderData(
           data: {

@@ -6,19 +6,45 @@ class ConsoleWidget implements WaStringWidget {
   get layout => """
 class DebuggerStatusBar {
   constructor() {
-    // Restore state from localStorage, default to open
-    const storedState = localStorage.getItem('wa_console_collapsed');
-    this.isCollapsed = storedState === 'true';
+    this.isCollapsed = false;
     this.isRunning = true;
     this.startTime = Date.now();
     this.breakpoints = 0;
     this.memory = 0;
+    // Create an isolated Shadow DOM to prevent external styles from affecting the debugger UI
+    this.attachShadowRoot();
+    // Load persisted UI state (default: open)
+    this.loadCollapsedState();
     this.createStyles();
     this.createElements();
     this.bindEvents();
     this.logs = [];
-    // Apply initial collapsed state
-    this.container.classList.toggle('collapsed', this.isCollapsed);
+  }
+
+  loadCollapsedState() {
+    try {
+      const stored = window.localStorage.getItem('waDebuggerCollapsed');
+      this.isCollapsed = stored === 'true' ? true : false; // default open if not set
+    } catch (e) {
+      this.isCollapsed = false;
+    }
+  }
+
+  saveCollapsedState() {
+    try {
+      window.localStorage.setItem('waDebuggerCollapsed', this.isCollapsed ? 'true' : 'false');
+    } catch (e) {
+      // ignore storage errors
+    }
+  }
+  
+  attachShadowRoot() {
+    // Host element attached to body
+    this.host = document.createElement('div');
+    this.host.id = 'wa-debugger-host';
+    // Create shadow root
+    this.shadow = this.host.attachShadow({ mode: 'open' });
+    document.body.appendChild(this.host);
   }
   
   createStyles() {
@@ -878,18 +904,24 @@ class DebuggerStatusBar {
         text-overflow: ellipsis;
       }
     `;
-    document.head.appendChild(styleSheet);
+  // Inject styles inside the shadow root for complete isolation
+  this.shadow.appendChild(styleSheet);
   }
   
   createElements() {
     // Create main container
     this.mainContainer = document.createElement('div');
     this.mainContainer.className = 'wa-console';
-    document.body.appendChild(this.mainContainer);
+  // Append the debugger UI only inside the shadow root
+  this.shadow.appendChild(this.mainContainer);
 
     this.container = document.createElement('div');
     this.container.id = 'debugger-container';
     this.container.className = 'wa-console';
+    // Apply initial collapsed state from storage
+    if (this.isCollapsed) {
+      this.container.classList.add('collapsed');
+    }
 
     // Create debugger bar
     const debuggerBar = document.createElement('div');
@@ -1075,9 +1107,10 @@ class DebuggerStatusBar {
       this.toggleDropdown();
     });
     
-    // Close dropdown when clicking outside
-    document.addEventListener('click', (e) => {
-      if (!this.dropdownMenu.contains(e.target) && !this.dropdownToggle.contains(e.target)) {
+    // Close dropdown when clicking outside (within shadow root)
+    this.shadow.addEventListener('click', (e) => {
+      const target = e.target;
+      if (!this.dropdownMenu.contains(target) && !this.dropdownToggle.contains(target)) {
         this.closeDropdown();
       }
     });
@@ -1133,10 +1166,9 @@ class DebuggerStatusBar {
   }
   
   toggle() {
-  this.isCollapsed = !this.isCollapsed;
-  this.container.classList.toggle('collapsed', this.isCollapsed);
-  // Store state in localStorage
-  localStorage.setItem('wa_console_collapsed', this.isCollapsed ? 'true' : 'false');
+    this.isCollapsed = !this.isCollapsed;
+    this.container.classList.toggle('collapsed', this.isCollapsed);
+  this.saveCollapsedState();
   }
   
   toggleDropdown() {
@@ -1255,7 +1287,7 @@ class DebuggerStatusBar {
   
   openConsole(errorData) {
     // Remove existing modal if any
-    const existingModal = document.querySelector('.console-modal');
+  const existingModal = this.shadow.querySelector('.console-modal');
     if (existingModal) {
       existingModal.remove();
     }
@@ -1488,7 +1520,7 @@ class DebuggerStatusBar {
     modal.appendChild(modalContent);
     
     // Add to DOM
-    this.mainContainer.appendChild(modal);
+  this.mainContainer.appendChild(modal);
     
     // Show modal with animation
     setTimeout(() => {
@@ -1503,7 +1535,7 @@ class DebuggerStatusBar {
     });
     
     // Close on Escape key
-    const escapeHandler = (e) => {
+  const escapeHandler = (e) => {
       if (e.key === 'Escape') {
         this.closeConsole();
         document.removeEventListener('keydown', escapeHandler);
@@ -1513,7 +1545,7 @@ class DebuggerStatusBar {
   }
   
   closeConsole() {
-    const modal = document.querySelector('.console-modal');
+  const modal = this.shadow.querySelector('.console-modal');
     if (modal) {
       modal.classList.remove('active');
       setTimeout(() => {
@@ -1526,12 +1558,13 @@ class DebuggerStatusBar {
   
   switchTab(tabName) {
     // Remove active class from all tabs and contents
-    document.querySelectorAll('.error-tab').forEach(tab => tab.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+  this.shadow.querySelectorAll('.error-tab').forEach(tab => tab.classList.remove('active'));
+  this.shadow.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
     
     // Add active class to selected tab and content
     event.target.classList.add('active');
-    document.getElementById(tabName + '-tab').classList.add('active');
+  const content = this.shadow.querySelector('#' + tabName + '-tab');
+  if (content) content.classList.add('active');
   }
 }
 

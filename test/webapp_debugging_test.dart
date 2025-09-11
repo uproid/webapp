@@ -121,10 +121,10 @@ void main() async {
       var content = req.body;
       expect(
         content.contains(
-            "<script href='http://localhost:${httpServer.port}/debugger/console.js'></script>"),
+            "<script src='http://localhost:${httpServer.port}/debugger/console.js'></script>"),
         true,
         reason:
-            "Response success should contain '<script>' it used for debugging",
+            "Response success should contain '<script src=...>' used for debugging",
       );
       expect(req.statusCode, 200, reason: "Status code should be 200");
     });
@@ -136,7 +136,7 @@ void main() async {
       var content = req.body;
       print(content);
       expect(
-        content.contains("<script href='/debugger/console.js'></script>"),
+        content.contains("<script src='/debugger/console.js'></script>"),
         false,
         reason: "debugger used only on HTML pages",
       );

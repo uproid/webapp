@@ -141,7 +141,7 @@ class WaServer {
 
       _webRoutes.add((rq) async {
         rq.buffer.writeln(
-            "<script href='${rq.url('/debugger/console.js')}'></script>");
+            "<script src='${rq.url('/debugger/console.js')}'></script>");
 
         rq.addAsset(
           Asset(

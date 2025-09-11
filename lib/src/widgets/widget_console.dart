@@ -6,7 +6,9 @@ class ConsoleWidget implements WaStringWidget {
   get layout => """
 class DebuggerStatusBar {
   constructor() {
-    this.isCollapsed = false;
+    // Restore state from localStorage, default to open
+    const storedState = localStorage.getItem('wa_console_collapsed');
+    this.isCollapsed = storedState === 'true';
     this.isRunning = true;
     this.startTime = Date.now();
     this.breakpoints = 0;
@@ -15,6 +17,8 @@ class DebuggerStatusBar {
     this.createElements();
     this.bindEvents();
     this.logs = [];
+    // Apply initial collapsed state
+    this.container.classList.toggle('collapsed', this.isCollapsed);
   }
   
   createStyles() {
@@ -1129,8 +1133,10 @@ class DebuggerStatusBar {
   }
   
   toggle() {
-    this.isCollapsed = !this.isCollapsed;
-    this.container.classList.toggle('collapsed', this.isCollapsed);
+  this.isCollapsed = !this.isCollapsed;
+  this.container.classList.toggle('collapsed', this.isCollapsed);
+  // Store state in localStorage
+  localStorage.setItem('wa_console_collapsed', this.isCollapsed ? 'true' : 'false');
   }
   
   toggleDropdown() {

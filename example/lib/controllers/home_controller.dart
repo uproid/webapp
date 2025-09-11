@@ -336,7 +336,6 @@ class HomeController extends WaController {
     MockUserModel? user;
     if (rq.session.containsKey('user')) {
       user = MockUserModel();
-      ;
     }
 
     rq.addParam('languages', Setting.languages);
@@ -635,7 +634,6 @@ class HomeController extends WaController {
   }
 
   Future<String> exampleMysql() async {
-    print(rq.getAll());
     MysqlBooks tableBooks = MysqlBooks(server.mysqlDb);
     MysqlCategories tableCategories = MysqlCategories(server.mysqlDb);
     final action = rq.get<String>('action', def: '');
@@ -646,30 +644,30 @@ class HomeController extends WaController {
       if (title.isNotEmpty) {
         var res = await tableCategories.addNewCategory(title: title);
         if (res.success) {
-          this.addFlash('Category added successfully');
+          addFlash('Category added successfully');
         } else {
-          this.addFlash(
+          addFlash(
             'Error adding category: ${res.errorMsg}',
             type: FlashType.ERROR,
           );
         }
       } else {
-        this.addFlash('Category title is required', type: FlashType.ERROR);
+        addFlash('Category title is required', type: FlashType.ERROR);
       }
     } else if (action == 'delete_category') {
       final id = rq.get<String>('id', def: '');
       await tableCategories.deleteCategory(id);
-      this.addFlash('Category deleted successfully');
+      addFlash('Category deleted successfully');
     } else if (action == 'delete') {
       final id = rq.get<String>('id', def: '');
       await tableBooks.deleteBook(id);
 
-      this.addFlash('Book deleted successfully', type: FlashType.ERROR);
+      addFlash('Book deleted successfully', type: FlashType.ERROR);
     } else if (action == 'delete_all') {
       var ids = rq.get<String>('selected_books', def: '').split(',');
       await tableBooks.deleteAllBooks(ids);
     } else if (action == 'add' || action == 'edit' || action == 'update') {
-      var book = null;
+      Map<String, dynamic>? book;
       var bookId = rq.get<String>('id', def: '');
 
       rq.addParam('id', bookId);
@@ -715,9 +713,9 @@ class HomeController extends WaController {
         }
 
         if (res.success) {
-          this.addFlash('Book added successfully');
+          addFlash('Book added successfully');
         } else {
-          this.addFlash(
+          addFlash(
             'Error adding book: ${res.errorMsg}',
             type: FlashType.ERROR,
           );
@@ -810,6 +808,7 @@ enum FlashType {
   INFO,
   WARNING;
 
+  @override
   String toString() {
     switch (this) {
       case FlashType.SUCCESS:

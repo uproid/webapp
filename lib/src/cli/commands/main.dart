@@ -7,8 +7,8 @@ class Main {
   Future<CappConsole> main(CappController controller) async {
     if (controller.existsOption('version')) {
       return CappConsole(
-        "WebApp Version: v${WaServer.info.version}\n" +
-            "Dart Version: v${Platform.version}",
+        "WebApp Version: v${WaServer.info.version}\n"
+        "Dart Version: v${Platform.version}",
       );
     }
 

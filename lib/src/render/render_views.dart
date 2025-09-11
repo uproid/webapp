@@ -10,7 +10,7 @@ import 'package:jinja/loaders.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 
 class RenderViews {
-  static render({
+  static String render({
     required String path,
     Map<String, Object?> viewParams = const {},
     bool isFile = true,

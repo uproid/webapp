@@ -59,7 +59,7 @@ class AuthController extends WaAuthController<MockUserModel> {
         MockUserModel? user,
       })> checkLogin() async {
     var mockUser = MockUserModel();
-    var userSession = this.rq.getSession('user', def: '');
+    var userSession = rq.getSession('user', def: '');
 
     if (userSession == mockUser.email) {
       return (

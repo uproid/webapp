@@ -14,7 +14,7 @@ class ModelLessArray<T> {
 
   ModelLessArray({this.fields});
 
-  get length {
+  int get length {
     return fields == null ? 0 : fields!.length;
   }
 

@@ -78,7 +78,7 @@ class FormResultFree {
 
   void updateFromMongoResponse(List<Map<String, Object?>> response) {
     final res = MongoErrorResponse.discoverError(response);
-    this.updateErrors(res);
+    updateErrors(res);
   }
 
   FormResultFree(
@@ -109,8 +109,8 @@ class FieldResultFree<T> {
   var errors = [];
   var errorHtml = '';
   var valid = '';
-  T? value = null;
-  T? parsedValue = null;
+  T? value;
+  T? parsedValue;
 
   FieldResultFree(
     this.field, {
@@ -143,7 +143,7 @@ class FieldResultFree<T> {
 class DBFieldFree<T> {
   List<ValidatorEvent> validators = [];
   Type get type => T;
-  T Function()? defaultValue = null;
+  T Function()? defaultValue;
   bool readonly = true;
   bool hideJson = false;
   bool searchable = true;
@@ -158,10 +158,8 @@ class DBFieldFree<T> {
     this.hideJson = false,
     this.searchable = true,
     this.filterable = false,
-    T? Function<R>(R? value)? fix,
-  }) {
-    this.fix = fix;
-  }
+    this.fix,
+  });
 
   Future<FieldResultFree> validate(Object? fieldValue) async {
     var fieldResult = FieldResultFree(this);

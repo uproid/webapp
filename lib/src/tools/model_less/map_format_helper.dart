@@ -251,6 +251,6 @@ extension MapFormatHelper on Map {
 
   /// remove all null values from the map.
   void removeNulls() {
-    this.removeWhere((key, value) => value == null);
+    removeWhere((key, value) => value == null);
   }
 }

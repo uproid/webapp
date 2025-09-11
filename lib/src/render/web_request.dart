@@ -88,7 +88,7 @@ class WebRequest {
   /// Sets application-specific settings for the request.
   ///
   /// If the `theme` cookie is present, it updates the theme setting accordingly.
-  setSetting(Map<String, Object?> setting) {
+  void setSetting(Map<String, Object?> setting) {
     ///To change theme when Cookie of theme is seted.
     var theme = getCookie(
       'theme',
@@ -383,7 +383,7 @@ class WebRequest {
         return res as T;
       case bool:
         if (!hasData(key)) {
-          return (def != null ? def : false) as T;
+          return (def ?? false) as T;
         }
         return data(key, trim: trim).toBool as T;
       case String:
@@ -454,7 +454,7 @@ class WebRequest {
     addParam('output', WaJson.jsonEncoder(object));
     response.headers.contentType = ContentType.html;
     var html = DumpWodget().generateHtml!({}).toHtml();
-    var output = await this.renderView(
+    var output = await renderView(
       path: html,
       isFile: false,
     );
@@ -830,7 +830,7 @@ class WebRequest {
     return renderString;
   }
 
-  static Map<String, Function> _layoutFilters = {
+  static final Map<String, Function> _layoutFilters = {
     'dateFormat': (dynamic dt, String format) {
       try {
         if (dt is DateTime) return DateFormat(format).format(dt);
@@ -855,7 +855,7 @@ class WebRequest {
   };
 
   static Map<String, Function> get layoutFilters => _layoutFilters;
-  static addLocalLayoutFilters(Map<String, Function> filters) {
+  static void addLocalLayoutFilters(Map<String, Function> filters) {
     _layoutFilters.addAll(filters);
   }
 
@@ -1401,7 +1401,7 @@ class WebRequest {
   ///
   /// [key] - The key for the session value.
   /// [value] - The value to be added to the session.
-  addSession(String key, Object value) {
+  void addSession(String key, Object value) {
     session[key] = value;
   }
 
@@ -1413,7 +1413,7 @@ class WebRequest {
   /// [value] - The value of the cookie.
   /// [duration] - The duration for which the cookie should be valid. Default is null.
   /// [safe] - A flag indicating whether to encrypt the cookie value. Default is true.
-  addCookie(
+  void addCookie(
     String key,
     String value, {
     Duration? duration,

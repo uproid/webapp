@@ -218,16 +218,14 @@ class DQ {
     String foreignField = '_id',
     String? as,
   }) {
-    if (as == null) {
-      as = '${from}_info';
-    }
+    as ??= '${from}_info';
 
     return {
       '\$lookup': {
-        'from': "$from",
-        'localField': "$localField",
-        'foreignField': "$foreignField",
-        'as': "$as"
+        'from': from,
+        'localField': localField,
+        'foreignField': foreignField,
+        'as': as,
       }
     };
   }
@@ -246,7 +244,7 @@ class DQ {
         'path': "\$$path",
         if (preserveNullAndEmptyArrays != null)
           'preserveNullAndEmptyArrays': preserveNullAndEmptyArrays,
-        if (as != null) 'as': "$as"
+        if (as != null) 'as': as
       }
     };
   }

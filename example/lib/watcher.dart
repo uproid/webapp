@@ -8,7 +8,7 @@ import 'package:watcher/watcher.dart';
 import 'package:stream_transform/stream_transform.dart';
 import 'app.dart' as app;
 
-main([List<String>? args]) async {
+void main([List<String>? args]) async {
   runZonedGuarded(() async {
     app.main(args);
 
@@ -29,7 +29,6 @@ main([List<String>? args]) async {
           .throttle(const Duration(milliseconds: 1000))
           .listen((_) async {
         await serviceClient.reloadSources(mainIsolate.id ?? '');
-        //print('Reload source codes ${DateTime.now()}');
       });
     } else {
       print(

@@ -7,12 +7,12 @@ extension WaDirectory on Directory {
       to.createSync(recursive: true);
     }
 
-    for (var entity in this.listSync(recursive: true)) {
+    for (var entity in listSync(recursive: true)) {
       if (entity is Directory) {
       } else if (entity is File) {
         var filePath = p.join(
           to.path,
-          p.relative(entity.path, from: this.path),
+          p.relative(entity.path, from: path),
         );
         var file = File(filePath);
         if (!file.parent.existsSync()) {
@@ -24,7 +24,7 @@ extension WaDirectory on Directory {
   }
 
   Future<void> cleanDirectory() async {
-    this.deleteSync(recursive: true);
-    this.createSync(recursive: true);
+    deleteSync(recursive: true);
+    createSync(recursive: true);
   }
 }

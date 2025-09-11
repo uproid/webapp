@@ -35,7 +35,7 @@ class WaController implements RouteRepos {
   ///
   /// Returns a [String] representing the controller.
   @override
-  String toString({var short = false}) {
+  String toString({bool short = false}) {
     if (short) {
       return super.toString().split(' ').last.replaceAll("'", '');
     }

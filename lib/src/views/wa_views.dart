@@ -51,7 +51,7 @@ class WaView {
   /// Otherwise, it returns the rendered view content.
   ///
   /// If the [widget] path is empty, an error message is returned.
-  Future<Object> render({toData = false}) async {
+  Future<Object> render({bool toData = false}) async {
     if (toData) {
       return renderData();
     }

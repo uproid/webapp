@@ -31,9 +31,9 @@ extension MySqlTable on MTable {
   /// // Generates: users.name AS u.name, users.email AS u.email
   /// ```
   List<QSelectField> getFieldsAs(String from, String as) {
-    return this.fields.map((field) {
+    return fields.map((field) {
       return QSelectCustom(
-          QMath('${from.isEmpty ? field.name : "$from.${field.name}"}'),
+          QMath(from.isEmpty ? field.name : "$from.${field.name}"),
           as: as.isEmpty ? field.name : '$as.${field.name}');
     }).toList();
   }
@@ -108,7 +108,6 @@ extension MySqlTable on MTable {
         QO.EQ,
         QVar(name),
       ));
-    ;
     var result = await execute(conn, sqler.toSQL());
     var count = result.rows.first.colByName('count')?.toInt(def: 0);
     return (count ?? 0) > 0;
@@ -188,9 +187,7 @@ extension MySqlTable on MTable {
     for (var i = 1; i <= foreignKeys.length; i++) {
       var fk = foreignKeys[i - 1];
       sql +=
-          'ADD CONSTRAINT fk_${name}_${fk.name}_${DateTime.now().microsecondsSinceEpoch} ' +
-              fk.toSQL() +
-              (i == foreignKeys.length ? ';\n' : ',\n');
+          'ADD CONSTRAINT fk_${name}_${fk.name}_${DateTime.now().microsecondsSinceEpoch} ${fk.toSQL()}${i == foreignKeys.length ? ';\n' : ',\n'}';
     }
     return execute(conn, sql);
   }
@@ -220,7 +217,7 @@ extension MySqlTable on MTable {
     MySQLConnection conn,
     List<Map<String, QVar>> data,
   ) async {
-    String sql = Sqler().insert(QField(this.name), data).toSQL();
+    String sql = Sqler().insert(QField(name), data).toSQL();
     return execute(conn, sql);
   }
 
@@ -248,7 +245,7 @@ extension MySqlTable on MTable {
     MySQLConnection conn,
     Map<String, QVar> data,
   ) async {
-    return this.insertMany(conn, [data]);
+    return insertMany(conn, [data]);
   }
 
   /// Executes a SELECT query on the table.
@@ -357,7 +354,7 @@ extension MySqlTable on MTable {
 
     FormValidator formValidator = FormValidator(
       fields: fields,
-      name: '${this.name}_form',
+      name: '${name}_form',
       extraData: exteraData,
     );
     var res = await formValidator.validateAndForm();

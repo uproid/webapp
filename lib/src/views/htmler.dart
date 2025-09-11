@@ -184,11 +184,10 @@ class $JinjaBody extends JinjaTag {
 class $JinjaBlock extends $JinjaBody {
   $JinjaBlock({
     required String blockName,
-    List<Tag>? children,
+    super.children,
   }) : super(
           commandUp: 'block $blockName',
           commandDown: 'endblock',
-          children: children,
         );
 }
 

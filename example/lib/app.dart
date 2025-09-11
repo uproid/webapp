@@ -113,6 +113,6 @@ void main([List<String>? args]) async {
   );
 }
 
-printDB() {
+void printDB() {
   DBCollectionFree.printDesign();
 }

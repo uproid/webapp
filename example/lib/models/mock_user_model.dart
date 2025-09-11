@@ -1,4 +1,4 @@
-import 'package:mongo_dart/mongo_dart.dart';
+import 'package:webapp/mongo_dart.dart';
 import 'package:webapp/wa_model.dart';
 
 class MockUserModel extends DBModel {

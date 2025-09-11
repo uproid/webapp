@@ -27,7 +27,7 @@ extension SafeString on String {
   }
 
   /// Escapes HTML special characters in the string to their corresponding HTML entities.
-  String escape([var mode = HtmlEscapeMode.unknown]) =>
+  String escape([HtmlEscapeMode mode = HtmlEscapeMode.unknown]) =>
       HtmlEscape(mode).convert(this);
 
   /// Unescapes HTML entities in the string back to their corresponding characters.

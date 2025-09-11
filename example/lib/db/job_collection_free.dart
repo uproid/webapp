@@ -1,6 +1,6 @@
 import 'package:webapp/wa_model_less.dart';
 import 'package:webapp/wa_ui.dart';
-import 'package:mongo_dart/mongo_dart.dart';
+import 'package:webapp/mongo_dart.dart';
 
 class JobCollectionFree extends DBCollectionFree {
   JobCollectionFree({required super.db})

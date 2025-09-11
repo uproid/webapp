@@ -995,7 +995,7 @@ abstract class DBCollectionFree {
         ),
       if (useRouteAll)
         routeGetAll(
-          '$path',
+          path,
           rq: rq,
           paging: paging,
           pageSize: pageSize,
@@ -1010,7 +1010,7 @@ abstract class DBCollectionFree {
           rq: rq,
           apiDoc: docDelete,
         ),
-      if (useRouteInsert) routeInsert('$path', rq: rq, apiDoc: docInsert),
+      if (useRouteInsert) routeInsert(path, rq: rq, apiDoc: docInsert),
       if (useRouteUpdate) routeUpdate('$path/{id}', rq: rq, apiDoc: docUpdate),
     ];
   }
@@ -1076,7 +1076,7 @@ abstract class DBCollectionFree {
       int pageSize = 20,
       bool orderReverse = true,
       String orderBy = '_id'}) {
-    final index = () async {
+    Future<String> index() async {
       if (paging == false) {
         var all = await getAll(
           filter: getSearchableFilter(inputs: rq.getAll()),
@@ -1117,7 +1117,7 @@ abstract class DBCollectionFree {
           'paging': await paging.renderData(),
         });
       }
-    };
+    }
 
     return WebRoute(
       path: path,
@@ -1188,7 +1188,7 @@ abstract class DBCollectionFree {
     List<String> permissions = const [],
     List<int> ports = const [],
   }) {
-    final index = () async {
+    Future<String> index() async {
       var res = await insert(rq.getAll());
 
       if (!res.success) {
@@ -1207,7 +1207,7 @@ abstract class DBCollectionFree {
         'success': true,
         'message': 'inserted',
       });
-    };
+    }
 
     return WebRoute(
       path: path,
@@ -1276,7 +1276,7 @@ abstract class DBCollectionFree {
     List<String> permissions = const [],
     List<int> ports = const [],
   }) {
-    final index = () async {
+    Future<String> index() async {
       var id = rq.getParam('id', def: '').toString();
 
       if (id.isEmpty) {
@@ -1316,7 +1316,7 @@ abstract class DBCollectionFree {
         'success': true,
         'message': 'updated',
       });
-    };
+    }
 
     return WebRoute(
       path: path,
@@ -1384,7 +1384,7 @@ abstract class DBCollectionFree {
     List<String> permissions = const [],
     List<int> ports = const [],
   }) {
-    final index = () async {
+    Future<String> index() async {
       var id = rq.getParam('id', def: '').toString();
 
       if (id.isEmpty) {
@@ -1412,7 +1412,7 @@ abstract class DBCollectionFree {
         'success': true,
         'message': 'deleted',
       });
-    };
+    }
 
     return WebRoute(
       path: path,
@@ -1481,7 +1481,7 @@ abstract class DBCollectionFree {
     List<String> permissions = const [],
     List<int> ports = const [],
   }) {
-    final index = () async {
+    Future<String> index() async {
       var id = rq.getParam('id', def: '').toString();
 
       if (id.isEmpty) {
@@ -1510,7 +1510,7 @@ abstract class DBCollectionFree {
         'data': data,
         'message': 'ok',
       });
-    };
+    }
 
     return WebRoute(
       path: path,
@@ -1751,12 +1751,12 @@ class MongoErrorResponse {
                   ? writeError['keyPattern']
                   : {};
           List<String> fields = keyPattern.keys.toList();
-          fields.forEach((field) {
+          for (var field in fields) {
             if (!res.containsKey(field)) {
               res[field] = [];
             }
             res[field]!.add(error);
-          });
+          }
         }
       }
     }

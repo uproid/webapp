@@ -27,7 +27,7 @@ class Console {
     ),
   );
 
-  static void json(object) {
+  static void json(dynamic object) {
     var log = Logger(
       level: isTestRunning() ? Level.off : Level.debug,
       printer: PrettyPrinter(
@@ -41,13 +41,13 @@ class Console {
 
     log.f("=" * 50 + '\n');
     log.f(object);
-    log.f('\n' + "=" * 50);
+    log.f('\n${"=" * 50}');
   }
 
   /// Logs a warning message.
   ///
   /// The [object] parameter can be any type of object to be logged.
-  static void w(object) {
+  static void w(dynamic object) {
     _logger.w(object);
     _writeLog(object, 'warning');
   }
@@ -55,7 +55,7 @@ class Console {
   /// Logs an error message.
   ///
   /// The [object] parameter can be any type of object to be logged.
-  static void e(object) {
+  static void e(dynamic object) {
     _logger.e(object);
     _writeLog(object, 'error');
     for (var callback in onError) {
@@ -66,7 +66,7 @@ class Console {
   /// Logs an informational message.
   ///
   /// The [object] parameter can be any type of object to be logged.
-  static void i(object) {
+  static void i(dynamic object) {
     _logger.i(object);
     _writeLog(object);
   }
@@ -74,7 +74,7 @@ class Console {
   /// Logs a fatal or critical error message.
   ///
   /// The [object] parameter can be any type of object to be logged.
-  static void p(object) {
+  static void p(dynamic object) {
     _logger.f(object);
     _writeLog(object, 'fatal');
   }
@@ -82,7 +82,7 @@ class Console {
   /// Logs a debug message.
   ///
   /// The [object] parameter can be any type of object to be logged.
-  static void d(object) {
+  static void d(dynamic object) {
     _logger.d(object);
     _writeLog(object, 'debug');
   }
@@ -91,11 +91,11 @@ class Console {
   ///
   /// This is a private method used internally by the logging methods
   /// to print the log message.
-  static void _writeLog(object, [String type = 'info']) {
+  static void _writeLog(dynamic object, [String type = 'info']) {
     if (isDebug) {
-      onLogging.forEach((callback) {
+      for (var callback in onLogging) {
         callback(object, type);
-      });
+      }
     } else {
       write(object);
     }
@@ -104,7 +104,7 @@ class Console {
   /// Prints the given [obj] to the console.
   ///
   /// This method is public and can be used to directly print messages.
-  static void write(obj) => print(obj);
+  static void write(dynamic obj) => print(obj);
 
   /// Checks if the application is running in debug mode.
   ///

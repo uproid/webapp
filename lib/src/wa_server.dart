@@ -109,7 +109,7 @@ class WaServer {
           }),
           'reinit': SocketEvent(onMessage: (socket, data) async {
             print("Server is restarting...");
-            this.restart();
+            restart();
           }),
         },
       );
@@ -250,7 +250,7 @@ class WaServer {
   /// Returns a [Future] containing the [HttpServer] instance.
   /// If [awaitCommands] is true, it will also handle command-line inputs.
   Future<HttpServer> start([List<String>? args, bool awaitCommands = true]) {
-    this._args = args ?? [];
+    _args = args ?? [];
     if (config.noStop) {
       return runZonedGuarded(
         () => _run(args, awaitCommands: awaitCommands),
@@ -387,7 +387,7 @@ class WaServer {
 
     CappConsole.write(welcomeWebApp);
 
-    await _runCommands(this._args);
+    await _runCommands(_args);
   }
 
   CappManager _getCommandManager(List<String> args) => CappManager(
@@ -530,7 +530,7 @@ class WaServer {
                     return appLanguages.length.toString();
                   },
                 );
-                return CappConsole("Count of languages: ${res}");
+                return CappConsole("Count of languages: $res");
               }
 
               return CappConsole("Language commands");
@@ -586,7 +586,7 @@ class WaServer {
                   route['fullPath'].toString(),
                   route['method'].toString(),
                   route['type'].toString(),
-                  route['hosts'].toString() + '/' + route['ports'].toString(),
+                  '${route['hosts']}/${route['ports']}',
                   route['hasAuth'] == true ? 'Yes' : 'No',
                 ]);
               }
@@ -671,7 +671,7 @@ class WaServer {
   }
 
   Future<List<Map>> exploreAllRoutes(WebRequest rq) async {
-    var allRoutes = await this.getAllRoutes(rq);
+    var allRoutes = await getAllRoutes(rq);
 
     List<Map> convert(List<WebRoute> routes, String parentPath, hasAuth) {
       var result = <Map>[];

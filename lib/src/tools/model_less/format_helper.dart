@@ -5,15 +5,15 @@ import 'package:webapp/src/tools/convertor/string_validator.dart';
 
 extension FormatHelper on dynamic {
   int asInt({int? def}) {
-    return int.tryParse(this.toString()) ?? def ?? 0;
+    return int.tryParse(toString()) ?? def ?? 0;
   }
 
   double asDouble({double? def}) {
-    return double.tryParse(this.toString()) ?? def ?? 0.0;
+    return double.tryParse(toString()) ?? def ?? 0.0;
   }
 
   num asNum({num? def}) {
-    return num.tryParse(this.toString()) ?? def ?? 0;
+    return num.tryParse(toString()) ?? def ?? 0;
   }
 
   String asString({String? def, bool trim = true}) {
@@ -49,11 +49,11 @@ extension FormatHelper on dynamic {
         return res as List<T>;
       }
       if (this is List) {
-        return List<T>.from(this.map((x) => x));
+        return List<T>.from(map((x) => x));
       }
 
       if (this is String) {
-        var res = (this.toString()).split(',').map((e) {
+        var res = (toString()).split(',').map((e) {
           if (T == String) {
             return e.toString().trim() as T;
           }
@@ -78,13 +78,13 @@ extension FormatHelper on dynamic {
       return this;
     }
 
-    var res = this.toString().trim();
+    var res = toString().trim();
     res = res.replaceAll('ObjectId("', '').replaceAll('")', 'replace');
     return res.oID ?? def ?? ObjectId();
   }
 
   DateTime? asDateTime({DateTime? def}) {
-    var value = this ?? def ?? null;
+    var value = this ?? def;
     if (value == null) {
       return DateTime.utc(1977);
     }
@@ -116,28 +116,28 @@ extension FormatHelper on dynamic {
       case 'DateTime':
         return value.asDateTime(def: def as DateTime) as T;
       case 'int?':
-        int? defVal = (def == null ? null : def) as int?;
+        int? defVal = (def) as int?;
         return value.asInt(def: defVal) as T?;
       case 'double?':
-        var defVal = (def == null ? null : def) as double?;
+        var defVal = (def) as double?;
         return value.asDouble(def: defVal) as T?;
       case 'num?':
-        var defVal = (def == null ? null : def) as num?;
+        var defVal = (def) as num?;
         return value.asNum(def: defVal) as T?;
       case 'String?':
-        var defVal = (def == null ? null : def) as String?;
+        var defVal = (def) as String?;
         return value.asString(def: defVal) as T?;
       case 'bool?':
-        var defVal = (def == null ? null : def) as bool?;
+        var defVal = (def) as bool?;
         return value.asBool(def: defVal) as T?;
       case 'List?':
-        var defVal = (def == null ? null : def) as List?;
+        var defVal = (def) as List?;
         return value.asList(def: defVal) as T?;
       case 'ObjectId?':
-        var defVal = (def == null ? null : def) as ObjectId?;
+        var defVal = (def) as ObjectId?;
         return value.asObjectId(def: defVal) as T?;
       case 'DateTime?':
-        var defVal = (def == null ? null : def) as DateTime?;
+        var defVal = (def) as DateTime?;
         return value.asDateTime(def: defVal) as T?;
       default:
         return def;

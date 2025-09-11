@@ -104,7 +104,7 @@ class WaJson {
     return _normalizeMapKeys(map);
   }
 
-  static _normalizeMapKeys(Map map) {
+  static Map _normalizeMapKeys(Map map) {
     var res = {};
     for (var key in map.keys) {
       final value = map[key];

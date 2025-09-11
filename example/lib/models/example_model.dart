@@ -1,6 +1,6 @@
 import 'package:webapp/wa_model.dart';
-import 'package:json_annotation/json_annotation.dart';
-import 'package:mongo_dart/mongo_dart.dart';
+import 'package:webapp/json_annotation.dart';
+import 'package:webapp/mongo_dart.dart';
 
 part 'example_model.g.dart';
 

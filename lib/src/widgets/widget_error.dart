@@ -458,7 +458,7 @@ class ErrorWidget implements WaStringWidget {
                   // Linkify stack vscode paths
                   document.querySelectorAll('.vscode').forEach(function(element){
                     var text = element.textContent || '';
-                    var regExp = "/\/\/([^)*]+)/";
+                    var regExp = "///([^)*]+)/";
                     var match = text.match(regExp);
                     if(match && match[1]) {
                       element.innerHTML = '<a href="vscode://file/' + match[1] + '">' + text + '</a>';

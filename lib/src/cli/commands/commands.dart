@@ -76,17 +76,17 @@ class ProjectCommands {
       workingDirectory: File(path).parent.parent.path,
     );
 
-    var help = "Project is running (${proccess.pid})...\n\n" +
-        "┌┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬──────────┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┐\n" +
-        "││││││││││││││││││││││  WEBAPP  │││││││││││││││││││││\n" +
-        "├┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴──────────┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┤\n" +
-        "│  * Press 'r' to Reload  the project               │\n" +
-        "├───────────────────────────────────────────────────┤\n" +
-        "│  * Press 'c' to clear screen                      │\n" +
-        "├───────────────────────────────────────────────────┤\n" +
-        "│  * Press 'i' to write info                        │\n" +
-        "├───────────────────────────────────────────────────┤\n" +
-        "│  * Press 'q' to quit the project                  │\n" +
+    var help = "Project is running (${proccess.pid})...\n\n"
+        "┌┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬──────────┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┬┐\n"
+        "││││││││││││││││││││││  WEBAPP  │││││││││││││││││││││\n"
+        "├┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴──────────┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┤\n"
+        "│  * Press 'r' to Reload  the project               │\n"
+        "├───────────────────────────────────────────────────┤\n"
+        "│  * Press 'c' to clear screen                      │\n"
+        "├───────────────────────────────────────────────────┤\n"
+        "│  * Press 'i' to write info                        │\n"
+        "├───────────────────────────────────────────────────┤\n"
+        "│  * Press 'q' to quit the project                  │\n"
         "└───────────────────────────────────────────────────┘\n";
 
     // Listen for user input in a separate loop
@@ -139,7 +139,7 @@ class ProjectCommands {
       'dart',
       [
         'test',
-        if (report.isNotEmpty) ...['--reporter', '$report'],
+        if (report.isNotEmpty) ...['--reporter', report],
       ],
       environment: {
         'WEBAPP_IS_TEST': 'true',

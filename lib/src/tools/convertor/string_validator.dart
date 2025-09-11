@@ -95,7 +95,7 @@ extension StringValidator on String {
   /// [def] The default value to return if the string cannot be parsed. Defaults to `-1`.
   ///
   /// Returns the integer value of the string or the default value if parsing fails.
-  int toInt({var def = -1}) {
+  int toInt({int def = -1}) {
     return int.tryParse(this) ?? def;
   }
 

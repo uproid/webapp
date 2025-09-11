@@ -1,4 +1,4 @@
-import 'package:mysql_client/mysql_client.dart';
+import 'package:webapp/mysql_client.dart';
 import 'package:webapp/wa_model_less.dart';
 import 'package:webapp/wa_ui.dart';
 import 'package:webapp/wa_mysql.dart';

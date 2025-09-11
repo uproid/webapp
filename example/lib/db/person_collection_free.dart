@@ -1,7 +1,8 @@
+import 'package:webapp/mongo_dart.dart';
+
 import '../app.dart';
 import 'package:webapp/wa_model_less.dart';
 import 'package:webapp/wa_ui.dart';
-import 'package:mongo_dart/mongo_dart.dart';
 
 class PersonCollectionFree extends DBCollectionFree {
   PersonCollectionFree({required super.db})
@@ -11,7 +12,7 @@ class PersonCollectionFree extends DBCollectionFree {
           indexes: allIndexes,
         );
 
-  static get allIndexes => <String, DBIndex>{
+  static Map<String, DBIndex> get allIndexes => <String, DBIndex>{
         'email': DBIndex(
           name: '_email_',
           key: 'email',

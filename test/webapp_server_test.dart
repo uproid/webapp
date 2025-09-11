@@ -135,8 +135,8 @@ void main() async {
             index: () {
               rq.addParam("testParam", "paramValue");
               return rq.renderView(
-                path: "<?= \$e.url('test') ?>\n" +
-                    "<?= testParam ?>\n" +
+                path: "<?= \$e.url('test') ?>\n"
+                    "<?= testParam ?>\n"
                     "<?= \$t('test.translate') ?>\n",
                 isFile: false,
               );
@@ -441,8 +441,7 @@ void main() async {
 
 class AuthController extends WaAuthController<String> {
   bool testResult = false;
-  WebRequest rq;
-  AuthController(this.rq, this.testResult) : super(rq);
+  AuthController(super.rq, this.testResult);
 
   @override
   Future<bool> auth() async {

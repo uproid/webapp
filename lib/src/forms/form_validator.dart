@@ -560,5 +560,5 @@ class FormResult {
     required this.result,
   });
 
-  get json => WaJson.jsonEncoder(this.form);
+  String get json => WaJson.jsonEncoder(form);
 }

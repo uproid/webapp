@@ -30,7 +30,7 @@ class CreateProject {
       );
     }
 
-    var path = controller.getOption('path', def: '$name');
+    var path = controller.getOption('path', def: name);
     path = Uri.parse(path).toFilePath(windows: Platform.isWindows);
 
     CappConsole.write(path, CappColors.success);

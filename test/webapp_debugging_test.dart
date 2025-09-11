@@ -58,8 +58,8 @@ void main() async {
             index: () {
               rq.addParam("testParam", "paramValue");
               return rq.renderView(
-                path: "<?= \$e.url('test') ?>\n" +
-                    "<?= testParam ?>\n" +
+                path: "<?= \$e.url('test') ?>\n"
+                    "<?= testParam ?>\n"
                     "<?= \$t('test.translate') ?>\n",
                 isFile: false,
               );

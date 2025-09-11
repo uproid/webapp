@@ -177,6 +177,16 @@
         </a>
       </li>
       {% endif %}
+      <li>
+        <a
+          href="/example/htmler"
+          class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/htmler') else '' }}"
+          aria-current="page"
+        >
+          <i class="fa-solid fa-theater-masks w-5 text-black"></i>
+          <span>{{ $t('Htmler example') }}</span>
+        </a>
+      </li>
     </ul>
   </div>
 </aside>

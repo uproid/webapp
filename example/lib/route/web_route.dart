@@ -164,6 +164,12 @@ Future<List<WebRoute>> getWebRoute(WebRequest rq) async {
           ],
           index: homeController.paginationExample,
         ),
+        WebRoute(
+          path: 'htmler',
+          rq: rq,
+          methods: RequestMethods.GET_POST,
+          index: htmlerController.exampleHtmler,
+        ),
       ],
     ),
     WebRoute(
@@ -172,13 +178,6 @@ Future<List<WebRoute>> getWebRoute(WebRequest rq) async {
       rq: rq,
       methods: RequestMethods.GET_POST,
       index: homeController.exampleMysql,
-    ),
-    WebRoute(
-      path: 'example/htmler',
-      extraPath: ['api/example/htmler'],
-      rq: rq,
-      methods: RequestMethods.GET_POST,
-      index: htmlerController.exampleHtmler,
     ),
     WebRoute(
       path: 'info',

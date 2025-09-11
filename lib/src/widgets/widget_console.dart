@@ -19,6 +19,8 @@ class DebuggerStatusBar {
     this.createElements();
     this.bindEvents();
     this.logs = [];
+    this.loadStoredLogs();
+    this.updateBreakpointsDisplay();
   }
 
   loadCollapsedState() {
@@ -36,6 +38,85 @@ class DebuggerStatusBar {
     } catch (e) {
       // ignore storage errors
     }
+  }
+
+  loadStoredLogs() {
+    try {
+      const stored = window.localStorage.getItem('waDebuggerLogs');
+      if (stored) {
+        this.logs = JSON.parse(stored);
+        // Ensure we only keep the last 30 logs
+        if (this.logs.length > 30) {
+          this.logs = this.logs.slice(-30);
+          this.saveLogsToStorage();
+        }
+      }
+    } catch (e) {
+      this.logs = [];
+    }
+  }
+
+  saveLogsToStorage() {
+    try {
+      // Only keep the last 30 logs
+      const logsToSave = this.logs.slice(-30);
+      window.localStorage.setItem('waDebuggerLogs', JSON.stringify(logsToSave));
+    } catch (e) {
+      // ignore storage errors
+    }
+  }
+
+  addLogMessage(message, type) {
+    const logEntry = {
+      message: message,
+      type: type,
+      timestamp: new Date().toISOString(),
+      id: Date.now() + Math.random()
+    };
+    
+    this.logs.push(logEntry);
+    
+    // Keep only the last 30 logs
+    if (this.logs.length > 30) {
+      this.logs = this.logs.slice(-30);
+    }
+    
+    // Save to localStorage
+    this.saveLogsToStorage();
+    
+    return logEntry;
+  }
+
+  updateBreakpointsDisplay() {
+    if (this.logs.length > 0) {
+      // Get the most recent log
+      const lastLog = this.logs[this.logs.length - 1];
+      this.breakpointsElement.textContent = lastLog.message;
+      this.breakpointsElement.className = 'log log-' + lastLog.type;
+    } else {
+      // No logs available
+      this.breakpointsElement.textContent = 'No debug messages';
+      this.breakpointsElement.className = 'log';
+    }
+  }
+
+  clearAllLogs() {
+    // Clear logs array
+    this.logs = [];
+    
+    // Clear localStorage
+    try {
+      window.localStorage.removeItem('waDebuggerLogs');
+    } catch (e) {
+      // ignore storage errors
+    }
+    
+    // Update display
+    this.updateBreakpointsDisplay();
+    
+    // Close console and show notification
+    this.closeConsole();
+    this.showNotification('All logs cleared', 'info');
   }
   
   attachShadowRoot() {
@@ -331,6 +412,45 @@ class DebuggerStatusBar {
         background: rgba(255, 255, 255, 0.2);
       }
       
+      .wa-console .console-button-container {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 15px;
+        padding: 0 5px;
+      }
+      
+      .wa-console .console-clear-btn {
+        background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        border: none;
+        color: white;
+        font-size: 11px;
+        font-weight: 500;
+        cursor: pointer;
+        padding: 6px 12px;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
+      }
+      
+      .wa-console .console-clear-btn:hover {
+        background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+      }
+      
+      .wa-console .console-clear-btn:active {
+        transform: translateY(0);
+      }
+      
+      .wa-console .console-clear-btn svg {
+        opacity: 0.9;
+      }
+      
       .wa-console .console-modal-body {
         padding: 20px;
         max-height: 500px;
@@ -494,6 +614,11 @@ class DebuggerStatusBar {
       .wa-console .method-put { background: #FF9800; color: white; }
       .wa-console .method-delete { background: #f44336; color: white; }
       .wa-console .method-patch { background: #9C27B0; color: white; }
+      .wa-console .method-error { background: #f44336; color: white; }
+      .wa-console .method-warning { background: #FF9800; color: white; }
+      .wa-console .method-info { background: #2196F3; color: white; }
+      .wa-console .method-debug { background: #4CAF50; color: white; }
+      .wa-console .method-fatal { background: #9C27B0; color: white; }
 
       .wa-console .type-badge {
         display: inline-block;
@@ -981,6 +1106,12 @@ class DebuggerStatusBar {
     infoDiv.appendChild(memorySpan);
     infoDiv.appendChild(breakpointsSpan);
     
+    // Make breakpoints element clickable to open console
+    this.breakpointsElement.style.cursor = 'pointer';
+    this.breakpointsElement.addEventListener('click', () => {
+      this.openConsole(this.logs);
+    });
+    
     leftSection.appendChild(this.statusElement);
     leftSection.appendChild(infoDiv);
     
@@ -1067,9 +1198,9 @@ class DebuggerStatusBar {
   }
 
   showLog(message, type) {
-    this.breakpointsElement.textContent = this.logs.length + ') ' + message;
-    this.breakpointsElement.className = 'log log-' + type;
-    this.logs.push(message);
+    const logEntry = this.addLogMessage(message, type);
+    // Update the debug-breakpoints display with the latest log
+    this.updateBreakpointsDisplay();
   }
 
   createButton(id, text) {
@@ -1139,7 +1270,7 @@ class DebuggerStatusBar {
     
     // Panel buttons
     this.consoleBtn.addEventListener('click', () => {
-      this.openConsole(this.logs.join('\\n'));
+      this.openConsole(this.logs);
       this.togglePanel('console');
       this.closeDropdown();
     });
@@ -1309,7 +1440,16 @@ class DebuggerStatusBar {
     
     // Check if data is routes array
     const isRoutesData = Array.isArray(errorData) && errorData.length > 0 && errorData[0].hasOwnProperty('path');
-    title.textContent = isRoutesData ? 'DEBUG CONSOLE - ROUTES TABLE' : 'DEBUG CONSOLE - ERROR DETAILS';
+    // Check if data is logs array
+    const isLogsData = Array.isArray(errorData) && errorData.length > 0 && errorData[0].hasOwnProperty('timestamp');
+    
+    if (isLogsData) {
+      title.textContent = 'DEBUG CONSOLE - LOGS HISTORY';
+    } else if (isRoutesData) {
+      title.textContent = 'DEBUG CONSOLE - ROUTES TABLE';
+    } else {
+      title.textContent = 'DEBUG CONSOLE - ERROR DETAILS';
+    }
     
     const closeBtn = document.createElement('button');
     closeBtn.className = 'console-modal-close';
@@ -1323,7 +1463,103 @@ class DebuggerStatusBar {
     const body = document.createElement('div');
     body.className = 'console-modal-body';
     
-    if (isRoutesData) {
+    if (isLogsData) {
+      // Create logs summary
+      const summary = document.createElement('div');
+      summary.className = 'routes-summary';
+      
+      const summaryTitle = document.createElement('div');
+      summaryTitle.className = 'routes-summary-title';
+      summaryTitle.textContent = 'Console Logs History';
+      
+      const summaryInfo = document.createElement('div');
+      const logCounts = errorData.reduce((acc, log) => {
+        acc[log.type] = (acc[log.type] || 0) + 1;
+        return acc;
+      }, {});
+      summaryInfo.textContent = 'Total Logs: ' + errorData.length + ' | ' + Object.entries(logCounts).map(([type, count]) => type.toUpperCase() + ': ' + count).join(' | ');
+      
+      summary.appendChild(summaryTitle);
+      summary.appendChild(summaryInfo);
+      
+      // Create clear button with SVG icon
+      const clearBtn = document.createElement('button');
+      clearBtn.className = 'console-clear-btn';
+      clearBtn.innerHTML = `
+        Clear All
+      `;
+      clearBtn.title = 'Clear all logs';
+      clearBtn.addEventListener('click', () => this.clearAllLogs());
+      
+      // Create button container
+      const buttonContainer = document.createElement('div');
+      buttonContainer.className = 'console-button-container';
+      buttonContainer.appendChild(clearBtn);
+      
+      // Create logs table
+      const table = document.createElement('table');
+      table.className = 'routes-table';
+      
+      // Create table header
+      const thead = document.createElement('thead');
+      const headerRow = document.createElement('tr');
+
+      const headers = ['#', 'Time', 'Type', 'Message'];
+      headers.forEach(headerText => {
+        const th = document.createElement('th');
+        th.textContent = headerText;
+        headerRow.appendChild(th);
+      });
+      
+      thead.appendChild(headerRow);
+      table.appendChild(thead);
+      
+      // Create table body
+      const tbody = document.createElement('tbody');
+      
+      // Sort logs by timestamp (newest first)
+      const sortedLogs = [...errorData].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      
+      sortedLogs.forEach((log, index) => {
+        const row = document.createElement('tr');
+        
+        // #
+        const indexCell = document.createElement('td');
+        indexCell.textContent = (index + 1).toString();
+        row.appendChild(indexCell);
+        
+        // Time
+        const timeCell = document.createElement('td');
+        const date = new Date(log.timestamp);
+        timeCell.textContent = date.toLocaleTimeString();
+        timeCell.title = date.toLocaleString();
+        row.appendChild(timeCell);
+        
+        // Type
+        const typeCell = document.createElement('td');
+        const typeBadge = document.createElement('span');
+        typeBadge.className = 'method-badge method-' + log.type.toLowerCase();
+        typeBadge.textContent = log.type.toUpperCase();
+        typeCell.appendChild(typeBadge);
+        row.appendChild(typeCell);
+        
+        // Message
+        const messageCell = document.createElement('td');
+        messageCell.textContent = log.message;
+        messageCell.style.wordBreak = 'break-word';
+        messageCell.style.maxWidth = '400px';
+        row.appendChild(messageCell);
+        
+        tbody.appendChild(row);
+      });
+      
+      table.appendChild(tbody);
+      
+      // Assemble logs view
+      body.appendChild(summary);
+      body.appendChild(buttonContainer);
+      body.appendChild(table);
+    } else if (isRoutesData) {
       // Create routes summary
       const summary = document.createElement('div');
       summary.className = 'routes-summary';
@@ -1660,7 +1896,9 @@ var socketDebuggerEvents = {
     },
 
     log: function (data) {
-        window.debugger.showLog(data.data.message, data.data.type);
+        if (window.debugger) {
+            window.debugger.showLog(data.data.message, data.data.type);
+        }
     }
 }
 

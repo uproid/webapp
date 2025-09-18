@@ -17,28 +17,28 @@
         <div>
           <label for="email" class="mb-1 block text-sm font-medium text-slate-700">{{ $t('form.validation.email') }}</label>
           <input
-            value="{{ loginForm.email.value }}"
+            value="{{ $n('loginForm/email/value') }}"
             type="email"
             name="email"
             id="email"
             placeholder="{{ $t('form.validation.emailPlaceholder') }}"
-            class="block h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/30 {{ 'border-rose-500 ring-2 ring-rose-300 focus:border-rose-500 focus:ring-rose-300' if loginForm.email.failed else '' }}"
+            class="block h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/30 {{ 'border-rose-500 ring-2 ring-rose-300 focus:border-rose-500 focus:ring-rose-300' if $n('loginForm/email/failed') else '' }}"
           />
-          <div class="mt-1 hidden text-sm text-rose-700 {{ 'block' if loginForm.email.failed else '' }}">
+          <div class="mt-1 hidden text-sm text-rose-700 {{ 'block' if $n('loginForm/email/failed') else '' }}">
             {{ $t($n('loginForm/email/errors/0')) }}
           </div>
         </div>
         <div>
           <label for="password" class="mb-1 block text-sm font-medium text-slate-700">{{ $t('form.validation.password') }}</label>
           <input
-            value="{{ loginForm.password.value }}"
+            value="{{ $n('loginForm/password/value') }}"
             type="password"
             name="password"
             id="password"
             placeholder="{{ $t('form.validation.passwordPlaceholder') }}"
-            class="block h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/30 {{ 'border-rose-500 ring-2 ring-rose-300 focus:border-rose-500 focus:ring-rose-300' if loginForm.password.failed else '' }}"
+            class="block h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/30 {{ 'border-rose-500 ring-2 ring-rose-300 focus:border-rose-500 focus:ring-rose-300' if $n('loginForm/password/failed') else '' }}"
           />
-          <div class="mt-1 hidden text-sm text-rose-700 {{ 'block' if loginForm.password.failed else '' }}">
+          <div class="mt-1 hidden text-sm text-rose-700 {{ 'block' if $n('loginForm/password/failed') else '' }}">
             {{ $t($n('loginForm/password/errors/0')) }}
           </div>
         </div>

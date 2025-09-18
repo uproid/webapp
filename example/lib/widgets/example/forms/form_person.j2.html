@@ -1,6 +1,6 @@
-<form method="POST" action="/example/person/{{ data._id if data._id else '' }}" class="space-y-8">
-  <input type="hidden" name="action" value="{{ 'EDIT' if data._id else 'ADD' }}" />
-  <input type="hidden" name="id" value="{{ data._id if data._id else '' }}" />
+<form method="POST" action="/example/person/{{ toString(data._id) if data else '' }}" class="space-y-8">
+  <input type="hidden" name="action" value="{{ 'EDIT' if data else 'ADD' }}" />
+  <input type="hidden" name="id" value="{{ data if data._id else '' }}" />
 
   <!-- Row 1: Name / Email -->
   <div class="grid gap-6 md:grid-cols-2">
@@ -24,8 +24,8 @@
         name="email"
         value="{{ $n('form/email/value') }}"
         placeholder="{{ $t('person.form.placeholder.email') }}"
-        {% if data._id %}readonly disabled{% endif %}
-        class="h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/30 {{ 'opacity-60 cursor-not-allowed' if data._id else '' }} {{ 'border-rose-500 ring-2 ring-rose-300 focus:border-rose-500 focus:ring-rose-300' if $n('form/email/failed') else '' }}"
+        {% if data %}readonly disabled{% endif %}
+        class="h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/30 {{ 'opacity-60 cursor-not-allowed' if data else '' }} {{ 'border-rose-500 ring-2 ring-rose-300 focus:border-rose-500 focus:ring-rose-300' if $n('form/email/failed') else '' }}"
       />
       <div class="mt-1 text-xs text-rose-700 {{ '' if $n('form/email/failed') else 'hidden' }}">{{ $t($n('form/email/errors/0')) }}</div>
     </div>
@@ -52,8 +52,8 @@
         id="birthday"
         name="birthday"
         value="{{ $n('form/birthday/value') | dateFormat('yyyy-MM-ddThh:mm') }}"
-        {% if data._id %}readonly disabled{% endif %}
-        class="h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/30 {{ 'opacity-60 cursor-not-allowed' if data._id else '' }} {{ 'border-rose-500 ring-2 ring-rose-300 focus:border-rose-500 focus:ring-rose-300' if $n('form/birthday/failed') else '' }}"
+        {% if data %}readonly disabled{% endif %}
+        class="h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/30 {{ 'opacity-60 cursor-not-allowed' if data else '' }} {{ 'border-rose-500 ring-2 ring-rose-300 focus:border-rose-500 focus:ring-rose-300' if $n('form/birthday/failed') else '' }}"
       />
       <div class="mt-1 text-xs text-rose-700 {{ '' if $n('form/birthday/failed') else 'hidden' }}">{{ $t($n('form/birthday/errors/0')) }}</div>
     </div>
@@ -122,8 +122,8 @@
         name="password"
         value="{{ $n('form/password/value') }}"
         placeholder="{{ $t('person.form.placeholder.password') }}"
-        {% if data._id %}readonly disabled{% endif %}
-        class="h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/30 {{ 'opacity-60 cursor-not-allowed' if data._id else '' }} {{ 'border-rose-500 ring-2 ring-rose-300 focus:border-rose-500 focus:ring-rose-300' if $n('form/password/failed') else '' }}"
+        {% if data %}readonly disabled{% endif %}
+        class="h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500/30 {{ 'opacity-60 cursor-not-allowed' if data else '' }} {{ 'border-rose-500 ring-2 ring-rose-300 focus:border-rose-500 focus:ring-rose-300' if $n('form/password/failed') else '' }}"
       />
       <div class="mt-1 text-xs text-rose-700 {{ '' if $n('form/password/failed') else 'hidden' }}">{{ $t($n('form/password/errors/0')) }}</div>
     </div>
@@ -163,7 +163,7 @@
   <!-- Actions -->
   <div class="flex flex-wrap gap-3 border-t border-slate-200 pt-4">
     <button type="submit" class="wave inline-flex items-center rounded-md bg-primary-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500/30">{{ $t('person.form.button.submit') }}</button>
-    {% if data._id %}
+    {% if data %}
     <a href="{{ $e.url('/example/person') }}" class="wave inline-flex items-center rounded-md border border-slate-300 bg-white px-5 py-2.5 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-primary-500/30">{{ $t('person.form.button.cancel') }}</a>
     {% endif %}
   </div>

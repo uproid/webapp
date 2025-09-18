@@ -92,12 +92,22 @@ class TString {
   /// [ln] The language code (e.g., 'en', 'fr') to look up the translation.
   ///
   /// Returns the translated string if found, otherwise returns the original key.
-  String writeByLang(String ln) {
+  String writeByLang(String ln, [Map values = const {}]) {
     var language = WaServer.appLanguages[ln] ?? WaServer.appLanguages['en'];
+    var res = key;
     if (language != null && language[key] != null) {
-      return language[key]!;
+      res = language[key]!;
     }
-    return key;
+    res = _repliceParams(res, values);
+    return res;
+  }
+
+  String writeByLangArr(String ln, [List values = const []]) {
+    var valueMap = <String, Object?>{};
+    for (var i = 1; i <= values.length; i++) {
+      valueMap[i.toString()] = values[i - 1];
+    }
+    return writeByLang(ln, valueMap);
   }
 
   @override

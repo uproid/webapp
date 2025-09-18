@@ -371,6 +371,9 @@ class WebRequest {
         if (res is List) {
           return res as T;
         }
+        // if (res is String && res.isNotEmpty) {
+        //   return jsonDecode(res) as T;
+        // }
         if (def != null) return def;
         return [] as T;
       case num:
@@ -1296,16 +1299,17 @@ class WebRequest {
     };
     params['\$l'] = LMap(localEvents, def: null);
     params['\$t'] = (String text, [Object? params]) {
+      var language = getLanguage();
       if (params == null) {
-        return text.tr.write(this);
+        return text.tr.writeByLang(language);
       } else {
-        var json = WaJson.tryJson(params);
-        if (json != null) {
-          return text.tr.write(this, json);
+        if (params is Map) {
+          return text.tr.writeByLang(language, params);
+        } else if (params is List) {
+          return text.tr.writeByLangArr(language, params);
         }
       }
-
-      return text.tr.write(this);
+      return text.tr.writeByLang(language);
     };
     addParam('timestamp_end', DateTime.now().millisecondsSinceEpoch);
     var duration = (getParam('timestamp_end', def: 0) as int) -

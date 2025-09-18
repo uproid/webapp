@@ -143,13 +143,12 @@ class RenderViews {
       if (params == null) {
         return text.tr.writeByLang(language);
       } else {
-        // if (params is Map) {
-        //   return text.trParam(params);
-        // } else if (params is List) {
-        //   return text.trList(params);
-        // }
+        if (params is Map) {
+          return text.tr.writeByLang(language, params);
+        } else if (params is List) {
+          return text.tr.writeByLangArr(language, params);
+        }
       }
-
       return text.tr.writeByLang(language);
     };
 

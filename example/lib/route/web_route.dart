@@ -28,15 +28,7 @@ Future<List<WebRoute>> getWebRoute(WebRequest rq) async {
     WebRoute(
       path: 'swagger',
       rq: rq,
-      // index: () {
-      //   return rq.redirect(
-      //     'https://petstore.swagger.io/?url=${rq.url('api/docs')}',
-      //   );
-      // },
-      controller: WaSwaggerController(
-        rq,
-        rq.url('api/docs'),
-      ),
+      controller: WaSwaggerController(rq, rq.url('api/docs')),
     ),
     WebRoute(
       path: 'ws',

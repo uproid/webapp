@@ -1,105 +1,232 @@
 <!-- Sidebar -->
 {% set dir = $t('dir') %}
-<aside id="sidebar" class="fixed top-[56px] ltr:left-0 rtl:right-0 bottom-0 z-40 w-[240px] overflow-y-auto ltr:border-r rtl:border-l border-outline/20 bg-surface text-on-surface/90 transform transition-transform duration-300 ease-in-out will-change-transform shadow-sm {{ 'translate-x-full' if dir=='rtl' else '-translate-x-full' }} no-transition" aria-hidden="true">
-  <div class="min-h-screen overflow-y-auto p-2">
+<aside id="sidebar" class="fixed top-[56px] ltr:left-0 rtl:right-0 bottom-0 z-40 w-[240px] overflow-y-auto ltr:border-r rtl:border-l border-outline/20 bg-surface text-on-surface/90 transform transition-transform duration-300 ease-in-out will-change-transform shadow-sm {{ 'translate-x-full' if dir=='rtl' else '-translate-x-full' }} no-transition" aria-hidden="true" style="scrollbar-width: thin; scrollbar-color: rgba(156, 163, 175, 0.5) transparent;">
+  <div class="h-full p-2">
     <ul class="flex list-none flex-col gap-1 p-0">
+      
+      <!-- Navigation Category -->
       <li>
-        <a
-          href="/"
-          class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/') else '' }}"
-          aria-current="page"
-        >
-          <i class="fa-solid fa-house w-5 text-black"></i>
-          <span>{{ $t('sidebar.home') }}</span>
-        </a>
-      </li>
-      <li>
-        <a
-          href="/info"
-          class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/info') else '' }}"
-          aria-current="page"
-        >
-          <i class="fa-solid fa-circle-info w-5 text-black"></i>
-          <span>{{ $t('sidebar.info') }}</span>
-        </a>
-      </li>
-      <li>
-        <a
-          href="/example/form"
-          class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/form') else '' }}"
-          aria-current="page"
-        >
-          <i class="fa-solid fa-pen-to-square w-5 text-black"></i>
-          <span>{{ $t('sidebar.formExample') }}</span>
-        </a>
-      </li>
-      <li>
-        <a
-          href="/example/cookie"
-          class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/cookie') else '' }}"
-          aria-current="page"
-        >
-          <i class="fa-solid fa-cookie-bite w-5 text-black"></i>
-          <span>{{ $t('sidebar.cookieExample') }}</span>
-        </a>
-      </li>
-      <li>
-        <a
-          href="/example/route"
-          class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/route') else '' }}"
-          aria-current="page"
-        >
-          <i class="fa-solid fa-route w-5 text-black"></i>
-          <span>{{ $t('sidebar.routeExample') }}</span>
-        </a>
-      </li>
-      <li>
-        <a
-          href="/example/socket"
-          class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/socket') else '' }}"
-          aria-current="page"
-        >
-          <i class="fa-solid fa-plug w-5 text-black"></i>
-          <span>{{ $t('sidebar.socketExample') }}</span>
-        </a>
-      </li>
-      <li>
-        <a
-          href="/example/email"
-          class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/email') else '' }}"
-          aria-current="page"
-        >
-          <i class="fa-solid fa-envelope w-5 text-black"></i>
-          <span>{{ $t('sidebar.emailExample') }}</span>
-        </a>
-      </li>
-      <li>
-        <a
-          href="/example/panel"
-          class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/panel') else '' }}"
-          aria-current="page"
-        >
-          <i class="fa-solid fa-user-shield w-5 text-black"></i>
-          <span>{{ $t('sidebar.authExample') }}</span>
-        </a>
-      </li>
-      <li>
-        <a
-          href="/example/language"
-          class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/language') else '' }}"
-          aria-current="page"
-        >
-          <i class="fa-solid fa-language w-5 text-black"></i>
-          <span>{{ $t('sidebar.languageExample') }}</span>
-        </a>
+        <details class="group" {{ 'open' if $e.isPath('/') or $e.isPath('/info') else '' }}>
+          <summary class="flex cursor-pointer list-none items-center justify-between rounded-md px-3 py-2 text-sm hover:bg-primary-50">
+            <span class="inline-flex items-center gap-2">
+              <i class="fa-solid fa-compass w-5 text-black"></i>
+              <span>Navigation</span>
+            </span>
+            <i class="fas fa-angle-down transition-transform group-open:rotate-180"></i>
+          </summary>
+          <ul class="mt-1 space-y-1 border-l border-outline/20 pl-4">
+            <li>
+              <a
+                href="/"
+                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/') else '' }}"
+                aria-current="page"
+              >
+                <i class="fa-solid fa-house w-5 text-black"></i>
+                <span>{{ $t('sidebar.home') }}</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="/info"
+                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/info') else '' }}"
+                aria-current="page"
+              >
+                <i class="fa-solid fa-circle-info w-5 text-black"></i>
+                <span>{{ $t('sidebar.info') }}</span>
+              </a>
+            </li>
+          </ul>
+        </details>
       </li>
 
+      <!-- Web Examples Category -->
+      <li>
+        <details class="group" {{ 'open' if $e.isPath('/example/form') or $e.isPath('/example/cookie') or $e.isPath('/example/route') or $e.isPath('/example/socket') or $e.isPath('/example/email') or $e.isPath('/example/panel') or $e.isPath('/example/language') else '' }}>
+          <summary class="flex cursor-pointer list-none items-center justify-between rounded-md px-3 py-2 text-sm hover:bg-primary-50">
+            <span class="inline-flex items-center gap-2">
+              <i class="fa-solid fa-globe w-5 text-black"></i>
+              <span>Web Examples</span>
+            </span>
+            <i class="fas fa-angle-down transition-transform group-open:rotate-180"></i>
+          </summary>
+          <ul class="mt-1 space-y-1 border-l border-outline/20 pl-4">
+            <li>
+              <a
+                href="/example/form"
+                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/form') else '' }}"
+                aria-current="page"
+              >
+                <i class="fa-solid fa-pen-to-square w-5 text-black"></i>
+                <span>{{ $t('sidebar.formExample') }}</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="/example/cookie"
+                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/cookie') else '' }}"
+                aria-current="page"
+              >
+                <i class="fa-solid fa-cookie-bite w-5 text-black"></i>
+                <span>{{ $t('sidebar.cookieExample') }}</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="/example/route"
+                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/route') else '' }}"
+                aria-current="page"
+              >
+                <i class="fa-solid fa-route w-5 text-black"></i>
+                <span>{{ $t('sidebar.routeExample') }}</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="/example/socket"
+                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/socket') else '' }}"
+                aria-current="page"
+              >
+                <i class="fa-solid fa-plug w-5 text-black"></i>
+                <span>{{ $t('sidebar.socketExample') }}</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="/example/email"
+                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/email') else '' }}"
+                aria-current="page"
+              >
+                <i class="fa-solid fa-envelope w-5 text-black"></i>
+                <span>{{ $t('sidebar.emailExample') }}</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="/example/panel"
+                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/panel') else '' }}"
+                aria-current="page"
+              >
+                <i class="fa-solid fa-user-shield w-5 text-black"></i>
+                <span>{{ $t('sidebar.authExample') }}</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="/example/language"
+                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/language') else '' }}"
+                aria-current="page"
+              >
+                <i class="fa-solid fa-language w-5 text-black"></i>
+                <span>{{ $t('sidebar.languageExample') }}</span>
+              </a>
+            </li>
+          </ul>
+        </details>
+      </li>
+
+      <!-- Database Examples Category -->
+      {% if mongoActive or mysqlActive %}
+      <li>
+        <details class="group" {{ 'open' if $e.isPath('/example/database') or $e.isPath('/example/person') or $e.isPath('/example/mysql') else '' }}>
+          <summary class="flex cursor-pointer list-none items-center justify-between rounded-md px-3 py-2 text-sm hover:bg-primary-50">
+            <span class="inline-flex items-center gap-2">
+              <i class="fa-solid fa-database w-5 text-black"></i>
+              <span>Database Examples</span>
+            </span>
+            <i class="fas fa-angle-down transition-transform group-open:rotate-180"></i>
+          </summary>
+          <ul class="mt-1 space-y-1 border-l border-outline/20 pl-4">
+            {% if mongoActive %}
+            <li>
+              <a
+                href="/example/database"
+                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/database') else '' }}"
+                aria-current="page"
+              >
+                <i class="fa-solid fa-leaf w-5 text-black"></i>
+                <span>{{ $t('sidebar.monogdbExample') }}</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="/example/person"
+                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/person') else '' }}"
+                aria-current="page"
+              >
+                <i class="fa-solid fa-user-group w-5 text-black"></i>
+                <span>Example Free model DB</span>
+              </a>
+            </li>
+            {% endif %}
+            {% if mysqlActive %}
+            <li>
+              <a
+                href="/example/mysql"
+                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/mysql') else '' }}"
+                aria-current="page"
+              >
+                <i class="fa-solid fa-server w-5 text-black"></i>
+                <span>{{ $t('MySQL Example') }}</span>
+              </a>
+            </li>
+            {% endif %}
+          </ul>
+        </details>
+      </li>
+      {% endif %}
+
+      <!-- Development Tools Category -->
+      <li>
+        <details class="group" {{ 'open' if $e.isPath('/example/pagination') or $e.isPath('/example/htmler') or $e.isPath('/swagger') else '' }}>
+          <summary class="flex cursor-pointer list-none items-center justify-between rounded-md px-3 py-2 text-sm hover:bg-primary-50">
+            <span class="inline-flex items-center gap-2">
+              <i class="fa-solid fa-tools w-5 text-black"></i>
+              <span>Development Tools</span>
+            </span>
+            <i class="fas fa-angle-down transition-transform group-open:rotate-180"></i>
+          </summary>
+          <ul class="mt-1 space-y-1 border-l border-outline/20 pl-4">
+            <li>
+              <a
+                href="/example/pagination"
+                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/pagination') else '' }}"
+                aria-current="page"
+              >
+                <i class="fa-solid fa-list-ol w-5 text-black"></i>
+                <span>{{ $t('sidebar.paginationExample') }}</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="/example/htmler"
+                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/htmler') else '' }}"
+                aria-current="page"
+              >
+                <i class="fa-solid fa-theater-masks w-5 text-black"></i>
+                <span>{{ $t('Htmler example') }}</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="/swagger"
+                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/swagger') else '' }}"
+                aria-current="page"
+              >
+                <i class="fa-solid fa-file-code w-5 text-black"></i>
+                <span>{{ $t('Swagger example') }}</span>
+              </a>
+            </li>
+          </ul>
+        </details>
+      </li>
+
+      <!-- Debug & Testing Category -->
       <li>
         <details class="group" {{ 'open' if $e.isPath('/example/error') or $e.isPath('/example/dump') else '' }}>
           <summary class="flex cursor-pointer list-none items-center justify-between rounded-md px-3 py-2 text-sm hover:bg-primary-50">
             <span class="inline-flex items-center gap-2">
               <i class="fa-solid fa-bug w-5 text-black"></i>
-              <span>Debug Example</span>
+              <span>Debug & Testing</span>
             </span>
             <i class="fas fa-angle-down transition-transform group-open:rotate-180"></i>
           </summary>
@@ -128,75 +255,6 @@
         </details>
       </li>
 
-      {% if mongoActive %}
-      <li>
-        <a
-          href="/example/database"
-          class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/database') else '' }}"
-          aria-current="page"
-        >
-          <i class="fa-solid fa-database w-5 text-black"></i>
-          <span>{{ $t('sidebar.monogdbExample') }}</span>
-        </a>
-      </li>
-      {% endif %}
-
-      <li>
-        <a
-          href="/example/pagination"
-          class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/pagination') else '' }}"
-          aria-current="page"
-        >
-          <i class="fa-solid fa-list-ol w-5 text-black"></i>
-          <span>{{ $t('sidebar.paginationExample') }}</span>
-        </a>
-      </li>
-
-      {% if mongoActive %}
-      <li>
-        <a
-          href="/example/person"
-          class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/person') else '' }}"
-          aria-current="page"
-        >
-          <i class="fa-solid fa-user-group w-5 text-black"></i>
-          <span>Example Free model DB</span>
-        </a>
-      </li>
-      {% endif %}
-
-      {% if mysqlActive %}
-      <li>
-        <a
-          href="/example/mysql"
-          class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/mysql') else '' }}"
-          aria-current="page"
-        >
-          <i class="fa-solid fa-database w-5 text-black"></i>
-          <span>{{ $t('MySQL Example') }}</span>
-        </a>
-      </li>
-      {% endif %}
-      <li>
-        <a
-          href="/example/htmler"
-          class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/htmler') else '' }}"
-          aria-current="page"
-        >
-          <i class="fa-solid fa-theater-masks w-5 text-black"></i>
-          <span>{{ $t('Htmler example') }}</span>
-        </a>
-      </li>
-      <li>
-        <a
-          href="/swagger"
-          class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/swagger') else '' }}"
-          aria-current="page"
-        >
-          <i class="fa-solid fa-file w-5 text-black"></i>
-          <span>{{ $t('Swagger example') }}</span>
-        </a>
-      </li>
     </ul>
   </div>
 </aside>

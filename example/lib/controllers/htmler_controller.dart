@@ -29,7 +29,7 @@ class HtmlerController extends WaController {
               },
             ),
             $Title(
-                children: [$Text('Htmler Tag Showcase - Professional Demo')]),
+                children: [$Text('Htmler Framework - Modern Web Development')]),
             $Link(attrs: {
               'href':
                   'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css',
@@ -40,66 +40,118 @@ class HtmlerController extends WaController {
             }),
             $Style(children: [
               $Raw('''
+                  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+                  
                   :root {
-                    --primary-color: #0d6efd;
-                    --secondary-color: #6f42c1;
-                    --success-color: #198754;
-                    --warning-color: #ffc107;
-                    --danger-color: #dc3545;
-                    --info-color: #0dcaf0;
-                    --light-color: #f8f9fa;
-                    --dark-color: #212529;
+                    --md-primary: #E91E63;
+                    --md-primary-variant: #C2185B;
+                    --md-secondary: #FF4081;
+                    --md-secondary-variant: #F50057;
+                    --md-accent: #9C27B0;
+                    --md-accent-light: #E1BEE7;
+                    --md-background: #FAFAFA;
+                    --md-surface: #FFFFFF;
+                    --md-error: #F44336;
+                    --md-on-primary: #FFFFFF;
+                    --md-on-secondary: #FFFFFF;
+                    --md-on-background: #212121;
+                    --md-on-surface: #424242;
+                    --md-on-error: #FFFFFF;
+                    --md-text-primary: #212121;
+                    --md-text-secondary: #757575;
+                    --md-divider: #E0E0E0;
+                    --md-success: #4CAF50;
+                    --md-warning: #FF9800;
+                    --md-info: #2196F3;
+                    --google-play-pink: #E91E63;
+                    --google-play-purple: #9C27B0;
+                    --google-play-light-pink: #FCE4EC;
+                  }
+                  
+                  * {
+                    box-sizing: border-box;
                   }
                   
                   body {
-                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
                     line-height: 1.6;
+                    background-color: var(--md-background);
+                    color: var(--md-text-primary);
+                    margin: 0;
+                    padding: 0;
                   }
                   
                   .hero-section {
-                    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-                    min-height: 70vh;
+                    background-color: var(--md-primary);
+                    color: var(--md-on-primary);
+                    min-height: 80vh;
                     display: flex;
                     align-items: center;
+                    position: relative;
+                  }
+                  
+                  .hero-section::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.02)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.02)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.01)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+                    pointer-events: none;
                   }
                   
                   .hero-title {
-                    font-size: 2.0rem;
+                    font-size: 3.5rem;
                     font-weight: 700;
-                    margin-bottom: 1.5rem;
+                    letter-spacing: -0.02em;
+                    margin-bottom: 1rem;
+                    line-height: 1.1;
                   }
                   
                   .hero-subtitle {
-                    font-size: 1.0rem;
-                    margin-bottom: 2rem;
+                    font-size: 1.25rem;
+                    font-weight: 400;
+                    opacity: 0.9;
+                    margin-bottom: 2.5rem;
+                    max-width: 600px;
                   }
                   
                   .section-title {
                     font-size: 2.5rem;
                     font-weight: 600;
                     margin-bottom: 3rem;
-                    color: var(--dark-color);
+                    color: var(--md-text-primary);
+                    text-align: center;
+                    letter-spacing: -0.01em;
                   }
                   
                   .card {
+                    background: var(--md-surface);
                     border: none;
-                    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-                    transition: box-shadow 0.3s ease;
+                    border-radius: 12px;
+                    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    overflow: hidden;
                   }
                   
                   .card:hover {
-                    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+                    transform: translateY(-2px);
                   }
                   
                   .stat-card {
-                    background: rgba(255, 255, 255, 0.1);
-                    border: 1px solid rgba(255, 255, 255, 0.2);
+                    background: var(--md-surface);
+                    border-radius: 16px;
+                    box-shadow: 0 2px 8px rgba(233, 30, 99, 0.15);
                     backdrop-filter: blur(10px);
+                    border: 1px solid var(--google-play-light-pink);
                   }
                   
                   .stat-number {
                     font-size: 2.5rem;
                     font-weight: 700;
+                    color: var(--md-primary);
                   }
                   
                   .navbar-brand {
@@ -107,80 +159,223 @@ class HtmlerController extends WaController {
                     font-size: 1.25rem;
                   }
                   
-                  .btn-primary {
-                    background-color: var(--primary-color);
-                    border-color: var(--primary-color);
-                    padding: 0.75rem 2rem;
+                  .btn {
+                    border-radius: 8px;
                     font-weight: 500;
+                    padding: 12px 24px;
+                    transition: all 0.2s ease;
+                    border: none;
+                    text-decoration: none;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 8px;
+                  }
+                  
+                  .btn-primary {
+                    background-color: var(--md-primary);
+                    color: var(--md-on-primary);
+                  }
+                  
+                  .btn-primary:hover {
+                    background-color: var(--md-primary-variant);
+                    transform: translateY(-1px);
                   }
                   
                   .btn-outline-primary {
-                    border-width: 2px;
-                    padding: 0.75rem 2rem;
-                    font-weight: 500;
+                    background-color: transparent;
+                    border: 2px solid var(--md-primary);
+                    color: var(--md-primary);
+                  }
+                  
+                  .btn-outline-primary:hover {
+                    background-color: var(--md-primary);
+                    color: var(--md-on-primary);
+                  }
+                  
+                  .btn-light {
+                    background-color: var(--md-surface);
+                    color: var(--md-text-primary);
+                  }
+                  
+                  .btn-outline-light {
+                    background-color: transparent;
+                    border: 2px solid rgba(255, 255, 255, 0.3);
+                    color: var(--md-on-primary);
+                  }
+                  
+                  .btn-outline-light:hover {
+                    background-color: rgba(255, 255, 255, 0.1);
+                    border-color: rgba(255, 255, 255, 0.5);
                   }
                   
                   .progress {
-                    height: 1rem;
+                    height: 8px;
+                    background-color: var(--md-divider);
+                    border-radius: 4px;
+                    overflow: hidden;
+                  }
+                  
+                  .progress-bar {
+                    border-radius: 4px;
+                  }
+                  
+                  .table {
+                    border-radius: 8px;
+                    overflow: hidden;
+                    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
                   }
                   
                   .table th {
-                    background-color: var(--primary-color);
-                    color: white;
+                    background-color: var(--md-primary);
+                    color: var(--md-on-primary);
                     font-weight: 600;
                     border: none;
+                    padding: 16px;
                   }
                   
                   .table td {
                     vertical-align: middle;
+                    padding: 16px;
+                    border-color: var(--md-divider);
                   }
                   
                   .form-control, .form-select {
-                    border: 2px solid #e9ecef;
-                    padding: 0.75rem 1rem;
+                    border: 2px solid var(--md-divider);
+                    border-radius: 8px;
+                    padding: 12px 16px;
+                    background-color: var(--md-surface);
+                    transition: border-color 0.2s ease;
                   }
                   
                   .form-control:focus, .form-select:focus {
-                    border-color: var(--primary-color);
-                    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+                    border-color: var(--md-primary);
+                    box-shadow: 0 0 0 3px rgba(233, 30, 99, 0.1);
+                    outline: none;
                   }
                   
                   .form-label {
-                    font-weight: 600;
-                    margin-bottom: 0.75rem;
+                    font-weight: 500;
+                    margin-bottom: 8px;
+                    color: var(--md-text-primary);
                   }
                   
                   .alert {
                     border: none;
-                    border-left: 4px solid;
+                    border-radius: 8px;
+                    padding: 16px;
+                    margin: 16px 0;
                   }
                   
                   .alert-info {
-                    border-left-color: var(--info-color);
+                    background-color: rgba(33, 150, 243, 0.1);
+                    color: var(--md-info);
+                    border-left: 4px solid var(--md-info);
+                  }
+                  
+                  .alert-success {
+                    background-color: rgba(76, 175, 80, 0.1);
+                    color: var(--md-success);
+                    border-left: 4px solid var(--md-success);
                   }
                   
                   .code-block {
-                    background-color: #f8f9fa;
-                    border: 1px solid #e9ecef;
-                    border-radius: 0.375rem;
-                    padding: 1.5rem;
-                    font-family: 'Courier New', monospace;
-                    font-size: 0.875rem;
+                    background-color: #F5F5F5;
+                    border: 1px solid var(--md-divider);
+                    border-radius: 8px;
+                    padding: 20px;
+                    font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+                    font-size: 14px;
                     line-height: 1.5;
+                    overflow-x: auto;
                   }
                   
                   .footer {
-                    background-color: var(--dark-color);
-                    color: white;
+                    background-color: var(--md-text-primary);
+                    color: var(--md-surface);
                   }
                   
                   .footer a {
-                    color: #adb5bd;
+                    color: rgba(255, 255, 255, 0.7);
                     text-decoration: none;
+                    transition: color 0.2s ease;
                   }
                   
                   .footer a:hover {
-                    color: white;
+                    color: var(--md-surface);
+                  }
+                  
+                  .container {
+                    max-width: 1200px;
+                  }
+                  
+                  .section {
+                    padding: 80px 0;
+                  }
+                  
+                  .card-title {
+                    color: var(--md-primary);
+                    font-weight: 600;
+                    font-size: 1.25rem;
+                  }
+                  
+                  .navbar {
+                    background-color: var(--md-surface) !important;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                  }
+                  
+                  .navbar-dark .navbar-nav .nav-link {
+                    color: var(--md-text-primary);
+                  }
+                  
+                  .list-group-item {
+                    border-color: var(--md-divider);
+                    transition: background-color 0.2s ease;
+                  }
+                  
+                  .list-group-item:hover {
+                    background-color: rgba(233, 30, 99, 0.05);
+                  }
+                  
+                  .badge {
+                    font-weight: 500;
+                    padding: 6px 12px;
+                  }
+                  
+                  .bg-primary {
+                    background-color: var(--md-primary) !important;
+                  }
+                  
+                  .bg-secondary {
+                    background-color: var(--md-secondary) !important;
+                  }
+                  
+                  .bg-accent {
+                    background-color: var(--md-accent) !important;
+                  }
+                  
+                  .bg-success {
+                    background-color: var(--md-success) !important;
+                  }
+                  
+                  .text-primary {
+                    color: var(--md-primary) !important;
+                  }
+                  
+                  .text-secondary {
+                    color: var(--md-secondary) !important;
+                  }
+                  
+                  .text-accent {
+                    color: var(--md-accent) !important;
+                  }
+                  
+                  .text-muted {
+                    color: var(--md-text-secondary) !important;
+                  }
+                  
+                  .google-play-card {
+                    background: linear-gradient(45deg, var(--google-play-light-pink) 0%, #FFFFFF 50%);
+                    border-left: 4px solid var(--md-primary);
                   }
                   
                   @media (max-width: 768px) {
@@ -191,6 +386,15 @@ class HtmlerController extends WaController {
                     .section-title {
                       font-size: 2rem;
                     }
+                    
+                    .hero-section {
+                      min-height: 60vh;
+                      text-align: center;
+                    }
+                    
+                    .section {
+                      padding: 40px 0;
+                    }
                   }
                 ''')
             ]),
@@ -199,25 +403,25 @@ class HtmlerController extends WaController {
         $Body(children: [
           // Hero Section
           $Section(attrs: {
-            'class': 'hero-section text-white'
+            'class': 'hero-section'
           }, children: [
             $Div(attrs: {
               'class': 'container'
             }, children: [
               $Div(attrs: {
-                'class': 'row align-items-center'
+                'class': 'row align-items-center min-vh-100'
               }, children: [
                 $Div(attrs: {
-                  'class': 'col-lg-6'
+                  'class': 'col-lg-6 mb-5 mb-lg-0'
                 }, children: [
                   $H1(
                       attrs: {'class': 'hero-title'},
-                      children: [$Text('Htmler Tag Showcase')]),
+                      children: [$Text('Htmler Framework')]),
                   $P(attrs: {
                     'class': 'hero-subtitle'
                   }, children: [
                     $Text(
-                        'A comprehensive demonstration of all available Htmler tags for building professional web applications with type-safe HTML generation.')
+                        'Build modern web applications with type-safe HTML generation. Clean, efficient, and developer-friendly.')
                   ]),
                   $Div(attrs: {
                     'class': 'd-flex gap-3 flex-wrap'
@@ -228,26 +432,26 @@ class HtmlerController extends WaController {
                         .addAttr('data-language', JJ.$var('language')),
                     $Button(
                         attrs: {'class': 'btn btn-outline-light'},
-                        children: [$Text('View Documentation')]),
+                        children: [$Text('Documentation')]),
                   ]),
                 ]),
                 $Div(attrs: {
                   'class': 'col-lg-6'
                 }, children: [
                   $Div(attrs: {
-                    'class': 'row g-3'
+                    'class': 'row g-4'
                   }, children: [
                     $Div(attrs: {
                       'class': 'col-6'
                     }, children: [
                       $Div(attrs: {
-                        'class': 'stat-card rounded-3 p-4 text-center'
+                        'class': 'stat-card p-4 text-center'
                       }, children: [
                         $Div(
-                            attrs: {'class': 'stat-number text-white'},
+                            attrs: {'class': 'stat-number'},
                             children: [$Text('40+')]),
                         $P(
-                            attrs: {'class': 'text-white-50 mb-0'},
+                            attrs: {'class': 'text-muted mb-0 small'},
                             children: [$Text('HTML Tags')]),
                       ]),
                     ]),
@@ -255,13 +459,13 @@ class HtmlerController extends WaController {
                       'class': 'col-6'
                     }, children: [
                       $Div(attrs: {
-                        'class': 'stat-card rounded-3 p-4 text-center'
+                        'class': 'stat-card p-4 text-center'
                       }, children: [
                         $Div(
-                            attrs: {'class': 'stat-number text-white'},
+                            attrs: {'class': 'stat-number'},
                             children: [$Text('100%')]),
                         $P(
-                            attrs: {'class': 'text-white-50 mb-0'},
+                            attrs: {'class': 'text-muted mb-0 small'},
                             children: [$Text('Type Safe')]),
                       ]),
                     ]),
@@ -269,13 +473,13 @@ class HtmlerController extends WaController {
                       'class': 'col-6'
                     }, children: [
                       $Div(attrs: {
-                        'class': 'stat-card rounded-3 p-4 text-center'
+                        'class': 'stat-card p-4 text-center'
                       }, children: [
                         $Div(
-                            attrs: {'class': 'stat-number text-white'},
+                            attrs: {'class': 'stat-number'},
                             children: [$Text('0')]),
                         $P(
-                            attrs: {'class': 'text-white-50 mb-0'},
+                            attrs: {'class': 'text-muted mb-0 small'},
                             children: [$Text('Dependencies')]),
                       ]),
                     ]),
@@ -283,13 +487,13 @@ class HtmlerController extends WaController {
                       'class': 'col-6'
                     }, children: [
                       $Div(attrs: {
-                        'class': 'stat-card rounded-3 p-4 text-center'
+                        'class': 'stat-card p-4 text-center'
                       }, children: [
                         $Div(
-                            attrs: {'class': 'stat-number text-white'},
+                            attrs: {'class': 'stat-number'},
                             children: [$Text('∞')]),
                         $P(
-                            attrs: {'class': 'text-white-50 mb-0'},
+                            attrs: {'class': 'text-muted mb-0 small'},
                             children: [$Text('Possibilities')]),
                       ]),
                     ]),
@@ -301,14 +505,17 @@ class HtmlerController extends WaController {
 
           // Navigation
           $Nav(attrs: {
-            'class': 'navbar navbar-expand-lg navbar-dark bg-dark sticky-top'
+            'class': 'navbar navbar-expand-lg sticky-top'
           }, children: [
             $Div(attrs: {
               'class': 'container'
             }, children: [
-              $A(
-                  attrs: {'class': 'navbar-brand', 'href': '#'},
-                  children: [$Text('Htmler Framework')]),
+              $A(attrs: {
+                'class': 'navbar-brand text-primary fw-bold',
+                'href': '#'
+              }, children: [
+                $Text('Htmler')
+              ]),
               $Button(attrs: {
                 'class': 'navbar-toggler',
                 'type': 'button',
@@ -327,37 +534,42 @@ class HtmlerController extends WaController {
                   $Li(attrs: {
                     'class': 'nav-item'
                   }, children: [
-                    $A(
-                        attrs: {'class': 'nav-link', 'href': '#typography'},
-                        children: [$Text('Typography')]),
+                    $A(attrs: {
+                      'class': 'nav-link fw-medium',
+                      'href': '#typography'
+                    }, children: [
+                      $Text('Typography')
+                    ]),
                   ]),
                   $Li(attrs: {
                     'class': 'nav-item'
                   }, children: [
-                    $A(
-                        attrs: {'class': 'nav-link', 'href': '#forms'},
-                        children: [$Text('Forms')]),
+                    $A(attrs: {
+                      'class': 'nav-link fw-medium',
+                      'href': '#forms'
+                    }, children: [
+                      $Text('Forms')
+                    ]),
                   ]),
                   $Li(attrs: {
                     'class': 'nav-item'
                   }, children: [
-                    $A(
-                        attrs: {'class': 'nav-link', 'href': '#tables'},
-                        children: [$Text('Tables')]),
+                    $A(attrs: {
+                      'class': 'nav-link fw-medium',
+                      'href': '#tables'
+                    }, children: [
+                      $Text('Tables')
+                    ]),
                   ]),
                   $Li(attrs: {
                     'class': 'nav-item'
                   }, children: [
-                    $A(
-                        attrs: {'class': 'nav-link', 'href': '#media'},
-                        children: [$Text('Media')]),
-                  ]),
-                  $Li(attrs: {
-                    'class': 'nav-item'
-                  }, children: [
-                    $A(
-                        attrs: {'class': 'nav-link', 'href': '#layout'},
-                        children: [$Text('Layout')]),
+                    $A(attrs: {
+                      'class': 'nav-link fw-medium',
+                      'href': '#media'
+                    }, children: [
+                      $Text('Media')
+                    ]),
                   ]),
                 ]),
               ]),
@@ -366,7 +578,7 @@ class HtmlerController extends WaController {
 
           // Main Content
           $Main(attrs: {
-            'class': 'py-5'
+            'class': 'section'
           }, children: [
             $Div(attrs: {
               'class': 'container'
@@ -377,7 +589,7 @@ class HtmlerController extends WaController {
                 'class': 'mb-5'
               }, children: [
                 $H2(
-                    attrs: {'class': 'section-title text-center'},
+                    attrs: {'class': 'section-title'},
                     children: [$Text('Typography Elements')]),
                 $Div(attrs: {
                   'class': 'row g-4'
@@ -495,7 +707,7 @@ class HtmlerController extends WaController {
                         }, children: [
                           $Text('Modern web typography with '),
                           $Span(
-                              attrs: {'class': 'text-primary fw-bold'},
+                              attrs: {'class': 'text-accent fw-bold'},
                               children: [$Text('styled text effects')]),
                           $Text(' and beautiful spacing.'),
                         ]),
@@ -506,7 +718,7 @@ class HtmlerController extends WaController {
                           $Code(children: [$Text('\$Span')]),
                           $Text(' with custom styles for '),
                           $Span(
-                              attrs: {'class': 'badge bg-warning text-dark'},
+                              attrs: {'class': 'badge bg-secondary text-white'},
                               children: [$Text('highlighted text')]),
                           $Text(' or '),
                           $Span(attrs: {
@@ -544,7 +756,7 @@ class HtmlerController extends WaController {
                 'class': 'mb-5'
               }, children: [
                 $H2(
-                    attrs: {'class': 'section-title text-center'},
+                    attrs: {'class': 'section-title'},
                     children: [$Text('Lists & Navigation')]),
                 $Div(attrs: {
                   'class': 'row g-4'
@@ -592,7 +804,8 @@ class HtmlerController extends WaController {
                           }, children: [
                             $Text('Third item'),
                             $Span(attrs: {
-                              'class': 'badge bg-success rounded-pill'
+                              'class':
+                                  'badge bg-secondary rounded-pill text-white'
                             }, children: [
                               $Text('NEW')
                             ])
@@ -652,7 +865,7 @@ class HtmlerController extends WaController {
                 'class': 'mb-5'
               }, children: [
                 $H2(
-                    attrs: {'class': 'section-title text-center'},
+                    attrs: {'class': 'section-title'},
                     children: [$Text('Interactive Form Elements')]),
                 $Form(attrs: {
                   'method': 'post',
@@ -990,7 +1203,7 @@ class HtmlerController extends WaController {
                 'class': 'mb-5'
               }, children: [
                 $H2(
-                    attrs: {'class': 'section-title text-center'},
+                    attrs: {'class': 'section-title'},
                     children: [$Text('Table Elements')]),
                 $Div(attrs: {
                   'class': 'card'
@@ -1102,7 +1315,7 @@ class HtmlerController extends WaController {
                 'class': 'mb-5'
               }, children: [
                 $H2(
-                    attrs: {'class': 'section-title text-center'},
+                    attrs: {'class': 'section-title'},
                     children: [$Text('Media & Visual Elements')]),
                 $Div(attrs: {
                   'class': 'row g-4'
@@ -1256,7 +1469,7 @@ class HtmlerController extends WaController {
                 'class': 'mb-5'
               }, children: [
                 $H2(
-                    attrs: {'class': 'section-title text-center'},
+                    attrs: {'class': 'section-title'},
                     children: [$Text('Code Examples')]),
                 $Div(attrs: {
                   'class': 'card'
@@ -1305,7 +1518,7 @@ class HtmlerController extends WaController {
                 'class': 'mb-5'
               }, children: [
                 $H2(
-                    attrs: {'class': 'section-title text-center'},
+                    attrs: {'class': 'section-title'},
                     children: [$Text('Jinja Integration')]),
                 $Div(attrs: {
                   'class': 'card'
@@ -1368,37 +1581,46 @@ class HtmlerController extends WaController {
                       attrs: {'class': 'text-white mb-4'},
                       children: [$Text('Htmler Framework')]),
                   $P(attrs: {
-                    'class': 'mb-4'
+                    'class': 'mb-4 text-white-50'
                   }, children: [
-                    $Text('Made with dedication using '),
-                    $B(
-                        attrs: {'class': 'text-primary'},
+                    $Text('Building the future of web development with '),
+                    $Span(
+                        attrs: {'class': 'text-white fw-medium'},
                         children: [$Text('Dart WebApp Framework')]),
                     $Text(' & '),
-                    $B(
-                        attrs: {'class': 'text-info'},
+                    $Span(
+                        attrs: {'class': 'text-white fw-medium'},
                         children: [$Text('Htmler Library')]),
                   ]),
                   $Div(attrs: {
                     'class':
                         'd-flex gap-3 justify-content-center flex-wrap mb-4'
                   }, children: [
-                    $A(
-                        attrs: {'href': '#', 'class': 'btn btn-outline-light'},
-                        children: [$Text('Documentation')]),
-                    $A(
-                        attrs: {'href': '#', 'class': 'btn btn-outline-light'},
-                        children: [$Text('Report Issues')]),
-                    $A(
-                        attrs: {'href': '#', 'class': 'btn btn-outline-light'},
-                        children: [$Text('Contribute')]),
+                    $A(attrs: {
+                      'href': '#',
+                      'class': 'btn btn-outline-light btn-sm'
+                    }, children: [
+                      $Text('Documentation')
+                    ]),
+                    $A(attrs: {
+                      'href': '#',
+                      'class': 'btn btn-outline-light btn-sm'
+                    }, children: [
+                      $Text('GitHub')
+                    ]),
+                    $A(attrs: {
+                      'href': '#',
+                      'class': 'btn btn-outline-light btn-sm'
+                    }, children: [
+                      $Text('Community')
+                    ]),
                   ]),
-                  $Hr(attrs: {'class': 'my-4'}),
+                  $Hr(attrs: {'class': 'my-4 border-secondary'}),
                   $P(attrs: {
-                    'class': 'small text-muted mb-0'
+                    'class': 'small text-white-50 mb-0'
                   }, children: [
                     $Text(
-                        '© ${DateTime.now().year} WebApp Framework. All rights reserved. | Built with passion for developers.'),
+                        '© ${DateTime.now().year} WebApp Framework. Made with ❤️ for developers.'),
                   ]),
                 ]),
               ]),

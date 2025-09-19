@@ -187,6 +187,16 @@
           <span>{{ $t('Htmler example') }}</span>
         </a>
       </li>
+      <li>
+        <a
+          href="/swagger"
+          class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/swagger') else '' }}"
+          aria-current="page"
+        >
+          <i class="fa-solid fa-file w-5 text-black"></i>
+          <span>{{ $t('Swagger example') }}</span>
+        </a>
+      </li>
     </ul>
   </div>
 </aside>

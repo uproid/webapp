@@ -8,6 +8,7 @@ import 'package:webapp/src/tools/convertor/html_formatter.dart';
 import 'package:webapp/src/views/htmler.dart';
 import 'package:webapp/src/widgets/wa_string_widget.dart';
 import 'package:webapp/src/widgets/widget_dump.dart';
+import 'package:webapp/src/widgets/widget_inline_dump.dart';
 import 'package:webapp/wa_model_less.dart';
 import 'package:webapp/src/tools/console.dart';
 import 'package:webapp/src/tools/convertor/query_string.dart';
@@ -1288,6 +1289,12 @@ class WebRequest {
         return value.toString();
       },
     };
+    params['dump'] = (dynamic object) => InlineDumpWidget()
+        .generateHtml!({
+          'var': object,
+          'rq': this,
+        })
+        .toHtml();
     params['\$e'] = LMap(events, def: null);
     params['\$rq'] = this;
     params['\$n'] = (String path, [Object? def = '']) {

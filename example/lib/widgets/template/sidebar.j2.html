@@ -3,7 +3,6 @@
 <aside id="sidebar" class="fixed top-[56px] ltr:left-0 rtl:right-0 bottom-0 z-40 w-[240px] overflow-y-auto ltr:border-r rtl:border-l border-outline/20 bg-surface text-on-surface/90 transform transition-transform duration-300 ease-in-out will-change-transform shadow-sm {{ 'translate-x-full' if dir=='rtl' else '-translate-x-full' }} no-transition" aria-hidden="true" style="scrollbar-width: thin; scrollbar-color: rgba(156, 163, 175, 0.5) transparent;">
   <div class="h-full p-2">
     <ul class="flex list-none flex-col gap-1 p-0">
-      
       <!-- Navigation Category -->
       <li>
         <details class="group" {{ 'open' if $e.isPath('/') or $e.isPath('/info') else '' }}>

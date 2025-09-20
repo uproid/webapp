@@ -1,3 +1,9 @@
+## 2.0.4
+- Added in line dump function for templates `{{ dump(var) }}`
+- Added internal Swagger Widget to show documentations
+- Fixed analizer reports
+- Imoroved examples
+
 ## 2.0.3
 - Trimming the input values received through GET/POST methods
 - Enhancing security measures to mitigate XSS and injection vulnerabilities

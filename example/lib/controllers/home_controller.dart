@@ -377,7 +377,9 @@ class HomeController extends WaController {
         },
       },
     };
-    return rq.dump(variable);
+
+    rq.addParam('variable', variable);
+    return renderTemplate('example/dump');
   }
 
   Future<String> indexApi() async => rq.renderData(

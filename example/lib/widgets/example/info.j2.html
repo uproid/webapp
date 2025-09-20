@@ -5,7 +5,7 @@ $t('sidebar.info') }} {% endblock %} {% block content %}
     {{ $t('webappInfo.title') }}
   </h3>
   <div class="mt-4 space-y-3">
-    {% for key, value in server | items() %}
+    {% for key, value in server %}
     <style>
       /* local styles to animate details slide-down */
       .animate-details .details-content {

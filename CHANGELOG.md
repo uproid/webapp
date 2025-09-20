@@ -1,4 +1,4 @@
-## 2.0.4
+## 2.1.0
 - Added in line dump function for templates `{{ dump(var) }}`
 - Added internal Swagger Widget to show documentations
 - Fixed analizer reports

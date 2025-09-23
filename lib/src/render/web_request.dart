@@ -1308,7 +1308,7 @@ class WebRequest {
     params['\$t'] = (String text, [Object? params]) {
       var language = getLanguage();
       if (params == null) {
-        return text.tr.writeByLang(language);
+        return text.tr.write(this);
       } else {
         if (params is Map) {
           return text.tr.writeByLang(language, params);

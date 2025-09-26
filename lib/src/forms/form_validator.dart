@@ -555,7 +555,6 @@ class FieldValidator {
     required MySQLConnection db,
     required String table,
     required String field,
-    required dynamic value,
     QO operator = QO.EQ,
     Where? where,
   }) {
@@ -563,7 +562,7 @@ class FieldValidator {
       Sqler sqler = Sqler();
       sqler.from(QField(table));
       sqler.addSelect(SQL.count(QField(field, as: 'count_of_field')));
-      sqler.where(WhereOne(QField(field), operator, QVar(value)));
+      sqler.where(WhereOne(QField(field), operator, QVar(v)));
       if (where != null) {
         sqler.where(where);
       }

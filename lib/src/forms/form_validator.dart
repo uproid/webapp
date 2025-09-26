@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'package:mysql_client/mysql_client.dart';
 import 'package:webapp/wa_model_less.dart';
+import 'package:webapp/wa_mysql.dart';
 import 'package:webapp/wa_tools.dart';
 
 import '../render/web_request.dart';
@@ -546,6 +548,35 @@ class FieldValidator {
       }
 
       return FieldValidateResult(success: true);
+    };
+  }
+
+  static ValidatorEvent isUniqueSQLField({
+    required MySQLConnection db,
+    required String table,
+    required String field,
+    required dynamic value,
+    QO operator = QO.EQ,
+    Where? where,
+  }) {
+    return (v) async {
+      Sqler sqler = Sqler();
+      sqler.from(QField(table));
+      sqler.addSelect(SQL.count(QField(field, as: 'count_of_field')));
+      sqler.where(WhereOne(QField(field), operator, QVar(value)));
+      if (where != null) {
+        sqler.where(where);
+      }
+
+      var res = await db.execute(sqler.toSQL());
+      if (res.rows.isNotEmpty) {
+        var count = res.rows.first.assoc()['count_of_field'] ?? '0';
+        if (count.toString().toInt(def: 10) == 0) {
+          return FieldValidateResult(success: true);
+        }
+      }
+
+      return FieldValidateResult(success: false, error: 'error.field.unique');
     };
   }
 }

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:webapp/wa_console.dart';
 import 'package:webapp/wa_tools.dart';
 import 'package:webapp/src/render/web_request.dart';
 import 'package:mongo_dart/mongo_dart.dart';
@@ -136,8 +137,11 @@ class WaJson {
     WebRequest? rq,
   }) {
     try {
-      var res = jsonEncoder(data, rq: rq);
-      return jsonDecoder(res) as List;
+      if (data is List) {
+        return data;
+      }
+      var res = jsonDecoder('{"list": $data}');
+      return res['list'] as List;
     } catch (e) {
       print(e);
       return def;

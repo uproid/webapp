@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:webapp/wa_console.dart';
 import 'package:webapp/wa_tools.dart';
 import 'package:webapp/src/render/web_request.dart';
 import 'package:mongo_dart/mongo_dart.dart';

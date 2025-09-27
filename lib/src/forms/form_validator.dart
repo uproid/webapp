@@ -590,6 +590,43 @@ class FieldValidator {
     };
   }
 
+  /// Validator to check if a field value has a relation in a SQL database table.
+  /// The validator checks whether the provided value exists in the specified table and field.
+  /// If the value does not exist, an error message `'error.field.relation'` is returned.
+  /// Parameters:
+  /// - [db]: The MySQLConnection instance to use for the database query. (required)
+  /// - [table]: The name of the database table to check. (required)
+  /// - [field]: The name of the field/column to check for relation. (required)
+  /// - [operator]: The comparison operator to use in the query. Defaults to `QO.EQ`.
+  /// - [where]: An optional additional `Where` clause to further filter the query.
+  /// Returns:
+  /// - `ValidatorEvent`: A validator event function that can be used in the `FormValidator`.
+  static ValidatorEvent hasSqlRelation({
+    required MySQLConnection db,
+    required String table,
+    required String field,
+    QO operator = QO.EQ,
+    Where? where,
+  }) {
+    return (v) async {
+      Sqler sqler = Sqler();
+      sqler.from(QField(table));
+      sqler.addSelect(SQL.count(QField(field, as: 'count_of_field')));
+      sqler.where(WhereOne(QField(field), operator, QVar(v)));
+      if (where != null) {
+        sqler.where(where);
+      }
+      var res = await db.execute(sqler.toSQL());
+      if (res.rows.isNotEmpty) {
+        var count = res.rows.first.assoc()['count_of_field'] ?? '0';
+        if (count.toString().toInt(def: 10) > 0) {
+          return FieldValidateResult(success: true);
+        }
+      }
+      return FieldValidateResult(success: false, error: 'error.field.relation');
+    };
+  }
+
   /// Validator to check if a field matches a given regular expression pattern.
   /// The validator checks whether the provided value matches the specified regex pattern.
   /// If the value does not match the pattern, an error message `'error.field.regex'` is returned.

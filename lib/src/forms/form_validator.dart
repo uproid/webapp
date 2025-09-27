@@ -599,7 +599,7 @@ class FieldValidator {
   /// Returns:
   /// - `ValidatorEvent`: A validator event function that can be used in the `FormValidator`.
   static ValidatorEvent checkByRegexp(
-    String pattern, {
+    RegExp pattern, {
     bool isRequired = true,
   }) {
     return (value) async {
@@ -614,8 +614,7 @@ class FieldValidator {
         return FieldValidateResult(success: true);
       }
 
-      final regex = RegExp(pattern);
-      if (!regex.hasMatch(value.toString())) {
+      if (!pattern.hasMatch(value.toString())) {
         return FieldValidateResult(
           success: false,
           error: 'error.field.regex',

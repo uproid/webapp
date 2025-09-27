@@ -551,6 +551,17 @@ class FieldValidator {
     };
   }
 
+  /// Validator to check if a field value is unique in a SQL database table.
+  /// The validator checks whether the provided value already exists in the specified table and field.
+  /// If the value exists, an error message `'error.field.unique'` is returned.
+  /// Parameters:
+  /// - [db]: The MySQLConnection instance to use for the database query. (required)
+  /// - [table]: The name of the database table to check. (required)
+  /// - [field]: The name of the field/column to check for uniqueness. (required)
+  /// - [operator]: The comparison operator to use in the query. Defaults to `QO.EQ`.
+  /// - [where]: An optional additional `Where` clause to further filter the query.
+  /// Returns:
+  /// - `ValidatorEvent`: A validator event function that can be used in the `FormValidator`.
   static ValidatorEvent isUniqueSQLField({
     required MySQLConnection db,
     required String table,
@@ -566,7 +577,7 @@ class FieldValidator {
       if (where != null) {
         sqler.where(where);
       }
-
+      print(sqler.toSQL());
       var res = await db.execute(sqler.toSQL());
       if (res.rows.isNotEmpty) {
         var count = res.rows.first.assoc()['count_of_field'] ?? '0';
@@ -576,6 +587,42 @@ class FieldValidator {
       }
 
       return FieldValidateResult(success: false, error: 'error.field.unique');
+    };
+  }
+
+  /// Validator to check if a field matches a given regular expression pattern.
+  /// The validator checks whether the provided value matches the specified regex pattern.
+  /// If the value does not match the pattern, an error message `'error.field.regex'` is returned.
+  /// Parameters:
+  /// - [pattern]: The regular expression pattern to match against. (required)
+  /// - [isRequired]: Whether the field is required (non-null). Defaults to `true`.
+  /// Returns:
+  /// - `ValidatorEvent`: A validator event function that can be used in the `FormValidator`.
+  static ValidatorEvent checkByRegexp(
+    String pattern, {
+    bool isRequired = true,
+  }) {
+    return (value) async {
+      if ((value == null || value.toString().isEmpty) && isRequired) {
+        return FieldValidateResult(
+          success: false,
+          error: 'error.field.required',
+        );
+      }
+
+      if ((value == null || value.toString().isEmpty) && !isRequired) {
+        return FieldValidateResult(success: true);
+      }
+
+      final regex = RegExp(pattern);
+      if (!regex.hasMatch(value.toString())) {
+        return FieldValidateResult(
+          success: false,
+          error: 'error.field.regex',
+        );
+      }
+
+      return FieldValidateResult(success: true);
     };
   }
 }

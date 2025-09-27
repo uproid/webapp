@@ -372,9 +372,9 @@ class WebRequest {
         if (res is List) {
           return res as T;
         }
-        // if (res is String && res.isNotEmpty) {
-        //   return jsonDecode(res) as T;
-        // }
+        if (res is String && res.isNotEmpty) {
+          return WaJson.tryJsonList(res, def: (def ?? []) as List) as T;
+        }
         if (def != null) return def;
         return [] as T;
       case num:

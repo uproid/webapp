@@ -129,4 +129,18 @@ class WaJson {
       return null;
     }
   }
+
+  static List? tryJsonList(
+    dynamic data, {
+    List def = const [],
+    WebRequest? rq,
+  }) {
+    try {
+      var res = jsonEncoder(data, rq: rq);
+      return jsonDecoder(res) as List;
+    } catch (e) {
+      print(e);
+      return def;
+    }
+  }
 }

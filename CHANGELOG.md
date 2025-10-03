@@ -1,3 +1,18 @@
+## 2.1.1
+- Added SSE (Server-Sent Events) support:
+  - `renderSSE()` method in WebRequest class for streaming real-time data
+  - New `SSE` class for creating Server-Sent Events messages
+  - Support for custom headers, content types, and finish events
+  - Automatic connection management and proper SSE protocol formatting
+- Added new SQL-related form validators:
+  - `isUniqueSQLField()` - validates field uniqueness in SQL database tables
+  - `hasSqlRelation()` - validates field relations in SQL database tables
+  - `checkByRegexp()` - validates fields using regular expression patterns
+- Fixed JSON list parsing in WebRequest class
+- Fixed localization translation function to properly use WebRequest context
+- Added `tryJsonList()` method to WaJson for safer JSON list parsing
+- Updated sqler dependency from 1.1.3 to 1.1.4
+
 ## 2.1.0
 - Added in line dump function for templates `{{ dump(var) }}`
 - Added internal Swagger Widget to show documentations

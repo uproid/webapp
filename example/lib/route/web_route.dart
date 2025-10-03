@@ -19,6 +19,12 @@ Future<List<WebRoute>> getWebRoute(WebRequest rq) async {
 
   var paths = [
     WebRoute(
+      path: 'sse',
+      methods: RequestMethods.ALL,
+      rq: rq,
+      index: homeController.sseExample,
+    ),
+    WebRoute(
       path: 'api/docs',
       rq: rq,
       index: () {

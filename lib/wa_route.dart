@@ -3,6 +3,7 @@ library;
 /// Render & Route & Controller & Service
 export 'src/render/authorization.dart';
 export 'src/render/web_request.dart';
+export 'src/render/sse.dart';
 export 'src/render/asset_manager.dart';
 export 'src/router/request_methods.dart';
 export 'src/router/route.dart';

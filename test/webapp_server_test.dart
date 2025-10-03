@@ -31,6 +31,23 @@ void main() async {
         index: () => rq.renderString(text: "TEST"),
         children: [
           WebRoute(
+            path: '/sse',
+            rq: rq,
+            index: () {
+              var stream = Stream<SSE>.periodic(
+                const Duration(
+                  milliseconds: 100,
+                ),
+                (count) {
+                  return SSE(
+                    data: 'test $count',
+                  );
+                },
+              ).take(10);
+              return rq.renderSSE(stream);
+            },
+          ),
+          WebRoute(
             path: 'htmler',
             rq: rq,
             index: () {
@@ -436,6 +453,32 @@ void main() async {
       contains('TEST CENTER COMMENT'),
     );
     expect(req.statusCode, 200, reason: "Status code should be 200");
+  });
+
+  test('Test SSE', () async {
+    var req = await http.get(
+      Uri.parse("http://localhost:${httpServer.port}/sse"),
+    );
+
+    expect(req.statusCode, 200, reason: "Status code should be 200");
+    expect(
+      req.headers['content-type'],
+      'text/event-stream; charset=utf-8',
+      reason: "Content-Type should be text/event-stream",
+    );
+
+    var lines = req.body.split('\n');
+    var dataLines = lines.where((line) => line.startsWith('data:')).toList();
+
+    expect(dataLines.length, 11, reason: "Should receive 11 data lines");
+
+    for (var i = 0; i < dataLines.length - 1; i++) {
+      expect(
+        dataLines[i],
+        'data: test $i',
+        reason: "Data line $i should be 'data: test $i'",
+      );
+    }
   });
 }
 

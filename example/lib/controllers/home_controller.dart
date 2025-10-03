@@ -23,6 +23,17 @@ class HomeController extends WaController {
     return renderTemplate('template/home');
   }
 
+  Future<String> sseExample() async {
+    Stream<SSE> streamer = Stream.periodic(Duration(seconds: 1), (count) {
+      return SSE(
+        data: 'This is an SSE message $count',
+        event: 'message',
+      );
+    }).take(10);
+
+    return rq.renderSSE(streamer);
+  }
+
   Future<String> exampleForm() async {
     if (rq.method == RequestMethods.POST) {
       var loginForm = FormValidator(

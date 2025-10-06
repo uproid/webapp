@@ -1,5 +1,5 @@
 <form method="post" action="{{ $e.uriString }}" class="contents">
-    <input type="hidden" name="action" value="{{ 'update' if(action == 'edit' or action == 'update') else 'add' }}" />
+    <input type="hidden" name="action" value="{{ 'update' if(action == 'edit' ?? action == 'update') else 'add' }}" />
     <tr>
         <td colspan="7" class="p-2">
             <div class="flex flex-wrap items-start gap-2">
@@ -49,7 +49,7 @@
                     </select>
                     <div class="mt-1 text-[10px] text-rose-600 {{ '' if $n('form/category_id/errors/0') else 'hidden' }}">{{ $n('form/category_id/errors/0') }}</div>
                 </div>
-                {% if(action == 'edit' or action == 'update') %}
+                {% if(action == 'edit' ?? action == 'update') %}
                 <input type="hidden" name="id" value="{{ id }}" />
                 <button type="submit" class="wave inline-flex h-9 items-center rounded-md border border-primary-600 bg-primary-50 px-3 text-xs font-medium text-primary-700 hover:bg-primary-100 focus:outline-none focus:ring-2 focus:ring-primary-500/30">{{ $t('mysql.button.update') }}</button>
                 {% else %}

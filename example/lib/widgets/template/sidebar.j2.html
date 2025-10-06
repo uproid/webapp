@@ -5,7 +5,7 @@
     <ul class="flex list-none flex-col gap-1 p-0">
       <!-- Navigation Category -->
       <li>
-        <details class="group" {{ 'open' if $e.isPath('/') or $e.isPath('/info') else '' }}>
+        <details class="group" {{ 'open' if $e.isPath('/') ?? $e.isPath('/info') else '' }}>
           <summary class="flex cursor-pointer list-none items-center justify-between rounded-md px-3 py-2 text-sm hover:bg-primary-50">
             <span class="inline-flex items-center gap-2">
               <i class="fa-solid fa-compass w-5 text-black"></i>
@@ -40,7 +40,7 @@
 
       <!-- Web Examples Category -->
       <li>
-        <details class="group" {{ 'open' if $e.isPath('/example/form') or $e.isPath('/example/cookie') or $e.isPath('/example/route') or $e.isPath('/example/socket') or $e.isPath('/example/email') or $e.isPath('/example/panel') or $e.isPath('/example/language') else '' }}>
+        <details class="group" {{ 'open' if $e.isPath('/example/form') ?? $e.isPath('/example/cookie') ?? $e.isPath('/example/route') ?? $e.isPath('/example/socket') ?? $e.isPath('/example/email') ?? $e.isPath('/example/panel') ?? $e.isPath('/example/language') else '' }}>
           <summary class="flex cursor-pointer list-none items-center justify-between rounded-md px-3 py-2 text-sm hover:bg-primary-50">
             <span class="inline-flex items-center gap-2">
               <i class="fa-solid fa-globe w-5 text-black"></i>
@@ -124,9 +124,9 @@
       </li>
 
       <!-- Database Examples Category -->
-      {% if mongoActive or mysqlActive %}
+      {% if mongoActive ?? mysqlActive %}
       <li>
-        <details class="group" {{ 'open' if $e.isPath('/example/database') or $e.isPath('/example/person') or $e.isPath('/example/mysql') else '' }}>
+        <details class="group" {{ 'open' if $e.isPath('/example/database') ?? $e.isPath('/example/person') ?? $e.isPath('/example/mysql') else '' }}>
           <summary class="flex cursor-pointer list-none items-center justify-between rounded-md px-3 py-2 text-sm hover:bg-primary-50">
             <span class="inline-flex items-center gap-2">
               <i class="fa-solid fa-database w-5 text-black"></i>
@@ -176,7 +176,7 @@
 
       <!-- Development Tools Category -->
       <li>
-        <details class="group" {{ 'open' if $e.isPath('/example/pagination') or $e.isPath('/example/htmler') or $e.isPath('/swagger') else '' }}>
+        <details class="group" {{ 'open' if $e.isPath('/example/pagination') ?? $e.isPath('/example/htmler') ?? $e.isPath('/swagger') else '' }}>
           <summary class="flex cursor-pointer list-none items-center justify-between rounded-md px-3 py-2 text-sm hover:bg-primary-50">
             <span class="inline-flex items-center gap-2">
               <i class="fa-solid fa-tools w-5 text-black"></i>
@@ -221,7 +221,7 @@
 
       <!-- Debug & Testing Category -->
       <li>
-        <details class="group" {{ 'open' if $e.isPath('/example/error') or $e.isPath('/example/dump') else '' }}>
+        <details class="group" {{ 'open' if $e.isPath('/example/error') ?? $e.isPath('/example/dump') else '' }}>
           <summary class="flex cursor-pointer list-none items-center justify-between rounded-md px-3 py-2 text-sm hover:bg-primary-50">
             <span class="inline-flex items-center gap-2">
               <i class="fa-solid fa-bug w-5 text-black"></i>

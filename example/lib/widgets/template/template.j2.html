@@ -38,7 +38,7 @@
             {% if flash.type == 'success' %} bg-emerald-50 border-emerald-200 text-emerald-800 {% endif %}
             {% if flash.type == 'info' %} bg-primary-50 border-primary-200 text-primary-800 {% endif %}
             {% if flash.type == 'warning' %} bg-amber-50 border-amber-200 text-amber-900 {% endif %}
-            {% if flash.type == 'danger' or flash.type == 'error' %} bg-rose-50 border-rose-200 text-rose-800 {% endif %}
+            {% if flash.type == 'danger' ?? flash.type == 'error' %} bg-rose-50 border-rose-200 text-rose-800 {% endif %}
             {% if flash.type != 'success' and flash.type != 'info' and flash.type != 'warning' and flash.type != 'danger' and flash.type != 'error' %} bg-slate-50 border-slate-200 text-slate-800 {% endif %}
             ">
             {{ flash.text }}

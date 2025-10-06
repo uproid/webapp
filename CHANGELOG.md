@@ -1,3 +1,22 @@
+## 2.1.2
+- Update dependencies
+- Update jinja
+  - Expressions:
+    - Ternary operator (condition ? trueValue : falseValue) as alternative to if-else expressions
+      ```
+      {{ user.isAdmin ? "Admin Panel" : "User Panel" }}
+      {{ score > 60 ? "Pass" : "Fail" }}
+      ```
+    - Null coalescing operator (??) equivalent to or
+      ```
+      {{ variable ?? "default" }}
+      {{ var1 ?? var2 ?? "final" }}
+      ```
+    - Variable names now support # and @ characters
+      ```
+      {{ #var }}, {{ var# }}, {{ @variable }}
+      ```
+
 ## 2.1.1
 - Added SSE (Server-Sent Events) support:
   - `renderSSE()` method in WebRequest class for streaming real-time data

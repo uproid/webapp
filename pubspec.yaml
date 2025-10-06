@@ -45,9 +45,9 @@ dependencies:
   mongo_dart: ^0.10.5
   encrypt: ^5.0.3
   crypto: ^3.0.6
-  logger: ^2.6.1
+  logger: ^2.6.2
   mailer: ^6.5.0
-  jinja: ^0.6.4  
+  jinja: ^0.6.5  
   intl: ^0.20.2
   mime: ^2.0.0 
   cron: ^0.6.2

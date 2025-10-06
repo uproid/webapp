@@ -1,4 +1,5 @@
 ## 2.1.2
+- Remove `rq` from arguments of `WebRoute`
 - Update dependencies
 - Update jinja
   - Expressions:

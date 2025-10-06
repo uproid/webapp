@@ -152,7 +152,6 @@ class WaServer {
         return [
           WebRoute(
             path: 'debugger',
-            rq: rq,
             index: () async {
               await debugger?.requestHandel(rq, userId: "LOCAL_USER");
               debugger?.sendToAll({
@@ -164,7 +163,6 @@ class WaServer {
             children: [
               WebRoute(
                 path: 'console.js',
-                rq: rq,
                 index: () async {
                   return rq.renderString(
                     text: ConsoleWidget().layout,

@@ -307,6 +307,7 @@ class WaApiController extends WaController {
     var result = <WebRoute>[];
 
     for (final route in routes) {
+      route.rq = rq;
       route.path = endpointNorm([
         parentPath,
         route.path,

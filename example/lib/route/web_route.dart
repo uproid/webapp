@@ -21,41 +21,34 @@ Future<List<WebRoute>> getWebRoute(WebRequest rq) async {
     WebRoute(
       path: 'sse',
       methods: RequestMethods.ALL,
-      rq: rq,
       index: homeController.sseExample,
     ),
     WebRoute(
       path: 'api/docs',
-      rq: rq,
       index: () {
         return apiController.index(showPublic: true);
       },
     ),
     WebRoute(
       path: 'swagger',
-      rq: rq,
       controller: WaSwaggerController(rq, rq.url('api/docs')),
     ),
     WebRoute(
       path: 'ws',
       methods: RequestMethods.ALL,
-      rq: rq,
       index: homeController.socket,
     ),
     WebRoute(
       path: 'app/includes.js',
       methods: RequestMethods.ALL,
-      rq: rq,
       index: includeController.index,
     ),
     WebRoute(
       path: 'example',
-      rq: rq,
       index: () => rq.redirect('/'),
       children: [
         WebRoute(
           path: 'host',
-          rq: rq,
           hosts: ['localhost'],
           ports: [80, 8085],
           index: () => rq.renderString(text: 'Localhost'),
@@ -63,7 +56,6 @@ Future<List<WebRoute>> getWebRoute(WebRequest rq) async {
         ),
         WebRoute(
           path: 'host',
-          rq: rq,
           ports: [80, 8085],
           hosts: ['127.0.0.1'],
           index: () => rq.renderString(text: '127.0.0.1'),
@@ -72,19 +64,16 @@ Future<List<WebRoute>> getWebRoute(WebRequest rq) async {
         WebRoute(
           path: 'form',
           methods: RequestMethods.ONLY_GET,
-          rq: rq,
           index: homeController.exampleForm,
         ),
         WebRoute(
           path: 'form',
           methods: RequestMethods.ONLY_POST,
-          rq: rq,
           index: authController.loginPost,
         ),
         WebRoute(
           path: 'panel',
           methods: RequestMethods.ALL,
-          rq: rq,
           auth: authController,
           index: homeController.exampleAuth,
           permissions: ['admin'],
@@ -92,64 +81,53 @@ Future<List<WebRoute>> getWebRoute(WebRequest rq) async {
         WebRoute(
           path: 'language',
           methods: RequestMethods.ONLY_GET,
-          rq: rq,
           index: homeController.exampleLanguage,
         ),
         WebRoute(
           path: 'cookie',
           methods: RequestMethods.ONLY_GET,
-          rq: rq,
           index: homeController.exampleCookie,
         ),
         WebRoute(
           path: 'cookie',
           methods: RequestMethods.ONLY_POST,
-          rq: rq,
           index: homeController.exampleAddCookie,
         ),
         WebRoute(
           path: 'cookie',
           methods: RequestMethods.ONLY_GET,
-          rq: rq,
           index: homeController.exampleAddCookie,
         ),
         WebRoute(
           path: 'route',
           methods: RequestMethods.ONLY_GET,
-          rq: rq,
           index: homeController.exampleRoute,
         ),
         WebRoute(
           path: 'socket',
           methods: RequestMethods.ONLY_GET,
-          rq: rq,
           index: homeController.exampleSocket,
         ),
         WebRoute(
           path: 'email',
           methods: RequestMethods.ONLY_GET,
-          rq: rq,
           index: homeController.exampleEmail,
         ),
         WebRoute(
           path: 'email',
           methods: RequestMethods.ONLY_POST,
-          rq: rq,
           index: homeController.exampleEmailSend,
         ),
         WebRoute(
           path: 'error',
-          rq: rq,
           index: homeController.exampleError,
         ),
         WebRoute(
           path: 'dump',
-          rq: rq,
           index: homeController.exampleDump,
         ),
         WebRoute(
           path: 'database',
-          rq: rq,
           methods: [
             RequestMethods.GET,
             RequestMethods.POST,
@@ -160,7 +138,6 @@ Future<List<WebRoute>> getWebRoute(WebRequest rq) async {
         ),
         WebRoute(
           path: 'pagination',
-          rq: rq,
           methods: [
             RequestMethods.GET,
           ],
@@ -168,7 +145,6 @@ Future<List<WebRoute>> getWebRoute(WebRequest rq) async {
         ),
         WebRoute(
           path: 'htmler',
-          rq: rq,
           methods: RequestMethods.GET_POST,
           index: htmlerController.exampleHtmler,
         ),
@@ -177,21 +153,18 @@ Future<List<WebRoute>> getWebRoute(WebRequest rq) async {
     WebRoute(
       path: 'example/mysql',
       extraPath: ['api/example/mysql'],
-      rq: rq,
       methods: RequestMethods.GET_POST,
       index: homeController.exampleMysql,
     ),
     WebRoute(
       path: 'info',
       extraPath: ['api/info'],
-      rq: rq,
       index: homeController.info,
       apiDoc: ApiDocuments.info,
     ),
     WebRoute(
       path: 'api/person',
       extraPath: ['example/person'],
-      rq: rq,
       index: homeController.addNewPerson,
       methods: RequestMethods.ONLY_POST,
       apiDoc: ApiDocuments.allPerson,
@@ -202,7 +175,6 @@ Future<List<WebRoute>> getWebRoute(WebRequest rq) async {
         'example/persons',
         'example/person',
       ],
-      rq: rq,
       index: homeController.allPerson,
       methods: RequestMethods.ONLY_GET,
       apiDoc: ApiDocuments.allPerson,
@@ -210,7 +182,6 @@ Future<List<WebRoute>> getWebRoute(WebRequest rq) async {
     WebRoute(
       path: 'api/person/{id}',
       extraPath: ['example/person/{id}'],
-      rq: rq,
       index: homeController.onePerson,
       methods: RequestMethods.GET_POST,
       apiDoc: ApiDocuments.onePerson,
@@ -218,14 +189,12 @@ Future<List<WebRoute>> getWebRoute(WebRequest rq) async {
     WebRoute(
       path: 'api/person/replace/{id}',
       extraPath: ['example/person/replace/{id}'],
-      rq: rq,
       index: homeController.replacePerson,
       methods: RequestMethods.ONLY_POST,
     ),
     WebRoute(
       path: 'api/person/delete/{id}',
       extraPath: ['example/person/delete/{id}'],
-      rq: rq,
       index: homeController.deletePerson,
       methods: RequestMethods.ONLY_POST,
       apiDoc: ApiDocuments.onePerson,
@@ -233,7 +202,6 @@ Future<List<WebRoute>> getWebRoute(WebRequest rq) async {
     WebRoute(
       path: 'logout',
       methods: RequestMethods.ALL,
-      rq: rq,
       index: authController.logout,
     ),
   ];
@@ -241,7 +209,6 @@ Future<List<WebRoute>> getWebRoute(WebRequest rq) async {
   return [
     WebRoute(
       path: '/',
-      rq: rq,
       methods: RequestMethods.ALL,
       controller: homeController,
       children: [
@@ -249,7 +216,6 @@ Future<List<WebRoute>> getWebRoute(WebRequest rq) async {
         WebRoute(
           path: 'fa/*',
           extraPath: Setting.languages.keys.map((e) => '$e/*').toList(),
-          rq: rq,
           index: homeController.changeLanguage,
         )
       ],

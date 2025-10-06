@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:webapp/wa_tools.dart';
-
 import '../controllers/wa_auth_controller.dart';
 import '../router/api_doc.dart';
 import '../render/web_request.dart';
@@ -91,7 +90,8 @@ class WebRoute {
   /// [path] and [rq] are required parameters. All other parameters have default values.
   WebRoute({
     required this.path,
-    required this.rq,
+    @Deprecated('This parameter will be removed in future versions. 3.0.0')
+    WebRequest? rq,
     this.extraPath = const [],
     this.methods = const [RequestMethods.GET],
     this.controller,
@@ -106,7 +106,11 @@ class WebRoute {
     this.permissions = const [],
     this.hosts = const ['*'],
     this.ports = const [],
-  }) : super();
+  }) : super() {
+    if (rq != null) {
+      this.rq = rq;
+    }
+  }
 
   /// Checks if the current HTTP method is allowed for this route.
   ///
@@ -189,9 +193,8 @@ class WebRoute {
     var res = <WebRoute>[];
 
     for (var path in paths) {
-      res.add(WebRoute(
+      final route = WebRoute(
         path: path,
-        rq: rq,
         index: index,
         apiDoc: apiDoc,
         auth: auth,
@@ -206,7 +209,9 @@ class WebRoute {
         widget: widget,
         hosts: hosts,
         ports: ports,
-      ));
+      );
+      route.rq = rq;
+      res.add(route);
     }
 
     return res;

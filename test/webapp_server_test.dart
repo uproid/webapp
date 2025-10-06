@@ -27,12 +27,10 @@ void main() async {
     return [
       WebRoute(
         path: "/",
-        rq: rq,
         index: () => rq.renderString(text: "TEST"),
         children: [
           WebRoute(
             path: '/sse',
-            rq: rq,
             index: () {
               var stream = Stream<SSE>.periodic(
                 const Duration(
@@ -49,7 +47,6 @@ void main() async {
           ),
           WebRoute(
             path: 'htmler',
-            rq: rq,
             index: () {
               rq.addParam('variable', 'VALUE');
               rq.addParam('list', ['item1', 'item2', 'item3', 'item4']);
@@ -123,7 +120,6 @@ void main() async {
           ),
           WebRoute(
             path: 'checkurl',
-            rq: rq,
             index: () {
               return rq.renderView(
                 path: "<?= \$e.url('test') ?>",
@@ -133,14 +129,12 @@ void main() async {
           ),
           WebRoute(
             path: 'error',
-            rq: rq,
             index: () {
               throw ("test error page");
             },
           ),
           WebRoute(
             path: 'debug_test',
-            rq: rq,
             methods: RequestMethods.ALL,
             index: () {
               return rq.renderView(path: "<h1>Debug Test</h1>", isFile: false);
@@ -148,7 +142,6 @@ void main() async {
           ),
           WebRoute(
             path: 'widget',
-            rq: rq,
             index: () {
               rq.addParam("testParam", "paramValue");
               return rq.renderView(
@@ -162,7 +155,6 @@ void main() async {
           WebRoute(
             path: "api/info",
             methods: RequestMethods.ONLY_GET,
-            rq: rq,
             index: () {
               rq.addParam("data", "TEST");
               return rq.renderData(data: rq.getParams());
@@ -171,7 +163,6 @@ void main() async {
           WebRoute(
             path: "api/post",
             methods: RequestMethods.ONLY_POST,
-            rq: rq,
             index: () {
               return rq.renderData(data: {
                 'sended': rq.getAll(),
@@ -185,7 +176,6 @@ void main() async {
           WebRoute(
             path: "api/auth/ok",
             methods: RequestMethods.ALL,
-            rq: rq,
             auth: AuthController(rq, true),
             index: () {
               return rq.renderData(data: {
@@ -196,7 +186,6 @@ void main() async {
           WebRoute(
             path: "api/auth/failed",
             methods: RequestMethods.ALL,
-            rq: rq,
             auth: AuthController(rq, false),
             index: () {
               return rq.renderData(data: {

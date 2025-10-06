@@ -989,7 +989,6 @@ abstract class DBCollectionFree {
     return <WebRoute>[
       if (children.isNotEmpty)
         WebRoute(
-          rq: rq,
           path: path,
           children: children,
         ),
@@ -1122,7 +1121,6 @@ abstract class DBCollectionFree {
     return WebRoute(
       path: path,
       methods: methods,
-      rq: rq,
       apiDoc: apiDoc,
       auth: auth,
       excludePaths: excludePaths,
@@ -1212,7 +1210,6 @@ abstract class DBCollectionFree {
     return WebRoute(
       path: path,
       methods: methods,
-      rq: rq,
       apiDoc: apiDoc,
       auth: auth,
       excludePaths: excludePaths,
@@ -1321,7 +1318,6 @@ abstract class DBCollectionFree {
     return WebRoute(
       path: path,
       methods: methods,
-      rq: rq,
       apiDoc: apiDoc,
       auth: auth,
       excludePaths: excludePaths,
@@ -1417,7 +1413,6 @@ abstract class DBCollectionFree {
     return WebRoute(
       path: path,
       methods: methods,
-      rq: rq,
       apiDoc: apiDoc,
       auth: auth,
       excludePaths: excludePaths,
@@ -1515,7 +1510,6 @@ abstract class DBCollectionFree {
     return WebRoute(
       path: path,
       methods: methods,
-      rq: rq,
       apiDoc: apiDoc,
       auth: auth,
       excludePaths: excludePaths,

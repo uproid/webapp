@@ -27,6 +27,23 @@ class Console {
     ),
   );
 
+  /// Logs a formatted JSON object with visual separators.
+  ///
+  /// This method creates a visually distinct log entry for JSON or complex objects,
+  /// using separators and special formatting to make the output easily readable.
+  /// The object is logged as a fatal level message with no method count and
+  /// clear visual boundaries.
+  ///
+  /// [object] The object to be logged, typically a Map, List, or any JSON-serializable object
+  ///
+  /// Example usage:
+  /// ```dart
+  /// Console.json({'user': 'john', 'status': 'active', 'permissions': ['read', 'write']});
+  /// // Output:
+  /// // ==================================================
+  /// // {user: john, status: active, permissions: [read, write]}
+  /// // ==================================================
+  /// ```
   static void json(dynamic object) {
     var log = Logger(
       level: isTestRunning() ? Level.off : Level.debug,
@@ -116,6 +133,21 @@ class Console {
     return inDebugMode;
   }
 
+  /// Checks if the application is running in test mode.
+  ///
+  /// This method determines if the current execution environment is a test
+  /// environment by checking the WEBAPP_IS_TEST environment variable.
+  /// When running tests, certain logging and debugging features may be
+  /// disabled to avoid interference with test output.
+  ///
+  /// Returns `true` if the application is running in test mode, `false` otherwise.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// if (!Console.isTestRunning()) {
+  ///   Console.i('Application started in development mode');
+  /// }
+  /// ```
   static bool isTestRunning() {
     return Platform.environment['WEBAPP_IS_TEST'] == 'true';
   }

@@ -26,10 +26,58 @@ import 'package:mongo_dart/mongo_dart.dart';
 import 'package:webapp/wa_route.dart';
 import 'package:webapp/wa_server.dart';
 
-/// The `WebRequest` class handles HTTP requests and provides various methods
-/// for processing, routing, and responding to client requests. It includes
-/// methods for parsing request data, managing sessions, handling cookies,
-/// rendering views, redirecting, and more.
+/// Handles HTTP request processing and response generation for the WebApp framework.
+///
+/// [WebRequest] is the core class responsible for processing incoming HTTP requests
+/// and generating appropriate responses. It provides a comprehensive API for:
+///
+/// **Request Processing:**
+/// - HTTP method and URI handling
+/// - Header and cookie management
+/// - Query parameter and form data parsing
+/// - File upload processing
+/// - Session management
+///
+/// **Response Generation:**
+/// - Template rendering with Jinja engine
+/// - JSON and XML response formatting
+/// - File serving and downloads
+/// - Redirect handling
+/// - Error page generation
+///
+/// **Framework Integration:**
+/// - Asset management (CSS, JS)
+/// - Multi-language support
+/// - Security features (CORS, authentication)
+/// - Database integration helpers
+/// - Widget system integration
+///
+/// **Template Engine Features:**
+/// - Jinja2-compatible template syntax
+/// - Custom blocks: `<? code ?>`, `<?= variable ?>`, `<?# comment ?>`
+/// - Dynamic content injection
+/// - Layout and partial support
+///
+/// The class uses a buffer-based approach for content generation, allowing
+/// for efficient string building and content manipulation before sending
+/// the final response to the client.
+///
+/// Example usage:
+/// ```dart
+/// // In a controller or route handler:
+/// Future<String> handleRequest() async {
+///   final data = await service.getData();
+///   return rq.renderJson(data);
+/// }
+///
+/// // Template rendering:
+/// Future<String> renderPage() async {
+///   return rq.renderView(
+///     path: 'user/profile.html',
+///     params: {'user': currentUser, 'title': 'Profile'},
+///   );
+/// }
+/// ```
 class WebRequest {
   StringBuffer buffer = StringBuffer();
 

@@ -4,11 +4,35 @@ import '../wa_server.dart';
 import 'package:mime/mime.dart';
 import '../tools/path.dart';
 
-/// A class that handles route management and request processing for a web application.
+/// A comprehensive route management and request processing system for web applications.
 ///
-/// This class processes incoming requests, matches them to defined routes, and handles
-/// rendering of files or widgets based on the route configuration. It also performs
-/// authentication checks and permission validations as required by the routes.
+/// The [Route] class serves as the core routing engine that processes incoming HTTP requests,
+/// matches them against defined route patterns, and handles the appropriate response rendering.
+/// It supports features like nested routing, URL parameters, authentication, permission checks,
+/// static file serving, and widget rendering.
+///
+/// Key features:
+/// - Pattern-based route matching with URL parameters (`{id}`, `{name}`, etc.)
+/// - Nested route structures with parent-child relationships
+/// - Host and port-based routing restrictions
+/// - Authentication and authorization integration
+/// - Static file serving from public directory
+/// - Widget and controller-based response handling
+/// - Automatic MIME type detection for static files
+///
+/// Example usage:
+/// ```dart
+/// final routes = [
+///   WebRoute(
+///     path: '/api/users/{id}',
+///     methods: [RequestMethods.GET],
+///     index: () async => handleUserRequest(),
+///   ),
+/// ];
+///
+/// final router = Route(routing: routes);
+/// router.handle(); // Process the current request
+/// ```
 class Route {
   /// A list of [WebRoute] objects defining the routing paths and configurations.
   List<WebRoute> routing = [];
@@ -25,10 +49,21 @@ class Route {
   /// parameter is required for the current web request.
   Route({required this.routing});
 
-  /// Handles the routing logic by checking all defined routes.
+  /// Initiates the route processing workflow for the current request.
   ///
-  /// This method initiates the route checking process by calling [checkAll] with the
-  /// defined routes.
+  /// This method serves as the main entry point for route handling. It begins
+  /// the route matching process by delegating to [checkAll] with the configured
+  /// routing table. The method will attempt to find a matching route pattern
+  /// for the current request's path, method, host, and port constraints.
+  ///
+  /// The routing process follows this hierarchy:
+  /// 1. Match route patterns (including URL parameters)
+  /// 2. Validate HTTP methods, hosts, and ports
+  /// 3. Execute authentication and authorization checks
+  /// 4. Render appropriate response (controller, widget, or static file)
+  /// 5. Fallback to static file serving or 404 error
+  ///
+  /// Note: The method name contains a typo and should be `handle()` in future versions.
   void handel() async {
     checkAll(routing);
   }
@@ -238,20 +273,49 @@ class Route {
     return pathTo("${WaServer.config.publicDir}/$filePath");
   }
 
+  /// Renders a widget-based view for the current request.
+  ///
+  /// This method handles the rendering of template-based responses using the
+  /// configured view system. The widget is typically an HTML template that
+  /// can include dynamic content and template engine features.
+  ///
+  /// [uri] The path to the widget/template file to render, relative to the
+  /// configured views directory. The file should be a valid template supported
+  /// by the view engine (e.g., HTML, Jinja2, etc.).
+  ///
+  /// The rendered content is automatically sent as the HTTP response with
+  /// appropriate content-type headers.
   void renderWidget(String uri) {
     rq.renderView(
       path: uri,
     );
   }
 
-  /// Extracts parameters from the client path and server path.
+  /// Extracts URL parameters from route patterns and matches them with request paths.
   ///
-  /// The [clientPath] parameter is the path from the client's request. The [serverPath]
-  /// parameter is the path defined in the route.
+  /// This method performs pattern matching between a client's requested path and
+  /// a server-defined route pattern that contains parameter placeholders. It
+  /// supports dynamic URL segments defined with curly braces (e.g., `{id}`, `{slug}`).
   ///
-  /// Returns a tuple where:
-  /// - The first element is the processed server path.
-  /// - The second element is a map of URL parameters extracted from the client path.
+  /// The matching process:
+  /// 1. Compares path segment counts (must be equal)
+  /// 2. Identifies parameter placeholders in the route pattern
+  /// 3. Extracts corresponding values from the client path
+  /// 4. Builds a parameter map with extracted values
+  ///
+  /// [clientPath] The actual path from the incoming HTTP request
+  /// [serverPath] The route pattern with parameter placeholders (e.g., `/users/{id}/posts/{slug}`)
+  ///
+  /// Returns a record containing:
+  /// - `$1`: The processed server path with placeholders replaced by actual values
+  /// - `$2`: A map of parameter names to their extracted values
+  ///
+  /// Example:
+  /// ```dart
+  /// final result = getParamsPath('/users/123/posts/hello-world', '/users/{id}/posts/{slug}');
+  /// // result.$1 = '/users/123/posts/hello-world'
+  /// // result.$2 = {'id': '123', 'slug': 'hello-world'}
+  /// ```
   (String, Map<String, Object?>) getParamsPath(
     String clientPath,
     String serverPath,

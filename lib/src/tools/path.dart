@@ -65,6 +65,28 @@ String pathNorm(String path, {bool? normSlashs, endWithSlash = false}) {
   return path;
 }
 
+/// Normalizes endpoint paths for URL routing with customizable formatting options.
+///
+/// This function takes a list of path segments and combines them into a normalized
+/// endpoint path suitable for web routing. It provides fine-grained control over
+/// the formatting including slash handling and path structure.
+///
+/// [paths] List of path segments to join into a single endpoint path
+/// [normSlashs] If true, converts backslashes to forward slashes (default: true)
+/// [endWithSlash] If true, ensures the path ends with a forward slash (default: true)
+/// [startWithSlash] If true, ensures the path starts with a forward slash (default: true)
+///
+/// The function also handles double slashes by replacing them with single slashes
+/// to prevent malformed URLs.
+///
+/// Example usage:
+/// ```dart
+/// String endpoint = endpointNorm(['api', 'users', 'profile']);
+/// // Result: '/api/users/profile/'
+///
+/// String apiPath = endpointNorm(['v1', 'data'], endWithSlash: false);
+/// // Result: '/v1/data'
+/// ```
 String endpointNorm(
   List<String> paths, {
   bool normSlashs = true,
@@ -87,7 +109,28 @@ String endpointNorm(
   return path;
 }
 
-/// check the paths are equal or not
+/// Compares multiple paths for equality after normalization.
+///
+/// This function normalizes all provided paths using the same formatting options
+/// and then compares them to determine if they represent the same endpoint.
+/// This is useful for route matching and path comparison in web applications.
+///
+/// [paths] List of path strings to compare for equality
+/// [normSlashs] If true, converts backslashes to forward slashes (default: true)
+/// [endWithSlash] If true, ensures paths end with a forward slash (default: true)
+/// [startWithSlash] If true, ensures paths start with a forward slash (default: true)
+///
+/// Returns `true` if all paths are equivalent after normalization, `false` otherwise.
+/// Returns `true` if the paths list is empty.
+///
+/// Example usage:
+/// ```dart
+/// bool isEqual = pathsEqual(['/api/users/', 'api\\users', '/api/users']);
+/// // Result: true (all represent the same path)
+///
+/// bool isDifferent = pathsEqual(['/api/users', '/api/posts']);
+/// // Result: false (different endpoints)
+/// ```
 bool pathsEqual(
   List<String> paths, {
   bool normSlashs = true,

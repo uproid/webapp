@@ -5,12 +5,45 @@ import 'package:webapp/wa_console.dart';
 
 var env = DotEnv(includePlatformEnvironment: true)..load();
 
-/// A class representing configuration settings for the web application.
+/// Configuration management system for the WebApp framework.
 ///
-/// The [WaConfigs] class provides a comprehensive configuration setup for
-/// various aspects of the web application, including paths, server settings,
-/// database configuration, and more. It uses environment variables and default
-/// values to initialize its properties.
+/// [WaConfigs] provides comprehensive configuration management for all aspects
+/// of the web application including server settings, database connections,
+/// file paths, security settings, and development tools. The configuration
+/// system supports environment variables, default values, and runtime customization.
+///
+/// Key features:
+/// - Environment variable integration with .env file support
+/// - Database configuration for MongoDB and MySQL
+/// - Server and domain configuration
+/// - Path management for assets, templates, and uploads
+/// - Mail server configuration
+/// - Template engine configuration (Jinja-like syntax)
+/// - Development and debugging tools
+/// - Multi-language support
+/// - Security settings (cookies, CORS, etc.)
+///
+/// Environment variables are automatically loaded from:
+/// - System environment variables
+/// - .env file in the project root
+/// - Platform-specific environment settings
+///
+/// Example usage:
+/// ```dart
+/// final config = WaConfigs(
+///   port: 8080,
+///   domain: 'example.com',
+///   dbConfig: WaDBConfig(
+///     host: 'localhost',
+///     dbName: 'myapp',
+///     enable: true,
+///   ),
+///   enableLocalDebugger: true, // Only in development
+/// );
+///
+/// final server = WaServer(configs: config);
+/// await server.start();
+/// ```
 class WaConfigs {
   /// Creates an instance of [WaConfigs].
   ///
@@ -144,6 +177,38 @@ class WaConfigs {
   }
 }
 
+/// MySQL database configuration for the WebApp framework.
+///
+/// [WaMysqlConfig] manages MySQL database connection settings and provides
+/// environment variable integration for secure credential management.
+/// This configuration is used for SQL-based data operations, migrations,
+/// and relational database features.
+///
+/// Configuration priority:
+/// 1. Constructor parameters (highest)
+/// 2. Environment variables
+/// 3. Default values (lowest)
+///
+/// Environment variables:
+/// - MYSQL_HOST: Database server hostname
+/// - MYSQL_PORT: Database server port (default: 3306)
+/// - MYSQL_USER: Database username
+/// - MYSQL_PASS: Database password
+/// - MYSQL_DATABASE: Database name
+/// - MYSQL_SECURE: Enable SSL connection (true/false)
+/// - MYSQL_COLLATION: Character set collation
+///
+/// Example:
+/// ```dart
+/// final mysqlConfig = WaMysqlConfig(
+///   host: 'localhost',
+///   port: 3306,
+///   user: 'webapp_user',
+///   pass: 'secure_password',
+///   databaseName: 'webapp_db',
+///   enable: true,
+/// );
+/// ```
 class WaMysqlConfig {
   bool enable = false;
   String host = 'localhost';
@@ -177,6 +242,42 @@ class WaMysqlConfig {
   }
 }
 
+/// MongoDB database configuration for the WebApp framework.
+///
+/// [WaDBConfig] manages MongoDB connection settings with built-in support
+/// for authentication, replica sets, and connection string generation.
+/// This is the primary database configuration for document-based operations.
+///
+/// Configuration priority:
+/// 1. Constructor parameters (highest)
+/// 2. Environment variables
+/// 3. Default values (lowest)
+///
+/// Environment variables:
+/// - MONGO_INITDB_ROOT_USERNAME: MongoDB root username
+/// - MONGO_INITDB_ROOT_PASSWORD: MongoDB root password
+/// - MONGO_INITDB_ROOT_AUTH: Authentication database (default: admin)
+/// - MONGO_CONNECTION: MongoDB host (default: localhost)
+/// - MONGO_PORT: MongoDB port (default: 27017)
+/// - MONGO_INITDB_DATABASE: Database name
+///
+/// The [link] property automatically generates a MongoDB connection string
+/// in the format: `mongodb://user:pass@host:port/dbName/?authSource=auth`
+///
+/// Example:
+/// ```dart
+/// final dbConfig = WaDBConfig(
+///   host: 'localhost',
+///   port: '27017',
+///   user: 'webapp_user',
+///   pass: 'secure_password',
+///   dbName: 'webapp_db',
+///   enable: true,
+/// );
+///
+/// // Auto-generated connection string:
+/// // mongodb://webapp_user:secure_password@localhost:27017/webapp_db/?authSource=admin
+/// ```
 class WaDBConfig {
   late final bool enable;
   late final String user;

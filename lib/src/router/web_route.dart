@@ -2,28 +2,71 @@ import 'dart:async';
 import 'package:webapp/wa_route.dart';
 import 'package:webapp/wa_tools.dart';
 
-/// Represents a route in the web application, including path configurations, methods,
-/// controllers, and authorization details.
+/// Defines a web route configuration for HTTP request handling in the application.
 ///
-/// The [WebRoute] class is used to define routes for handling HTTP requests. It allows
-/// you to specify the main path, additional paths, HTTP methods, associated controllers,
-/// and other details needed for routing and authorization.
+/// The [WebRoute] class represents a single route definition that specifies how
+/// incoming HTTP requests should be matched and handled. It supports advanced
+/// routing features including pattern matching, HTTP method filtering, host/port
+/// restrictions, nested routing, authentication, and authorization.
+///
+/// Key features:
+/// - Path pattern matching with wildcards (`/api/*`) and parameters (`/users/{id}`)
+/// - HTTP method restrictions (GET, POST, PUT, DELETE, etc.)
+/// - Host and port-based routing for multi-tenant applications
+/// - Nested route hierarchies for organized route structures
+/// - Integration with authentication and authorization systems
+/// - Controller-based and function-based request handling
+/// - Widget/template rendering capabilities
+/// - API documentation generation support
+///
+/// Example usage:
+/// ```dart
+/// // Simple route
+/// WebRoute(
+///   path: '/users',
+///   methods: [RequestMethods.GET],
+///   index: () async => 'User list',
+/// )
+///
+/// // Parameterized route with authentication
+/// WebRoute(
+///   path: '/users/{id}',
+///   methods: [RequestMethods.GET, RequestMethods.PUT],
+///   auth: UserAuthController(),
+///   permissions: ['user.read', 'user.edit'],
+///   controller: UserController(),
+/// )
+///
+/// // Nested route structure
+/// WebRoute(
+///   path: '/api',
+///   children: [
+///     WebRoute(path: '/users', controller: UserApiController()),
+///     WebRoute(path: '/posts', controller: PostApiController()),
+///   ],
+/// )
+/// ```
 class WebRoute {
   /// The primary path of the route. For example, `/test` or `/test/*`.
   /// If using `/test/*`, it will match all sub-paths under `/test`.
   late String path;
 
-  /// The primary hostname of the route. for example `example.com`.
-  /// by default is it `['*']` to match all hostnames.
-  /// If using `example.com`, it will match only the `example.com` hostname.
-  /// otherwise, it will match all hostnames that are set.
+  /// The primary hostname constraints for this route.
+  ///
+  /// Specifies which hostnames this route should respond to. Useful for
+  /// multi-tenant applications or domain-specific routing.
+  /// - `['*']` (default): Matches all hostnames
+  /// - `['example.com']`: Matches only requests to example.com
+  /// - `['api.example.com', 'admin.example.com']`: Matches specific subdomains
   late List<String> hosts;
 
-  /// The primary port of the route. for example `[8080]`.
-  /// by default is it `[]` to match all ports.
-  /// If using `[8080]`, it will match only the `8080` port.
-  /// otherwise, it will match all ports that are set.
-  /// and then other ports will be ignored.
+  /// The port number constraints for this route.
+  ///
+  /// Restricts the route to specific port numbers. Useful for development
+  /// environments or when running multiple services on different ports.
+  /// - `[]` (default): Matches all ports
+  /// - `[8080]`: Matches only requests on port 8080
+  /// - `[80, 443]`: Matches HTTP and HTTPS standard ports
   late List<int> ports;
 
   /// Additional main paths for this route. This allows for multiple matching paths.
@@ -101,9 +144,25 @@ class WebRoute {
     this.ports = const [],
   }) : super();
 
-  /// Checks if the current HTTP method is allowed for this route.
+  /// Validates if the current HTTP request method is allowed for this route.
   ///
-  /// Returns `true` if the method is in the list of allowed methods, otherwise `false`.
+  /// Checks the incoming request's HTTP method against the route's configured
+  /// allowed methods list. This is used during the routing process to determine
+  /// if a route should handle a specific request.
+  ///
+  /// Returns `true` if the request method is in the [methods] list, `false` otherwise.
+  ///
+  /// Example:
+  /// ```dart
+  /// // Route configured for GET and POST
+  /// final route = WebRoute(
+  ///   path: '/api/users',
+  ///   methods: [RequestMethods.GET, RequestMethods.POST],
+  /// );
+  ///
+  /// // For a GET request: returns true
+  /// // For a DELETE request: returns false
+  /// ```
   bool allowMethod() {
     return (methods.contains(RequestContext.rq.method));
   }
@@ -154,13 +213,45 @@ class WebRoute {
     return res;
   }
 
-  /// Creates a list of [WebRoute] instances from the given parameters.
+  /// Creates multiple [WebRoute] instances with shared configuration.
   ///
-  /// [paths] is a list of main paths for the routes.
-  /// [rq] is the [WebRequest] context for the routes.
-  /// All other parameters have default values.
+  /// This factory method simplifies the creation of multiple routes that share
+  /// the same configuration (methods, controller, authentication, etc.) but
+  /// have different paths. It's particularly useful for creating route groups
+  /// or when you need similar routes for different endpoints.
   ///
-  /// Returns a list of [WebRoute] instances.
+  /// All parameters except [paths] are optional and will be applied to all
+  /// created routes. Each path in the [paths] list will generate a separate
+  /// [WebRoute] instance with the shared configuration.
+  ///
+  /// [paths] List of path patterns for which to create routes
+  /// [extraPath] Additional path aliases for each route
+  /// [methods] HTTP methods allowed for all routes (defaults to GET)
+  /// [controller] Controller instance to handle requests for all routes
+  /// [index] Function to handle index requests for all routes
+  /// [auth] Authentication controller for all routes
+  /// [permissions] Required permissions for all routes
+  /// [widget] Widget/template path for all routes
+  /// [params] Default parameters for all routes
+  /// [title] Page title for all routes
+  /// [excludePaths] Paths to exclude from wildcard matching
+  /// [children] Child routes for all routes
+  /// [apiDoc] API documentation generator function
+  /// [hosts] Host restrictions for all routes
+  /// [ports] Port restrictions for all routes
+  ///
+  /// Returns a list of configured [WebRoute] instances.
+  ///
+  /// Example:
+  /// ```dart
+  /// final userRoutes = WebRoute.makeList(
+  ///   paths: ['/users', '/members', '/people'],
+  ///   methods: [RequestMethods.GET, RequestMethods.POST],
+  ///   controller: UserController(),
+  ///   auth: UserAuthController(),
+  ///   permissions: ['user.read'],
+  /// );
+  /// ```
   static List<WebRoute> makeList({
     required List<String> paths,
     List<String> extraPath = const [],

@@ -1,22 +1,70 @@
-## 2.1.2
+
+
+## 3.0.0
+#### Changes Applied to Remove `rq` Parameter from Controllers
+
+##### Summary of Changes
+
+In this project, all controllers and related classes have been updated to use a global `RequestContext` system instead of passing `rq` as a parameter.
+
+##### Main Changes
+
+###### 1. RequestContext Creation
+- Created `RequestContext` class in `lib/src/core/request_context.dart`
+- Uses Zone-based context for thread-safe request handling
+- Provides `RequestContext.current` method for global access to WebRequest
+
+###### 2. WaController Updates
+- Removed `rq` parameter from constructor
+- Added `rq` getter that uses `RequestContext.current`
+
+###### 3. WaServer Updates
+- Added `RequestContext.run()` in request handlers
+- Set up request context at the beginning of each request
+
+###### 4. Controller Updates
+- `HomeController`: Removed `rq` parameter from constructor
+- `AuthController`: Removed `rq` parameter from constructor  
+- `HtmlerController`: Removed `rq` parameter from constructor
+- `WaApiController`: Removed `rq` parameter from constructor
+- `IncludeJsController`: Removed `rq` parameter from constructor
+
+###### 5. Helper Class Updates
+- `FormValidator`: Removed `rq` parameter and uses RequestContext
+- `WaView`: Removed `rq` parameter and uses RequestContext
+- `UIPaging`: Removed `rq` parameter and uses RequestContext
+- `AssetManager`: Removed `rq` parameter and uses RequestContext
+- `Asset`: Removed `rq` parameter and uses RequestContext
+- `DBCollectionFree`: Removed `rq` parameter from all route methods
+
+###### 6. Routing Updates
+- Removed passing `rq` to controllers during instantiation
+- Converted inline functions to controller methods
+
+###### Benefits of These Changes
+  - **Code Simplicity**: No longer need to pass `rq` everywhere
+  - **Reduced Repetition**: Eliminated repetitive parameter passing code
+  - **Thread Safety**: Zone-based context ensures thread safety
+  - **Easy Access**: Simple and global access to WebRequest
+---
 - Remove `rq` from arguments of `WebRoute`
 - Update dependencies
 - Update jinja
-  - Expressions:
-    - Ternary operator (condition ? trueValue : falseValue) as alternative to if-else expressions
-      ```
-      {{ user.isAdmin ? "Admin Panel" : "User Panel" }}
-      {{ score > 60 ? "Pass" : "Fail" }}
-      ```
-    - Null coalescing operator (??) equivalent to or
-      ```
-      {{ variable ?? "default" }}
-      {{ var1 ?? var2 ?? "final" }}
-      ```
-    - Variable names now support # and @ characters
-      ```
-      {{ #var }}, {{ var# }}, {{ @variable }}
-      ```
+- Expressions:
+  - Ternary operator (condition ? trueValue : falseValue) as alternative to if-else expressions
+    ```
+    {{ user.isAdmin ? "Admin Panel" : "User Panel" }}
+    {{ score > 60 ? "Pass" : "Fail" }}
+    ```
+  - Null coalescing operator (??) equivalent to or
+    ```
+    {{ variable ?? "default" }}
+    {{ var1 ?? var2 ?? "final" }}
+    ```
+  - Variable names now support # and @ characters
+    ```
+    {{ #var }}, {{ var# }}, {{ @variable }}
+    ```
 
 ## 2.1.1
 - Added SSE (Server-Sent Events) support:

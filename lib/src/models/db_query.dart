@@ -212,6 +212,26 @@ class DQ {
     return {'\$sum': '\$$field'};
   }
 
+  /// Constructs a MongoDB $lookup aggregation stage for joining collections.
+  ///
+  /// The $lookup stage performs a left outer join to an unsharded collection in
+  /// the same database to filter in documents from the "joined" collection.
+  ///
+  /// [from] The target collection to join with
+  /// [localField] The field from the input documents
+  /// [foreignField] The field from the documents of the "from" collection (defaults to '_id')
+  /// [as] The name of the output array field (defaults to '${from}_info')
+  ///
+  /// Example:
+  /// ```dart
+  /// var query = DQ.lookup(
+  ///   from: 'users',
+  ///   localField: 'user_id',
+  ///   foreignField: '_id',
+  ///   as: 'user_data'
+  /// );
+  /// // { '$lookup': { 'from': 'users', 'localField': 'user_id', 'foreignField': '_id', 'as': 'user_data' } }
+  /// ```
   static Map<String, Object> lookup({
     required String from,
     required String localField,
@@ -230,6 +250,26 @@ class DQ {
     };
   }
 
+  /// Constructs a MongoDB $unwind aggregation stage for deconstructing array fields.
+  ///
+  /// The $unwind stage deconstructs an array field from the input documents to output
+  /// a document for each element. Each output document is the input document with the
+  /// value of the array field replaced by the element.
+  ///
+  /// [path] The field path to an array field (will be prefixed with $)
+  /// [as] Optional name for the index field (when preserving empty arrays)
+  /// [preserveNullAndEmptyArrays] If true, includes documents with null, missing, or empty arrays
+  ///
+  /// Example:
+  /// ```dart
+  /// // Simple unwind
+  /// var query = DQ.unwind(path: 'items');
+  /// // { '$unwind': '$items' }
+  ///
+  /// // Unwind with preserve null arrays
+  /// var query = DQ.unwind(path: 'tags', preserveNullAndEmptyArrays: true);
+  /// // { '$unwind': { 'path': '$tags', 'preserveNullAndEmptyArrays': true } }
+  /// ```
   static Map<String, Object> unwind({
     required String path,
     String? as,
@@ -249,42 +289,131 @@ class DQ {
     };
   }
 
+  /// Constructs a MongoDB $match aggregation stage for filtering documents.
+  ///
+  /// The $match stage filters the documents to pass only the documents that
+  /// match the specified condition(s) to the next pipeline stage.
+  ///
+  /// [matches] A list of match conditions to combine
+  ///
+  /// Example:
+  /// ```dart
+  /// var query = DQ.match([
+  ///   DQ.field('status', 'active'),
+  ///   DQ.field('age', DQ.gte(18))
+  /// ]);
+  /// // { '$match': { 'status': 'active', 'age': { '$gte': 18 } } }
+  /// ```
   static Map<String, Object> match(List<Map<String, Object?>> matches) {
     return {
       '\$match': {for (var match in matches) ...match}
     };
   }
 
+  /// Constructs a greater than ($gt) comparison operator.
+  ///
+  /// Matches values that are greater than the specified value.
+  ///
+  /// [value] The value to compare against
+  ///
+  /// Example:
+  /// ```dart
+  /// var query = DQ.field('age', DQ.gt(18)); // { 'age': { '$gt': 18 } }
+  /// ```
   static Map<String, Object?> gt(Object? value) {
     return {
       '\$gt': value,
     };
   }
 
+  /// Constructs a greater than or equal ($gte) comparison operator.
+  ///
+  /// Matches values that are greater than or equal to the specified value.
+  ///
+  /// [value] The value to compare against
+  ///
+  /// Example:
+  /// ```dart
+  /// var query = DQ.field('age', DQ.gte(18)); // { 'age': { '$gte': 18 } }
+  /// ```
   static Map<String, Object?> gte(Object? value) {
     return {
       '\$gte': value,
     };
   }
 
+  /// Constructs a less than ($lt) comparison operator.
+  ///
+  /// Matches values that are less than the specified value.
+  ///
+  /// [value] The value to compare against
+  ///
+  /// Example:
+  /// ```dart
+  /// var query = DQ.field('age', DQ.lt(65)); // { 'age': { '$lt': 65 } }
+  /// ```
   static Map<String, Object?> lt(Object? value) {
     return {
       '\$lt': value,
     };
   }
 
+  /// Constructs a less than or equal ($lte) comparison operator.
+  ///
+  /// Matches values that are less than or equal to the specified value.
+  ///
+  /// [value] The value to compare against
+  ///
+  /// Example:
+  /// ```dart
+  /// var query = DQ.field('age', DQ.lte(65)); // { 'age': { '$lte': 65 } }
+  /// ```
   static Map<String, Object?> lte(Object? value) {
     return {
       '\$lte': value,
     };
   }
 
+  /// Creates an aggregation pipeline array.
+  ///
+  /// This is a utility method for creating MongoDB aggregation pipelines.
+  /// It simply returns a copy of the provided query stages.
+  ///
+  /// [query] List of aggregation stages
+  ///
+  /// Example:
+  /// ```dart
+  /// var pipeline = DQ.pipeline([
+  ///   DQ.match([DQ.field('status', 'active')]),
+  ///   DQ.group({'_id': null, 'count': DQ.sum('1')})
+  /// ]);
+  /// ```
   static List<Map<String, Object>> pipeline(
     List<Map<String, Object>> query,
   ) {
     return [...query];
   }
 
+  /// Constructs a MongoDB $project aggregation stage.
+  ///
+  /// The $project stage passes along the documents with the requested fields
+  /// to the next stage in the pipeline. The specified fields can be existing
+  /// fields from the input documents or newly computed fields.
+  ///
+  /// [fields] Map of field specifications where values can be:
+  /// - 1 or true: Include the field
+  /// - 0 or false: Exclude the field
+  /// - Expression: Computed field value
+  ///
+  /// Example:
+  /// ```dart
+  /// var query = DQ.project({
+  ///   'name': 1,
+  ///   'age': 1,
+  ///   '_id': 0,
+  ///   'fullName': {'\$concat': ['\$firstName', ' ', '\$lastName']}
+  /// });
+  /// ```
   static Map<String, Object> project(Map<String, Object> fields) {
     return {
       '\$project': {
@@ -388,6 +517,22 @@ class DQ {
     };
   }
 
+  /// Creates a field reference for use in MongoDB aggregation expressions.
+  ///
+  /// This method prefixes a field name with '$' to create a field path expression
+  /// that can be used in aggregation pipelines to reference document fields.
+  ///
+  /// [field] The name of the field to reference
+  ///
+  /// Example:
+  /// ```dart
+  /// var fieldRef = DQ.$field('name'); // Returns: '$name'
+  ///
+  /// // Usage in aggregation:
+  /// var projection = DQ.project({
+  ///   'upperName': {'\$toUpper': DQ.$field('name')}
+  /// });
+  /// ```
   static String $field(String field) {
     return "\$$field";
   }

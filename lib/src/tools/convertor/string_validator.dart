@@ -116,6 +116,24 @@ extension StringValidator on String {
     return toInt(def: -99999999) != -99999999;
   }
 
+  /// Checks if the string represents a valid double (floating-point number).
+  ///
+  /// This method attempts to convert the string to a double and checks if the conversion is successful.
+  /// It can handle integers, decimal numbers, and scientific notation.
+  ///
+  /// Example:
+  /// ```dart
+  /// var intStr = '123';
+  /// var doubleStr = '123.45';
+  /// var scientificStr = '1.23e4';
+  /// var invalidStr = 'abc';
+  /// print(intStr.isDouble); // Outputs: true
+  /// print(doubleStr.isDouble); // Outputs: true
+  /// print(scientificStr.isDouble); // Outputs: true
+  /// print(invalidStr.isDouble); // Outputs: false
+  /// ```
+  ///
+  /// Returns `true` if the string can be parsed as a double, otherwise `false`.
   bool get isDouble {
     return double.tryParse(this) != null;
   }

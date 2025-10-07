@@ -11,11 +11,35 @@ import 'package:webapp/src/tools/multi_language/language.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
 import 'package:webapp/wa_tools.dart';
 
-/// A class that represents the web server for handling HTTP requests and database operations.
+/// A comprehensive web application server framework for Dart.
 ///
-/// The `WaServer` class is responsible for initializing and starting the web server, managing HTTP requests,
-/// handling routes, connecting to MongoDB, and managing scheduled tasks (cron jobs). It also provides methods
-/// for adding routing functions and stopping the server.
+/// The [WaServer] class provides a complete HTTP server implementation with
+/// built-in support for routing, database connectivity (MongoDB and MySQL),
+/// WebSocket management, scheduled tasks (cron jobs), and development tools.
+///
+/// Features:
+/// - HTTP request/response handling with middleware support
+/// - MongoDB and MySQL database integration
+/// - WebSocket server capabilities
+/// - Cron job scheduling
+/// - Multi-language support
+/// - Development debugging tools
+/// - Migration system for database schema management
+///
+/// Example usage:
+/// ```dart
+/// final config = WaConfigs(
+///   ip: '0.0.0.0',
+///   port: 8080,
+///   dbConfig: DbConfig(
+///     enable: true,
+///     link: 'mongodb://localhost:27017/myapp'
+///   ),
+/// );
+///
+/// final server = WaServer(configs: config);
+/// await server.start();
+/// ```
 class WaServer {
   /// A list of command-line arguments passed to the server.
   List<String> _args = [];
@@ -65,6 +89,11 @@ class WaServer {
     debuggerInit();
   }
 
+  /// WebSocket-based debugger for local development.
+  ///
+  /// Provides real-time debugging capabilities including route inspection,
+  /// memory monitoring, language reloading, and server restart functionality.
+  /// Only active when [config.enableLocalDebugger] and [config.isLocalDebug] are true.
   SocketManager? debugger;
 
   /// Adds a routing function to the server.
@@ -126,6 +155,15 @@ class WaServer {
     server = null;
   }
 
+  /// Restarts the server by stopping and starting it again.
+  ///
+  /// This method performs a graceful restart by:
+  /// 1. Stopping the current server instance with force flag
+  /// 2. Waiting for 2 seconds to ensure proper cleanup
+  /// 3. Starting the server again with the same configuration
+  ///
+  /// Any errors during the stop process are logged but don't prevent the restart.
+  /// This is useful for applying configuration changes or recovering from errors.
   Future<void> restart() async {
     try {
       await stop(force: true);
@@ -284,6 +322,21 @@ class WaServer {
     await _runCommands(_args);
   }
 
+  /// Creates and configures the command manager for interactive CLI operations.
+  ///
+  /// Sets up a [CappManager] with all available server commands including:
+  /// - `help` - Shows help information for all available commands
+  /// - `migrate` - Database migration tools (init, create, rollback, list)
+  /// - `language` - Multi-language support management (list, reload)
+  /// - `info` - Displays server information (version, memory, connections)
+  /// - `route` - Route inspection and listing tools
+  /// - `exit` - Graceful server shutdown
+  ///
+  /// Each command includes relevant options and provides structured output
+  /// using tables and progress indicators for better user experience.
+  ///
+  /// [args] - Command-line arguments to initialize the manager
+  /// Returns a configured [CappManager] instance ready for command processing
   CappManager _getCommandManager(List<String> args) => CappManager(
         main: CappController(
           '',
@@ -508,6 +561,21 @@ class WaServer {
         ],
       );
 
+  /// Processes command-line arguments and enters interactive command mode.
+  ///
+  /// Handles the execution of server commands such as:
+  /// - `help` - Display available commands
+  /// - `migrate` - Database migration operations
+  /// - `language` - Language management commands
+  /// - `info` - Server information display
+  /// - `route` - Route inspection
+  /// - `exit` - Graceful server shutdown
+  ///
+  /// If no arguments are provided, the method returns immediately.
+  /// Otherwise, it starts an interactive command prompt (WebApp>) where
+  /// users can continue entering commands.
+  ///
+  /// [args] - List of command-line arguments to process
   Future<void> _runCommands(List<String> args) async {
     if (args.isEmpty) {
       return;
@@ -615,7 +683,28 @@ class WaServer {
     return webRoutes;
   }
 
+  /// Flag to track whether the debugger has been initialized.
+  ///
+  /// Prevents multiple initialization of the debugging system
+  /// when [debuggerInit] is called multiple times.
   var _isDebuggerInit = false;
+
+  /// Initializes the local development debugger system.
+  ///
+  /// Sets up a WebSocket-based debugging interface that provides:
+  /// - Real-time route inspection and listing
+  /// - Language file reloading capabilities
+  /// - Server restart functionality
+  /// - Memory usage monitoring
+  /// - Error and log message broadcasting
+  /// - Console widget for debugging
+  ///
+  /// The debugger is only initialized when both [config.enableLocalDebugger]
+  /// and [config.isLocalDebug] are true, and prevents duplicate initialization.
+  ///
+  /// Automatically adds debugging routes to the server:
+  /// - `/debugger` - Main debugger interface
+  /// - `/debugger/console.js` - Console widget JavaScript
   void debuggerInit() {
     if (config.enableLocalDebugger && config.isLocalDebug && !_isDebuggerInit) {
       _isDebuggerInit = true;
@@ -718,8 +807,18 @@ class WaServer {
   }
 }
 
-/// A class that holds version information for the server.
+/// Provides version and build information for the WebApp server.
+///
+/// This class contains static information about the current server version
+/// and can be extended to include additional build metadata such as
+/// build date, commit hash, or environment information.
 class _Info {
-  /// The version of the server.
-  final String version = '2.1.1';
+  /// The current version of the WebApp server framework.
+  ///
+  /// Follows semantic versioning (SemVer) format: MAJOR.MINOR.PATCH[-PRERELEASE]
+  /// - MAJOR: Breaking changes
+  /// - MINOR: New features (backward compatible)
+  /// - PATCH: Bug fixes (backward compatible)
+  /// - PRERELEASE: Pre-release identifiers (alpha, beta, rc)
+  final String version = '3.0.0-beta.1';
 }

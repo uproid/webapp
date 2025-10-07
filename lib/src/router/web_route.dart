@@ -1,10 +1,6 @@
 import 'dart:async';
+import 'package:webapp/wa_route.dart';
 import 'package:webapp/wa_tools.dart';
-import '../controllers/wa_auth_controller.dart';
-import '../router/api_doc.dart';
-import '../render/web_request.dart';
-import 'request_methods.dart';
-import 'wa_controller.dart';
 
 /// Represents a route in the web application, including path configurations, methods,
 /// controllers, and authorization details.
@@ -50,9 +46,6 @@ class WebRoute {
 
   /// Permissions required for this route. Authentication is needed to use these permissions.
   late List<String> permissions = [];
-
-  /// The [WebRequest] context for the current request.
-  late WebRequest rq;
 
   /// Path to the widget to be loaded as content for this route.
   late String widget;
@@ -106,17 +99,13 @@ class WebRoute {
     this.permissions = const [],
     this.hosts = const ['*'],
     this.ports = const [],
-  }) : super() {
-    if (rq != null) {
-      this.rq = rq;
-    }
-  }
+  }) : super();
 
   /// Checks if the current HTTP method is allowed for this route.
   ///
   /// Returns `true` if the method is in the list of allowed methods, otherwise `false`.
   bool allowMethod() {
-    return (methods.contains(rq.method));
+    return (methods.contains(RequestContext.rq.method));
   }
 
   /// Converts the route to a list of maps representing its details.
@@ -174,7 +163,6 @@ class WebRoute {
   /// Returns a list of [WebRoute] instances.
   static List<WebRoute> makeList({
     required List<String> paths,
-    required WebRequest rq,
     List<String> extraPath = const [],
     List<String> methods = const [RequestMethods.GET],
     WaController? controller,
@@ -210,7 +198,6 @@ class WebRoute {
         hosts: hosts,
         ports: ports,
       );
-      route.rq = rq;
       res.add(route);
     }
 

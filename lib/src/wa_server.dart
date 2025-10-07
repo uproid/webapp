@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:capp/capp.dart';
 import 'package:mysql_client/mysql_client.dart';
 import 'package:webapp/src/db/mysql/mysql_migration.dart';
-import 'package:webapp/src/render/fake_web_request.dart';
 import 'package:webapp/src/widgets/widget_console.dart';
 import 'package:webapp/wa_route.dart';
 import 'package:webapp/wa_server.dart';
@@ -63,6 +62,7 @@ class WaServer {
     this.onRequest,
   }) {
     WaServer.config = configs;
+    debuggerInit();
   }
 
   SocketManager? debugger;
@@ -74,110 +74,6 @@ class WaServer {
   ///
   /// Returns the [WaServer] instance to allow method chaining.
   WaServer addRouting(Future<List<WebRoute>> Function(WebRequest rq) router) {
-    if (config.enableLocalDebugger && config.isLocalDebug) {
-      debugger = SocketManager(
-        this,
-        routes: {
-          'get_routes': SocketEvent(onMessage: (socket, data) async {
-            var res = await exploreAllRoutes(socket.rq);
-            debugger?.sendToAll({
-              'routes': res,
-            }, path: 'get_routes');
-          }),
-          'update_languages': SocketEvent(onMessage: (socket, data) async {
-            appLanguages = await MultiLanguage(config.languagePath).init();
-            await debugger?.sendToAll(
-              {'message': 'Language updated'},
-              path: 'update_languages',
-            );
-          }),
-          'restart': SocketEvent(onMessage: (socket, data) async {
-            await debugger?.sendToAll({}, path: 'restartStarted');
-            await stop(force: true);
-            await start();
-          }),
-          'get_data': SocketEvent(onMessage: (socket, data) async {
-            debugger?.sendToAll({
-              'error': {
-                'params': socket.rq.getParams(),
-                'uri': socket.rq.uri.toString(),
-                'buffer': socket.rq.buffer.toString().split('\n'),
-                'headers': socket.rq.headers.toString().split(';'),
-                'session_cookies': socket.rq.getAllSession(),
-              },
-            }, path: 'console');
-          }),
-          'reinit': SocketEvent(onMessage: (socket, data) async {
-            print("Server is restarting...");
-            restart();
-          }),
-        },
-      );
-
-      Console.onError.add((error, type) {
-        debugger?.sendToAll({
-          'error': error.toString(),
-          'type': type,
-        }, path: "console");
-      });
-
-      Console.onLogging.add((error, type) {
-        debugger?.sendToAll({
-          'message': error.toString(),
-          'type': type,
-        }, path: "log");
-      });
-
-      WaCron(
-        schedule: WaCron.evrySecond(1),
-        delayFirstMoment: false,
-        onCron: (index, cron) async {
-          debugger?.sendToAll({
-            'memory': ConvertSize.toLogicSizeString(ProcessInfo.currentRss),
-            'max_memory': ConvertSize.toLogicSizeString(ProcessInfo.maxRss),
-          }, path: "updateMemory");
-        },
-      ).start();
-
-      _webRoutes.add((rq) async {
-        rq.buffer.writeln(
-            "<script src='${rq.url('/debugger/console.js')}'></script>");
-
-        rq.addAsset(
-          Asset(
-            path: rq.url('/debugger/console.js'),
-          ),
-        );
-        return [
-          WebRoute(
-            path: 'debugger',
-            index: () async {
-              await debugger?.requestHandel(rq, userId: "LOCAL_USER");
-              debugger?.sendToAll({
-                'type': 'user_connected',
-                'userId': "LOCAL_USER",
-              });
-              return rq.renderSocket();
-            },
-            children: [
-              WebRoute(
-                path: 'console.js',
-                index: () async {
-                  return rq.renderString(
-                    text: ConsoleWidget().layout,
-                    contentType: ContentType(
-                      'text',
-                      'javascript',
-                      charset: 'utf-8',
-                    ),
-                  );
-                },
-              )
-            ],
-          )
-        ];
-      });
-    }
     _webRoutes.add(router);
 
     return this;
@@ -186,10 +82,11 @@ class WaServer {
   /// Get routing list of Server
   /// Here you can get all routing of server that added to server
   /// Returns a list of [WebRoute] instances.
-  Future<List<WebRoute>> getAllRoutes(WebRequest rq) async {
+  Future<List<WebRoute>> getAllRoutes() async {
     List<WebRoute> routing = [];
+
     for (var webRoute in _webRoutes) {
-      routing.addAll(await webRoute(rq));
+      routing.addAll(await webRoute(RequestContext.rq));
     }
     return routing;
   }
@@ -321,7 +218,6 @@ class WaServer {
         RequestContext.run(rq, () {
           runZonedGuarded(() async {
             List<WebRoute> routing = [];
-
             if (config.dbConfig.enable) {
               if (_db == null) {
                 _db = await connectMongoDb().onError((error, stackTrace) async {
@@ -568,7 +464,7 @@ class WaServer {
               ),
             ],
             run: (c) async {
-              var routes = await exploreAllRoutes(FakeWebRequest());
+              var routes = await exploreAllRoutes();
               var header = [
                 '#',
                 'Full Path',
@@ -668,8 +564,8 @@ class WaServer {
     crons.add(cron);
   }
 
-  Future<List<Map>> exploreAllRoutes(WebRequest rq) async {
-    var allRoutes = await getAllRoutes(rq);
+  Future<List<Map>> exploreAllRoutes() async {
+    var allRoutes = await getAllRoutes();
 
     List<Map> convert(List<WebRoute> routes, String parentPath, hasAuth) {
       var result = <Map>[];
@@ -717,6 +613,108 @@ class WaServer {
       return e;
     }).toList();
     return webRoutes;
+  }
+
+  var _isDebuggerInit = false;
+  void debuggerInit() {
+    if (config.enableLocalDebugger && config.isLocalDebug && !_isDebuggerInit) {
+      _isDebuggerInit = true;
+      debugger = SocketManager(
+        this,
+        routes: {
+          'get_routes': SocketEvent(onMessage: (socket, data) async {
+            var res = await exploreAllRoutes();
+            debugger?.sendToAll({
+              'routes': res,
+            }, path: 'get_routes');
+          }),
+          'update_languages': SocketEvent(onMessage: (socket, data) async {
+            appLanguages = await MultiLanguage(config.languagePath).init();
+            await debugger?.sendToAll(
+              {'message': 'Language updated'},
+              path: 'update_languages',
+            );
+          }),
+          'restart': SocketEvent(onMessage: (socket, data) async {
+            await debugger?.sendToAll({}, path: 'restartStarted');
+            await stop(force: true);
+            await start();
+          }),
+          'get_data': SocketEvent(onMessage: (socket, data) async {
+            debugger?.sendToAll({
+              'error': {
+                'params': socket.rq.getParams(),
+                'uri': socket.rq.uri.toString(),
+                'buffer': socket.rq.buffer,
+                'headers': socket.rq.headers.toString().split(';'),
+                'session_cookies': socket.rq.getAllSession(),
+              },
+            }, path: 'console');
+          }),
+          'reinit': SocketEvent(onMessage: (socket, data) async {
+            print("Server is restarting...");
+            restart();
+          }),
+        },
+      );
+
+      Console.onError.add((error, type) {
+        debugger?.sendToAll({
+          'error': error.toString(),
+          'type': type,
+        }, path: "console");
+      });
+
+      Console.onLogging.add((error, type) {
+        debugger?.sendToAll({
+          'message': error.toString(),
+          'type': type,
+        }, path: "log");
+      });
+
+      WaCron(
+        schedule: WaCron.evrySecond(1),
+        delayFirstMoment: false,
+        onCron: (index, cron) async {
+          debugger?.sendToAll({
+            'memory': ConvertSize.toLogicSizeString(ProcessInfo.currentRss),
+            'max_memory': ConvertSize.toLogicSizeString(ProcessInfo.maxRss),
+          }, path: "updateMemory");
+        },
+      ).start();
+      _webRoutes.add((WebRequest rq) async {
+        rq.buffer.writeln(
+            "<script src='${rq.url('/debugger/console.js')}'></script>");
+        return [
+          WebRoute(
+            path: 'debugger',
+            index: () async {
+              await debugger?.requestHandel(rq, userId: "LOCAL_USER");
+              debugger?.sendToAll({
+                'type': 'user_connected',
+                'userId': "LOCAL_USER",
+              });
+              return rq.renderSocket();
+            },
+            children: [
+              WebRoute(
+                path: 'console.js',
+                index: () async {
+                  return rq.renderString(
+                    text: ConsoleWidget().layout,
+                    contentType: ContentType(
+                      'text',
+                      'javascript',
+                      charset: 'utf-8',
+                    ),
+                  );
+                },
+              )
+            ],
+          )
+        ];
+      });
+    }
   }
 }
 

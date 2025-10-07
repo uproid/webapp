@@ -117,7 +117,7 @@ class HomeController extends WaController {
   }
 
   Future<String> exampleRoute() async {
-    var allRoutes = await server.getAllRoutes(rq);
+    var allRoutes = await server.getAllRoutes();
 
     List<Map> convert(List<WebRoute> routes, String parentPath, hasAuth) {
       var result = <Map>[];

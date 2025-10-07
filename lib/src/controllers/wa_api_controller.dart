@@ -60,7 +60,7 @@ class WaApiController extends WaController {
     }
 
     var paths = {};
-    List<WebRoute> routes = await server.getAllRoutes(rq);
+    List<WebRoute> routes = await server.getAllRoutes();
 
     var webRoutes = _convert(routes, '', null);
 
@@ -310,7 +310,6 @@ class WaApiController extends WaController {
     var result = <WebRoute>[];
 
     for (final route in routes) {
-      route.rq = rq;
       route.path = endpointNorm([
         parentPath,
         route.path,
@@ -330,7 +329,6 @@ class WaApiController extends WaController {
       var res = _convert(
         WebRoute.makeList(
           paths: route.extraPath,
-          rq: route.rq,
           index: route.index,
           apiDoc: route.apiDoc,
           auth: auth,

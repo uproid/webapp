@@ -47,7 +47,6 @@ class Route {
   }) async {
     for (var i = 0; i < routing.length; i++) {
       var route = routing[i];
-      route.rq = rq;
       if (route.hosts.isNotEmpty && !route.hosts.contains('*')) {
         if (!route.hosts.contains(rq.host)) {
           continue;
@@ -104,9 +103,8 @@ class Route {
     WebRoute route,
     final String key,
   ) async {
-    route.rq = rq;
     var urlParams = <String, Object?>{};
-    final pathClient = route.rq.uri.path;
+    final pathClient = RequestContext.rq.uri.path;
     var endpoint = endpointNorm([key]);
     var path = endpointNorm([pathClient]);
     rq.addParams(route.params);
@@ -174,7 +172,6 @@ class Route {
         if (!await checkPermission(seenAuth)) {
           return (found: false, urlParams: urlParams);
         }
-        route.rq = rq;
         rq.addParams(urlParams);
         await route.index!();
         return (found: true, urlParams: urlParams);
@@ -185,7 +182,6 @@ class Route {
         var res = await route.auth!.auth();
         if (res == false) return (found: false, urlParams: urlParams);
       }
-      route.rq = rq;
       if (await checkAll(route.children, parentPath: key)) {
         return (found: true, urlParams: urlParams);
       }

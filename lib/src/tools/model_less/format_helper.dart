@@ -3,19 +3,51 @@ import 'package:webapp/src/tools/console.dart';
 import 'package:webapp/src/tools/convertor/convert_strings.dart';
 import 'package:webapp/src/tools/convertor/string_validator.dart';
 
+/// A set of extension methods for dynamic types to facilitate type conversion
+/// and provide default values when conversion is not possible.
+/// These methods help in safely converting dynamic values to specific types
+/// such as int, double, String, bool, List, ObjectId, and DateTime.
+/// Each method allows specifying a default value to return if the conversion fails.
+/// Example usage:
+/// ```dart
+/// dynamic value = "123";
+/// int intValue = value.asInt(def: 0); // Converts to int, returns 123
+/// String strValue = value.asString(def: "default"); // Converts to String, returns "123"
+/// bool boolValue = value.asBool(def: false); // Converts to bool, returns false
+/// List listValue = value.asList(def: []); // Converts to List, returns []
+/// ObjectId oidValue = value.asObjectId(def: ObjectId()); // Converts to ObjectId, returns a new ObjectId
+/// DateTime dateTimeValue = value.asDateTime(def: DateTime.now()); // Converts to DateTime, returns current date and time
+/// ```
 extension FormatHelper on dynamic {
+  /// Converts the dynamic value to an integer.
+  /// If conversion fails, returns the provided default value or 0.
+  /// [def] The default value to return if conversion fails.
+  /// Returns the integer representation of the dynamic value or the default value.
   int asInt({int? def}) {
     return int.tryParse(toString()) ?? def ?? 0;
   }
 
+  /// Converts the dynamic value to a double.
+  /// If conversion fails, returns the provided default value or 0.0.
+  /// [def] The default value to return if conversion fails.
+  /// Returns the double representation of the dynamic value or the default value.
   double asDouble({double? def}) {
     return double.tryParse(toString()) ?? def ?? 0.0;
   }
 
+  /// Converts the dynamic value to a num (either int or double).
+  /// If conversion fails, returns the provided default value or 0.
+  /// [def] The default value to return if conversion fails.
+  /// Returns the num representation of the dynamic value or the default value.
   num asNum({num? def}) {
     return num.tryParse(toString()) ?? def ?? 0;
   }
 
+  /// Converts the dynamic value to a String.
+  /// If the value is null or empty after trimming, returns the provided default value or an empty string.
+  /// [def] The default value to return if the dynamic value is null or empty.
+  /// [trim] Whether to trim whitespace from the string (default is true).
+  /// Returns the String representation of the dynamic value or the default value.
   String asString({String? def, bool trim = true}) {
     def ??= '';
     var res = (this ?? def).toString();
@@ -25,6 +57,12 @@ extension FormatHelper on dynamic {
     return res.isEmpty ? def : res;
   }
 
+  /// Converts the dynamic value to a boolean.
+  /// If the value is null, returns the provided default value or false.
+  /// The conversion considers '1' and 'true' (case insensitive) as true,
+  /// and any other value as false.
+  /// [def] The default value to return if the dynamic value is null.
+  /// Returns the boolean representation of the dynamic value or the default value.
   bool asBool({bool? def}) {
     var value = this ?? def;
     return value.toString().toBool;
@@ -73,6 +111,12 @@ extension FormatHelper on dynamic {
     }
   }
 
+  /// Converts the dynamic value to a MongoDB ObjectId.
+  /// If the value is already an ObjectId, it is returned as is.
+  /// If the value is a String, it attempts to parse it into an ObjectId.
+  /// If parsing fails or the value is null, returns the provided default ObjectId or a new ObjectId.
+  /// [def] The default ObjectId to return if conversion fails.
+  /// Returns the ObjectId representation of the dynamic value or the default ObjectId.
   ObjectId asObjectId({ObjectId? def}) {
     if (this is ObjectId) {
       return this;
@@ -83,6 +127,12 @@ extension FormatHelper on dynamic {
     return res.oID ?? def ?? ObjectId();
   }
 
+  /// Converts the dynamic value to a DateTime object.
+  /// If the value is null, returns the provided default DateTime or a DateTime set to UTC 1977.
+  /// If the value is a String, it attempts to parse it into a DateTime.
+  /// If parsing fails, returns null.
+  /// [def] The default DateTime to return if the value is null.
+  /// Returns the DateTime representation of the dynamic value or the default DateTime.
   DateTime? asDateTime({DateTime? def}) {
     var value = this ?? def;
     if (value == null) {
@@ -92,6 +142,11 @@ extension FormatHelper on dynamic {
     return res;
   }
 
+  /// Attempts to cast the dynamic value to a specified type [T].
+  /// If the value is null or cannot be cast to [T], returns the provided default value or null.
+  /// Supports basic types such as int, double, num, String, bool, List, ObjectId, and DateTime.
+  /// [def] The default value to return if casting fails.
+  /// Returns the value cast to type [T] or the default value.
   T? asCast<T>({T? def}) {
     var value = this as Object?;
     if (value == null) {

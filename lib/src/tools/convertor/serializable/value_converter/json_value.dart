@@ -54,6 +54,10 @@ class WaJson {
   }
 
   /// Convert Symbol maps to String maps
+  /// For example, {Symbol('name'): 'John'} becomes {'name': 'John'}
+  /// [obj] is the map to be converted.
+  /// [rq] is an optional [WebRequest] object used for encoding [TString] instances.
+  /// Returns a new map with String keys.
   static Map encodeMaps(Map obj, {WebRequest? rq}) {
     var res = {};
     for (Object o in obj.keys) {
@@ -68,6 +72,12 @@ class WaJson {
     return res;
   }
 
+  /// Converts a [Symbol] to a string key.
+  /// The string key is derived from the symbol's name.
+  /// If the symbol represents a private member (starts with '_'), it is prefixed with '#'.
+  /// For example, Symbol('name') becomes 'name', and Symbol('_private') becomes '#_private'.
+  /// [symbol] is the symbol to be converted.
+  /// Returns the string representation of the symbol.
   static String symbolToKey(Symbol symbol) {
     var name = symbol.toString();
     var regExp = RegExp(r'\("(.+)"\)');
@@ -104,6 +114,12 @@ class WaJson {
     return _normalizeMapKeys(map);
   }
 
+  /// Normalizes the keys of a map by converting keys that start with '#' to Symbol keys.
+  ///
+  /// For example, a key '#name' will be converted to Symbol('name').
+  /// Other keys remain unchanged.
+  /// [map] is the map to be normalized.
+  /// Returns a new map with normalized keys.
   static Map _normalizeMapKeys(Map map) {
     var res = {};
     for (var key in map.keys) {
@@ -120,6 +136,10 @@ class WaJson {
   }
 
   /// Parses a JSON-encoded dynamic into a Dart object.
+  /// If parsing fails, returns null.
+  /// The [data] parameter can be any type of object to be parsed.
+  /// The [rq] parameter is an optional [WebRequest] object used for encoding [TString] instances.
+  /// Returns a dynamic object representing the parsed JSON data, or null if
   static Map<T, V>? tryJson<T, V>(dynamic data, {WebRequest? rq}) {
     try {
       var res = jsonEncoder(data, rq: rq);
@@ -130,6 +150,11 @@ class WaJson {
     }
   }
 
+  /// Parses a JSON-encoded dynamic into a List.
+  /// If parsing fails, returns the provided default list.
+  /// The [data] parameter can be any type of object to be parsed.
+  /// The [def] parameter is the default list to return if parsing fails (default is an empty list).
+  /// The [rq] parameter is an optional [WebRequest] object used for encoding [TString] instances.
   static List? tryJsonList(
     dynamic data, {
     List def = const [],

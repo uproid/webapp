@@ -335,7 +335,7 @@ class $JinjaVar extends JinjaTag {
 /// // Generates: <?# This section renders user profile information ?>
 ///
 /// final todo = $JinjaComment('TODO: Add pagination support');
-/// // Generates: <?# TODO: Add pagination support ?>
+/// // Generates: <?# Add pagination support ?>
 /// ```
 class $JinjaComment extends JinjaTag {
   String content;

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the asCast method from the FormatHelper extension, for the Dart programming language.">
+  <title>asCast method - FormatHelper extension - wa_model_less library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">webapp</a></li>
+    <li><a href="../../wa_model_less/">wa_model_less.dart</a></li>
+    <li><a href="../../wa_model_less/FormatHelper.html">FormatHelper</a></li>
+    <li class="self-crumb">asCast&lt;<wbr><span class="type-parameter">T</span>&gt; method</li>
+  </ol>
+  <div class="self-name">asCast</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="wa_model_less&#47;FormatHelper-extension-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">asCast&lt;<wbr><span class="type-parameter">T</span>&gt;</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+<span class="returntype">T?</span>
+<span class="name ">asCast</span>&lt;<wbr><span class="type-parameter">T</span>&gt;(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="asCast-param-def"><span class="type-annotation">T?</span> <span class="parameter-name">def</span>, </span></li>
+</ol>})
+
+      
+
+    </section>
+    
+<section class="desc markdown">
+  <p>Attempts to cast the dynamic value to a specified type <code>T</code>.
+If the value is null or cannot be cast to <code>T</code>, returns the provided default value or null.
+Supports basic types such as int, double, num, String, bool, List, ObjectId, and DateTime.
+<code>def</code> The default value to return if casting fails.
+Returns the value cast to type <code>T</code> or the default value.</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">T? asCast&lt;T&gt;({T? def}) {
+  var value = this as Object?;
+  if (value == null) {
+    return def;
+  }
+
+  switch (T.toString()) {
+    case &#39;int&#39;:
+      return value.asInt(def: def as int) as T;
+    case &#39;double&#39;:
+      return value.asDouble(def: def as double) as T;
+    case &#39;num&#39;:
+      return value.asNum(def: def as num) as T;
+    case &#39;String&#39;:
+      return value.asString(def: def as String) as T;
+    case &#39;bool&#39;:
+      return value.asBool(def: def as bool) as T;
+    case &#39;List&#39;:
+      return value.asList(def: def as List) as T;
+    case &#39;ObjectId&#39;:
+      return value.asObjectId(def: def as ObjectId) as T;
+    case &#39;DateTime&#39;:
+      return value.asDateTime(def: def as DateTime) as T;
+    case &#39;int?&#39;:
+      int? defVal = (def) as int?;
+      return value.asInt(def: defVal) as T?;
+    case &#39;double?&#39;:
+      var defVal = (def) as double?;
+      return value.asDouble(def: defVal) as T?;
+    case &#39;num?&#39;:
+      var defVal = (def) as num?;
+      return value.asNum(def: defVal) as T?;
+    case &#39;String?&#39;:
+      var defVal = (def) as String?;
+      return value.asString(def: defVal) as T?;
+    case &#39;bool?&#39;:
+      var defVal = (def) as bool?;
+      return value.asBool(def: defVal) as T?;
+    case &#39;List?&#39;:
+      var defVal = (def) as List?;
+      return value.asList(def: defVal) as T?;
+    case &#39;ObjectId?&#39;:
+      var defVal = (def) as ObjectId?;
+      return value.asObjectId(def: defVal) as T?;
+    case &#39;DateTime?&#39;:
+      var defVal = (def) as DateTime?;
+      return value.asDateTime(def: defVal) as T?;
+    default:
+      return def;
+  }
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">webapp</a></li>
+    <li><a href="../../wa_model_less/">wa_model_less</a></li>
+    <li><a href="../../wa_model_less/FormatHelper.html">FormatHelper</a></li>
+    <li class="self-crumb">asCast&lt;<wbr><span class="type-parameter">T</span>&gt; method</li>
+</ol>
+
+    <h5>FormatHelper extension on dynamic</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    webapp
+      2.1.1
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the UIPaging.fromRequest constructor from Class UIPaging from the wa_ui library, for the Dart programming language.">
+  <title>UIPaging.fromRequest constructor - UIPaging - wa_ui library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">webapp</a></li>
+    <li><a href="../../wa_ui/">wa_ui.dart</a></li>
+    <li><a href="../../wa_ui/UIPaging-class.html">UIPaging</a></li>
+    <li class="self-crumb">UIPaging.fromRequest factory constructor</li>
+  </ol>
+  <div class="self-name">UIPaging.fromRequest</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+  <div
+      id="dartdoc-main-content"
+      class="main-content"
+      data-above-sidebar="wa_ui&#47;UIPaging-class-sidebar.html"
+      data-below-sidebar="">
+      <div>
+<h1><span class="kind-constructor">UIPaging.fromRequest</span> constructor 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+      <span class="name ">UIPaging.fromRequest</span>(<wbr><ol class="parameter-list"> <li><span class="parameter" id="fromRequest-param-rq"><span class="type-annotation"><a href="../../wa_route/WebRequest-class.html">WebRequest</a></span> <span class="parameter-name">rq</span>, {</span></li>
+<li><span class="parameter" id="fromRequest-param-total"><span>required</span> <span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/int-class.html">int</a></span> <span class="parameter-name">total</span>, </span></li>
+<li><span class="parameter" id="fromRequest-param-profix"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">profix</span> = <span class="default-value">&#39;page&#39;</span>, </span></li>
+<li><span class="parameter" id="fromRequest-param-widget"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">widget</span> = <span class="default-value">&#39;dashboard&#47;theme&#47;ui&#47;paging&#39;</span>, </span></li>
+<li><span class="parameter" id="fromRequest-param-otherQuery"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>, <span class="type-parameter"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>&gt;</span></span> <span class="parameter-name">otherQuery</span> = <span class="default-value">const {}</span>, </span></li>
+<li><span class="parameter" id="fromRequest-param-pageSize"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/int-class.html">int</a></span> <span class="parameter-name">pageSize</span> = <span class="default-value">5</span>, </span></li>
+<li><span class="parameter" id="fromRequest-param-orderByDef"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">orderByDef</span> = <span class="default-value">&#39;&#39;</span>, </span></li>
+<li><span class="parameter" id="fromRequest-param-orderReverseDef"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">orderReverseDef</span> = <span class="default-value">false</span>, </span></li>
+<li><span class="parameter" id="fromRequest-param-pageDef"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/int-class.html">int</a></span> <span class="parameter-name">pageDef</span> = <span class="default-value">1</span>, </span></li>
+</ol>})
+    </section>
+    
+<section class="desc markdown">
+  <p>A factory constructor to create <a href="../../wa_ui/UIPaging-class.html">UIPaging</a> from a request object <code>rq</code>.</p>
+<p>This factory method extracts relevant pagination information from the request
+and provides default values for optional parameters:</p>
+<ul>
+<li><code>total</code>: The total number of items.</li>
+<li><code>profix</code>: The page query parameter name (default is 'page').</li>
+<li><code>widget</code>: The widget identifier (default is 'dashboard/theme/ui/paging').</li>
+<li><code>otherQuery</code>: Additional query parameters.</li>
+<li><code>pageSize</code>: The number of items per page (default is 5).</li>
+<li><code>orderByDef</code>: The default field for ordering.</li>
+<li><code>orderReverseDef</code>: The default ordering direction.</li>
+<li><code>pageDef</code>: The default page number (default is 1).</li>
+</ul>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">factory UIPaging.fromRequest(
+  WebRequest rq, {
+  required int total,
+  String profix = &#39;page&#39;,
+  String widget = &#39;dashboard&#47;theme&#47;ui&#47;paging&#39;,
+  Map&lt;String, String&gt; otherQuery = const {},
+  int pageSize = 5,
+  String orderByDef = &#39;&#39;,
+  bool orderReverseDef = false,
+  int pageDef = 1,
+}) {
+  var page = rq.get&lt;int&gt;(profix, def: pageDef);
+  var pageSizeFix = rq.get&lt;int&gt;(&#39;pageSize&#39;, def: pageSize);
+  var orderBy = rq.get&lt;String&gt;(&#39;orderBy&#39;, def: orderByDef);
+  var orderReverse = rq.get&lt;bool&gt;(&#39;orderReverse&#39;, def: orderReverseDef);
+
+  return UIPaging(
+    widget: widget,
+    page: page,
+    total: total,
+    pageSize: pageSizeFix,
+    orderBy: orderBy,
+    orderReverse: orderReverse,
+    profix: profix,
+    otherQuery: otherQuery,
+  );
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">webapp</a></li>
+    <li><a href="../../wa_ui/">wa_ui</a></li>
+    <li><a href="../../wa_ui/UIPaging-class.html">UIPaging</a></li>
+    <li class="self-crumb">UIPaging.fromRequest factory constructor</li>
+</ol>
+
+    <h5>UIPaging class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-left-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    webapp
+      2.1.1
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

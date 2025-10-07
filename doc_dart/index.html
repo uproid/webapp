@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="webapp API docs, for the Dart programming language.">
+  <title>webapp - Dart API docs</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="static-assets/github.css?v1">
+  <link rel="stylesheet" href="static-assets/styles.css?v1">
+  <link rel="icon" href="static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="https://webapp.uproid.com/">webapp package</a></li>
+  </ol>
+  <div class="self-name">webapp</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+  <div id="dartdoc-main-content" class="main-content">
+      
+<section class="desc markdown">
+  <h1 id="webapp-package">WebApp Package</h1>
+<p><a href="https://pub.dev/packages/webapp"><img src="https://img.shields.io/pub/v/webapp.svg" alt="pub package"></a>
+<a href="https://pub.dev/packages/webapp"><img src="https://img.shields.io/pub/v/webapp.svg?label=dev&amp;include_prereleases" alt="Dev"></a>
+<a href="https://buymeacoffee.com/fardziao"><img src="https://img.shields.io/badge/Donate-Buy%20Me%20A%20Coffee-pink.svg" alt="Donate"></a>
+<a href="https://github.com/uproid/webapp/issues?q=is%3Aissue+is%3Aclosed"><img src="https://img.shields.io/github/issues-closed/uproid/webapp?color=green" alt="issues-closed"></a>
+<a href="https://github.com/uproid/webapp/issues"><img src="https://img.shields.io/github/issues-raw/uproid/webapp" alt="issues-open"></a>
+<a href="https://github.com/uproid/webapp/blob/master/CONTRIBUTING.md"><img src="https://img.shields.io/github/contributors/uproid/webapp" alt="Contributions"></a></p>
+<h1 id="webapp-package-overview">WebApp Package Overview</h1>
+<p>WebApp Package is a robust Dart package designed to streamline the development of powerful web applications. Whether you're building APIs, managing databases, creating dynamic frontend widgets, or implementing real-time features, the WebApp package offers a comprehensive suite of tools to accelerate your development process. With built-in support for MongoDB, MySQL, WebSockets, and seamless integration with Nginx, this package is ideal for developers seeking efficiency and scalability in their web projects.</p>
+<h4 id="examples-projecthttpsgithubcomuproidwebapptreemasterexample----live-demohttpsexampleuproidcom--documentationshttpswebappuproidcom"><a href="https://github.com/uproid/webapp/tree/master/example">Examples Project</a>  |  <a href="https://example.uproid.com">Live Demo</a> | <a href="https://webapp.uproid.com">Documentations</a></h4>
+<h2 id="purpose">Purpose</h2>
+<p>The WebApp package is crafted to facilitate:</p>
+<ul>
+<li><strong>Rapid API Development:</strong> Quickly create and manage APIs, reducing development time.</li>
+<li><strong>Efficient Project Structuring:</strong> Organize web projects for better maintainability and scalability.</li>
+<li><strong>MongoDB Integration:</strong> Utilize MongoDB for efficient data storage and retrieval.</li>
+<li><strong>MySQL Support:</strong> Full MySQL database integration with query building, migrations, and table management.</li>
+<li><strong>Frontend Widget Creation:</strong> Develop reusable widgets for dynamic frontend interfaces.</li>
+<li><strong>WebSocket Implementation:</strong> Build interactive, real-time features with ease.</li>
+<li><strong>Nginx Integration:</strong> Deploy and manage your web application seamlessly with Nginx.</li>
+<li><strong>Comprehensive Tooling:</strong> Simplify web development with built-in utilities for handling common data structures and operations.</li>
+</ul>
+<ol>
+<li><a href="#webapp-package-overview">Overview</a></li>
+<li><a href="https://github.com/uproid/webapp/tree/master/doc/1.Installing.md">Installing</a></li>
+<li><a href="https://github.com/uproid/webapp/tree/master/doc/2.Example-start-server.md">Example: Start Server</a></li>
+<li><a href="https://github.com/uproid/webapp/tree/master/doc/3.Routing.md">Routing</a></li>
+<li><a href="https://github.com/uproid/webapp/tree/master/doc/4.Controllers.md">Controllers</a></li>
+<li><a href="https://github.com/uproid/webapp/tree/master/doc/5.Localization.md">Localization</a></li>
+<li><a href="https://github.com/uproid/webapp/tree/master/doc/6.FormValidators.md">Form Validators</a></li>
+<li><a href="https://github.com/uproid/webapp/tree/master/doc/7.jinja-template-engin.md">Jinja Template Engine</a></li>
+<li><a href="https://github.com/uproid/webapp/tree/master/doc/8.WebSocket.md">WebSocket</a></li>
+<li><a href="https://github.com/uproid/webapp/tree/master/doc/9.CronJob.md">Cron Job</a></li>
+<li><a href="https://github.com/uproid/webapp/tree/master/doc/10.Database.md">Database</a></li>
+<li><a href="https://github.com/uproid/webapp/tree/master/doc/11.DQ-Database-Queries.md">Database Queries</a></li>
+<li><a href="https://github.com/uproid/webapp/tree/master/doc/12.Mongo-db-connection.md">MongoDB Connection</a></li>
+<li><a href="https://github.com/uproid/webapp/tree/master/doc/14.MySQL-Database-Support.md">MySQL Database Support</a></li>
+<li><a href="https://github.com/uproid/webapp/tree/master/doc/13.open-api-documentation.md">Open API Documentation</a></li>
+</ol>
+<h2 id="features">Features</h2>
+<h3 id="1-rapid-api-development">1. Rapid API Development</h3>
+<p>The WebApp package provides a streamlined framework for setting up and managing APIs. Define endpoints, handle requests, and manage responses effortlessly, enabling you to focus on building the core functionality of your application.</p>
+<h3 id="2-mongodb-support">2. MongoDB Support</h3>
+<p>Integrate MongoDB seamlessly into your web application. The package offers tools to connect to MongoDB instances, perform CRUD operations, and manage data efficiently, ensuring robust backend support for your projects.</p>
+<h3 id="3-mysql-database-support">3. MySQL Database Support</h3>
+<p>Full-featured MySQL integration with comprehensive database management tools. Includes:</p>
+<ul>
+<li><strong>MySQL Query Builder</strong>: Type-safe SQL query construction with fluent API</li>
+<li><strong>Database Migrations</strong>: Automated schema management and version control</li>
+<li><strong>Table Management</strong>: Create, modify, and manage MySQL tables programmatically</li>
+<li><strong>Connection Management</strong>: Efficient connection pooling and management</li>
+<li><strong>Advanced SQL Features</strong>: Support for joins, subqueries, aggregations, and complex conditions</li>
+</ul>
+<h3 id="4-openapi-v30-documentation-generation">4. OpenAPI v3.0 Documentation Generation</h3>
+<p>Automatically generate OpenAPI v3.0 documentation for your APIs. This feature facilitates the use of UI tools like Swagger, providing an interactive interface for testing and exploring your APIs, enhancing developer and client experience.</p>
+<h3 id="5-database-models-and-mongodb-query-support">5. Database Models and MongoDB Query Support</h3>
+<p>Create database models that map directly to your MongoDB collections. The package simplifies defining data schemas and building complex queries, enabling efficient data operations such as filtering, sorting, and aggregating within your Dart code.</p>
+<h3 id="6-frontend-widget-creation">6. Frontend Widget Creation</h3>
+<p>Develop and manage reusable frontend widgets to render dynamic content. The package supports the creation of interactive UI components, enhancing the user experience and ensuring consistency across your web application.</p>
+<h3 id="7-websocket-support">7. WebSocket Support</h3>
+<p>Implement real-time communication features using WebSockets. Whether you're building chat applications, live data feeds, or interactive dashboards, the WebApp package makes adding WebSocket functionality straightforward and efficient.</p>
+<h3 id="8-nginx-compatibility">8. Nginx Compatibility</h3>
+<p>Deploy your Dart web application with ease using Nginx. The package is designed to work seamlessly with Nginx, providing robust and scalable server management suitable for production environments.</p>
+<h3 id="9-smtp-email-sending">9. SMTP Email Sending</h3>
+<p>Send emails directly from your web application using the Simple Mail Transfer Protocol (SMTP). This feature is essential for functionalities like user registration, password recovery, and sending notifications.</p>
+<h3 id="10-comprehensive-data-handling-tools">10. Comprehensive Data Handling Tools</h3>
+<p>Simplify web development with built-in tools for managing common data structures such as Strings, Maps, and Lists. These utilities include string encoding and manipulation, as well as efficient handling of Maps and Lists, reducing the need for additional packages.</p>
+<h3 id="11-advanced-routing-with-authentication-and-permissions">11. Advanced Routing with Authentication and Permissions</h3>
+<p>Handle client-side request routing effectively with built-in support for managing authentication and permissions. Define secure routes and control access to various parts of your application effortlessly.</p>
+<h3 id="12-easy-socket-request-development">12. Easy Socket Request Development</h3>
+<p>Develop and manage Socket requests with ease. The WebApp package provides intuitive APIs to handle Socket connections, enabling real-time data exchange and interactive features in your web application.</p>
+<h3 id="13-mvc-architecture-for-scalability">13. MVC Architecture for Scalability</h3>
+<p>Scale large projects effortlessly using the Model-View-Controller (MVC) architecture. Extend the provided classes such as <code>WaController</code>, <code>DBModel</code>, and <code>DBCollection</code> to structure your application logically and maintainably.</p>
+<h3 id="14-form-validators">14. Form Validators</h3>
+<p>Utilize built-in FormValidators to manage and validate client-side data on the server. This feature ensures data integrity and security by validating API requests and user inputs effectively.</p>
+<h3 id="15-cronjob-development">15. CronJob Development</h3>
+<p>Implement scheduled tasks quickly using the <code>WaCron</code> class. Automate routine operations, such as data backups or periodic data processing, with minimal configuration.</p>
+<h3 id="16-flexible-output-rendering">16. Flexible Output Rendering</h3>
+<p>Render client requests using various methods, including JSON, HTML, Text, Widgets, and variable dumps. The package supports multiple output formats, allowing you to present data in the most appropriate form for your users.</p>
+<h3 id="17-asset-management">17. Asset Management</h3>
+<p>Manage and include assets effortlessly during request rendering. Extend the <code>Layout</code> class and use the <code>include_controller</code> to add and manage assets, ensuring your application resources are well-organized and easily accessible.</p>
+<h2 id="contributing">Contributing</h2>
+<p>Contributions are welcome! If you have suggestions, bug reports, or improvements, please open an issue or submit a pull request on the <a href="https://github.com/uproid/webapp">GitHub repository</a>.</p>
+<h2 id="license">License</h2>
+<p>This project is licensed under the <a href="../LICENSE">MIT License</a>.</p>
+<hr>
+<h2 id="installation">Installation</h2>
+<h3 id="install-webapp-package">Install WebApp package</h3>
+<pre class="language-bash"><code class="language-bash">dart pub add webapp
+</code></pre>
+<h3 id="install-webapp-cli">Install WebApp CLI</h3>
+<pre class="language-bash"><code class="language-bash">dart pub global activate webapp
+webapp --version
+</code></pre>
+<h4 id="using-webapp-cli">Using WebApp CLI</h4>
+<pre class="language-bash"><code class="language-bash">webapp --help #help
+webapp create --name example # create new project
+webapp get  # get all packages from pub.dev (dart pub get)
+webapp runner # build all models (dart pub run build_runner build)
+webapp run  # Run project
+</code></pre>
+<p>Feel free to customize and extend the example provided with the package to fully leverage the WebApp package's capabilities in your web development projects.</p>
+<h3 id="simple-webapp-server-example">Simple WebApp Server example:</h3>
+<pre class="language-dart"><code class="language-dart">WaConfigs configs = WaConfigs(
+widgetsPath: pathTo('./example/widgets'),
+widgetsType: 'j2.html',
+languagePath: pathTo('./example/languages'),
+port: 8085,
+dbConfig: WaDBConfig(enable: false),
+publicDir: pathTo('./example/public'),
+);
+WaServer server = WaServer(configs: configs);
+
+final socketManager = SocketManager(
+server,
+event: SocketEvent(
+ onConnect: (socket) {
+   server.socketManager?.sendToAll(
+     'New user connected! count: ${server.socketManager?.countClients}',
+     path: 'output',
+   );
+   socket.send(
+     {'message': 'Soccuess connect to socket!'},
+     path: 'connected',
+   );
+ },
+ onMessage: (socket, data) {},
+ onDisconnect: (socket) {
+   var count = server.socketManager?.countClients ?? 0;
+   server.socketManager?.sendToAll(
+     'User disconnected! count: ${count - 1}',
+     path: 'output',
+   );
+ },
+),
+routes: getSocketRoute(),
+);
+
+void main() async {
+server.addRouting(getWebRoute);
+server.start().then((value) {
+ Console.p('Example app started: http://localhost:${value.port}');
+});
+}
+</code></pre>
+<h3 id="email-smtp-example">Email SMTP example:</h3>
+<p><a href="/example/">Example</a></p>
+<pre class="language-dart"><code class="language-dart">import 'package:mailer/smtp_server.dart';
+
+bool success = await MailSender.sendEmail(
+  from: 'sender@example.com',
+  fromName: 'Sender Name',
+  host: 'smtp.example.com',
+  port: 587,
+  to: ['recipient@example.com'],
+  subject: 'Test Email',
+  html: '&lt;h1&gt;Hello, World!&lt;/h1&gt;',
+  text: 'Hello, World!',
+  username: 'smtp-username',
+  password: 'smtp-password',
+  ssl: true,
+  allowInsecure: false,
+);
+</code></pre>
+<h3 id="mysql-database-example">MySQL Database example:</h3>
+<pre class="language-dart"><code class="language-dart">import 'package:webapp/wa_mysql.dart';
+
+// Create a query using the MySQL Query Builder
+var query = Q()
+  .selects([QSelectAll()])
+  .from(QField('users'))
+  .where(WhereOne(QField('status'), QO.EQ, QVar('active')))
+  .orderBy(QOrder('created_at', desc: true))
+  .limit(10);
+
+// Generate SQL
+String sql = query.toSQL();
+// Output: SELECT * FROM `users` WHERE ( `status` = 'active' ) ORDER BY `created_at` DESC LIMIT 10
+
+// Database migrations
+var migration = MysqlMigration(mysqlConnection);
+await migration.migrate(); // Run pending migrations
+await migration.rollback(); // Rollback last migration
+</code></pre>
+<h2 id="routing-example">Routing example:</h2>
+<pre class="language-dart"><code class="language-dart">Future&lt;List&lt;WebRoute&gt;&gt; getWebRoute(WebRequest rq) async {
+   final homeController = HomeController(rq);
+   final includeController = IncludeJsController(rq);
+   final authController = AuthController(rq);
+
+   var paths = [
+      WebRoute(
+         path: 'ws',
+         methods: RequestMethods.ALL,
+         rq: rq,
+         index: homeController.socket,
+      ),
+      WebRoute(
+         path: 'app/includes.js',
+         methods: RequestMethods.ALL,
+         rq: rq,
+         index: includeController.index,
+      ),
+      WebRoute(
+         path: 'example',
+         rq: rq,
+         index: () =&gt; rq.redirect('/'),
+         ports: [80,8080,443]    /// The allowd ports
+         hosts: ['localhost','127.0.0.1', 'example.com']  /// The allowed hostname
+         children: [
+            WebRoute(
+               path: '/form',
+               methods: RequestMethods.ALL,
+               rq: rq,
+               index: homeController.exampleForm,
+            ),
+            WebRoute(
+               path: '/cookie',
+               methods: RequestMethods.ONLY_GET,
+               rq: rq,
+               index: homeController.exampleCookie,
+            ),
+            WebRoute(
+               path: '/panel',
+               methods: RequestMethods.ONLY_GET,
+               rq: rq,
+               index: homeController.examplePanel,
+               auth: authController,
+            ),
+         ],
+      ),
+      WebRoute(
+         path: 'info',
+         extraPath: ['api/info'],
+         rq: rq,
+         index: homeController.info,
+      ),
+   ];
+
+   return [
+      WebRoute(
+         path: '/',
+         rq: rq,
+         methods: RequestMethods.ALL,
+         controller: homeController,
+         children: [
+         ...paths,
+         WebRoute(
+            path: 'fa/*',
+            extraPath: [
+               'en/*',
+               'nl/*',
+            ],
+            rq: rq,
+            index: homeController.changeLanguage,
+         )
+         ],
+      ),
+   ];
+}
+</code></pre>
+</section>
+
+
+      <section class="summary">
+          <h2>Libraries</h2>
+        <dl>
+          <dt id="json_annotation">
+  <span class="name"><a href="json_annotation/">json_annotation</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="mongo_dart">
+  <span class="name"><a href="mongo_dart/">mongo_dart</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="mysql_client">
+  <span class="name"><a href="mysql_client/">mysql_client</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="wa_console">
+  <span class="name"><a href="wa_console/">wa_console</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="wa_htmler">
+  <span class="name"><a href="wa_htmler/">wa_htmler</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="wa_mail">
+  <span class="name"><a href="wa_mail/">wa_mail</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="wa_model">
+  <span class="name"><a href="wa_model/">wa_model</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="wa_model_less">
+  <span class="name"><a href="wa_model_less/">wa_model_less</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="wa_mysql">
+  <span class="name"><a href="wa_mysql/">wa_mysql</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="wa_route">
+  <span class="name"><a href="wa_route/">wa_route</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="wa_server">
+  <span class="name"><a href="wa_server/">wa_server</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="wa_tools">
+  <span class="name"><a href="wa_tools/">wa_tools</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="wa_ui">
+  <span class="name"><a href="wa_ui/">wa_ui</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+        </dl>
+      </section>
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="https://webapp.uproid.com/">webapp package</a></li>
+</ol>
+
+    <h5 class="hidden-xs"><span class="package-name">webapp</span> <span class="package-kind">package</span></h5>
+    <ol>
+      <li class="section-title">Libraries</li>
+      <li><a href="json_annotation/">json_annotation</a></li>
+      <li><a href="mongo_dart/">mongo_dart</a></li>
+      <li><a href="mysql_client/">mysql_client</a></li>
+      <li><a href="wa_console/">wa_console</a></li>
+      <li><a href="wa_htmler/">wa_htmler</a></li>
+      <li><a href="wa_mail/">wa_mail</a></li>
+      <li><a href="wa_model/">wa_model</a></li>
+      <li><a href="wa_model_less/">wa_model_less</a></li>
+      <li><a href="wa_mysql/">wa_mysql</a></li>
+      <li><a href="wa_route/">wa_route</a></li>
+      <li><a href="wa_server/">wa_server</a></li>
+      <li><a href="wa_tools/">wa_tools</a></li>
+      <li><a href="wa_ui/">wa_ui</a></li>
+</ol>
+
+  </div>
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div>
+</main>
+<footer>
+  <span class="no-break">
+    webapp
+      2.1.1
+  </span>
+  
+</footer>
+
+
+<script src="static-assets/highlight.pack.js?v1"></script>
+<script src="static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

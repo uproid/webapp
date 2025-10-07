@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the requestHandel method from the SocketManager class, for the Dart programming language.">
+  <title>requestHandel method - SocketManager class - wa_server library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">webapp</a></li>
+    <li><a href="../../wa_server/">wa_server.dart</a></li>
+    <li><a href="../../wa_server/SocketManager-class.html">SocketManager</a></li>
+    <li class="self-crumb">requestHandel method</li>
+  </ol>
+  <div class="self-name">requestHandel</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="wa_server&#47;SocketManager-class-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">requestHandel</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+<span class="returntype"><a href="https://api.dart.dev/stable/3.9.2/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../wa_route/WebRequest-class.html">WebRequest</a></span>&gt;</span></span>
+<span class="name ">requestHandel</span>(<wbr><ol class="parameter-list"> <li><span class="parameter" id="requestHandel-param-rq"><span class="type-annotation"><a href="../../wa_route/WebRequest-class.html">WebRequest</a></span> <span class="parameter-name">rq</span>, {</span></li>
+<li><span class="parameter" id="requestHandel-param-userId"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">userId</span>, </span></li>
+</ol>})
+
+      
+
+    </section>
+    
+<section class="desc markdown">
+  <p>Handles an incoming WebSocket request and establishes a WebSocket connection.</p>
+<p>The <code>rq</code> parameter is the WebRequest that initiated the WebSocket upgrade.
+The optional <code>userId</code> parameter associates the WebSocket connection with a specific user.</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">Future&lt;WebRequest&gt; requestHandel(WebRequest rq, {String? userId}) async {
+  var socket =
+      await WebSocketTransformer.upgrade(RequestContext.rq.httpRequest);
+  final id = rq.headers[&#39;sec-websocket-key&#39;]!.first;
+  session.add(
+    id,
+    SocketClient(
+      id: id,
+      socket: socket,
+      rq: rq,
+      manager: this,
+    ),
+    userID: userId,
+  );
+
+  if (session.getClient(id) != null) {
+    event?.onConnect?.call(session.getClient(id)!);
+  }
+
+  socket.listen(
+    (data) {
+      var res = &lt;String, dynamic&gt;{};
+      try {
+        Map json = WaJson.jsonDecoder(data);
+        res = Map&lt;String, dynamic&gt;.from(json);
+      } catch (e) {
+        Console.e(e);
+        res = {&#39;path&#39;: &#39;error&#39;, &#39;data&#39;: data};
+      }
+
+      if (routes.containsKey(res[&#39;path&#39;] ?? &#39;&#39;)) {
+        routes[res[&#39;path&#39;]]?.onMessage!(session.getClient(id)!, res);
+      } else if (event?.onMessage != null) {
+        event?.onMessage!(session.getClient(id)!, res);
+      }
+    },
+    onDone: () async {
+      await event?.onDisconnect?.call(session.getClient(id)!);
+      session.remove(id);
+    },
+    onError: (data) async {
+      var res = &lt;String, dynamic&gt;{};
+      try {
+        res = jsonDecode(data);
+      } catch (e) {
+        res = {&#39;path&#39;: &#39;error&#39;, &#39;data&#39;: data};
+      }
+      event?.onMessage!(session.getClient(id)!, res);
+      event?.onError?.call(session.getClient(id)!, res);
+      await event?.onDisconnect?.call(session.getClient(id)!);
+      session.remove(id);
+    },
+    cancelOnError: true,
+  );
+
+  return rq;
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">webapp</a></li>
+    <li><a href="../../wa_server/">wa_server</a></li>
+    <li><a href="../../wa_server/SocketManager-class.html">SocketManager</a></li>
+    <li class="self-crumb">requestHandel method</li>
+</ol>
+
+    <h5>SocketManager class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    webapp
+      2.1.1
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

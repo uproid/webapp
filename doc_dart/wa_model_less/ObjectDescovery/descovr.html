@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the descovr method from the ObjectDescovery class, for the Dart programming language.">
+  <title>descovr method - ObjectDescovery class - wa_model_less library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">webapp</a></li>
+    <li><a href="../../wa_model_less/">wa_model_less.dart</a></li>
+    <li><a href="../../wa_model_less/ObjectDescovery-class.html">ObjectDescovery</a></li>
+    <li class="self-crumb">descovr static method</li>
+  </ol>
+  <div class="self-name">descovr</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="wa_model_less&#47;ObjectDescovery-class-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">descovr</span> static method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+<span class="returntype"><a href="https://api.dart.dev/stable/3.9.2/dart-core/Object-class.html">Object</a>?</span>
+<span class="name ">descovr</span>(<wbr><ol class="parameter-list"> <li><span class="parameter" id="descovr-param-value"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/Object-class.html">Object</a>?</span> <span class="parameter-name">value</span>, </span></li>
+<li><span class="parameter" id="descovr-param-type"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/Type-class.html">Type</a></span> <span class="parameter-name">type</span>, {</span></li>
+<li><span class="parameter" id="descovr-param-def"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/Object-class.html">Object</a>?</span> <span class="parameter-name">def</span>, </span></li>
+</ol>})
+
+      
+
+    </section>
+    
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">static Object? descovr(Object? value, Type type, {Object? def}) {
+  &#47;&#47; if (value == null &amp;&amp; def == null) {
+  &#47;&#47;   return null;
+  &#47;&#47; }
+  switch (type.toString()) {
+    case &#39;int&#39;:
+      return value.asInt(def: (def ?? 0) as int?);
+    case &#39;double&#39;:
+      return value.asDouble(def: (def ?? 0.0) as double);
+    case &#39;bool&#39;:
+      return value.asBool(def: (def ?? false) as bool);
+    case &#39;DateTime&#39;:
+      return value.asDateTime(def: (def ?? DateTime.utc(1977)) as DateTime);
+    case &#39;String&#39;:
+      return value.asString(def: (def ?? &#39;&#39;) as String);
+    case &#39;num&#39;:
+      return value.asNum(def: (def ?? 0) as num);
+    case &#39;ObjectId&#39;:
+      return value.asObjectId(
+          def: (def ?? mongo.ObjectId()) as mongo.ObjectId);
+    case &#39;List&lt;String&gt;&#39;:
+      return value.asList&lt;String&gt;(def: (def ?? &lt;String&gt;[]) as List&lt;String&gt;);
+    case &#39;List&lt;ObjectId&gt;&#39;:
+      return value.asList&lt;mongo.ObjectId&gt;(
+          def: (def ?? &lt;mongo.ObjectId&gt;[]) as List&lt;mongo.ObjectId&gt;);
+
+    &#47;&#47;&#47; Nulables
+    case &#39;int?&#39;:
+      if (value == null) return def;
+      return value.asInt(def: def as int?);
+    case &#39;double?&#39;:
+      if (value == null) return def;
+      return value.asDouble(def: def as double?);
+    case &#39;bool?&#39;:
+      if (value == null &amp;&amp; def == null) return null;
+      return value.asBool(def: def as bool?);
+    case &#39;DateTime?&#39;:
+      if (value == null) return def;
+      return value.asDateTime(def: def as DateTime?);
+    case &#39;String?&#39;:
+      if (value == null) return def;
+      return value.asString(def: def as String?);
+    case &#39;num?&#39;:
+      if (value == null) return def;
+      return value.asNum(def: def as num?);
+    case &#39;ObjectId?&#39;:
+      if (value == null) return def;
+      return value.asObjectId(def: def as mongo.ObjectId?);
+    case &#39;List&lt;String&gt;?&#39;:
+      if (value == null) return def;
+      return value.asList&lt;String&gt;(def: def as List&lt;String&gt;?);
+    case &#39;List&lt;ObjectId&gt;?&#39;:
+      if (value == null) return def;
+      return value.asList&lt;mongo.ObjectId&gt;(def: def as List&lt;mongo.ObjectId&gt;?);
+  }
+
+  return (value ?? def);
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">webapp</a></li>
+    <li><a href="../../wa_model_less/">wa_model_less</a></li>
+    <li><a href="../../wa_model_less/ObjectDescovery-class.html">ObjectDescovery</a></li>
+    <li class="self-crumb">descovr static method</li>
+</ol>
+
+    <h5>ObjectDescovery class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    webapp
+      2.1.1
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

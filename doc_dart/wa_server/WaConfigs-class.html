@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the WaConfigs class from the wa_server library, for the Dart programming language.">
+  <title>WaConfigs class - wa_server library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../static-assets/styles.css?v1">
+  <link rel="icon" href="../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../index.html">webapp</a></li>
+    <li><a href="../wa_server/">wa_server.dart</a></li>
+    <li class="self-crumb">WaConfigs class</li>
+  </ol>
+  <div class="self-name">WaConfigs</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="wa_server&#47;wa_server-library-sidebar.html"
+    data-below-sidebar="wa_server&#47;WaConfigs-class-sidebar.html">
+    <div>
+<h1><span class="kind-class">WaConfigs</span> class 
+ 
+</h1></div>
+
+    
+<section class="desc markdown">
+  <p>Configuration management system for the WebApp framework.</p>
+<p><a href="../wa_server/WaConfigs-class.html">WaConfigs</a> provides comprehensive configuration management for all aspects
+of the web application including server settings, database connections,
+file paths, security settings, and development tools. The configuration
+system supports environment variables, default values, and runtime customization.</p>
+<p>Key features:</p>
+<ul>
+<li>Environment variable integration with .env file support</li>
+<li>Database configuration for MongoDB and MySQL</li>
+<li>Server and domain configuration</li>
+<li>Path management for assets, templates, and uploads</li>
+<li>Mail server configuration</li>
+<li>Template engine configuration (Jinja-like syntax)</li>
+<li>Development and debugging tools</li>
+<li>Multi-language support</li>
+<li>Security settings (cookies, CORS, etc.)</li>
+</ul>
+<p>Environment variables are automatically loaded from:</p>
+<ul>
+<li>System environment variables</li>
+<li>.env file in the project root</li>
+<li>Platform-specific environment settings</li>
+</ul>
+<p>Example usage:</p>
+<pre class="language-dart"><code class="language-dart">final config = WaConfigs(
+  port: 8080,
+  domain: 'example.com',
+  dbConfig: WaDBConfig(
+    host: 'localhost',
+    dbName: 'myapp',
+    enable: true,
+  ),
+  enableLocalDebugger: true, // Only in development
+);
+
+final server = WaServer(configs: config);
+await server.start();
+</code></pre>
+</section>
+
+
+
+    
+  <section class="summary offset-anchor" id="constructors">
+    <h2>Constructors</h2>
+    <dl class="constructor-summary-list">
+        <dt id="WaConfigs.new" class="callable">
+          <span class="name"><a href="../wa_server/WaConfigs/WaConfigs.html">WaConfigs.new</a></span><span class="signature">({<span class="parameter" id="-param-version"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">version</span> = <span class="default-value">&#39;1.0.0&#39;</span>, </span><span class="parameter" id="-param-appPath"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">appPath</span>, </span><span class="parameter" id="-param-dbPath"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">dbPath</span>, </span><span class="parameter" id="-param-backupPath"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">backupPath</span>, </span><span class="parameter" id="-param-widgetsPath"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">widgetsPath</span>, </span><span class="parameter" id="-param-languagePath"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">languagePath</span>, </span><span class="parameter" id="-param-port"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/int-class.html">int</a></span> <span class="parameter-name">port</span> = <span class="default-value">8080</span>, </span><span class="parameter" id="-param-portSocket"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/int-class.html">int</a></span> <span class="parameter-name">portSocket</span> = <span class="default-value">8083</span>, </span><span class="parameter" id="-param-portNginx"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/int-class.html">int</a></span> <span class="parameter-name">portNginx</span> = <span class="default-value">80</span>, </span><span class="parameter" id="-param-ip"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">ip</span> = <span class="default-value">&#39;0.0.0.0&#39;</span>, </span><span class="parameter" id="-param-dbName"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">dbName</span> = <span class="default-value">&quot;database_name&quot;</span>, </span><span class="parameter" id="-param-noStop"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">noStop</span> = <span class="default-value">true</span>, </span><span class="parameter" id="-param-serverName"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">serverName</span> = <span class="default-value">&quot;webserver&quot;</span>, </span><span class="parameter" id="-param-pathFilemanager"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">pathFilemanager</span> = <span class="default-value">&#39;&#47;upload&#47;filemanager&#39;</span>, </span><span class="parameter" id="-param-publicDir"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">publicDir</span>, </span><span class="parameter" id="-param-domain"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">domain</span>, </span><span class="parameter" id="-param-domainScheme"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">domainScheme</span>, </span><span class="parameter" id="-param-domainPort"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">domainPort</span>, </span><span class="parameter" id="-param-dbConfig"><span class="type-annotation"><a href="../wa_server/WaDBConfig-class.html">WaDBConfig</a>?</span> <span class="parameter-name">dbConfig</span>, </span><span class="parameter" id="-param-widgetsType"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">widgetsType</span> = <span class="default-value">&#39;html&#39;</span>, </span><span class="parameter" id="-param-fakeDelay"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/int-class.html">int</a></span> <span class="parameter-name">fakeDelay</span> = <span class="default-value">0</span>, </span><span class="parameter" id="-param-languages"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>&gt;</span>?</span> <span class="parameter-name">languages</span>, </span><span class="parameter" id="-param-mailDefault"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">mailDefault</span> = <span class="default-value">&quot;example@uproid.com&quot;</span>, </span><span class="parameter" id="-param-mailHost"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">mailHost</span> = <span class="default-value">&quot;smtp.zoho.eu&quot;</span>, </span><span class="parameter" id="-param-blockStart"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">blockStart</span> = <span class="default-value">&#39;&lt;?&#39;</span>, </span><span class="parameter" id="-param-blockEnd"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">blockEnd</span> = <span class="default-value">&quot;?&gt;&quot;</span>, </span><span class="parameter" id="-param-variableStart"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">variableStart</span> = <span class="default-value">&quot;&lt;?=&quot;</span>, </span><span class="parameter" id="-param-variableEnd"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">variableEnd</span> = <span class="default-value">&quot;?&gt;&quot;</span>, </span><span class="parameter" id="-param-commentStart"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">commentStart</span> = <span class="default-value">&#39;&lt;?#&#39;</span>, </span><span class="parameter" id="-param-commentEnd"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">commentEnd</span> = <span class="default-value">&#39;?&gt;&#39;</span>, </span><span class="parameter" id="-param-cookiePassword"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">cookiePassword</span> = <span class="default-value">&quot;password&quot;</span>, </span><span class="parameter" id="-param-mysqlConfig"><span class="type-annotation"><a href="../wa_server/WaMysqlConfig-class.html">WaMysqlConfig</a>?</span> <span class="parameter-name">mysqlConfig</span>, </span><span class="parameter" id="-param-poweredBy"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">poweredBy</span> = <span class="default-value">&quot;Dart with package:webapp&quot;</span>, </span><span class="parameter" id="-param-enableLocalDebugger"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">enableLocalDebugger</span> = <span class="default-value">false</span></span>})</span>
+        </dt>
+        <dd>
+          Creates an instance of <a href="../wa_server/WaConfigs-class.html">WaConfigs</a>.
+        </dd>
+    </dl>
+  </section>
+    
+  <section
+      class="summary offset-anchor"
+      id="instance-properties">
+    <h2>Properties</h2>
+    <dl class="properties">
+        <dt id="appPath" class="property">
+  <span class="name"><a href="../wa_server/WaConfigs/appPath.html">appPath</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">late</span><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="backupPath" class="property">
+  <span class="name"><a href="../wa_server/WaConfigs/backupPath.html">backupPath</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">late</span><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="blockEnd" class="property">
+  <span class="name"><a href="../wa_server/WaConfigs/blockEnd.html">blockEnd</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">late</span><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="blockStart" class="property">
+  <span class="name"><a href="../wa_server/WaConfigs/blockStart.html">blockStart</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">late</span><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="commentEnd" class="property">
+  <span class="name"><a href="../wa_server/WaConfigs/commentEnd.html">commentEnd</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">late</span><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="commentStart" class="property">
+  <span class="name"><a href="../wa_server/WaConfigs/commentStart.html">commentStart</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">late</span><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="cookiePassword" class="property">
+  <span class="name"><a href="../wa_server/WaConfigs/cookiePassword.html">cookiePassword</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">late</span><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="dbConfig" class="property">
+  <span class="name"><a href="../wa_server/WaConfigs/dbConfig.html">dbConfig</a></span>
+  <span class="signature">&#8596; <a href="../wa_server/WaDBConfig-class.html">WaDBConfig</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">late</span><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="dbName" class="property">
+  <span class="name"><a href="../wa_server/WaConfigs/dbName.html">dbName</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="dbPath" class="property">
+  <span class="name"><a href="../wa_server/WaConfigs/dbPath.html">dbPath</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">late</span><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="domain" class="property">
+  <span class="name"><a href="../wa_server/WaConfigs/domain.html">domain</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  
+
+</dt>
+<dd>
+  DOMAIN CONFIG
+  <div class="features"><span class="feature">late</span><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="domainPort" class="property">
+  <span class="name"><a href="../wa_server/WaConfigs/domainPort.html">domainPort</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/int-class.html">int</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">late</span><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="domainScheme" class="property">
+  <span class="name"><a href="../wa_server/WaConfigs/domainScheme.html">domainScheme</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">late</span><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="enableLocalDebugger" class="property">
+  <span class="name"><a href="../wa_server/WaConfigs/enableLocalDebugger.html">enableLocalDebugger</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/bool-class.html">bool</a></span>
+  
+
+</dt>
+<dd>
+  Enable local debugger
+This is useful for debugging the application in a local environment.
+It allows you to inspect and modify the application state in real-time.
+You can enable it by setting the <a href="../wa_server/WaConfigs/enableLocalDebugger.html">enableLocalDebugger</a> property to true.
+the <a href="../wa_server/WaConfigs/enableLocalDebugger.html">enableLocalDebugger</a> property wills activate a debugger bar on frontend side.
+This is useful for debugging the application in a local environment.
+It allows you to inspect and modify the application state in real-time.
+You can enable it by setting the <a href="../wa_server/WaConfigs/enableLocalDebugger.html">enableLocalDebugger</a> property to true.
+Take attention that this will only work in a local environment.
+dont activate it in production.
+  <div class="features"><span class="feature">getter/setter pair</span></div>
+
+</dd>
+
+        <dt id="fakeDelay" class="property">
+  <span class="name"><a href="../wa_server/WaConfigs/fakeDelay.html">fakeDelay</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/int-class.html">int</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">late</span><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="hashCode" class="property inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.9.2/dart-core/Object/hashCode.html">hashCode</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.9.2/dart-core/int-class.html">int</a></span>
+  
+
+</dt>
+<dd class="inherited">
+  The hash code for this object.
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="ip" class="property">
+  <span class="name"><a href="../wa_server/WaConfigs/ip.html">ip</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="isLocalDebug" class="property">
+  <span class="name"><a href="../wa_server/WaConfigs/isLocalDebug.html">isLocalDebug</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.9.2/dart-core/bool-class.html">bool</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">no setter</span></div>
+
+</dd>
+
+        <dt id="languagePath" class="property">
+  <span class="name"><a href="../wa_server/WaConfigs/languagePath.html">languagePath</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">late</span><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="languages" class="property">
+  <span class="name"><a href="../wa_server/WaConfigs/languages.html">languages</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>&gt;</span></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">late</span><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="mailDefault" class="property">
+  <span class="name"><a href="../wa_server/WaConfigs/mailDefault.html">mailDefault</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">late</span><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="mailHost" class="property">
+  <span class="name"><a href="../wa_server/WaConfigs/mailHost.html">mailHost</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">late</span><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="mysqlConfig" class="property">
+  <span class="name"><a href="../wa_server/WaConfigs/mysqlConfig.html">mysqlConfig</a></span>
+  <span class="signature">&#8596; <a href="../wa_server/WaMysqlConfig-class.html">WaMysqlConfig</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">late</span><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="noStop" class="property">
+  <span class="name"><a href="../wa_server/WaConfigs/noStop.html">noStop</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.9.2/dart-core/bool-class.html">bool</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="pathFilemanager" class="property">
+  <span class="name"><a href="../wa_server/WaConfigs/pathFilemanager.html">pathFilemanager</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="port" class="property">
+  <span class="name"><a href="../wa_server/WaConfigs/port.html">port</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.9.2/dart-core/int-class.html">int</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="portNginx" class="property">
+  <span class="name"><a href="../wa_server/WaConfigs/portNginx.html">portNginx</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.9.2/dart-core/int-class.html">int</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="portSocket" class="property">
+  <span class="name"><a href="../wa_server/WaConfigs/portSocket.html">portSocket</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.9.2/dart-core/int-class.html">int</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="poweredBy" class="property">
+  <span class="name"><a href="../wa_server/WaConfigs/poweredBy.html">poweredBy</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="publicDir" class="property">
+  <span class="name"><a href="../wa_server/WaConfigs/publicDir.html">publicDir</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">late</span><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="runtimeType" class="property inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.9.2/dart-core/Object/runtimeType.html">runtimeType</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.9.2/dart-core/Type-class.html">Type</a></span>
+  
+
+</dt>
+<dd class="inherited">
+  A representation of the runtime type of the object.
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="serverName" class="property">
+  <span class="name"><a href="../wa_server/WaConfigs/serverName.html">serverName</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="uri" class="property">
+  <span class="name"><a href="../wa_server/WaConfigs/uri.html">uri</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/Uri-class.html">Uri</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">late</span><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="variableEnd" class="property">
+  <span class="name"><a href="../wa_server/WaConfigs/variableEnd.html">variableEnd</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">late</span><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="variableStart" class="property">
+  <span class="name"><a href="../wa_server/WaConfigs/variableStart.html">variableStart</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">late</span><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="version" class="property">
+  <span class="name"><a href="../wa_server/WaConfigs/version.html">version</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="widgetsPath" class="property">
+  <span class="name"><a href="../wa_server/WaConfigs/widgetsPath.html">widgetsPath</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">late</span><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="widgetsType" class="property">
+  <span class="name"><a href="../wa_server/WaConfigs/widgetsType.html">widgetsType</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">late</span><span class="feature">final</span></div>
+
+</dd>
+
+    </dl>
+  </section>
+
+    
+  <section
+      class="summary offset-anchor"
+      id="instance-methods">
+    <h2>Methods</h2>
+    <dl class="callables">
+        <dt id="noSuchMethod" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.9.2/dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
+    <span class="returntype parameter">&#8594; dynamic</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Invoked when a nonexistent method or property is accessed.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="toString" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.9.2/dart-core/Object/toString.html">toString</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  A string representation of this object.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="url" class="callable">
+  <span class="name"><a href="../wa_server/WaConfigs/url.html">url</a></span><span class="signature">(<wbr>{<span class="parameter" id="url-param-path"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">path</span></span>})
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+    </dl>
+  </section>
+    
+  <section
+      class="summary offset-anchor inherited"
+      id="operators">
+    <h2>Operators</h2>
+    <dl class="callables">
+        <dt id="operator ==" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.9.2/dart-core/Object/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/Object-class.html">Object</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.9.2/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  The equality operator.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+    </dl>
+  </section>
+    
+    
+    
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../index.html">webapp</a></li>
+    <li><a href="../wa_server/">wa_server</a></li>
+    <li class="self-crumb">WaConfigs class</li>
+</ol>
+
+    <h5>wa_server library</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div>
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    webapp
+      2.1.1
+  </span>
+  
+</footer>
+
+
+<script src="../static-assets/highlight.pack.js?v1"></script>
+<script src="../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

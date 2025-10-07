@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the Tag class from the wa_htmler library, for the Dart programming language.">
+  <title>Tag class - wa_htmler library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../static-assets/styles.css?v1">
+  <link rel="icon" href="../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../index.html">webapp</a></li>
+    <li><a href="../wa_htmler/">wa_htmler.dart</a></li>
+    <li class="self-crumb">Tag class</li>
+  </ol>
+  <div class="self-name">Tag</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="wa_htmler&#47;wa_htmler-library-sidebar.html"
+    data-below-sidebar="wa_htmler&#47;Tag-class-sidebar.html">
+    <div>
+<h1><span class="kind-class">Tag</span> class 
+    <a href="https://dart.dev/language/class-modifiers#abstract" class="feature feature-abstract" title="This type can not be directly constructed.">abstract</a>
+ 
+</h1></div>
+
+    
+<section class="desc markdown">
+  <p>Abstract base class for creating and manipulating HTML elements programmatically.</p>
+<p><a href="../wa_htmler/Tag-class.html">Tag</a> provides a foundation for building HTML structures in Dart code with
+support for attributes, child elements, CSS classes, and inline styles.
+It offers a fluent API for chaining operations and maintains the hierarchical
+structure of HTML documents.</p>
+<p>Key features:</p>
+<ul>
+<li>Dynamic attribute management</li>
+<li>CSS class manipulation</li>
+<li>Inline style handling</li>
+<li>Child element management</li>
+<li>HTML string generation</li>
+<li>Fluent method chaining</li>
+</ul>
+<p>Example usage:</p>
+<pre class="language-dart"><code class="language-dart">final div = CustomTag('div')
+  .addClass('container')
+  .addAttr('data-id', '123')
+  .addStyle('background-color', 'blue')
+  .addChild(CustomTag('p').addChild(TextTag('Hello World')));
+
+String html = div.toHtml();
+// Result: &lt;div class="container" data-id="123" style="background-color: blue; "&gt;&lt;p&gt;Hello World&lt;/p&gt;&lt;/div&gt;
+</code></pre>
+</section>
+
+
+    <section>
+      <dl class="dl-horizontal">
+        
+
+        
+        
+
+          <dt>Implementers</dt>
+          <dd><ul class="comma-separated clazz-relationships">
+              <li><a href="../wa_htmler/$A-class.html">$A</a></li>
+              <li><a href="../wa_htmler/$Article-class.html">$Article</a></li>
+              <li><a href="../wa_htmler/$Aside-class.html">$Aside</a></li>
+              <li><a href="../wa_htmler/$B-class.html">$B</a></li>
+              <li><a href="../wa_htmler/$Body-class.html">$Body</a></li>
+              <li><a href="../wa_htmler/$Button-class.html">$Button</a></li>
+              <li><a href="../wa_htmler/$Caption-class.html">$Caption</a></li>
+              <li><a href="../wa_htmler/$Center-class.html">$Center</a></li>
+              <li><a href="../wa_htmler/$Code-class.html">$Code</a></li>
+              <li><a href="../wa_htmler/$Comment-class.html">$Comment</a></li>
+              <li><a href="../wa_htmler/$CustomTag-class.html">$CustomTag</a></li>
+              <li><a href="../wa_htmler/$Details-class.html">$Details</a></li>
+              <li><a href="../wa_htmler/$Div-class.html">$Div</a></li>
+              <li><a href="../wa_htmler/$Footer-class.html">$Footer</a></li>
+              <li><a href="../wa_htmler/$Form-class.html">$Form</a></li>
+              <li><a href="../wa_htmler/$H1-class.html">$H1</a></li>
+              <li><a href="../wa_htmler/$H2-class.html">$H2</a></li>
+              <li><a href="../wa_htmler/$H3-class.html">$H3</a></li>
+              <li><a href="../wa_htmler/$H4-class.html">$H4</a></li>
+              <li><a href="../wa_htmler/$H5-class.html">$H5</a></li>
+              <li><a href="../wa_htmler/$H6-class.html">$H6</a></li>
+              <li><a href="../wa_htmler/$H7-class.html">$H7</a></li>
+              <li><a href="../wa_htmler/$Head-class.html">$Head</a></li>
+              <li><a href="../wa_htmler/$Header-class.html">$Header</a></li>
+              <li><a href="../wa_htmler/$Html-class.html">$Html</a></li>
+              <li><a href="../wa_htmler/$I-class.html">$I</a></li>
+              <li><a href="../wa_htmler/$Label-class.html">$Label</a></li>
+              <li><a href="../wa_htmler/$Li-class.html">$Li</a></li>
+              <li><a href="../wa_htmler/$Main-class.html">$Main</a></li>
+              <li><a href="../wa_htmler/$Nav-class.html">$Nav</a></li>
+              <li><a href="../wa_htmler/$Noscript-class.html">$Noscript</a></li>
+              <li><a href="../wa_htmler/$Ol-class.html">$Ol</a></li>
+              <li><a href="../wa_htmler/$Option-class.html">$Option</a></li>
+              <li><a href="../wa_htmler/$P-class.html">$P</a></li>
+              <li><a href="../wa_htmler/$Path-class.html">$Path</a></li>
+              <li><a href="../wa_htmler/$Raw-class.html">$Raw</a></li>
+              <li><a href="../wa_htmler/$Script-class.html">$Script</a></li>
+              <li><a href="../wa_htmler/$Section-class.html">$Section</a></li>
+              <li><a href="../wa_htmler/$Select-class.html">$Select</a></li>
+              <li><a href="../wa_htmler/$Small-class.html">$Small</a></li>
+              <li><a href="../wa_htmler/$Span-class.html">$Span</a></li>
+              <li><a href="../wa_htmler/$Style-class.html">$Style</a></li>
+              <li><a href="../wa_htmler/$Summary-class.html">$Summary</a></li>
+              <li><a href="../wa_htmler/$Svg-class.html">$Svg</a></li>
+              <li><a href="../wa_htmler/$Table-class.html">$Table</a></li>
+              <li><a href="../wa_htmler/$Tbody-class.html">$Tbody</a></li>
+              <li><a href="../wa_htmler/$Td-class.html">$Td</a></li>
+              <li><a href="../wa_htmler/$Template-class.html">$Template</a></li>
+              <li><a href="../wa_htmler/$Text-class.html">$Text</a></li>
+              <li><a href="../wa_htmler/$TextArea-class.html">$TextArea</a></li>
+              <li><a href="../wa_htmler/$Tfoot-class.html">$Tfoot</a></li>
+              <li><a href="../wa_htmler/$Th-class.html">$Th</a></li>
+              <li><a href="../wa_htmler/$Thead-class.html">$Thead</a></li>
+              <li><a href="../wa_htmler/$Title-class.html">$Title</a></li>
+              <li><a href="../wa_htmler/$Tr-class.html">$Tr</a></li>
+              <li><a href="../wa_htmler/$U-class.html">$U</a></li>
+              <li><a href="../wa_htmler/$Ul-class.html">$Ul</a></li>
+              <li><a href="../wa_htmler/$Video-class.html">$Video</a></li>
+              <li><a href="../wa_htmler/ArrayTag-class.html">ArrayTag</a></li>
+              <li><a href="../wa_htmler/JinjaTag-class.html">JinjaTag</a></li>
+              <li><a href="../wa_htmler/SingleTag-class.html">SingleTag</a></li>
+          </ul></dd>
+
+        
+        
+
+
+      </dl>
+    </section>
+
+    
+  <section class="summary offset-anchor" id="constructors">
+    <h2>Constructors</h2>
+    <dl class="constructor-summary-list">
+        <dt id="Tag.new" class="callable">
+          <span class="name"><a href="../wa_htmler/Tag/Tag.html">Tag.new</a></span><span class="signature">({<span class="parameter" id="-param-attrs"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/Map-class.html">Map</a>?</span> <span class="parameter-name">attrs</span>, </span><span class="parameter" id="-param-children"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../wa_htmler/Tag-class.html">Tag</a></span>&gt;</span>?</span> <span class="parameter-name">children</span>, </span><span class="parameter" id="-param-classes"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/List-class.html">List</a></span> <span class="parameter-name">classes</span> = <span class="default-value">const []</span></span>})</span>
+        </dt>
+        <dd>
+          
+        </dd>
+    </dl>
+  </section>
+    
+  <section
+      class="summary offset-anchor"
+      id="instance-properties">
+    <h2>Properties</h2>
+    <dl class="properties">
+        <dt id="attrs" class="property">
+  <span class="name"><a href="../wa_htmler/Tag/attrs.html">attrs</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/Map-class.html">Map</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">getter/setter pair</span></div>
+
+</dd>
+
+        <dt id="children" class="property">
+  <span class="name"><a href="../wa_htmler/Tag/children.html">children</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../wa_htmler/Tag-class.html">Tag</a></span>&gt;</span></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">getter/setter pair</span></div>
+
+</dd>
+
+        <dt id="classes" class="property">
+  <span class="name"><a href="../wa_htmler/Tag/classes.html">classes</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/List-class.html">List</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">getter/setter pair</span></div>
+
+</dd>
+
+        <dt id="hashCode" class="property inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.9.2/dart-core/Object/hashCode.html">hashCode</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.9.2/dart-core/int-class.html">int</a></span>
+  
+
+</dt>
+<dd class="inherited">
+  The hash code for this object.
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="runtimeType" class="property inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.9.2/dart-core/Object/runtimeType.html">runtimeType</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.9.2/dart-core/Type-class.html">Type</a></span>
+  
+
+</dt>
+<dd class="inherited">
+  A representation of the runtime type of the object.
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="tagName" class="property">
+  <span class="name"><a href="../wa_htmler/Tag/tagName.html">tagName</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">no setter</span></div>
+
+</dd>
+
+        <dt id="type" class="property">
+  <span class="name"><a href="../wa_htmler/Tag/type.html">type</a></span>
+  <span class="signature">&#8596; <a href="../wa_htmler/TagType.html">TagType</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">getter/setter pair</span></div>
+
+</dd>
+
+    </dl>
+  </section>
+
+    
+  <section
+      class="summary offset-anchor"
+      id="instance-methods">
+    <h2>Methods</h2>
+    <dl class="callables">
+        <dt id="addAttr" class="callable">
+  <span class="name"><a href="../wa_htmler/Tag/addAttr.html">addAttr</a></span><span class="signature">(<wbr><span class="parameter" id="addAttr-param-key"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">key</span>, </span><span class="parameter" id="addAttr-param-value"><span class="type-annotation">dynamic</span> <span class="parameter-name">value</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../wa_htmler/Tag-class.html">Tag</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="addChild" class="callable">
+  <span class="name"><a href="../wa_htmler/Tag/addChild.html">addChild</a></span><span class="signature">(<wbr><span class="parameter" id="addChild-param-child"><span class="type-annotation"><a href="../wa_htmler/Tag-class.html">Tag</a></span> <span class="parameter-name">child</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../wa_htmler/Tag-class.html">Tag</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="addClass" class="callable">
+  <span class="name"><a href="../wa_htmler/Tag/addClass.html">addClass</a></span><span class="signature">(<wbr><span class="parameter" id="addClass-param-className"><span class="type-annotation">dynamic</span> <span class="parameter-name">className</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../wa_htmler/Tag-class.html">Tag</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="addStyle" class="callable">
+  <span class="name"><a href="../wa_htmler/Tag/addStyle.html">addStyle</a></span><span class="signature">(<wbr><span class="parameter" id="addStyle-param-property"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">property</span>, </span><span class="parameter" id="addStyle-param-value"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">value</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../wa_htmler/Tag-class.html">Tag</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="attrKey" class="callable">
+  <span class="name"><a href="../wa_htmler/Tag/attrKey.html">attrKey</a></span><span class="signature">(<wbr><span class="parameter" id="attrKey-param-key"><span class="type-annotation">dynamic</span> <span class="parameter-name">key</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="clearChildren" class="callable">
+  <span class="name"><a href="../wa_htmler/Tag/clearChildren.html">clearChildren</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="../wa_htmler/Tag-class.html">Tag</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="clearClasses" class="callable">
+  <span class="name"><a href="../wa_htmler/Tag/clearClasses.html">clearClasses</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="../wa_htmler/Tag-class.html">Tag</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="clearStyles" class="callable">
+  <span class="name"><a href="../wa_htmler/Tag/clearStyles.html">clearStyles</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="../wa_htmler/Tag-class.html">Tag</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="noSuchMethod" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.9.2/dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
+    <span class="returntype parameter">&#8594; dynamic</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Invoked when a nonexistent method or property is accessed.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="removeAttr" class="callable">
+  <span class="name"><a href="../wa_htmler/Tag/removeAttr.html">removeAttr</a></span><span class="signature">(<wbr><span class="parameter" id="removeAttr-param-key"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">key</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../wa_htmler/Tag-class.html">Tag</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="removeChild" class="callable">
+  <span class="name"><a href="../wa_htmler/Tag/removeChild.html">removeChild</a></span><span class="signature">(<wbr><span class="parameter" id="removeChild-param-child"><span class="type-annotation"><a href="../wa_htmler/Tag-class.html">Tag</a></span> <span class="parameter-name">child</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../wa_htmler/Tag-class.html">Tag</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="removeClass" class="callable">
+  <span class="name"><a href="../wa_htmler/Tag/removeClass.html">removeClass</a></span><span class="signature">(<wbr><span class="parameter" id="removeClass-param-className"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">className</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../wa_htmler/Tag-class.html">Tag</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="removeStyle" class="callable">
+  <span class="name"><a href="../wa_htmler/Tag/removeStyle.html">removeStyle</a></span><span class="signature">(<wbr><span class="parameter" id="removeStyle-param-property"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">property</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../wa_htmler/Tag-class.html">Tag</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="setClass" class="callable">
+  <span class="name"><a href="../wa_htmler/Tag/setClass.html">setClass</a></span><span class="signature">(<wbr><span class="parameter" id="setClass-param-className"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">className</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../wa_htmler/Tag-class.html">Tag</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="setId" class="callable">
+  <span class="name"><a href="../wa_htmler/Tag/setId.html">setId</a></span><span class="signature">(<wbr><span class="parameter" id="setId-param-id"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">id</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../wa_htmler/Tag-class.html">Tag</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="setStyle" class="callable">
+  <span class="name"><a href="../wa_htmler/Tag/setStyle.html">setStyle</a></span><span class="signature">(<wbr><span class="parameter" id="setStyle-param-property"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">property</span>, </span><span class="parameter" id="setStyle-param-value"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">value</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../wa_htmler/Tag-class.html">Tag</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="toHtml" class="callable">
+  <span class="name"><a href="../wa_htmler/Tag/toHtml.html">toHtml</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="toString" class="callable">
+  <span class="name"><a href="../wa_htmler/Tag/toString.html">toString</a></span><span class="signature">(<wbr>{<span class="parameter" id="toString-param-pretty"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">pretty</span> = <span class="default-value">false</span></span>})
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  A string representation of this object.
+  <div class="features"><span class="feature">override</span></div>
+
+</dd>
+
+    </dl>
+  </section>
+    
+  <section
+      class="summary offset-anchor inherited"
+      id="operators">
+    <h2>Operators</h2>
+    <dl class="callables">
+        <dt id="operator ==" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.9.2/dart-core/Object/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/Object-class.html">Object</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.9.2/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  The equality operator.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+    </dl>
+  </section>
+    
+    
+    
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../index.html">webapp</a></li>
+    <li><a href="../wa_htmler/">wa_htmler</a></li>
+    <li class="self-crumb">Tag class</li>
+</ol>
+
+    <h5>wa_htmler library</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div>
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    webapp
+      2.1.1
+  </span>
+  
+</footer>
+
+
+<script src="../static-assets/highlight.pack.js?v1"></script>
+<script src="../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

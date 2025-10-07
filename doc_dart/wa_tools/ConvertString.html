@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the ConvertString extension from the wa_tools library, for the Dart programming language.">
+  <title>ConvertString extension - wa_tools library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../static-assets/styles.css?v1">
+  <link rel="icon" href="../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../index.html">webapp</a></li>
+    <li><a href="../wa_tools/">wa_tools.dart</a></li>
+    <li class="self-crumb">ConvertString extension</li>
+  </ol>
+  <div class="self-name">ConvertString</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content extension-page"
+    data-above-sidebar="wa_tools&#47;wa_tools-library-sidebar.html"
+    data-below-sidebar="wa_tools&#47;ConvertString-extension-sidebar.html">
+    <div>
+<h1><span class="kind-class">ConvertString</span> extension 
+ 
+</h1></div>
+
+    
+<section class="desc markdown">
+  <p>Extension methods for <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a> to provide various utilities for string manipulation,
+encoding, decoding, and hashing.</p>
+<p>This extension adds methods to the <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a> class for tasks such as hashing the string
+using MD5, converting between different encoding formats (Base64, Base32), converting
+a string to an <a href="https://pub.dev/documentation/bson/5.0.7/bson/ObjectId-class.html">ObjectId</a>, and generating slugs.</p>
+</section>
+
+    <section>
+      <dl class="dl-horizontal">
+        <dt>on</dt>
+        <dd>
+          <ul class="comma-separated clazz-relationships">
+            <li><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></li>
+          </ul>
+        </dd>
+      </dl>
+      
+
+
+    </section>
+    
+  <section
+      class="summary offset-anchor"
+      id="instance-properties">
+    <h2>Properties</h2>
+    <dl class="properties">
+        <dt id="oID" class="property">
+  <span class="name"><a href="../wa_tools/ConvertString/oID.html">oID</a></span>
+  <span class="signature">&#8594; <a href="https://pub.dev/documentation/bson/5.0.7/bson/ObjectId-class.html">ObjectId</a>?</span>
+  
+
+</dt>
+<dd>
+      <p class="from-extension">
+        <span>Available on <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a>,
+        provided by the <a href="../wa_tools/ConvertString.html">ConvertString</a> extension</span>
+      </p>
+  Converts the string to an <a href="https://pub.dev/documentation/bson/5.0.7/bson/ObjectId-class.html">ObjectId</a>, or returns null if the string is not a valid ObjectId.
+  <div class="features"><span class="feature">no setter</span></div>
+
+</dd>
+
+    </dl>
+  </section>
+
+    
+  <section
+      class="summary offset-anchor"
+      id="instance-methods">
+    <h2>Methods</h2>
+    <dl class="callables">
+        <dt id="fromBase32" class="callable">
+  <span class="name"><a href="../wa_tools/ConvertString/fromBase32.html">fromBase32</a></span><span class="signature">(<wbr>{<span class="parameter" id="fromBase32-param-def"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">def</span> = <span class="default-value">&#39;&#39;</span></span>})
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+      <p class="from-extension">
+        <span>Available on <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a>,
+        provided by the <a href="../wa_tools/ConvertString.html">ConvertString</a> extension</span>
+      </p>
+  Decodes the string from Base32 encoding and returns the resulting string.
+  
+
+</dd>
+
+        <dt id="fromBase64" class="callable">
+  <span class="name"><a href="../wa_tools/ConvertString/fromBase64.html">fromBase64</a></span><span class="signature">(<wbr>{<span class="parameter" id="fromBase64-param-def"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">def</span> = <span class="default-value">&#39;&#39;</span></span>})
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+      <p class="from-extension">
+        <span>Available on <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a>,
+        provided by the <a href="../wa_tools/ConvertString.html">ConvertString</a> extension</span>
+      </p>
+  Decodes the string from Base64 encoding and returns the resulting string.
+  
+
+</dd>
+
+        <dt id="isSlug" class="callable">
+  <span class="name"><a href="../wa_tools/ConvertString/isSlug.html">isSlug</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.9.2/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+      <p class="from-extension">
+        <span>Available on <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a>,
+        provided by the <a href="../wa_tools/ConvertString.html">ConvertString</a> extension</span>
+      </p>
+  Checks if the string is a valid slug.
+  
+
+</dd>
+
+        <dt id="toBase32" class="callable">
+  <span class="name"><a href="../wa_tools/ConvertString/toBase32.html">toBase32</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+      <p class="from-extension">
+        <span>Available on <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a>,
+        provided by the <a href="../wa_tools/ConvertString.html">ConvertString</a> extension</span>
+      </p>
+  Encodes the string to Base32 format.
+  
+
+</dd>
+
+        <dt id="toBase64" class="callable">
+  <span class="name"><a href="../wa_tools/ConvertString/toBase64.html">toBase64</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+      <p class="from-extension">
+        <span>Available on <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a>,
+        provided by the <a href="../wa_tools/ConvertString.html">ConvertString</a> extension</span>
+      </p>
+  Encodes the string to Base64 format.
+  
+
+</dd>
+
+        <dt id="toMd5" class="callable">
+  <span class="name"><a href="../wa_tools/ConvertString/toMd5.html">toMd5</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+      <p class="from-extension">
+        <span>Available on <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a>,
+        provided by the <a href="../wa_tools/ConvertString.html">ConvertString</a> extension</span>
+      </p>
+  Computes the MD5 hash of the string and returns it as a hexadecimal <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a>.
+  
+
+</dd>
+
+        <dt id="toSlug" class="callable">
+  <span class="name"><a href="../wa_tools/ConvertString/toSlug.html">toSlug</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+      <p class="from-extension">
+        <span>Available on <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a>,
+        provided by the <a href="../wa_tools/ConvertString.html">ConvertString</a> extension</span>
+      </p>
+  Converts the string to a slug by replacing spaces and non-alphanumeric characters.
+  
+
+</dd>
+
+    </dl>
+  </section>
+    
+    
+    
+    
+
+</div> <!-- /.main-content -->
+<div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+  <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../index.html">webapp</a></li>
+    <li><a href="../wa_tools/">wa_tools</a></li>
+    <li class="self-crumb">ConvertString extension</li>
+</ol>
+
+  <h5>wa_tools library</h5>
+  <div id="dartdoc-sidebar-left-content"></div>
+</div>
+<div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    webapp
+      2.1.1
+  </span>
+  
+</footer>
+
+
+<script src="../static-assets/highlight.pack.js?v1"></script>
+<script src="../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+
+
+

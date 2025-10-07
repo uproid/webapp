@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the WebRoute class from the wa_route library, for the Dart programming language.">
+  <title>WebRoute class - wa_route library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../static-assets/styles.css?v1">
+  <link rel="icon" href="../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../index.html">webapp</a></li>
+    <li><a href="../wa_route/">wa_route.dart</a></li>
+    <li class="self-crumb">WebRoute class</li>
+  </ol>
+  <div class="self-name">WebRoute</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="wa_route&#47;wa_route-library-sidebar.html"
+    data-below-sidebar="wa_route&#47;WebRoute-class-sidebar.html">
+    <div>
+<h1><span class="kind-class">WebRoute</span> class 
+ 
+</h1></div>
+
+    
+<section class="desc markdown">
+  <p>Defines a web route configuration for HTTP request handling in the application.</p>
+<p>The <a href="../wa_route/WebRoute-class.html">WebRoute</a> class represents a single route definition that specifies how
+incoming HTTP requests should be matched and handled. It supports advanced
+routing features including pattern matching, HTTP method filtering, host/port
+restrictions, nested routing, authentication, and authorization.</p>
+<p>Key features:</p>
+<ul>
+<li>Path pattern matching with wildcards (<code>/api/*</code>) and parameters (<code>/users/{id}</code>)</li>
+<li>HTTP method restrictions (GET, POST, PUT, DELETE, etc.)</li>
+<li>Host and port-based routing for multi-tenant applications</li>
+<li>Nested route hierarchies for organized route structures</li>
+<li>Integration with authentication and authorization systems</li>
+<li>Controller-based and function-based request handling</li>
+<li>Widget/template rendering capabilities</li>
+<li>API documentation generation support</li>
+</ul>
+<p>Example usage:</p>
+<pre class="language-dart"><code class="language-dart">// Simple route
+WebRoute(
+  path: '/users',
+  methods: [RequestMethods.GET],
+  index: () async =&gt; 'User list',
+)
+
+// Parameterized route with authentication
+WebRoute(
+  path: '/users/{id}',
+  methods: [RequestMethods.GET, RequestMethods.PUT],
+  auth: UserAuthController(),
+  permissions: ['user.read', 'user.edit'],
+  controller: UserController(),
+)
+
+// Nested route structure
+WebRoute(
+  path: '/api',
+  children: [
+    WebRoute(path: '/users', controller: UserApiController()),
+    WebRoute(path: '/posts', controller: PostApiController()),
+  ],
+)
+</code></pre>
+</section>
+
+
+
+    
+  <section class="summary offset-anchor" id="constructors">
+    <h2>Constructors</h2>
+    <dl class="constructor-summary-list">
+        <dt id="WebRoute.new" class="callable">
+          <span class="name"><a href="../wa_route/WebRoute/WebRoute.html">WebRoute.new</a></span><span class="signature">({<span class="parameter" id="-param-path"><span>required</span> <span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">path</span>, </span><span class="parameter" id="-param-rq"><span>@<a href="https://api.dart.dev/stable/3.9.2/dart-core/Deprecated-class.html">Deprecated</a>(&#39;This parameter will be removed in future versions. 3.0.0&#39;)</span> <span class="type-annotation"><a href="../wa_route/WebRequest-class.html">WebRequest</a>?</span> <span class="parameter-name">rq</span>, </span><span class="parameter" id="-param-extraPath"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>&gt;</span></span> <span class="parameter-name">extraPath</span> = <span class="default-value">const []</span>, </span><span class="parameter" id="-param-methods"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>&gt;</span></span> <span class="parameter-name">methods</span> = <span class="default-value">const [RequestMethods.GET]</span>, </span><span class="parameter" id="-param-controller"><span class="type-annotation"><a href="../wa_route/WaController-class.html">WaController</a>?</span> <span class="parameter-name">controller</span>, </span><span class="parameter" id="-param-widget"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">widget</span> = <span class="default-value">&quot;&quot;</span>, </span><span class="parameter" id="-param-index"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>&gt;</span></span> <span class="parameter-name">index</span>()?, </span><span class="parameter" id="-param-auth"><span class="type-annotation"><a href="../wa_route/WaAuthController-class.html">WaAuthController</a>?</span> <span class="parameter-name">auth</span>, </span><span class="parameter" id="-param-children"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../wa_route/WebRoute-class.html">WebRoute</a></span>&gt;</span></span> <span class="parameter-name">children</span> = <span class="default-value">const []</span>, </span><span class="parameter" id="-param-params"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>, <span class="type-parameter"><a href="https://api.dart.dev/stable/3.9.2/dart-core/Object-class.html">Object</a>?</span>&gt;</span></span> <span class="parameter-name">params</span> = <span class="default-value">const {}</span>, </span><span class="parameter" id="-param-title"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">title</span> = <span class="default-value">&#39;&#39;</span>, </span><span class="parameter" id="-param-excludePaths"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>&gt;</span></span> <span class="parameter-name">excludePaths</span> = <span class="default-value">const []</span>, </span><span class="parameter" id="-param-apiDoc"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../wa_route/ApiDoc-class.html">ApiDoc</a></span>&gt;</span>?</span> <span class="parameter-name">apiDoc</span>()?, </span><span class="parameter" id="-param-permissions"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>&gt;</span></span> <span class="parameter-name">permissions</span> = <span class="default-value">const []</span>, </span><span class="parameter" id="-param-hosts"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>&gt;</span></span> <span class="parameter-name">hosts</span> = <span class="default-value">const [&#39;*&#39;]</span>, </span><span class="parameter" id="-param-ports"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.9.2/dart-core/int-class.html">int</a></span>&gt;</span></span> <span class="parameter-name">ports</span> = <span class="default-value">const []</span></span>})</span>
+        </dt>
+        <dd>
+          Creates a <a href="../wa_route/WebRoute-class.html">WebRoute</a> instance with the specified parameters.
+        </dd>
+    </dl>
+  </section>
+    
+  <section
+      class="summary offset-anchor"
+      id="instance-properties">
+    <h2>Properties</h2>
+    <dl class="properties">
+        <dt id="apiDoc" class="property">
+  <span class="name"><a href="../wa_route/WebRoute/apiDoc.html">apiDoc</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../wa_route/ApiDoc-class.html">ApiDoc</a></span>&gt;</span>? Function<span class="signature">()</span>?</span>
+  
+
+</dt>
+<dd>
+  Function to generate API documentation for this route.
+  <div class="features"><span class="feature">getter/setter pair</span></div>
+
+</dd>
+
+        <dt id="auth" class="property">
+  <span class="name"><a href="../wa_route/WebRoute/auth.html">auth</a></span>
+  <span class="signature">&#8596; <a href="../wa_route/WaAuthController-class.html">WaAuthController</a>?</span>
+  
+
+</dt>
+<dd>
+  An optional <a href="../wa_route/WaAuthController-class.html">WaAuthController</a> for handling authentication and session checks
+for this route.
+  <div class="features"><span class="feature">getter/setter pair</span></div>
+
+</dd>
+
+        <dt id="children" class="property">
+  <span class="name"><a href="../wa_route/WebRoute/children.html">children</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../wa_route/WebRoute-class.html">WebRoute</a></span>&gt;</span></span>
+  
+
+</dt>
+<dd>
+  Sub-routes of the current route, defining a tree structure of routes.
+  <div class="features"><span class="feature">getter/setter pair</span></div>
+
+</dd>
+
+        <dt id="controller" class="property">
+  <span class="name"><a href="../wa_route/WebRoute/controller.html">controller</a></span>
+  <span class="signature">&#8596; <a href="../wa_route/WaController-class.html">WaController</a>?</span>
+  
+
+</dt>
+<dd>
+  The controller associated with this route. This is an instance of <a href="../wa_route/WaController-class.html">WaController</a>
+that will handle the request for this route.
+  <div class="features"><span class="feature">getter/setter pair</span></div>
+
+</dd>
+
+        <dt id="excludePaths" class="property">
+  <span class="name"><a href="../wa_route/WebRoute/excludePaths.html">excludePaths</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>&gt;</span></span>
+  
+
+</dt>
+<dd>
+  Paths that should not be included in all sub-paths of <code>/*</code>.
+  <div class="features"><span class="feature">getter/setter pair</span></div>
+
+</dd>
+
+        <dt id="extraPath" class="property">
+  <span class="name"><a href="../wa_route/WebRoute/extraPath.html">extraPath</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>&gt;</span></span>
+  
+
+</dt>
+<dd>
+  Additional main paths for this route. This allows for multiple matching paths.
+  <div class="features"><span class="feature">getter/setter pair</span></div>
+
+</dd>
+
+        <dt id="hashCode" class="property inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.9.2/dart-core/Object/hashCode.html">hashCode</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.9.2/dart-core/int-class.html">int</a></span>
+  
+
+</dt>
+<dd class="inherited">
+  The hash code for this object.
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="hosts" class="property">
+  <span class="name"><a href="../wa_route/WebRoute/hosts.html">hosts</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>&gt;</span></span>
+  
+
+</dt>
+<dd>
+  The primary hostname constraints for this route.
+  <div class="features"><span class="feature">getter/setter pair</span></div>
+
+</dd>
+
+        <dt id="index" class="property">
+  <span class="name"><a href="../wa_route/WebRoute/index.html">index</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>&gt;</span> Function<span class="signature">()</span>?</span>
+  
+
+</dt>
+<dd>
+  A function representing the main controller function to load for this route.
+This is typically used to render the index of the controller.
+  <div class="features"><span class="feature">getter/setter pair</span></div>
+
+</dd>
+
+        <dt id="methods" class="property">
+  <span class="name"><a href="../wa_route/WebRoute/methods.html">methods</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>&gt;</span></span>
+  
+
+</dt>
+<dd>
+  List of HTTP methods allowed for this route. For example, <code>POST</code>, <code>GET</code>, <code>HEAD</code>, etc.
+  <div class="features"><span class="feature">getter/setter pair</span></div>
+
+</dd>
+
+        <dt id="params" class="property">
+  <span class="name"><a href="../wa_route/WebRoute/params.html">params</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>, <span class="type-parameter"><a href="https://api.dart.dev/stable/3.9.2/dart-core/Object-class.html">Object</a>?</span>&gt;</span></span>
+  
+
+</dt>
+<dd>
+  Default variable parameters to use in the content.
+  <div class="features"><span class="feature">getter/setter pair</span></div>
+
+</dd>
+
+        <dt id="path" class="property">
+  <span class="name"><a href="../wa_route/WebRoute/path.html">path</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  
+
+</dt>
+<dd>
+  The primary path of the route. For example, <code>/test</code> or <code>/test/*</code>.
+If using <code>/test/*</code>, it will match all sub-paths under <code>/test</code>.
+  <div class="features"><span class="feature">getter/setter pair</span></div>
+
+</dd>
+
+        <dt id="permissions" class="property">
+  <span class="name"><a href="../wa_route/WebRoute/permissions.html">permissions</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>&gt;</span></span>
+  
+
+</dt>
+<dd>
+  Permissions required for this route. Authentication is needed to use these permissions.
+  <div class="features"><span class="feature">getter/setter pair</span></div>
+
+</dd>
+
+        <dt id="ports" class="property">
+  <span class="name"><a href="../wa_route/WebRoute/ports.html">ports</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.9.2/dart-core/int-class.html">int</a></span>&gt;</span></span>
+  
+
+</dt>
+<dd>
+  The port number constraints for this route.
+  <div class="features"><span class="feature">getter/setter pair</span></div>
+
+</dd>
+
+        <dt id="runtimeType" class="property inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.9.2/dart-core/Object/runtimeType.html">runtimeType</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.9.2/dart-core/Type-class.html">Type</a></span>
+  
+
+</dt>
+<dd class="inherited">
+  A representation of the runtime type of the object.
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="title" class="property">
+  <span class="name"><a href="../wa_route/WebRoute/title.html">title</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  
+
+</dt>
+<dd>
+  The title of the page, which can be used as <code>&lt;?= $e.pageTitle ?&gt;</code>.
+  <div class="features"><span class="feature">getter/setter pair</span></div>
+
+</dd>
+
+        <dt id="widget" class="property">
+  <span class="name"><a href="../wa_route/WebRoute/widget.html">widget</a></span>
+  <span class="signature">&#8596; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  
+
+</dt>
+<dd>
+  Path to the widget to be loaded as content for this route.
+  <div class="features"><span class="feature">getter/setter pair</span></div>
+
+</dd>
+
+    </dl>
+  </section>
+
+    
+  <section
+      class="summary offset-anchor"
+      id="instance-methods">
+    <h2>Methods</h2>
+    <dl class="callables">
+        <dt id="allowMethod" class="callable">
+  <span class="name"><a href="../wa_route/WebRoute/allowMethod.html">allowMethod</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.9.2/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Validates if the current HTTP request method is allowed for this route.
+  
+
+</dd>
+
+        <dt id="getPathRender" class="callable">
+  <span class="name"><a href="../wa_route/WebRoute/getPathRender.html">getPathRender</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Gets the path after rendering.
+  
+
+</dd>
+
+        <dt id="noSuchMethod" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.9.2/dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
+    <span class="returntype parameter">&#8594; dynamic</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Invoked when a nonexistent method or property is accessed.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="setPathRender" class="callable">
+  <span class="name"><a href="../wa_route/WebRoute/setPathRender.html">setPathRender</a></span><span class="signature">(<wbr><span class="parameter" id="setPathRender-param-path"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">path</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd>
+  Sets the rendered path for this route.
+  
+
+</dd>
+
+        <dt id="toMap" class="callable">
+  <span class="name"><a href="../wa_route/WebRoute/toMap.html">toMap</a></span><span class="signature">(<wbr><span class="parameter" id="toMap-param-parentPath"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">parentPath</span>, </span><span class="parameter" id="toMap-param-hasAuth"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">hasAuth</span>, </span><span class="parameter" id="toMap-param-method"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">method</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.9.2/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.9.2/dart-core/Map-class.html">Map</a></span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Converts the route to a list of maps representing its details.
+  
+
+</dd>
+
+        <dt id="toString" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.9.2/dart-core/Object/toString.html">toString</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  A string representation of this object.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+    </dl>
+  </section>
+    
+  <section
+      class="summary offset-anchor inherited"
+      id="operators">
+    <h2>Operators</h2>
+    <dl class="callables">
+        <dt id="operator ==" class="callable inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.9.2/dart-core/Object/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/Object-class.html">Object</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.9.2/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  The equality operator.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+    </dl>
+  </section>
+    
+    
+  <section class="summary offset-anchor" id="static-methods">
+    <h2>Static Methods</h2>
+    <dl class="callables">
+        <dt id="makeList" class="callable">
+  <span class="name"><a href="../wa_route/WebRoute/makeList.html">makeList</a></span><span class="signature">(<wbr>{<span class="parameter" id="makeList-param-paths"><span>required</span> <span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>&gt;</span></span> <span class="parameter-name">paths</span>, </span><span class="parameter" id="makeList-param-extraPath"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>&gt;</span></span> <span class="parameter-name">extraPath</span> = <span class="default-value">const []</span>, </span><span class="parameter" id="makeList-param-methods"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>&gt;</span></span> <span class="parameter-name">methods</span> = <span class="default-value">const [RequestMethods.GET]</span>, </span><span class="parameter" id="makeList-param-controller"><span class="type-annotation"><a href="../wa_route/WaController-class.html">WaController</a>?</span> <span class="parameter-name">controller</span>, </span><span class="parameter" id="makeList-param-index"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>&gt;</span></span> <span class="parameter-name">index</span>()?, </span><span class="parameter" id="makeList-param-auth"><span class="type-annotation"><a href="../wa_route/WaAuthController-class.html">WaAuthController</a>?</span> <span class="parameter-name">auth</span>, </span><span class="parameter" id="makeList-param-permissions"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>&gt;</span></span> <span class="parameter-name">permissions</span> = <span class="default-value">const []</span>, </span><span class="parameter" id="makeList-param-widget"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">widget</span> = <span class="default-value">&quot;&quot;</span>, </span><span class="parameter" id="makeList-param-params"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>, <span class="type-parameter"><a href="https://api.dart.dev/stable/3.9.2/dart-core/Object-class.html">Object</a>?</span>&gt;</span></span> <span class="parameter-name">params</span> = <span class="default-value">const {}</span>, </span><span class="parameter" id="makeList-param-title"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">title</span> = <span class="default-value">&quot;&quot;</span>, </span><span class="parameter" id="makeList-param-excludePaths"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>&gt;</span></span> <span class="parameter-name">excludePaths</span> = <span class="default-value">const []</span>, </span><span class="parameter" id="makeList-param-children"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../wa_route/WebRoute-class.html">WebRoute</a></span>&gt;</span></span> <span class="parameter-name">children</span> = <span class="default-value">const []</span>, </span><span class="parameter" id="makeList-param-apiDoc"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../wa_route/ApiDoc-class.html">ApiDoc</a></span>&gt;</span>?</span> <span class="parameter-name">apiDoc</span>()?, </span><span class="parameter" id="makeList-param-hosts"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.9.2/dart-core/String-class.html">String</a></span>&gt;</span></span> <span class="parameter-name">hosts</span> = <span class="default-value">const [&#39;*&#39;]</span>, </span><span class="parameter" id="makeList-param-ports"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.9.2/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.9.2/dart-core/int-class.html">int</a></span>&gt;</span></span> <span class="parameter-name">ports</span> = <span class="default-value">const []</span></span>})
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.9.2/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../wa_route/WebRoute-class.html">WebRoute</a></span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Creates multiple <a href="../wa_route/WebRoute-class.html">WebRoute</a> instances with shared configuration.
+  
+
+</dd>
+
+    </dl>
+  </section>
+    
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../index.html">webapp</a></li>
+    <li><a href="../wa_route/">wa_route</a></li>
+    <li class="self-crumb">WebRoute class</li>
+</ol>
+
+    <h5>wa_route library</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div>
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    webapp
+      2.1.1
+  </span>
+  
+</footer>
+
+
+<script src="../static-assets/highlight.pack.js?v1"></script>
+<script src="../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

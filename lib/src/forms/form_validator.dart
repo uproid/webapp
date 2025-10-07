@@ -83,8 +83,8 @@ class FormValidator {
   /// If [data] is provided, it will be used instead of loading data from the request.
   ///
   /// Returns a tuple containing:
-  /// - [result]: The overall validation result (true if all validations pass).
-  /// - [form]: A map of the form structure containing field validation details.
+  /// - `result`: The overall validation result (true if all validations pass).
+  /// - `form`: A map of the form structure containing field validation details.
   Future<({bool result, Map<String, dynamic> form})> validateAndForm({
     Map data = const {},
   }) async {

@@ -116,7 +116,6 @@ class ApiParameter<T> {
 /// [def] - Optional default value for the parameter.
 /// [description] - Optional description of the parameter.
 /// [isRequired] - Indicates whether the parameter is required.
-/// [paramIn] - The location where the parameter is expected in the request.
 class ApiBodyField<T> {
   String name;
   Object? def;
@@ -156,7 +155,6 @@ class ApiResponse<T> {
   /// [name] - The name of the body field.
   /// [def] - Optional default value for the body field.
   /// [description] - Optional description of the body field.
-  /// [isRequired] - Indicates whether the body field is required.
   ApiResponse(
     this.name, {
     this.def,

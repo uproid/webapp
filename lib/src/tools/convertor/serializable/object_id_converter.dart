@@ -15,7 +15,7 @@ class IDConverter implements JsonConverter<String, ObjectId?> {
 
   /// Converts a JSON value to a [String] representation of [ObjectId].
   ///
-  /// If the [json] value is null, an empty string is returned. Otherwise, the [oid] property
+  /// If the [json] value is null, an empty string is returned. Otherwise, the `oid` property
   /// of the [ObjectId] is returned as a [String].
   ///
   /// [json] is the JSON value to be converted to a [String] representation of [ObjectId].

@@ -637,7 +637,7 @@ abstract class DBCollectionFree {
   /// [CollectionEvent.onDelete] event with the deleted document data.
   ///
   /// Parameters:
-  /// * [oid] - The MongoDB ObjectId of the document to delete
+  /// * `oid` - The MongoDB ObjectId of the document to delete
   ///
   /// Returns `true` if the deletion was successful, `false` otherwise.
   ///
@@ -775,7 +775,7 @@ abstract class DBCollectionFree {
   /// form validation system to ensure proper data formatting.
   ///
   /// Parameters:
-  /// * [oid] - The MongoDB ObjectId of the document to retrieve
+  /// * `oid` - The MongoDB ObjectId of the document to retrieve
   ///
   /// Returns the document as a map if found, `null` if not found or
   /// if the ObjectId is null.
@@ -1024,7 +1024,6 @@ abstract class DBCollectionFree {
   ///
   /// Parameters:
   /// * [path] - URL path for this route
-  /// * [rq] - Web request instance
   /// * [methods] - HTTP methods to accept (default: GET)
   /// * [apiDoc] - Optional API documentation generator
   /// * [auth] - Optional authentication controller
@@ -1138,7 +1137,6 @@ abstract class DBCollectionFree {
   ///
   /// Parameters:
   /// * [path] - URL path for this route
-  /// * [rq] - Web request instance
   /// * [methods] - HTTP methods to accept (default: POST)
   /// * [apiDoc] - Optional API documentation generator
   /// * [auth] - Optional authentication controller
@@ -1230,7 +1228,6 @@ abstract class DBCollectionFree {
   ///
   /// Parameters:
   /// * [path] - URL path for this route (should include {id} placeholder)
-  /// * [rq] - Web request instance
   /// * [methods] - HTTP methods to accept (default: POST)
   /// * [apiDoc] - Optional API documentation generator
   /// * [auth] - Optional authentication controller
@@ -1338,7 +1335,6 @@ abstract class DBCollectionFree {
   ///
   /// Parameters:
   /// * [path] - URL path for this route (should include {id} placeholder)
-  /// * [rq] - Web request instance
   /// * [methods] - HTTP methods to accept (default: GET)
   /// * [apiDoc] - Optional API documentation generator
   /// * [auth] - Optional authentication controller
@@ -1433,7 +1429,6 @@ abstract class DBCollectionFree {
   ///
   /// Parameters:
   /// * [path] - URL path for this route (should include {id} placeholder)
-  /// * [rq] - Web request instance
   /// * [methods] - HTTP methods to accept (default: GET)
   /// * [apiDoc] - Optional API documentation generator
   /// * [auth] - Optional authentication controller

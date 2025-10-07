@@ -93,7 +93,7 @@ class WaServer {
   ///
   /// Provides real-time debugging capabilities including route inspection,
   /// memory monitoring, language reloading, and server restart functionality.
-  /// Only active when [config.enableLocalDebugger] and [config.isLocalDebug] are true.
+  /// Only active when `config.enableLocalDebugger` and `config.isLocalDebug` are true.
   SocketManager? debugger;
 
   /// Adds a routing function to the server.
@@ -176,7 +176,7 @@ class WaServer {
 
   /// Starts the server and binds it to the specified IP and port.
   ///
-  /// If [config.noStop] is true, the server will run within a guarded zone to handle errors.
+  /// If `config.noStop` is true, the server will run within a guarded zone to handle errors.
   /// Otherwise, it runs normally.
   ///
   /// Returns a [Future] containing the [HttpServer] instance.
@@ -241,7 +241,7 @@ class WaServer {
 
   /// Handles incoming HTTP requests by processing them through routing functions and the [onRequest] function.
   ///
-  /// If [config.dbConfig.enable] is true, this method ensures the MongoDB database is connected before handling requests.
+  /// If `config.dbConfig.enable` is true, this method ensures the MongoDB database is connected before handling requests.
   ///
   /// The request is processed in a guarded zone to catch and log errors, and an error response is sent if needed.
   Future<void> handleRequests(HttpServer server) async {
@@ -589,7 +589,7 @@ class WaServer {
 
   /// Connects to MongoDB using the connection string from the configuration.
   ///
-  /// If [config.dbConfig.enable] is true, the database connection is opened.
+  /// If `config.dbConfig.enable` is true, the database connection is opened.
   ///
   /// Returns a [Future] containing the [mongo.Db] instance.
   Future<mongo.Db> connectMongoDb() async {
@@ -699,8 +699,8 @@ class WaServer {
   /// - Error and log message broadcasting
   /// - Console widget for debugging
   ///
-  /// The debugger is only initialized when both [config.enableLocalDebugger]
-  /// and [config.isLocalDebug] are true, and prevents duplicate initialization.
+  /// The debugger is only initialized when both `config.enableLocalDebugger`
+  /// and `config.isLocalDebug` are true, and prevents duplicate initialization.
   ///
   /// Automatically adds debugging routes to the server:
   /// - `/debugger` - Main debugger interface

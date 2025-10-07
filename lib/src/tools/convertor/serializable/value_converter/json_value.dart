@@ -13,8 +13,8 @@ class WaJson {
   ///
   /// This method uses [jsonEncode] to serialize the [data] object into a JSON string.
   /// It provides custom encoding for specific types:
-  /// - [TString]: Uses the [write] method with the optional [rq] parameter.
-  /// - [ObjectId]: Converts to its string representation via the [oid] property.
+  /// - [TString]: Uses the `write` method with the optional [rq] parameter.
+  /// - [ObjectId]: Converts to its string representation via the `oid` property.
   /// - [DateTime]: Converts to its ISO-8601 string representation.
   /// - [Duration]: Converts to its string representation.
   ///

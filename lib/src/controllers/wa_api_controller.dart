@@ -36,9 +36,9 @@ class WaApiController extends WaController {
   /// Constructs a [WaApiController] with the given request `rq`, router, title, and
   /// optional security scheme.
   ///
-  /// The [router] parameter is required and defines the API routes.
   /// The [title] parameter is required and sets the API title.
   /// The [security] parameter defaults to `'apiKey'`.
+  /// [server] is the WaServer instance containing the routes.
   WaApiController({
     required this.server,
     required this.title,

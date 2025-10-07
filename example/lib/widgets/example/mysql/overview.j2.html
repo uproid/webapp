@@ -59,13 +59,13 @@
             <th class="px-3 py-2">
               <div class="flex items-center gap-1">
                 <input class="h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500" type="checkbox" id="select_all" onchange="document.querySelectorAll(`input[name='selected_books']`).forEach(cb=>cb.checked=this.checked);" />
-                {{ $l.macro($rq,"/template/ui/sorting", {'sortby': 'b.id', 'title': 'mysql.table.header.id'} ) }}
+                {{ $l.macro("/template/ui/sorting", {'sortby': 'b.id', 'title': 'mysql.table.header.id'} ) }}
               </div>
             </th>
-            <th class="px-3 py-2">{{ $l.macro($rq,"/template/ui/sorting", {'sortby': 'title', 'title': 'mysql.table.header.title'} ) }}</th>
-            <th class="px-3 py-2">{{ $l.macro($rq,"/template/ui/sorting", {'sortby': 'author', 'title': 'mysql.table.header.author'} ) }}</th>
-            <th class="px-3 py-2">{{ $l.macro($rq,"/template/ui/sorting", {'sortby': 'published_date', 'title': 'mysql.table.header.publishedDate'} ) }}</th>
-            <th class="px-3 py-2">{{ $l.macro($rq,"/template/ui/sorting", {'sortby': 'category_id', 'title': 'mysql.table.header.categoryId'} ) }}</th>
+            <th class="px-3 py-2">{{ $l.macro("/template/ui/sorting", {'sortby': 'title', 'title': 'mysql.table.header.title'} ) }}</th>
+            <th class="px-3 py-2">{{ $l.macro("/template/ui/sorting", {'sortby': 'author', 'title': 'mysql.table.header.author'} ) }}</th>
+            <th class="px-3 py-2">{{ $l.macro("/template/ui/sorting", {'sortby': 'published_date', 'title': 'mysql.table.header.publishedDate'} ) }}</th>
+            <th class="px-3 py-2">{{ $l.macro("/template/ui/sorting", {'sortby': 'category_id', 'title': 'mysql.table.header.categoryId'} ) }}</th>
             <th class="px-3 py-2 text-end">{{ $t('database.table.header.action') }}</th>
           </tr>
           <tr>
@@ -83,13 +83,13 @@
             <td class="px-3 py-2 text-end">
               <div class="flex items-end justify-end gap-2">
                 <a
-                  data-href="{{ $l.updateUrlQuery($rq, {'id':book.id|s, 'action': 'delete'|s}) }}"
+                  data-href="{{ $l.updateUrlQuery( {'id':book.id|s, 'action': 'delete'|s}) }}"
                   data-message="{{ $t('mysql.message.deleteBook') ~ ' (' ~ book.title ~ ')' }}"
                   class="wave js-delete-links inline-flex h-7 w-7 items-center justify-center rounded-full border border-rose-200 text-[11px] text-rose-600 hover:bg-rose-50 focus:outline-none focus:ring-2 focus:ring-rose-500/30"
                   title="{{ $t('mysql.button.delete') }}"
                 >🗑️</a>
                 <a
-                  href="{{ $l.updateUrlQuery($rq, {'id':book.id|s, 'action': 'edit'|s}) }}"
+                  href="{{ $l.updateUrlQuery( {'id':book.id|s, 'action': 'edit'|s}) }}"
                   class="wave inline-flex h-7 w-7 items-center justify-center rounded-full border border-primary-200 text-[11px] text-primary-600 hover:bg-primary-50 focus:outline-none focus:ring-2 focus:ring-primary-500/30"
                   title="{{ $t('mysql.button.edit') }}"
                 >✏️</a>

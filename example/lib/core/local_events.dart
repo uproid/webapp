@@ -5,15 +5,15 @@ import 'package:webapp/wa_route.dart';
 import 'package:webapp/wa_tools.dart';
 
 var localEvents = <String, Object>{
-  'hasFlash': (WebRequest rq) {
-    return rq.get('flash') != null;
+  'hasFlash': () {
+    return RequestContext.rq.get('flash') != null;
   },
-  'getFlashs': (WebRequest rq) {
-    var flash = rq.getParam('flashs');
-    rq.removeParam('flashs');
+  'getFlashs': () {
+    var flash = RequestContext.rq.getParam('flashs');
+    RequestContext.rq.removeParam('flashs');
     return flash;
   },
-  'macro': (WebRequest rq, String template, Object? data) {
+  'macro': (String template, Object? data) {
     if (template.endsWith(configs.widgetsType)) {
       template = template.replaceAll(".${configs.widgetsType}", '');
     }
@@ -23,9 +23,9 @@ var localEvents = <String, Object>{
         params[key.toString()] = data[key];
       }
     }
-    return rq.renderAsync(path: template, viewParams: params);
+    return RequestContext.rq.renderAsync(path: template, viewParams: params);
   },
-  'updateUrlQuery': (WebRequest rq, [Object? updates]) {
+  'updateUrlQuery': ([Object? updates]) {
     if (updates is String) {
       updates = jsonDecode(updates);
     }
@@ -37,8 +37,8 @@ var localEvents = <String, Object>{
       }
     }
 
-    var queryParams =
-        rq.uri.queryParameters.map((key, value) => MapEntry(key, value));
+    var queryParams = RequestContext.rq.uri.queryParameters
+        .map((key, value) => MapEntry(key, value));
 
     var newUrl = Uri(
       queryParameters: {
@@ -49,9 +49,9 @@ var localEvents = <String, Object>{
 
     return newUrl.toString();
   },
-  'removeUrlQuery': (WebRequest rq, dynamic keys) {
-    var queryParams =
-        rq.uri.queryParameters.map((key, value) => MapEntry(key, value));
+  'removeUrlQuery': (dynamic keys) {
+    var queryParams = RequestContext.rq.uri.queryParameters
+        .map((key, value) => MapEntry(key, value));
 
     for (var key in keys) {
       queryParams.remove(key);
@@ -63,11 +63,11 @@ var localEvents = <String, Object>{
 
     return newUrl.toString();
   },
-  'existUrlQuery': (WebRequest rq, dynamic keys) {
+  'existUrlQuery': (dynamic keys) {
     for (var key in keys) {
-      if (rq.uri.queryParameters.containsKey(key) &&
-          rq.uri.queryParameters[key] != null &&
-          rq.uri.queryParameters[key]!.isNotEmpty) {
+      if (RequestContext.rq.uri.queryParameters.containsKey(key) &&
+          RequestContext.rq.uri.queryParameters[key] != null &&
+          RequestContext.rq.uri.queryParameters[key]!.isNotEmpty) {
         return true;
       }
     }

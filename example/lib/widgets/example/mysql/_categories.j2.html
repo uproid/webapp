@@ -18,12 +18,12 @@
             <td class="px-3 py-2 text-center">
               <a
                 class="wave inline-flex h-7 items-center rounded border border-cyan-600 bg-cyan-50 px-2 text-[11px] font-medium text-cyan-700 hover:bg-cyan-100 focus:outline-none focus:ring-2 focus:ring-cyan-500/30"
-                href="{{ $l.updateUrlQuery($rq, {'filter_category_id': category.id|s}) }}"
+                href="{{ $l.updateUrlQuery( {'filter_category_id': category.id|s}) }}"
               >{{ category.count_books }}</a>
             </td>
             <td class="px-3 py-2 text-center">
               <a
-                data-href="{{ $l.updateUrlQuery($rq, {'id': category.id|s, 'action': 'delete_category'|s}) }}"
+                data-href="{{ $l.updateUrlQuery( {'id': category.id|s, 'action': 'delete_category'|s}) }}"
                 data-message="{{ $t('mysql.message.deleteCategory') ~ ' (' ~ category.title ~ ')' }}"
                 class="wave js-delete-links inline-flex h-7 w-7 items-center justify-center rounded border border-transparent text-rose-600 hover:border-rose-200 hover:bg-rose-50 hover:text-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-500/30"
                 aria-label="{{ $t('mysql.button.delete') }}"
@@ -41,7 +41,7 @@
       <tfoot class="bg-slate-50/60">
         <tr>
           <td colspan="4" class="px-3 py-3">
-            <form method="POST" action="{{ $l.updateUrlQuery($rq, {'action': 'add_category'}) }}" class="flex flex-wrap items-start gap-2">
+            <form method="POST" action="{{ $l.updateUrlQuery( {'action': 'add_category'}) }}" class="flex flex-wrap items-start gap-2">
               <div class="flex flex-col">
                 <input
                   type="text"

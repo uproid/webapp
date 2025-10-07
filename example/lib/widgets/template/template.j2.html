@@ -31,8 +31,8 @@
       <main class="content px-3 py-4 lg:px-6">
         <div class="mx-auto w-full max-w-7xl">
           {% block flash %}
-          {% if $l.hasFlash($rq) %}
-          {% for flash in $l.getFlashs($rq) %}
+          {% if $l.hasFlash() %}
+          {% for flash in $l.getFlashs() %}
           <div
             class="mb-4 rounded-md border p-4 text-sm
             {% if flash.type == 'success' %} bg-emerald-50 border-emerald-200 text-emerald-800 {% endif %}

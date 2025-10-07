@@ -49,9 +49,9 @@
         </select>
     </th>
     <th colspan="2" class="p-1 align-top text-end">
-        {% set filterIsDirty = $l.existUrlQuery($rq,['filter_b.id','filter_title', 'filter_author', 'filter_published_date', 'filter_category_id']) %}
+        {% set filterIsDirty = $l.existUrlQuery(['filter_b.id','filter_title', 'filter_author', 'filter_published_date', 'filter_category_id']) %}
         <a
-            href="{{ $l.removeUrlQuery($rq,['page','filter_b.id','filter_title', 'filter_author', 'filter_published_date', 'filter_category_id']) }}"
+            href="{{ $l.removeUrlQuery(['page','filter_b.id','filter_title', 'filter_author', 'filter_published_date', 'filter_category_id']) }}"
             class="wave inline-flex h-8 items-center rounded-md border px-3 text-xs font-medium shadow-sm {{ 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50' if not filterIsDirty else 'border-slate-700 bg-slate-700 text-white hover:bg-slate-800' }}"
             type="reset"
         >{{ $t('mysql.button.reset') }}</a>

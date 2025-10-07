@@ -943,7 +943,6 @@ abstract class DBCollectionFree {
   ///
   /// Parameters:
   /// * [path] - Base URL path for the API routes
-  /// * [rq] - Web request instance for handling HTTP requests
   /// * [useRouteAll] - Enable/disable the get all documents route
   /// * [useRouteDelete] - Enable/disable the delete document route
   /// * [useRouteInsert] - Enable/disable the create document route
@@ -964,12 +963,11 @@ abstract class DBCollectionFree {
   ///
   /// Example:
   /// ```dart
-  /// var apiRoutes = userCollection.routes('/api/users', rq: request);
+  /// var apiRoutes = userCollection.routes('/api/users');
   /// router.addRoutes(apiRoutes);
   /// ```
   List<WebRoute> routes(
     String path, {
-    required WebRequest rq,
     bool useRouteAll = true,
     bool useRouteDelete = true,
     bool useRouteInsert = true,
@@ -995,22 +993,20 @@ abstract class DBCollectionFree {
       if (useRouteAll)
         routeGetAll(
           path,
-          rq: rq,
           paging: paging,
           pageSize: pageSize,
           orderReverse: orderReverse,
           orderBy: orderBy,
           apiDoc: docAll,
         ),
-      if (useRouteGetOne) routeGetOne('$path/{id}', rq: rq, apiDoc: docOne),
+      if (useRouteGetOne) routeGetOne('$path/{id}', apiDoc: docOne),
       if (useRouteDelete)
         routeDeleteOne(
           '$path/delete/{id}',
-          rq: rq,
           apiDoc: docDelete,
         ),
-      if (useRouteInsert) routeInsert(path, rq: rq, apiDoc: docInsert),
-      if (useRouteUpdate) routeUpdate('$path/{id}', rq: rq, apiDoc: docUpdate),
+      if (useRouteInsert) routeInsert(path, apiDoc: docInsert),
+      if (useRouteUpdate) routeUpdate('$path/{id}', apiDoc: docUpdate),
     ];
   }
 
@@ -1060,8 +1056,7 @@ abstract class DBCollectionFree {
   /// }
   /// ```
   WebRoute routeGetAll(String path,
-      {required WebRequest rq,
-      List<String> methods = const [RequestMethods.GET],
+      {List<String> methods = const [RequestMethods.GET],
       Future<ApiDoc>? Function()? apiDoc,
       WaAuthController? auth,
       List<String> extraPath = const [],
@@ -1076,6 +1071,7 @@ abstract class DBCollectionFree {
       bool orderReverse = true,
       String orderBy = '_id'}) {
     Future<String> index() async {
+      final rq = RequestContext.rq;
       if (paging == false) {
         var all = await getAll(
           filter: getSearchableFilter(inputs: rq.getAll()),
@@ -1094,7 +1090,6 @@ abstract class DBCollectionFree {
         orderReverse = rq.get<bool>('orderReverse', def: orderReverse);
 
         UIPaging paging = UIPaging(
-          rq: rq,
           total: countAll,
           pageSize: pageSize,
           widget: '',
@@ -1175,7 +1170,6 @@ abstract class DBCollectionFree {
   /// ```
   WebRoute routeInsert(
     String path, {
-    required WebRequest rq,
     List<String> methods = const [RequestMethods.POST],
     Future<ApiDoc>? Function()? apiDoc,
     WaAuthController<dynamic>? auth,
@@ -1187,6 +1181,7 @@ abstract class DBCollectionFree {
     List<int> ports = const [],
   }) {
     Future<String> index() async {
+      final rq = RequestContext.rq;
       var res = await insert(rq.getAll());
 
       if (!res.success) {
@@ -1262,7 +1257,6 @@ abstract class DBCollectionFree {
   /// - 502: Validation errors or missing ID
   WebRoute routeUpdate(
     String path, {
-    required WebRequest rq,
     List<String> methods = const [RequestMethods.POST],
     Future<ApiDoc>? Function()? apiDoc,
     WaAuthController<dynamic>? auth,
@@ -1274,6 +1268,7 @@ abstract class DBCollectionFree {
     List<int> ports = const [],
   }) {
     Future<String> index() async {
+      final rq = RequestContext.rq;
       var id = rq.getParam('id', def: '').toString();
 
       if (id.isEmpty) {
@@ -1369,7 +1364,6 @@ abstract class DBCollectionFree {
   /// - 502: Missing or invalid ID
   WebRoute routeDeleteOne(
     String path, {
-    required WebRequest rq,
     List<String> methods = const [RequestMethods.GET],
     Future<ApiDoc>? Function()? apiDoc,
     WaAuthController<dynamic>? auth,
@@ -1381,6 +1375,7 @@ abstract class DBCollectionFree {
     List<int> ports = const [],
   }) {
     Future<String> index() async {
+      final rq = RequestContext.rq;
       var id = rq.getParam('id', def: '').toString();
 
       if (id.isEmpty) {
@@ -1465,7 +1460,6 @@ abstract class DBCollectionFree {
   /// - 502: Missing or invalid ID
   WebRoute routeGetOne(
     String path, {
-    required WebRequest rq,
     List<String> methods = const [RequestMethods.GET],
     Future<ApiDoc>? Function()? apiDoc,
     WaAuthController<dynamic>? auth,
@@ -1477,6 +1471,7 @@ abstract class DBCollectionFree {
     List<int> ports = const [],
   }) {
     Future<String> index() async {
+      final rq = RequestContext.rq;
       var id = rq.getParam('id', def: '').toString();
 
       if (id.isEmpty) {

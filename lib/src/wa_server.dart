@@ -146,7 +146,6 @@ class WaServer {
         rq.addAsset(
           Asset(
             path: rq.url('/debugger/console.js'),
-            rq: rq,
           ),
         );
         return [
@@ -319,47 +318,48 @@ class WaServer {
       }
 
       WebRequest(httpRequest).init().then((WebRequest rq) {
-        runZonedGuarded(() async {
-          List<WebRoute> routing = [];
+        RequestContext.run(rq, () {
+          runZonedGuarded(() async {
+            List<WebRoute> routing = [];
 
-          if (config.dbConfig.enable) {
-            if (_db == null) {
-              _db = await connectMongoDb().onError((error, stackTrace) async {
-                throw ("Error connect to DB");
-              });
-            } else if (!_db!.isConnected) {
-              await _db!.open().onError((error, stackTrace) async {
-                throw ("Error connect to DB");
-              });
+            if (config.dbConfig.enable) {
+              if (_db == null) {
+                _db = await connectMongoDb().onError((error, stackTrace) async {
+                  throw ("Error connect to DB");
+                });
+              } else if (!_db!.isConnected) {
+                await _db!.open().onError((error, stackTrace) async {
+                  throw ("Error connect to DB");
+                });
+              }
             }
-          }
 
-          for (var webRoute in _webRoutes) {
-            routing.addAll(await webRoute(rq));
-          }
+            for (var webRoute in _webRoutes) {
+              routing.addAll(await webRoute(rq));
+            }
 
-          if (onRequest != null) {
-            rq = await onRequest!(rq);
-          }
+            if (onRequest != null) {
+              rq = await onRequest!(rq);
+            }
 
-          Route(
-            routing: routing,
-            rq: rq,
-          ).handel();
-        }, (error, StackTrace stack) async {
-          Console.e({
-            'error': error,
-            'stack': stack.toString().split("#"),
+            Route(
+              routing: routing,
+            ).handel();
+          }, (error, StackTrace stack) async {
+            Console.e({
+              'error': error,
+              'stack': stack.toString().split("#"),
+            });
+
+            rq.addParams({
+              'error': error,
+              'stack': stack.toString().split("#"),
+            });
+
+            await rq.renderError(502);
+
+            await rq.writeAndClose('');
           });
-
-          rq.addParams({
-            'error': error,
-            'stack': stack.toString().split("#"),
-          });
-
-          await rq.renderError(502);
-
-          await rq.writeAndClose('');
         });
       }).catchError((error, stack) {
         Console.e({

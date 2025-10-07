@@ -10,10 +10,10 @@ import 'package:webapp/src/router/wa_controller.dart';
 /// The type parameter `T` represents the user model or object being used in the
 /// authentication process.
 abstract class WaAuthController<T> extends WaController {
-  /// Constructs a `WaAuthController` with the given request object.
+  /// Constructs a `WaAuthController`.
   ///
-  /// The `super.rq` parameter is passed to the parent [WaController].
-  WaAuthController(super.rq);
+  /// No parameters are needed as we use RequestContext to access the current request.
+  WaAuthController();
 
   /// Displays the main page after authentication.
   ///

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:webapp/src/core/request_context.dart';
 import 'package:webapp/src/render/web_request.dart';
 import 'package:webapp/src/tools/console.dart';
 import 'package:path/path.dart' as p;
@@ -19,13 +20,12 @@ class AssetManager {
 
   /// Creates an instance of [AssetManager] and adds a default JS include.
   ///
-  /// The [rq] parameter represents the current web request. The constructor adds a default
-  /// include for the file `/app/includes.js` with `AssetCache.never` cache policy.
-  AssetManager(WebRequest rq) {
+  /// The constructor adds a default include for the file `/app/includes.js`
+  /// with `AssetCache.never` cache policy using the current request context.
+  AssetManager() {
     includes.insert(
       0,
       Asset(
-        rq: rq,
         path: '/app/includes.js',
         cache: AssetCache.never,
       ),
@@ -152,21 +152,21 @@ class AssetManager {
 /// It provides methods for constructing the correct URL for the asset, considering cache policies.
 class Asset {
   late String _path;
-  WebRequest rq;
   AssetType type;
   AssetCache cache = AssetCache.appVersion;
   Map<String, Object> data;
   Map<String, Object> attrs;
 
+  /// Gets the current web request from RequestContext.
+  WebRequest get rq => RequestContext.rq;
+
   /// Creates an instance of [Asset].
   ///
-  /// The [rq] parameter is the current web request.
   /// The [path] parameter is the path to the asset.
   /// The [type] parameter specifies the type of the asset (JS or CSS).
   /// The [cache] parameter controls the cache policy for the asset.
   Asset({
-    required this.rq,
-    required path,
+    required String path,
     this.type = AssetType.none,
     this.cache = AssetCache.appVersion,
     this.data = const {},

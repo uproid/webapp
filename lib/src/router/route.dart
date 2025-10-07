@@ -1,10 +1,8 @@
 import 'dart:io';
+import 'package:webapp/wa_route.dart';
 import '../wa_server.dart';
-import '../controllers/wa_auth_controller.dart';
-import '../router/web_route.dart';
 import 'package:mime/mime.dart';
 import '../tools/path.dart';
-import '../render/web_request.dart';
 
 /// A class that handles route management and request processing for a web application.
 ///
@@ -19,13 +17,13 @@ class Route {
   WaAuthController? seenAuth;
 
   /// The [WebRequest] object representing the current web request.
-  WebRequest rq;
+  WebRequest get rq => RequestContext.rq;
 
   /// Creates a [Route] instance.
   ///
   /// The [routing] parameter is required to initialize the list of routes, and the [rq]
   /// parameter is required for the current web request.
-  Route({required this.routing, required this.rq});
+  Route({required this.routing});
 
   /// Handles the routing logic by checking all defined routes.
   ///

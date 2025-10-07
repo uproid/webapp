@@ -2,7 +2,7 @@ import 'package:webapp/wa_htmler.dart';
 import 'package:webapp/wa_route.dart';
 
 class HtmlerController extends WaController {
-  HtmlerController(super.rq);
+  HtmlerController();
 
   @override
   Future<String> index() async {

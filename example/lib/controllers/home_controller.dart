@@ -16,11 +16,23 @@ import '../app.dart';
 import '../models/mock_user_model.dart';
 
 class HomeController extends WaController {
-  HomeController(super.rq);
+  HomeController();
 
   @override
   Future<String> index() async {
     return renderTemplate('template/home');
+  }
+
+  Future<String> redirectToRoot() async {
+    return rq.redirect('/');
+  }
+
+  Future<String> renderLocalhost() async {
+    return rq.renderString(text: 'Localhost');
+  }
+
+  Future<String> render127001() async {
+    return rq.renderString(text: '127.0.0.1');
   }
 
   Future<String> sseExample() async {
@@ -38,7 +50,6 @@ class HomeController extends WaController {
     if (rq.method == RequestMethods.POST) {
       var loginForm = FormValidator(
         name: 'loginForm',
-        rq: rq,
         fields: {
           'email': [
             FieldValidator.isEmailField(),
@@ -191,7 +202,6 @@ class HomeController extends WaController {
 
     var countRecords = await exampleCollections.getCount();
     var pagination = UIPaging(
-      rq: rq,
       widget: 'template/paging',
       page: page,
       total: countRecords,
@@ -213,7 +223,6 @@ class HomeController extends WaController {
     var pageC = rq.get<int>('page_c', def: 0);
 
     var paginationA = UIPaging(
-      rq: rq,
       widget: 'template/paging',
       page: pageA,
       total: 1000,
@@ -228,7 +237,6 @@ class HomeController extends WaController {
     rq.addParam('paginationA', await paginationA.render());
 
     var paginationB = UIPaging(
-      rq: rq,
       widget: 'template/paging',
       page: pageB,
       total: 500,
@@ -244,7 +252,6 @@ class HomeController extends WaController {
     rq.addParam('paginationB', await paginationB.render());
 
     var paginationC = UIPaging(
-      rq: rq,
       widget: 'template/paging',
       page: pageC,
       total: 1000,
@@ -268,7 +275,6 @@ class HomeController extends WaController {
   Future<String> exampleEmailSend() async {
     var emailForm = FormValidator(
       name: 'emailForm',
-      rq: rq,
       fields: {
         'email': [
           FieldValidator.requiredField(),
@@ -552,7 +558,6 @@ class HomeController extends WaController {
     final orderReverse = rq.get<bool>('orderReverse', def: true);
 
     UIPaging paging = UIPaging(
-      rq: rq,
       total: countAll,
       pageSize: pageSize,
       widget: '',
@@ -620,7 +625,6 @@ class HomeController extends WaController {
     final orderReverse = rq.get<bool>('orderReverse', def: true);
 
     UIPaging paging = UIPaging(
-      rq: rq,
       total: countAll,
       pageSize: pageSize,
       widget: 'template/paging',
@@ -742,7 +746,6 @@ class HomeController extends WaController {
     var order = rq.get<String>('order', def: 'asc');
 
     var formFilter = FormValidator(
-      rq: rq,
       fields: {
         'filter_b.id': [
           FieldValidator.isNumberField(isRequired: false),
@@ -767,7 +770,6 @@ class HomeController extends WaController {
     var pageSize = rq.get<int>('pageSize', def: 10);
 
     var paging = UIPaging(
-      rq: rq,
       widget: 'template/paging',
       page: page,
       total: 10,

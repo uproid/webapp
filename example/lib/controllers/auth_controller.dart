@@ -6,7 +6,7 @@ import 'home_controller.dart';
 
 class AuthController extends WaAuthController<MockUserModel> {
   HomeController homeController;
-  AuthController(super.rq, this.homeController);
+  AuthController(this.homeController);
   MockUserModel? userLogined;
 
   @override
@@ -99,7 +99,6 @@ class AuthController extends WaAuthController<MockUserModel> {
   Future<String> loginPost() async {
     var loginForm = FormValidator(
       name: 'loginForm',
-      rq: rq,
       fields: {
         'email': [
           FieldValidator.isEmailField(),

@@ -5,6 +5,7 @@ import 'package:webapp/wa_mysql.dart';
 import 'package:webapp/wa_tools.dart';
 
 import '../render/web_request.dart';
+import '../core/request_context.dart';
 
 typedef ValidatorEvent<T> = Future<FieldValidateResult> Function(T value);
 
@@ -28,8 +29,8 @@ extension SimpleValidatorEvent<T> on ValidatorEvent<T> {
 /// and then validating input data against those rules. It also handles error
 /// reporting and formatting for easy form validation and feedback display.
 class FormValidator {
-  /// The web request instance containing the form data to validate.
-  WebRequest? rq;
+  /// Gets the current WebRequest from the request context
+  WebRequest get rq => RequestContext.rq;
 
   /// A map of field names to a list of validator events that will be applied to them.
   Map<String, List<ValidatorEvent>> fields;
@@ -49,7 +50,6 @@ class FormValidator {
   /// Constructor to initialize the `FormValidator`.
   ///
   /// Parameters:
-  /// - [rq]: The web request object containing form data. (required)
   /// - [fields]: A map of fields to validate with their respective validation rules. (required)
   /// - [name]: The name of the form or validation context. (required)
   /// - [failed]: The value to mark a field as invalid. (optional, defaults to 'is-invalid')
@@ -58,17 +58,10 @@ class FormValidator {
   FormValidator({
     required this.fields,
     required this.name,
-    this.rq,
     this.failed = 'is-invalid',
     this.success = '',
     this.extraData = const {},
-  }) {
-    if (rq == null && extraData.isEmpty) {
-      throw ArgumentError(
-        'WebRequest or extraData is required for FormValidator',
-      );
-    }
-  }
+  });
 
   /// Validates the form data and returns a boolean result.
   ///
@@ -101,8 +94,8 @@ class FormValidator {
     for (var fieldName in fields.keys) {
       var fieldResult = <String, dynamic>{};
       Object? fieldValue;
-      if (data.isEmpty && rq != null) {
-        fieldValue = rq!.data(fieldName);
+      if (data.isEmpty) {
+        fieldValue = rq.data(fieldName);
       } else {
         fieldValue = data[fieldName] ?? extraData[fieldName];
       }
@@ -149,7 +142,7 @@ class FormValidator {
       }
     });
 
-    rq?.addValidator(name, thisForm);
+    rq.addValidator(name, thisForm);
 
     return (result: result, form: thisForm);
   }
@@ -174,7 +167,7 @@ class FormValidator {
       fields[item] = <ValidatorEvent>[];
     }
 
-    final emptyValidator = FormValidator(rq: rq, fields: fields, name: name);
+    final emptyValidator = FormValidator(fields: fields, name: name);
     await emptyValidator.validate(data: data);
     return emptyValidator;
   }

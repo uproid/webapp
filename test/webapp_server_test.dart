@@ -176,7 +176,7 @@ void main() async {
           WebRoute(
             path: "api/auth/ok",
             methods: RequestMethods.ALL,
-            auth: AuthController(rq, true),
+            auth: AuthController(true),
             index: () {
               return rq.renderData(data: {
                 'user': "TEST",
@@ -186,7 +186,7 @@ void main() async {
           WebRoute(
             path: "api/auth/failed",
             methods: RequestMethods.ALL,
-            auth: AuthController(rq, false),
+            auth: AuthController(false),
             index: () {
               return rq.renderData(data: {
                 'user': "TEST",
@@ -473,7 +473,7 @@ void main() async {
 
 class AuthController extends WaAuthController<String> {
   bool testResult = false;
-  AuthController(super.rq, this.testResult);
+  AuthController(this.testResult);
 
   @override
   Future<bool> auth() async {

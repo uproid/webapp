@@ -39,7 +39,7 @@ class WebRequest {
   static WaStringWidget errorWidget = ErrorWidget();
 
   /// Manages assets like JavaScript and CSS for rendering.
-  late final AssetManager assetManager = AssetManager(this);
+  late final AssetManager assetManager = AssetManager();
 
   /// Indicates whether the response has been closed.
   var isClosed = false;

@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:webapp/wa_route.dart';
 import 'package:webapp/wa_server.dart';
-import 'package:webapp/src/render/web_request.dart';
 import 'package:webapp/src/tools/convertor/serializable/value_converter/json_value.dart';
 import 'package:webapp/wa_console.dart';
 
@@ -54,7 +54,8 @@ class SocketManager {
   /// The [rq] parameter is the WebRequest that initiated the WebSocket upgrade.
   /// The optional [userId] parameter associates the WebSocket connection with a specific user.
   Future<WebRequest> requestHandel(WebRequest rq, {String? userId}) async {
-    var socket = await WebSocketTransformer.upgrade(rq.httpRequest);
+    var socket =
+        await WebSocketTransformer.upgrade(RequestContext.rq.httpRequest);
     final id = rq.headers['sec-websocket-key']!.first;
     session.add(
       id,

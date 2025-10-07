@@ -39,8 +39,7 @@ class WaApiController extends WaController {
   /// The [router] parameter is required and defines the API routes.
   /// The [title] parameter is required and sets the API title.
   /// The [security] parameter defaults to `'apiKey'`.
-  WaApiController(
-    super.rq, {
+  WaApiController({
     required this.server,
     required this.title,
     this.security = 'apiKey',
@@ -248,6 +247,10 @@ class WaApiController extends WaController {
     };
 
     return rq.renderData(data: data);
+  }
+
+  Future<String> indexPublic() async {
+    return index(showPublic: true);
   }
 
   /// Renders the Swagger UI for the API documentation.

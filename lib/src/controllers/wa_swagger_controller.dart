@@ -3,7 +3,7 @@ import 'package:webapp/wa_route.dart';
 
 class WaSwaggerController extends WaController {
   final String urlApiDocs;
-  WaSwaggerController(super.rq, this.urlApiDocs);
+  WaSwaggerController(this.urlApiDocs);
 
   @override
   Future<String> index() async {

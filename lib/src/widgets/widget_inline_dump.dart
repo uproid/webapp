@@ -1,6 +1,6 @@
-import 'package:webapp/src/render/web_request.dart';
 import 'package:webapp/src/views/htmler.dart';
 import 'package:webapp/src/widgets/wa_string_widget.dart';
+import 'package:webapp/wa_route.dart';
 import 'package:webapp/wa_tools.dart';
 
 /// A widget that provides an HTML layout for displaying error messages.
@@ -14,7 +14,6 @@ class InlineDumpWidget implements WaStringWidget {
 
   @override
   Tag Function(Map args)? generateHtml = (args) {
-    WebRequest rq = args['rq']!;
     dynamic variable = args['var'];
 
     var res = ArrayTag(children: [
@@ -41,7 +40,7 @@ class InlineDumpWidget implements WaStringWidget {
             'theme': 'summerfruit-dark',
             'expanded': '2',
           }, children: [
-            $Raw(WaJson.jsonEncoder(variable ?? 'N/A', rq: rq)),
+            $Raw(WaJson.jsonEncoder(variable ?? 'N/A', rq: RequestContext.rq)),
           ]),
         ],
       ),

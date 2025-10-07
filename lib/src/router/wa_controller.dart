@@ -1,4 +1,5 @@
 import '../render/web_request.dart';
+import '../core/request_context.dart';
 
 /// A base class for controllers in the web application.
 ///
@@ -6,15 +7,13 @@ import '../render/web_request.dart';
 /// for handling web requests. It includes a method for rendering the index and a method
 /// for providing a string representation of the controller instance.
 class WaController implements RouteRepos {
-  /// The [WebRequest] object representing the current web request.
-  WebRequest rq;
+  /// Gets the current WebRequest from the request context
+  WebRequest get rq => RequestContext.rq;
 
   /// Creates a [WaController] instance.
   ///
-  /// The [rq] parameter is required for initializing the controller with the current web request.
-  WaController(
-    this.rq,
-  );
+  /// The [rq] parameter is optional now as we use RequestContext to access the current request.
+  WaController([WebRequest? rq]);
 
   /// Provides an asynchronous method for rendering the index page of the controller.
   ///

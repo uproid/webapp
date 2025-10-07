@@ -7,13 +7,12 @@ import '../controllers/auth_controller.dart';
 import '../controllers/home_controller.dart';
 
 Future<List<WebRoute>> getWebRoute(WebRequest rq) async {
-  final homeController = HomeController(rq);
-  final htmlerController = HtmlerController(rq);
-  final authController = AuthController(rq, homeController);
-  final includeController = IncludeJsController(rq);
+  final homeController = HomeController();
+  final htmlerController = HtmlerController();
+  final authController = AuthController(homeController);
+  final includeController = IncludeJsController();
   final apiController = WaApiController(
     title: "API Documentation",
-    rq,
     server: server,
   );
 
@@ -25,13 +24,11 @@ Future<List<WebRoute>> getWebRoute(WebRequest rq) async {
     ),
     WebRoute(
       path: 'api/docs',
-      index: () {
-        return apiController.index(showPublic: true);
-      },
+      index: apiController.indexPublic,
     ),
     WebRoute(
       path: 'swagger',
-      controller: WaSwaggerController(rq, rq.url('api/docs')),
+      controller: WaSwaggerController(rq.url('api/docs')),
     ),
     WebRoute(
       path: 'ws',
@@ -45,20 +42,20 @@ Future<List<WebRoute>> getWebRoute(WebRequest rq) async {
     ),
     WebRoute(
       path: 'example',
-      index: () => rq.redirect('/'),
+      index: homeController.redirectToRoot,
       children: [
         WebRoute(
           path: 'host',
           hosts: ['localhost'],
           ports: [80, 8085],
-          index: () => rq.renderString(text: 'Localhost'),
+          index: homeController.renderLocalhost,
           methods: RequestMethods.ALL,
         ),
         WebRoute(
           path: 'host',
           ports: [80, 8085],
           hosts: ['127.0.0.1'],
-          index: () => rq.renderString(text: '127.0.0.1'),
+          index: homeController.render127001,
           methods: RequestMethods.ALL,
         ),
         WebRoute(

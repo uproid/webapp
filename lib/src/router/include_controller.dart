@@ -11,8 +11,8 @@ import 'package:webapp/src/router/wa_controller.dart';
 class IncludeJsController extends WaController {
   /// Creates an instance of [IncludeJsController].
   ///
-  /// The [rq] parameter is required to initialize the base class [WaController].
-  IncludeJsController(super.rq);
+  /// No parameters are needed as we use RequestContext to access the current request.
+  IncludeJsController();
 
   /// Handles the inclusion of JavaScript in the response.
   ///

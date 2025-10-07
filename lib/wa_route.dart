@@ -15,3 +15,4 @@ export 'src/controllers/wa_api_controller.dart';
 export 'src/controllers/wa_swagger_controller.dart';
 export 'src/router/include_controller.dart';
 export 'src/router/api_doc.dart';
+export 'src/core/request_context.dart';

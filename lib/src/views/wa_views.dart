@@ -1,4 +1,5 @@
 import 'package:webapp/src/render/web_request.dart';
+import 'package:webapp/src/core/request_context.dart';
 
 /// A base class for views in the web application.
 ///
@@ -10,10 +11,9 @@ import 'package:webapp/src/render/web_request.dart';
 /// ```dart
 /// class MyCustomView extends WaView {
 ///   MyCustomView({
-///     required WebRequest rq,
 ///     required String widget,
 ///     Map<String, Object?> params = const {},
-///   }) : super(rq: rq, widget: widget, params: params);
+///   }) : super(widget: widget, params: params);
 ///
 ///   @override
 ///   Future<Map<String, Object?>> renderData() async {
@@ -22,8 +22,8 @@ import 'package:webapp/src/render/web_request.dart';
 /// }
 /// ```
 class WaView {
-  /// The [WebRequest] object representing the current request.
-  WebRequest rq;
+  /// Gets the current WebRequest from the request context
+  WebRequest get rq => RequestContext.rq;
 
   /// A map containing parameters that can be passed to the view for rendering.
   Map<String, Object?> params;
@@ -33,11 +33,10 @@ class WaView {
 
   /// Creates an instance of [WaView].
   ///
-  /// The constructor requires a [WebRequest] object [rq] and a [widget] path,
+  /// The constructor requires a [widget] path,
   /// with an optional [params] map that can be used to pass additional data
   /// to the view during rendering.
   WaView({
-    required this.rq,
     required this.widget,
     this.params = const {},
   });

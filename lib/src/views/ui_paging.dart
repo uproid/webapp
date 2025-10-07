@@ -54,7 +54,7 @@ class UIPaging extends WaView {
 
   /// Creates a new [UIPaging] instance.
   ///
-  /// The constructor requires the current request object [rq], a [widget] identifier,
+  /// The constructor requires a [widget] identifier,
   /// and the [page] and [total] number of items. Optional parameters include:
   /// - [pageSize]: The number of items per page (default is 20).
   /// - [profix]: The page query parameter name (default is 'page').
@@ -64,7 +64,6 @@ class UIPaging extends WaView {
   /// - [orderBy]: The field used for ordering.
   /// - [orderReverse]: Whether the order is reversed (descending).
   UIPaging({
-    required super.rq,
     required super.widget,
     super.params,
 
@@ -111,7 +110,6 @@ class UIPaging extends WaView {
     var orderReverse = rq.get<bool>('orderReverse', def: orderReverseDef);
 
     return UIPaging(
-      rq: rq,
       widget: widget,
       page: page,
       total: total,

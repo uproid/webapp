@@ -4,11 +4,9 @@ import 'package:webapp/wa_tools.dart';
 
 /// The `WaApiController` class is responsible for managing API routes and generating
 /// OpenAPI documentation for the API.
-///
 /// This controller extends the `WaController` and includes functionality for
 /// configuring API routes, generating Swagger UI documentation, and handling
 /// security settings.
-///
 /// Example usage:
 /// ```dart
 /// WaApiController(

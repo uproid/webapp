@@ -3,12 +3,10 @@ import 'package:webapp/wa_route.dart';
 import 'package:webapp/wa_tools.dart';
 
 /// Defines a web route configuration for HTTP request handling in the application.
-///
 /// The [WebRoute] class represents a single route definition that specifies how
 /// incoming HTTP requests should be matched and handled. It supports advanced
 /// routing features including pattern matching, HTTP method filtering, host/port
 /// restrictions, nested routing, authentication, and authorization.
-///
 /// Key features:
 /// - Path pattern matching with wildcards (`/api/*`) and parameters (`/users/{id}`)
 /// - HTTP method restrictions (GET, POST, PUT, DELETE, etc.)
@@ -18,7 +16,6 @@ import 'package:webapp/wa_tools.dart';
 /// - Controller-based and function-based request handling
 /// - Widget/template rendering capabilities
 /// - API documentation generation support
-///
 /// Example usage:
 /// ```dart
 /// // Simple route
@@ -27,7 +24,6 @@ import 'package:webapp/wa_tools.dart';
 ///   methods: [RequestMethods.GET],
 ///   index: () async => 'User list',
 /// )
-///
 /// // Parameterized route with authentication
 /// WebRoute(
 ///   path: '/users/{id}',
@@ -36,7 +32,6 @@ import 'package:webapp/wa_tools.dart';
 ///   permissions: ['user.read', 'user.edit'],
 ///   controller: UserController(),
 /// )
-///
 /// // Nested route structure
 /// WebRoute(
 ///   path: '/api',

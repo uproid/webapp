@@ -1,7 +1,6 @@
 // ignore_for_file: constant_identifier_names, non_constant_identifier_names
 
 /// A utility class that provides constants and predefined lists for various HTTP request methods.
-///
 /// This class includes constants for common HTTP methods and provides convenience lists for
 /// frequently used method combinations. It is useful for standardizing and managing HTTP method
 /// strings throughout an application.

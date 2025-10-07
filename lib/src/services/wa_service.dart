@@ -1,5 +1,4 @@
 /// Represents a basic service in the application.
-///
 /// The [WaService] class is a base class for services that provide various functionalities
 /// in the application. It includes a method for generating a string representation of
 /// the service.

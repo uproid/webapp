@@ -2,7 +2,6 @@ import 'package:webapp/wa_route.dart';
 import 'package:webapp/src/views/wa_views.dart';
 
 /// A class that handles pagination logic and generates view parameters for rendering.
-///
 /// The [DBPaging] class is used to manage pagination, including calculating the
 /// current page, the range of pages to display, and handling query parameters.
 /// It extends [WaView] to integrate with the application's view rendering system.
@@ -29,7 +28,6 @@ class DBPaging {
   bool orderReverse;
 
   /// Calculates the starting index for the current page based on [page] and [pageSize].
-  ///
   /// The start index is adjusted if the page exceeds the total number of items.
   int get start {
     var start = (page - 1) * pageSize;
@@ -41,7 +39,6 @@ class DBPaging {
   }
 
   /// Creates a new [DBPaging] instance.
-  ///
   /// The constructor requires the current request object [rq], a [widget] identifier,
   /// and the [page] and [total] number of items. Optional parameters include:
   /// - [pageSize]: The number of items per page (default is 20).
@@ -52,20 +49,16 @@ class DBPaging {
   /// - [orderBy]: The field used for ordering.
   /// - [orderReverse]: Whether the order is reversed (descending).
   DBPaging({
-    ///
     required this.page,
     required this.total,
     this.pageSize = 20,
     this.profix = 'page',
     this.useRequsetQueries = false,
-
-    ///
     this.orderBy = '',
     this.orderReverse = false,
   });
 
   /// A factory constructor to create [DBPaging] from a request object [rq].
-  ///
   /// This factory method extracts relevant pagination information from the request
   /// and provides default values for optional parameters:
   /// - [total]: The total number of items.
@@ -101,10 +94,8 @@ class DBPaging {
   }
 
   /// Generates and returns a map of data for rendering the pagination UI.
-  ///
   /// The method calculates the page range to display, handles edge cases where
   /// the page number is out of bounds, and includes additional query parameters.
-  ///
   /// The returned map includes:
   /// - `total`: The total number of items.
   /// - `count`: The total number of pages.

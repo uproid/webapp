@@ -7,7 +7,6 @@ import 'package:path/path.dart' as p;
 import 'package:webapp/wa_server.dart';
 
 /// Manages the assets for a web request, including JavaScript, CSS, and data.
-///
 /// The [AssetManager] class is responsible for handling various assets (like JS and CSS files) and
 /// the data to be included in a web response. It provides methods for adding assets, managing cache settings,
 /// and generating the necessary HTML for including assets in the frontend.
@@ -147,7 +146,6 @@ class AssetManager {
 }
 
 /// Represents an asset (like JS or CSS) in the web application.
-///
 /// The [Asset] class is used to manage individual assets, including their path, type, and cache settings.
 /// It provides methods for constructing the correct URL for the asset, considering cache policies.
 class Asset {

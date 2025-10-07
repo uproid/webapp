@@ -1,20 +1,15 @@
 /// Provides utility methods for manipulating [Map] instances.
-///
 /// This extension adds additional functionality to the [Map] class, allowing you to easily remove
 /// multiple entries, select a subset of entries, and add new entries.
-///
 /// Example usage:
 /// ```dart
 /// var map = {'a': 1, 'b': 2, 'c': 3};
-///
 /// // Remove keys 'a' and 'c'
 /// map.removeAll(['a', 'c']);
 /// print(map); // Outputs: {'b': 2}
-///
 /// // Select only the key 'b'
 /// var selected = map.select(['b']);
 /// print(selected); // Outputs: {'b': 2}
-///
 /// // Add a new entry
 /// map.add(MapEntry('d', 4));
 /// print(map); // Outputs: {'b': 2, 'd': 4}

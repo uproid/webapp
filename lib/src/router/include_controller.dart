@@ -4,7 +4,6 @@ import 'package:webapp/wa_server.dart';
 import 'package:webapp/src/router/wa_controller.dart';
 
 /// A controller responsible for injecting JavaScript for client-side operations.
-///
 /// This controller generates a JavaScript snippet that contains global configuration
 /// and translation functions. The generated JavaScript can be used on the client-side
 /// to handle localization and dynamic URL generation.

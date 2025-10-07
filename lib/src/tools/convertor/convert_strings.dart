@@ -5,7 +5,6 @@ import 'package:mongo_dart/mongo_dart.dart';
 
 /// Extension methods for [String] to provide various utilities for string manipulation,
 /// encoding, decoding, and hashing.
-///
 /// This extension adds methods to the [String] class for tasks such as hashing the string
 /// using MD5, converting between different encoding formats (Base64, Base32), converting
 /// a string to an [ObjectId], and generating slugs.
@@ -104,7 +103,6 @@ extension ConvertString on String {
 }
 
 /// Extension methods for [Map] to provide utilities for map manipulation.
-///
 /// This extension adds methods to the [Map] class for joining map entries into a single string
 /// with a specified separator.
 extension ConvertMap on Map {

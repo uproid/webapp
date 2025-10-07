@@ -2,51 +2,32 @@ import '../render/web_request.dart';
 import '../core/request_context.dart';
 
 /// Base controller class for handling HTTP requests in the web application.
-///
 /// [WaController] serves as the foundation for all request handlers in the framework.
 /// It provides access to the current request context and implements the [RouteRepos]
 /// interface for standardized request handling. Controllers are typically used to
 /// organize related request handling logic and can be associated with routes to
 /// process incoming HTTP requests.
-///
-/// The controller automatically has access to the current [WebRequest] through
 /// the [rq] getter, eliminating the need to pass request objects manually.
 /// This design leverages the Zone-based [RequestContext] system for thread-safe
 /// request handling.
-///
-/// Key features:
-/// - Automatic access to current request context
 /// - Thread-safe request handling through Zone isolation
 /// - Standardized interface for index route handling
 /// - Built-in string representation for debugging and introspection
-///
 /// Example usage:
-/// ```dart
-/// class UserController extends WaController {
 ///   @override
-///   Future<String> index() async {
+///   Future&lt;String&gt; index() async {
 ///     final users = await userService.getAllUsers();
 ///     return rq.renderJson(users);
 ///   }
-///
-///   Future<String> show() async {
-///     final id = rq.params['id'];
-///     final user = await userService.getUserById(id);
-///     return rq.renderJson(user);
+///   Future&lt;String&gt; show() async {
 ///   }
 /// }
-///
-/// // Route configuration
 /// WebRoute(
 ///   path: '/users',
-///   controller: UserController(),
-/// )
-/// ```
 class WaController implements RouteRepos {
   /// Gets the current WebRequest from the request context
   WebRequest get rq => RequestContext.rq;
 
-  /// Creates a [WaController] instance.
   ///
   /// The [rq] parameter is optional now as we use RequestContext to access the current request.
   WaController([WebRequest? rq]);
@@ -79,34 +60,22 @@ class WaController implements RouteRepos {
 }
 
 /// Interface defining the contract for route request handlers.
-///
 /// [RouteRepos] establishes a standardized interface that all route handlers
 /// must implement. It serves as a contract ensuring that request handling
 /// components provide consistent entry points for processing HTTP requests.
-///
-/// The interface is designed to support the routing system's need for a
-/// unified way to invoke request handlers, regardless of their specific
-/// implementation details. This abstraction enables the framework to
-/// treat different types of controllers uniformly during route processing.
-///
+/// The interface is designed to support the routing system's n
+/// implementation details. This abstraction enables the framew
 /// Implementations should:
-/// - Handle the primary route endpoint logic in [index]
 /// - Return appropriate response content as a string
 /// - Manage any necessary asynchronous operations
-/// - Utilize the current request context for accessing request data
-///
-/// This interface is primarily implemented by [WaController] and its subclasses,
-/// but can be implemented by any class that needs to handle route requests.
+/// This interface is primarily implemented by [WaController] and its subcl
 abstract class RouteRepos {
   /// Handles the primary request processing for this route handler.
-  ///
   /// This method serves as the main entry point for processing HTTP requests
   /// when no specific action is specified. It should contain the core logic
-  /// for handling the request and generating an appropriate response.
-  ///
+  /// for handling the request and generating an appropriate respons
   /// The method is called by the routing system when a request matches the
   /// associated route pattern. Implementations should:
-  /// - Access request data through [RequestContext.rq]
   /// - Process the request according to business logic
   /// - Generate and return response content
   /// - Handle any errors appropriately

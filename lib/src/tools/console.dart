@@ -4,17 +4,14 @@ import 'package:logger/logger.dart';
 typedef LogCallback = void Function(Object log, String type);
 
 /// A utility class for logging messages with different severity levels.
-///
 /// The [Console] class provides static methods for logging warnings, errors,
 /// information, debugging messages, and fatal errors. The logs are managed using
 /// the [Logger] package and optionally printed to the console.
-///
 /// Example usage:
 /// ```dart
 /// Console.i("This is an informational message.");
 /// Console.e("This is an error message.");
 /// ```
-///
 class Console {
   static final onError = <LogCallback>[];
   static final onLogging = <LogCallback>[];

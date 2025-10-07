@@ -4,7 +4,6 @@ import 'package:webapp/wa_route.dart';
 import 'package:webapp/wa_tools.dart';
 
 /// A widget that provides an HTML layout for displaying error messages.
-///
 /// The [DumpWodget] class implements [WaStringWidget] and provides a predefined
 /// HTML structure to be used for rendering error messages in the application.
 /// It includes styles and structure for displaying error details and stack traces.

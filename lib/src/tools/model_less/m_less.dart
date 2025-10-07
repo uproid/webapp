@@ -1,7 +1,6 @@
 import 'model_less.dart';
 
 /// A class that wraps around [ModelLess] and provides additional functionality or abstraction.
-///
 /// This class is designed to manage and interact with an instance of [ModelLess].
 /// It initializes with a [ModelLess] object or creates a default instance from an empty JSON string if none is provided.
 class MLess {

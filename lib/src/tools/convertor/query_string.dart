@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 /// A utility class for parsing query strings into a [Map].
-///
 /// This class provides a static method to convert a query string into a map,
 /// handling URL decoding and array notation.
 class QueryString {

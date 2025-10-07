@@ -24,7 +24,6 @@ extension SimpleValidatorEvent<T> on ValidatorEvent<T> {
 }
 
 /// A class for validating form data using customizable field validators.
-///
 /// The `FormValidator` class allows defining validation rules for form fields
 /// and then validating input data against those rules. It also handles error
 /// reporting and formatting for easy form validation and feedback display.
@@ -200,7 +199,6 @@ class FormValidator {
 }
 
 /// A class representing the result of a field validation.
-///
 /// The `FieldValidateResult` contains information about whether a field is valid,
 /// any error messages, and a combined error message for easy access.
 class FieldValidateResult {
@@ -228,7 +226,6 @@ class FieldValidateResult {
 }
 
 /// A utility class providing common field validators.
-///
 /// The `FieldValidator` class contains static methods for common validation tasks,
 /// such as checking if a field is required, validating the length of a string,
 /// or ensuring a field is a number or an email address.

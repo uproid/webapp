@@ -1,7 +1,6 @@
 import 'package:webapp/src/views/htmler.dart';
 
 /// An abstract class representing a basic widget that provides an HTML layout as a string.
-///
 /// The [WaStringWidget] class serves as a base class for widgets that involve
 /// generating or managing HTML content in string format. It defines a single
 /// layout property that can be used by subclasses to provide a default or

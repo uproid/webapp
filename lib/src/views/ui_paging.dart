@@ -3,7 +3,6 @@ import 'package:webapp/wa_tools.dart';
 import 'package:webapp/src/views/wa_views.dart';
 
 /// A class that handles pagination logic and generates view parameters for rendering.
-///
 /// The [UIPaging] class is used to manage pagination, including calculating the
 /// current page, the range of pages to display, and handling query parameters.
 /// It extends [WaView] to integrate with the application's view rendering system.
@@ -41,7 +40,6 @@ class UIPaging extends WaView {
   }
 
   /// Calculates the starting index for the current page based on [page] and [pageSize].
-  ///
   /// The start index is adjusted if the page exceeds the total number of items.
   int get start {
     var start = (page - 1) * pageSize;
@@ -53,7 +51,6 @@ class UIPaging extends WaView {
   }
 
   /// Creates a new [UIPaging] instance.
-  ///
   /// The constructor requires a [widget] identifier,
   /// and the [page] and [total] number of items. Optional parameters include:
   /// - [pageSize]: The number of items per page (default is 20).
@@ -66,8 +63,6 @@ class UIPaging extends WaView {
   UIPaging({
     required super.widget,
     super.params,
-
-    ///
     required this.page,
     required this.total,
     this.pageSize = 20,
@@ -75,14 +70,11 @@ class UIPaging extends WaView {
     this.otherQuery = const <String, String>{},
     this.widthSide = 2,
     this.useRequsetQueries = false,
-
-    ///
     this.orderBy = '',
     this.orderReverse = false,
   });
 
   /// A factory constructor to create [UIPaging] from a request object [rq].
-  ///
   /// This factory method extracts relevant pagination information from the request
   /// and provides default values for optional parameters:
   /// - [total]: The total number of items.
@@ -122,10 +114,8 @@ class UIPaging extends WaView {
   }
 
   /// Generates and returns a map of data for rendering the pagination UI.
-  ///
   /// The method calculates the page range to display, handles edge cases where
   /// the page number is out of bounds, and includes additional query parameters.
-  ///
   /// The returned map includes:
   /// - `total`: The total number of items.
   /// - `count`: The total number of pages.

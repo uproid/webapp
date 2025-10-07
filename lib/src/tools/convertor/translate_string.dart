@@ -21,7 +21,6 @@ extension TranslateString on String {
 }
 
 /// Class representing a translatable string.
-///
 /// Use this class to handle translations of a string based on the current or specified language.
 class TString {
   /// The translation key for this string.

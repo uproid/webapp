@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:webapp/wa_server.dart';
 
 /// Enumeration defining the types of HTML tags.
-///
 /// This enum distinguishes between different HTML tag structures:
 /// - [single]: Self-closing tags that don't have content (e.g., `<br/>`, `<img/>`)
 /// - [double]: Container tags with opening and closing parts (e.g., `<div></div>`, `<p></p>`)
@@ -15,12 +14,10 @@ enum TagType {
 }
 
 /// Abstract base class for creating and manipulating HTML elements programmatically.
-///
 /// [Tag] provides a foundation for building HTML structures in Dart code with
 /// support for attributes, child elements, CSS classes, and inline styles.
 /// It offers a fluent API for chaining operations and maintains the hierarchical
 /// structure of HTML documents.
-///
 /// Key features:
 /// - Dynamic attribute management
 /// - CSS class manipulation
@@ -28,7 +25,6 @@ enum TagType {
 /// - Child element management
 /// - HTML string generation
 /// - Fluent method chaining
-///
 /// Example usage:
 /// ```dart
 /// final div = CustomTag('div')
@@ -36,7 +32,6 @@ enum TagType {
 ///   .addAttr('data-id', '123')
 ///   .addStyle('background-color', 'blue')
 ///   .addChild(CustomTag('p').addChild(TextTag('Hello World')));
-///
 /// String html = div.toHtml();
 /// // Result: <div class="container" data-id="123" style="background-color: blue; "><p>Hello World</p></div>
 /// ```
@@ -176,7 +171,6 @@ abstract class Tag {
 }
 
 /// Abstract base class for Jinja template engine tags.
-///
 /// [JinjaTag] extends [Tag] to provide specialized support for Jinja2-style
 /// template syntax within the HTML generation system. These tags generate
 /// template directives that are processed by the template engine rather
@@ -186,16 +180,13 @@ abstract class JinjaTag extends Tag {
 }
 
 /// Represents a single Jinja command block for template logic.
-///
 /// [$Jinja] generates template blocks using the configured block delimiters
 /// (typically `<? command ?>`). These blocks contain template logic such as
 /// variable assignments, conditionals, loops, and other Jinja directives.
-///
 /// Example usage:
 /// ```dart
 /// final ifBlock = $Jinja('if user.is_authenticated');
 /// // Generates: <? if user.is_authenticated ?>
-///
 /// final setVar = $Jinja('set title = "Welcome"');
 /// // Generates: <? set title = "Welcome" ?>
 /// ```
@@ -213,11 +204,9 @@ class $Jinja extends JinjaTag {
 }
 
 /// Represents a Jinja template block with opening and closing commands.
-///
 /// [$JinjaBody] creates template structures that have both opening and closing
 /// directives with content in between. This is useful for control structures
 /// like loops, conditionals, and custom blocks that wrap other content.
-///
 /// Example usage:
 /// ```dart
 /// final forLoop = $JinjaBody(
@@ -253,11 +242,9 @@ class $JinjaBody extends JinjaTag {
 }
 
 /// Represents a Jinja template block definition.
-///
 /// [$JinjaBlock] creates named template blocks that can be extended or overridden
 /// in child templates. This is a fundamental feature of Jinja's template inheritance
 /// system, allowing for modular and reusable template structures.
-///
 /// Example usage:
 /// ```dart
 /// final contentBlock = $JinjaBlock(
@@ -280,16 +267,13 @@ class $JinjaBlock extends $JinjaBody {
 }
 
 /// Represents a Jinja template include directive.
-///
 /// [$JinjaInclude] generates template include statements that insert the contents
 /// of another template file at the current location. This enables template
 /// composition and code reuse across multiple template files.
-///
 /// Example usage:
 /// ```dart
 /// final header = $JinjaInclude('header.html');
 /// // Generates: <? include 'header.html' ?>
-///
 /// final sidebar = $JinjaInclude('components/sidebar.html');
 /// // Generates: <? include 'components/sidebar.html' ?>
 /// ```
@@ -298,17 +282,14 @@ class $JinjaInclude extends $Jinja {
 }
 
 /// Represents a Jinja variable output expression.
-///
 /// [$JinjaVar] generates variable output expressions using the configured
 /// variable delimiters (typically `<?= variable ?>`). These expressions
 /// are evaluated by the template engine and their values are inserted
 /// into the final HTML output.
-///
 /// Example usage:
 /// ```dart
 /// final userName = $JinjaVar('user.name');
 /// // Generates: <?= user.name ?>
-///
 /// final greeting = $JinjaVar('greeting | upper');
 /// // Generates: <?= greeting | upper ?>
 /// ```
@@ -323,17 +304,14 @@ class $JinjaVar extends JinjaTag {
 }
 
 /// Represents a Jinja template comment.
-///
 /// [$JinjaComment] generates template comments using the configured comment
 /// delimiters (typically `<?# comment ?>`). These comments are processed
 /// by the template engine and do not appear in the final HTML output,
 /// making them useful for template documentation and debugging.
-///
 /// Example usage:
 /// ```dart
 /// final note = $JinjaComment('This section renders user profile information');
 /// // Generates: <?# This section renders user profile information ?>
-///
 /// final todo = $JinjaComment('TODO: Add pagination support');
 /// // Generates: <?# Add pagination support ?>
 /// ```

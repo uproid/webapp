@@ -4,7 +4,6 @@ import 'package:webapp/src/render/web_request.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 
 /// Provides utility methods for encoding and decoding JSON data.
-///
 /// The [WaJson] class includes static methods for converting data to JSON format and
 /// parsing JSON strings into Dart objects. It handles custom encoding for specific types
 /// such as `TString`, `ObjectId`, `DateTime`, and `Duration`.

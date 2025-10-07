@@ -3,11 +3,9 @@ import 'dart:io';
 import 'package:path/path.dart' as p;
 
 /// Normalizes and joins a given [path] with the application base directory path.
-///
 /// This function normalizes the input [path], formats it as a URI, applies
 /// additional path normalization, and finally joins it with the application
 /// directory path obtained from [pathApp].
-///
 /// Example usage:
 /// ```dart
 /// String fullPath = pathTo('assets/images');
@@ -20,10 +18,8 @@ String pathTo(String path) {
 }
 
 /// Joins a list of paths into a single normalized path string.
-///
 /// The first element in [paths] is joined as-is, while subsequent elements
 /// are normalized using [pathNorm] to ensure consistency.
-///
 /// Example usage:
 /// ```dart
 /// String fullPath = joinPaths(['assets', 'images', 'logo.png']);
@@ -44,10 +40,8 @@ String joinPaths(List<String> paths) {
 
 /// Normalizes a given [path] by removing leading slashes and optionally converting
 /// backslashes to forward slashes.
-///
 /// The [normSlashs] parameter, if set to `true`, replaces all backslashes (`\`)
 /// with forward slashes (`/`) in the normalized path.
-///
 /// Example usage:
 /// ```dart
 /// String normalizedPath = pathNorm('C:\\User\\Documents\\file.txt', normSlashs: true);
@@ -66,24 +60,16 @@ String pathNorm(String path, {bool? normSlashs, endWithSlash = false}) {
 }
 
 /// Normalizes endpoint paths for URL routing with customizable formatting options.
-///
 /// This function takes a list of path segments and combines them into a normalized
 /// endpoint path suitable for web routing. It provides fine-grained control over
 /// the formatting including slash handling and path structure.
-///
-/// [paths] List of path segments to join into a single endpoint path
 /// [normSlashs] If true, converts backslashes to forward slashes (default: true)
 /// [endWithSlash] If true, ensures the path ends with a forward slash (default: true)
 /// [startWithSlash] If true, ensures the path starts with a forward slash (default: true)
-///
 /// The function also handles double slashes by replacing them with single slashes
-/// to prevent malformed URLs.
-///
 /// Example usage:
 /// ```dart
-/// String endpoint = endpointNorm(['api', 'users', 'profile']);
 /// // Result: '/api/users/profile/'
-///
 /// String apiPath = endpointNorm(['v1', 'data'], endWithSlash: false);
 /// // Result: '/v1/data'
 /// ```
@@ -110,24 +96,19 @@ String endpointNorm(
 }
 
 /// Compares multiple paths for equality after normalization.
-///
 /// This function normalizes all provided paths using the same formatting options
 /// and then compares them to determine if they represent the same endpoint.
 /// This is useful for route matching and path comparison in web applications.
-///
 /// [paths] List of path strings to compare for equality
 /// [normSlashs] If true, converts backslashes to forward slashes (default: true)
 /// [endWithSlash] If true, ensures paths end with a forward slash (default: true)
 /// [startWithSlash] If true, ensures paths start with a forward slash (default: true)
-///
 /// Returns `true` if all paths are equivalent after normalization, `false` otherwise.
 /// Returns `true` if the paths list is empty.
-///
 /// Example usage:
 /// ```dart
 /// bool isEqual = pathsEqual(['/api/users/', 'api\\users', '/api/users']);
 /// // Result: true (all represent the same path)
-///
 /// bool isDifferent = pathsEqual(['/api/users', '/api/posts']);
 /// // Result: false (different endpoints)
 /// ```
@@ -162,10 +143,8 @@ bool pathsEqual(
 }
 
 /// Retrieves the base directory path of the application.
-///
 /// This getter uses the script path from [Platform.script] and navigates up two levels
 /// to return the root application path.
-///
 /// Example usage:
 /// ```dart
 /// String appPath = pathApp;

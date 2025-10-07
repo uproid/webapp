@@ -5,10 +5,8 @@ import 'package:path/path.dart' as p;
 
 /// A class that manages the loading and parsing of multi-language JSON files
 /// from a specified directory path.
-///
 /// The [MultiLanguage] class provides functionality to load, read, and parse
 /// JSON files to create a map structure representing different language data.
-///
 /// Example usage:
 /// ```dart
 /// final multiLanguage = MultiLanguage('/path/to/languages');

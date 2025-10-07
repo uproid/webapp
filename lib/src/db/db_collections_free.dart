@@ -9,13 +9,11 @@ import 'package:webapp/wa_tools.dart';
 import 'package:webapp/wa_ui.dart';
 
 /// An abstract class representing a MongoDB collection with utility methods.
-///
 /// The [DBCollectionFree] class provides an abstraction over a MongoDB collection,
 /// offering various methods to interact with the database, such as checking for
 /// the existence of a document by its ID, updating fields, form validation,
 /// and generating REST API routes. This class is meant to be extended by other
 /// classes for more specific collection implementations.
-///
 /// Features include:
 /// - Document CRUD operations (Create, Read, Update, Delete)
 /// - Form validation using [DBFormFree]
@@ -29,11 +27,9 @@ abstract class DBCollectionFree {
   static final List<DBCollectionFree> _allCollectionFree = [];
 
   /// Prints the design and structure of all registered collections.
-  ///
   /// This static method provides a comprehensive overview of all collection
   /// instances, including their fields, counts, events, and indexes.
   /// The output is displayed as JSON format using [Console.json].
-  ///
   /// This is useful for debugging and understanding the database schema
   /// during development.
   static void printDesign() async {
@@ -91,23 +87,19 @@ abstract class DBCollectionFree {
   Db db;
 
   /// Provides direct access to the underlying MongoDB collection.
-  ///
   /// The collection is retrieved using the `db.collection(name)` method.
   DbCollection get collection => db.collection(name);
 
   /// Constructor to initialize the collection with required parameters.
-  ///
   /// Creates a new database collection instance and automatically handles:
   /// - Collection registration in the global list
   /// - Collection creation if it doesn't exist in the database
   /// - Index renewal and management
-  ///
   /// Parameters:
   /// * [name] - The name of the MongoDB collection
   /// * [db] - The MongoDB database instance
   /// * [form] - The form definition with field validators
   /// * [indexes] - Optional map of database indexes to create
-  ///
   /// Example:
   /// ```dart
   /// final userCollection = UserCollection(
@@ -134,12 +126,10 @@ abstract class DBCollectionFree {
   }
 
   /// Renews and recreates all indexes defined for this collection.
-  ///
   /// This private method:
   /// 1. Drops all existing indexes
   /// 2. Creates new indexes based on the [indexes] map
   /// 3. Assigns default names if not provided
-  ///
   /// This is automatically called during collection initialization.
   void _renewIndexes() async {
     if (indexes.isNotEmpty) {
@@ -169,11 +159,9 @@ abstract class DBCollectionFree {
   }
 
   /// Creates a database index on the collection.
-  ///
   /// This method creates a new index on the MongoDB collection with the
   /// specified options. Indexes improve query performance and can enforce
   /// uniqueness constraints.
-  ///
   /// Parameters:
   /// * [key] - Single field name to index (alternative to [keys])
   /// * [keys] - Map of field names and index direction (1 for ascending, -1 for descending)
@@ -185,12 +173,9 @@ abstract class DBCollectionFree {
   /// * [name] - Custom name for the index
   /// * [modernReply] - Whether to use modern reply format
   /// * [collation] - Collation options for the index
-  ///
   /// Returns a map containing the result of the index creation operation.
-  ///
   /// Throws [MongoDartError] if the MongoDB server doesn't support OpMsg.
   /// Throws [ArgumentError] if both [key] and [keys] are provided, or if neither is provided.
-  ///
   /// Example:
   /// ```dart
   /// await collection.createIndex(
@@ -260,25 +245,20 @@ abstract class DBCollectionFree {
   }
 
   /// Validates data against the form definition.
-  ///
   /// Performs comprehensive validation of input data based on the validators
   /// defined in the collection's form. This method can validate all fields
   /// or only specific fields if specified.
-  ///
   /// Parameters:
   /// * [data] - The data to validate as a map of field names to values
   /// * [onlyCheckKeys] - Optional list of specific field names to validate.
   ///   If empty, all fields in the data will be validated.
-  ///
   /// Returns a [FormResultFree] containing validation results and processed data.
-  ///
   /// Example:
   /// ```dart
   /// var result = await collection.validate({
   ///   'name': 'John Doe',
   ///   'email': 'john@example.com',
   /// });
-  ///
   /// if (result.success) {
   ///   print('Data is valid');
   /// } else {
@@ -296,18 +276,14 @@ abstract class DBCollectionFree {
   }
 
   /// Inserts a new document into the collection.
-  ///
   /// This method validates the data before insertion and triggers the
   /// [CollectionEvent.onInsert] event if the insertion is successful.
-  ///
   /// Parameters:
   /// * [data] - The document data to insert as a map of field names to values
-  ///
   /// Returns a [FormResultFree] containing:
   /// - Validation results
   /// - The inserted document with generated ID (if successful)
   /// - Error information (if validation or insertion fails)
-  ///
   /// Example:
   /// ```dart
   /// var result = await collection.insert({
@@ -315,7 +291,6 @@ abstract class DBCollectionFree {
   ///   'email': 'jane@example.com',
   ///   'age': 30,
   /// });
-  ///
   /// if (result.success) {
   ///   print('Inserted with ID: ${result.formValues()['_id']}');
   /// }
@@ -336,19 +311,15 @@ abstract class DBCollectionFree {
   }
 
   /// Replaces an entire document by its ID.
-  ///
   /// This method completely replaces the existing document with new data,
   /// after validating the new data. The document must exist for the operation
   /// to succeed. Triggers [CollectionEvent.onUpdate] if successful.
-  ///
   /// Parameters:
   /// * [id] - The string representation of the document's ObjectId
   /// * [data] - The new document data to replace the existing document
-  ///
   /// Returns:
   /// - [FormResultFree] containing the updated document if successful
   /// - `null` if the document ID is invalid or doesn't exist
-  ///
   /// Example:
   /// ```dart
   /// var result = await collection.replaceOne('507f1f77bcf86cd799439011', {
@@ -356,7 +327,6 @@ abstract class DBCollectionFree {
   ///   'email': 'john.smith@example.com',
   ///   'age': 35,
   /// });
-  ///
   /// if (result?.success == true) {
   ///   print('Document replaced successfully');
   /// }
@@ -389,27 +359,22 @@ abstract class DBCollectionFree {
   }
 
   /// Merges new data with an existing document by its ID.
-  ///
   /// This method performs a partial update by merging the provided data
   /// with the existing document. Only the specified fields are validated
   /// and updated, while other fields remain unchanged. Triggers
   /// [CollectionEvent.onUpdate] if successful.
-  ///
   /// Parameters:
   /// * [id] - The string representation of the document's ObjectId
   /// * [data] - The partial data to merge with the existing document
-  ///
   /// Returns:
   /// - [FormResultFree] containing the merged document if successful
   /// - `null` if the document doesn't exist
-  ///
   /// Example:
   /// ```dart
   /// var result = await collection.mergeOne('507f1f77bcf86cd799439011', {
   ///   'email': 'newemail@example.com',  // Only update email
   ///   'lastLogin': DateTime.now(),      // Add new field
   /// });
-  ///
   /// if (result?.success == true) {
   ///   print('Document merged successfully');
   /// }
@@ -452,23 +417,18 @@ abstract class DBCollectionFree {
   }
 
   /// Gets the count of documents in the collection.
-  ///
   /// This method returns the total number of documents matching the specified
   /// criteria. If no criteria are provided, it returns the total count of
   /// all documents in the collection.
-  ///
   /// Parameters:
   /// * [field] - Optional field name to filter by
   /// * [value] - Optional value to match for the specified field
   /// * [filter] - Optional additional filter criteria
-  ///
   /// Returns the number of matching documents.
-  ///
   /// Example:
   /// ```dart
   /// // Get total count
   /// int total = await collection.getCount();
-  ///
   /// // Get count of active users
   /// int activeUsers = await collection.getCount(
   ///   field: 'status',
@@ -489,11 +449,9 @@ abstract class DBCollectionFree {
   }
 
   /// Retrieves multiple documents from the collection with flexible options.
-  ///
   /// This method provides comprehensive querying capabilities including
   /// filtering, sorting, pagination, and field projection. The results
   /// are automatically processed through the form validation system.
-  ///
   /// Parameters:
   /// * [selector] - Query selector for filtering documents
   /// * [filter] - Additional filter criteria
@@ -505,9 +463,7 @@ abstract class DBCollectionFree {
   /// * [hintDocument] - Document-based index hint
   /// * [projection] - Fields to include/exclude in results
   /// * [rawOptions] - Raw MongoDB query options
-  ///
   /// Returns a list of documents as maps, processed through form validation.
-  ///
   /// Example:
   /// ```dart
   /// var users = await collection.getAll(
@@ -559,16 +515,12 @@ abstract class DBCollectionFree {
   }
 
   /// Checks if a document with the given ID exists in the collection.
-  ///
   /// This method validates the ID format and checks for document existence.
   /// The [idField] should be a valid MongoDB ObjectId string representation.
-  ///
   /// Parameters:
   /// * [idField] - String representation of the MongoDB ObjectId
-  ///
   /// Returns `true` if the document exists, `false` if it doesn't exist
   /// or if the ID format is invalid.
-  ///
   /// Example:
   /// ```dart
   /// bool exists = await collection.existId('507f1f77bcf86cd799439011');
@@ -582,16 +534,12 @@ abstract class DBCollectionFree {
   }
 
   /// Checks if a document with the given ObjectId exists in the collection.
-  ///
   /// This method performs the actual existence check using the MongoDB
   /// ObjectId directly, providing better performance than string-based checks.
-  ///
   /// Parameters:
   /// * [id] - The MongoDB ObjectId to check
-  ///
   /// Returns `true` if the document exists, `false` if it doesn't exist
   /// or if the ID is null.
-  ///
   /// Example:
   /// ```dart
   /// var objectId = ObjectId.fromHexString('507f1f77bcf86cd799439011');
@@ -604,16 +552,12 @@ abstract class DBCollectionFree {
   }
 
   /// Deletes a document from the collection by its ID.
-  ///
   /// This method validates the ID format and attempts to delete the
   /// corresponding document. Triggers [CollectionEvent.onDelete] if successful.
-  ///
   /// Parameters:
   /// * [id] - String representation of the MongoDB ObjectId to delete
-  ///
   /// Returns `true` if the deletion was successful, `false` if the ID
   /// is invalid or the document doesn't exist.
-  ///
   /// Example:
   /// ```dart
   /// bool deleted = await collection.delete('507f1f77bcf86cd799439011');
@@ -631,16 +575,12 @@ abstract class DBCollectionFree {
   }
 
   /// Deletes a document from the collection by its ObjectId.
-  ///
   /// This method performs the actual deletion using the MongoDB ObjectId
   /// directly. It retrieves the document before deletion to trigger the
   /// [CollectionEvent.onDelete] event with the deleted document data.
-  ///
   /// Parameters:
   /// * `oid` - The MongoDB ObjectId of the document to delete
-  ///
   /// Returns `true` if the deletion was successful, `false` otherwise.
-  ///
   /// Example:
   /// ```dart
   /// var objectId = ObjectId.fromHexString('507f1f77bcf86cd799439011');
@@ -657,16 +597,12 @@ abstract class DBCollectionFree {
   }
 
   /// Creates a copy of a document by its ID and inserts it as a new document.
-  ///
   /// This method retrieves an existing document, removes its `_id` field,
   /// and inserts it as a new document with a newly generated ObjectId.
   /// Triggers [CollectionEvent.onInsert] if the copy operation is successful.
-  ///
   /// Parameters:
   /// * [id] - String representation of the source document's ObjectId
-  ///
   /// The method silently fails if the ID is invalid or the document doesn't exist.
-  ///
   /// Example:
   /// ```dart
   /// await collection.copy('507f1f77bcf86cd799439011');
@@ -687,21 +623,17 @@ abstract class DBCollectionFree {
   }
 
   /// Updates a specific field of a document by its ID.
-  ///
   /// This method validates the new field value using the form definition
   /// before updating the document. Only the specified field is validated
   /// and updated. Triggers [CollectionEvent.onUpdate] if successful.
-  ///
   /// Parameters:
   /// * [id] - String representation of the document's ObjectId
   /// * [field] - Name of the field to update
   /// * [value] - New value for the field
-  ///
   /// Returns:
   /// - [FormResultFree] containing the updated document if successful
   /// - `null` if the document ID is invalid, doesn't exist, or the field
   ///   is not defined in the form
-  ///
   /// Example:
   /// ```dart
   /// var result = await collection.updateField(
@@ -709,7 +641,6 @@ abstract class DBCollectionFree {
   ///   'status',
   ///   'inactive'
   /// );
-  ///
   /// if (result?.success == true) {
   ///   print('Field updated successfully');
   /// }
@@ -745,17 +676,13 @@ abstract class DBCollectionFree {
   }
 
   /// Retrieves a single document by its ID.
-  ///
   /// This method converts the string ID to an ObjectId and delegates
   /// to [getByOid] for the actual retrieval. The returned document
   /// is processed through form validation.
-  ///
   /// Parameters:
   /// * [id] - String representation of the document's ObjectId
-  ///
   /// Returns the document as a map if found, `null` if not found or
   /// if the ID format is invalid.
-  ///
   /// Example:
   /// ```dart
   /// var user = await collection.getById('507f1f77bcf86cd799439011');
@@ -769,17 +696,13 @@ abstract class DBCollectionFree {
   }
 
   /// Retrieves a single document by its ObjectId.
-  ///
   /// This method performs the actual document retrieval using the MongoDB
   /// ObjectId directly. The returned document is processed through the
   /// form validation system to ensure proper data formatting.
-  ///
   /// Parameters:
   /// * `oid` - The MongoDB ObjectId of the document to retrieve
-  ///
   /// Returns the document as a map if found, `null` if not found or
   /// if the ObjectId is null.
-  ///
   /// Example:
   /// ```dart
   /// var objectId = ObjectId.fromHexString('507f1f77bcf86cd799439011');
@@ -798,17 +721,13 @@ abstract class DBCollectionFree {
   }
 
   /// Converts a raw MongoDB document to a validated model.
-  ///
   /// This method processes a document through the form validation system
   /// to ensure proper data types and formatting. Optionally filters the
   /// result to include only selected fields.
-  ///
   /// Parameters:
   /// * [document] - The raw MongoDB document to process
   /// * [selectedFields] - Optional list of field names to include in the result
-  ///
   /// Returns a map containing the validated and formatted document data.
-  ///
   /// Example:
   /// ```dart
   /// var rawDoc = await collection.collection.findOne({'_id': objectId});
@@ -827,16 +746,12 @@ abstract class DBCollectionFree {
   }
 
   /// Converts a raw MongoDB document to a FormResultFree object.
-  ///
   /// This method processes a document through the form validation system
   /// and returns the complete validation result, which includes both the
   /// processed data and any validation information.
-  ///
   /// Parameters:
   /// * [document] - The raw MongoDB document to process
-  ///
   /// Returns a [FormResultFree] containing validation results and processed data.
-  ///
   /// Example:
   /// ```dart
   /// var rawDoc = await collection.collection.findOne({'_id': objectId});
@@ -850,22 +765,17 @@ abstract class DBCollectionFree {
   }
 
   /// Generates search and filter criteria based on form field definitions.
-  ///
   /// This method creates MongoDB query filters based on:
   /// - Searchable fields: Creates text-based search using regex patterns
   /// - Filterable fields: Creates exact-match filters for specific values
-  ///
   /// Parameters:
   /// * [inputs] - Input data containing search terms and filter values
   /// * [searchFiled] - Name of the field containing the search term (default: 'search')
-  ///
   /// Returns a MongoDB query filter object that can be used in find operations.
-  ///
   /// The method automatically:
   /// - Builds OR conditions for searchable fields using regex patterns
   /// - Builds AND conditions for filterable fields using exact matches
   /// - Combines search and filter conditions appropriately
-  ///
   /// Example:
   /// ```dart
   /// var filter = collection.getSearchableFilter(
@@ -929,18 +839,15 @@ abstract class DBCollectionFree {
   }
 
   /// Generates a complete set of REST API routes for this collection.
-  ///
   /// This method creates standard CRUD (Create, Read, Update, Delete) routes
   /// for the collection, providing a full REST API interface. Each route type
   /// can be individually enabled or disabled.
-  ///
   /// Generated routes:
   /// - `GET /path` - List all documents (with optional pagination)
   /// - `GET /path/{id}` - Get single document by ID
   /// - `POST /path` - Create new document
   /// - `POST /path/{id}` - Update existing document
   /// - `GET /path/delete/{id}` - Delete document by ID
-  ///
   /// Parameters:
   /// * [path] - Base URL path for the API routes
   /// * [useRouteAll] - Enable/disable the get all documents route
@@ -958,9 +865,7 @@ abstract class DBCollectionFree {
   /// * [docUpdate] - Optional API documentation generator for update route
   /// * [docOne] - Optional API documentation generator for get one route
   /// * [children] - Additional child routes to include
-  ///
   /// Returns a list of [WebRoute] objects ready to be registered with the router.
-  ///
   /// Example:
   /// ```dart
   /// var apiRoutes = userCollection.routes('/api/users');
@@ -1011,17 +916,14 @@ abstract class DBCollectionFree {
   }
 
   /// Creates a route for retrieving all documents in the collection.
-  ///
   /// This method generates a REST API endpoint that handles listing all
   /// documents in the collection with support for:
   /// - Search functionality across searchable fields
   /// - Filtering by filterable fields
   /// - Pagination with customizable page sizes
   /// - Sorting by any field
-  ///
   /// The route automatically handles query parameters for pagination,
   /// search terms, and filters based on the form field definitions.
-  ///
   /// Parameters:
   /// * [path] - URL path for this route
   /// * [methods] - HTTP methods to accept (default: GET)
@@ -1038,9 +940,7 @@ abstract class DBCollectionFree {
   /// * [pageSize] - Default page size
   /// * [orderReverse] - Default sort order
   /// * [orderBy] - Default sort field
-  ///
   /// Returns a [WebRoute] configured for listing documents.
-  ///
   /// Example response:
   /// ```json
   /// {
@@ -1129,12 +1029,10 @@ abstract class DBCollectionFree {
   }
 
   /// Creates a route for inserting new documents into the collection.
-  ///
   /// This method generates a REST API endpoint that handles document creation
   /// with automatic form validation. The route processes POST requests containing
   /// document data, validates it against the form definition, and inserts it
   /// into the collection.
-  ///
   /// Parameters:
   /// * [path] - URL path for this route
   /// * [methods] - HTTP methods to accept (default: POST)
@@ -1146,9 +1044,7 @@ abstract class DBCollectionFree {
   /// * [params] - Additional route parameters
   /// * [permissions] - Required permissions for access
   /// * [ports] - Specific ports to match
-  ///
   /// Returns a [WebRoute] configured for creating documents.
-  ///
   /// Success response (201):
   /// ```json
   /// {
@@ -1157,7 +1053,6 @@ abstract class DBCollectionFree {
   ///   "data": {"_id": "...", "name": "..."}
   /// }
   /// ```
-  ///
   /// Error response (502):
   /// ```json
   /// {
@@ -1216,16 +1111,13 @@ abstract class DBCollectionFree {
   }
 
   /// Creates a route for updating existing documents in the collection.
-  ///
   /// This method generates a REST API endpoint that handles document updates
   /// via complete replacement. The route expects a document ID in the URL path
   /// and processes POST requests containing the new document data.
-  ///
   /// The update operation:
   /// - Validates the new data against the form definition
   /// - Replaces the entire document (not a partial update)
   /// - Triggers the onUpdate event if successful
-  ///
   /// Parameters:
   /// * [path] - URL path for this route (should include {id} placeholder)
   /// * [methods] - HTTP methods to accept (default: POST)
@@ -1237,9 +1129,7 @@ abstract class DBCollectionFree {
   /// * [params] - Additional route parameters
   /// * [permissions] - Required permissions for access
   /// * [ports] - Specific ports to match
-  ///
   /// Returns a [WebRoute] configured for updating documents.
-  ///
   /// Success response (200):
   /// ```json
   /// {
@@ -1248,7 +1138,6 @@ abstract class DBCollectionFree {
   ///   "data": {"_id": "...", "name": "..."}
   /// }
   /// ```
-  ///
   /// Error responses:
   /// - 404: Document not found
   /// - 502: Validation errors or missing ID
@@ -1323,16 +1212,13 @@ abstract class DBCollectionFree {
   }
 
   /// Creates a route for deleting documents from the collection.
-  ///
   /// This method generates a REST API endpoint that handles document deletion
   /// by ID. The route expects a document ID in the URL path and processes
   /// GET requests to delete the specified document.
-  ///
   /// The delete operation:
   /// - Validates the document ID format
   /// - Checks if the document exists
   /// - Triggers the onDelete event if successful
-  ///
   /// Parameters:
   /// * [path] - URL path for this route (should include {id} placeholder)
   /// * [methods] - HTTP methods to accept (default: GET)
@@ -1344,9 +1230,7 @@ abstract class DBCollectionFree {
   /// * [params] - Additional route parameters
   /// * [permissions] - Required permissions for access
   /// * [ports] - Specific ports to match
-  ///
   /// Returns a [WebRoute] configured for deleting documents.
-  ///
   /// Success response (200):
   /// ```json
   /// {
@@ -1354,7 +1238,6 @@ abstract class DBCollectionFree {
   ///   "message": "deleted"
   /// }
   /// ```
-  ///
   /// Error responses:
   /// - 404: Document not found
   /// - 502: Missing or invalid ID
@@ -1417,16 +1300,13 @@ abstract class DBCollectionFree {
   }
 
   /// Creates a route for retrieving a single document by its ID.
-  ///
   /// This method generates a REST API endpoint that handles fetching individual
   /// documents from the collection. The route expects a document ID in the URL
   /// path and processes GET requests to return the specified document.
-  ///
   /// The retrieval operation:
   /// - Validates the document ID format
   /// - Fetches the document if it exists
   /// - Processes the document through form validation for consistent formatting
-  ///
   /// Parameters:
   /// * [path] - URL path for this route (should include {id} placeholder)
   /// * [methods] - HTTP methods to accept (default: GET)
@@ -1438,9 +1318,7 @@ abstract class DBCollectionFree {
   /// * [params] - Additional route parameters
   /// * [permissions] - Required permissions for access
   /// * [ports] - Specific ports to match
-  ///
   /// Returns a [WebRoute] configured for retrieving individual documents.
-  ///
   /// Success response (200):
   /// ```json
   /// {
@@ -1449,7 +1327,6 @@ abstract class DBCollectionFree {
   ///   "data": {"_id": "...", "name": "...", "email": "..."}
   /// }
   /// ```
-  ///
   /// Error responses:
   /// - 404: Document not found
   /// - 502: Missing or invalid ID
@@ -1514,85 +1391,70 @@ abstract class DBCollectionFree {
 }
 
 /// Event management system for database collection operations.
-///
 /// This class provides event handling capabilities for database operations,
 /// allowing you to register listeners that are called when documents are
 /// inserted, updated, or deleted from a collection.
-///
 /// Each event type supports both synchronous and asynchronous listeners,
 /// making it flexible for various use cases such as:
 /// - Logging database operations
 /// - Triggering side effects (like sending notifications)
 /// - Maintaining data consistency across related collections
 /// - Caching updates
-///
 /// Example:
 /// ```dart
 /// collection.collectionEvent.onInsert.addListener((document) {
 ///   print('New document inserted: ${document['_id']}');
 /// });
-///
 /// collection.collectionEvent.onUpdate.addAsyncListener((document) async {
 ///   await updateSearchIndex(document);
 /// });
 /// ```
 class CollectionEvent {
   /// Event triggered when a document is inserted into the collection.
-  ///
   /// Listeners receive the complete inserted document as a parameter,
   /// including the generated `_id` field.
   final Event<Map<String, Object?>> onInsert = Event<Map<String, Object?>>();
 
   /// Event triggered when a document is updated in the collection.
-  ///
   /// Listeners receive the complete updated document as a parameter,
   /// with all current field values.
   final Event<Map<String, Object?>> onUpdate = Event<Map<String, Object?>>();
 
   /// Event triggered when a document is deleted from the collection.
-  ///
   /// Listeners receive the document that was deleted as a parameter,
   /// allowing access to the data before it was removed.
   final Event<Map<String, Object?>> onDelete = Event<Map<String, Object?>>();
 }
 
 /// Type definition for synchronous event listener functions.
-///
 /// These functions are called immediately when an event is emitted
 /// and should complete quickly to avoid blocking the event emission process.
 typedef EventFunction<R> = void Function(R data);
 
 /// Type definition for asynchronous event listener functions.
-///
 /// These functions can perform async operations and are awaited during
 /// event emission, which means they can delay the completion of the
 /// database operation that triggered the event.
 typedef EventAsyncFunction<R> = Future<void> Function(R data);
 
 /// Generic event system for handling typed events with multiple listeners.
-///
 /// This class provides a flexible event system that supports both synchronous
 /// and asynchronous listeners. Events can be emitted with typed data, and all
 /// registered listeners will be called in the order they were added.
-///
 /// Features:
 /// - Type-safe event data
 /// - Support for both sync and async listeners
 /// - Sequential execution of listeners
 /// - Return count of executed listeners
-///
 /// Example:
 /// ```dart
 /// var userCreated = Event<User>();
-///
 /// userCreated.addListener((user) {
 ///   print('User created: ${user.name}');
 /// });
-///
 /// userCreated.addAsyncListener((user) async {
 ///   await sendWelcomeEmail(user);
 /// });
-///
 /// await userCreated.emit(newUser);
 /// ```
 class Event<T> {
@@ -1603,15 +1465,11 @@ class Event<T> {
   final List<EventAsyncFunction<T>> _asyncListeners = [];
 
   /// Adds a synchronous listener to the event.
-  ///
   /// Synchronous listeners are called immediately and should complete quickly.
   /// They are executed before any asynchronous listeners.
-  ///
   /// Parameters:
   /// * [listener] - The function to call when the event is emitted
-  ///
   /// Returns this [Event] instance for method chaining.
-  ///
   /// Example:
   /// ```dart
   /// event.addListener((data) => print('Event: $data'))
@@ -1623,16 +1481,12 @@ class Event<T> {
   }
 
   /// Adds an asynchronous listener to the event.
-  ///
   /// Asynchronous listeners can perform async operations and are awaited
   /// during event emission. They are executed after all synchronous listeners
   /// have completed.
-  ///
   /// Parameters:
   /// * [listener] - The async function to call when the event is emitted
-  ///
   /// Returns this [Event] instance for method chaining.
-  ///
   /// Example:
   /// ```dart
   /// event.addAsyncListener((data) async => await saveToDatabase(data))
@@ -1644,16 +1498,12 @@ class Event<T> {
   }
 
   /// Emits the event, calling all registered listeners.
-  ///
   /// This method executes all synchronous listeners first, then all
   /// asynchronous listeners. Asynchronous listeners are awaited, so this
   /// method will not complete until all listeners have finished executing.
-  ///
   /// Parameters:
   /// * [data] - The data to pass to all listeners
-  ///
   /// Returns the total number of listeners that were executed.
-  ///
   /// Example:
   /// ```dart
   /// int listenerCount = await event.emit(userData);
@@ -1677,16 +1527,13 @@ class Event<T> {
 }
 
 /// Utility class for parsing and processing MongoDB error responses.
-///
 /// This class provides static methods to analyze MongoDB operation errors
 /// and convert them into a more accessible format. It's particularly useful
 /// for handling write errors that occur during insert, update, or delete
 /// operations.
-///
 /// The class can extract field-specific errors from MongoDB's error response
 /// format, making it easier to provide meaningful error messages to users
 /// and identify which fields caused validation or constraint violations.
-///
 /// Example:
 /// ```dart
 /// // After a failed MongoDB operation
@@ -1697,22 +1544,17 @@ class Event<T> {
 /// ```
 class MongoErrorResponse {
   /// Analyzes MongoDB error responses and extracts field-specific errors.
-  ///
   /// This method processes MongoDB write error responses and groups them by
   /// the fields that caused the errors. It's particularly useful for handling
   /// constraint violations, duplicate key errors, and validation failures.
-  ///
   /// The method looks for:
   /// - Write errors in the response
   /// - Error codes and their corresponding messages
   /// - Key patterns to identify affected fields
-  ///
   /// Parameters:
   /// * [response] - List of MongoDB server response objects
-  ///
   /// Returns a map where keys are field names and values are lists of
   /// error messages for those fields.
-  ///
   /// Example:
   /// ```dart
   /// var errors = MongoErrorResponse.discoverError(responses);
@@ -1750,11 +1592,9 @@ class MongoErrorResponse {
 }
 
 /// Configuration class for MongoDB database indexes.
-///
 /// This class encapsulates all the configuration options needed to create
 /// a MongoDB index. It provides a convenient way to define index properties
 /// that will be used when creating indexes on collection fields.
-///
 /// MongoDB indexes improve query performance and can enforce constraints
 /// like uniqueness. This class supports all major index options including:
 /// - Single field and compound indexes
@@ -1763,7 +1603,6 @@ class MongoErrorResponse {
 /// - Partial indexes with filter expressions
 /// - Background index creation
 /// - Custom collation for text sorting
-///
 /// Example:
 /// ```dart
 /// var emailIndex = DBIndex(
@@ -1771,7 +1610,6 @@ class MongoErrorResponse {
 ///   unique: true,
 ///   sparse: true,
 /// );
-///
 /// var compoundIndex = DBIndex(
 ///   keys: {'category': 1, 'createdAt': -1},
 ///   name: 'category_date_idx',
@@ -1779,69 +1617,57 @@ class MongoErrorResponse {
 /// ```
 class DBIndex {
   /// Single field name to index (alternative to [keys]).
-  ///
   /// Use this for simple single-field indexes. Cannot be used together
   /// with the [keys] parameter.
   String? key;
 
   /// Map defining compound index fields and their sort order.
-  ///
   /// Keys are field names, values are:
   /// - 1 for ascending order
   /// - -1 for descending order
-  ///
   /// Example: `{'name': 1, 'age': -1}` creates an index on name (ascending)
   /// and age (descending).
   Map<String, dynamic>? keys;
 
   /// Whether the index should enforce uniqueness constraint.
-  ///
   /// When true, MongoDB will reject documents that would create duplicate
   /// values for the indexed field(s).
   bool? unique;
 
   /// Whether to create a sparse index.
-  ///
   /// Sparse indexes only contain entries for documents that have the indexed
   /// field, ignoring documents where the field is null or missing.
   bool? sparse;
 
   /// Whether to build the index in the background.
-  ///
   /// Background index builds don't block database operations but may take
   /// longer to complete.
   bool? background;
 
   /// Whether to drop duplicate documents during index creation.
-  ///
   /// This option is deprecated in newer MongoDB versions.
   bool? dropDups;
 
   /// Filter expression for partial indexes.
-  ///
   /// Partial indexes only index documents that meet the specified filter
   /// criteria, reducing index size and improving performance.
   Map<String, dynamic>? partialFilterExpression;
 
   /// Custom name for the index.
-  ///
   /// If not provided, MongoDB generates a name based on the field names
   /// and sort order.
   String? name;
 
   /// Whether to use modern reply format for index creation.
-  ///
   /// This affects the response format from the index creation operation.
   bool? modernReply;
 
   /// Collation specification for the index.
-  ///
   /// Collation allows you to specify language-specific rules for string
   /// comparison, such as case sensitivity and accent sensitivity.
   Map<dynamic, dynamic>? collation;
 
   /// Creates a new database index configuration.
-  ///
   /// Parameters:
   /// * [key] - Single field to index (cannot be used with [keys])
   /// * [keys] - Compound index field specification (cannot be used with [key])

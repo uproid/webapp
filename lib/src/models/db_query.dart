@@ -2,12 +2,10 @@ import 'package:webapp/wa_tools.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 
 /// A utility class for building MongoDB queries.
-///
 /// The [DQ] class provides a set of static methods to construct MongoDB-compatible queries
 /// in a more readable and structured way. It allows for easy creation of complex queries
 /// with operations such as equality checks, logical operations (`\$or`, `\$and`), pattern matching,
 /// and aggregation commands like grouping and sorting.
-///
 /// Example Usage:
 /// ```dart
 /// var query = DQ.and([

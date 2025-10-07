@@ -1,7 +1,6 @@
 import 'package:mongo_dart/mongo_dart.dart';
 
 /// An abstract class that represents a database model with serialization capabilities.
-///
 /// The [DBModel] class provides a blueprint for creating database models that can be converted into a map
 /// of parameters for MongoDB operations. It also provides a utility method to convert a list of such models
 /// into a list of maps, which can be useful for batch operations.

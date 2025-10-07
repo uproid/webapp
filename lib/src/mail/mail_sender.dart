@@ -3,7 +3,6 @@ import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
 
 /// A utility class for sending emails using SMTP.
-///
 /// The `MailSender` class provides a simple interface for sending emails using
 /// the `mailer` package. It allows specifying various email properties and
 /// SMTP server configurations, making it easy to send emails programmatically.

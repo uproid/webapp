@@ -2,11 +2,9 @@ import 'package:webapp/src/router/wa_controller.dart';
 
 /// The `WaAuthController` is an abstract class that defines authentication and
 /// authorization methods for a web application.
-///
 /// This controller handles common tasks like login, registration, authentication
 /// checks, and user session management. It extends the [WaController] and provides
 /// methods that can be overridden to customize authentication logic.
-///
 /// The type parameter `T` represents the user model or object being used in the
 /// authentication process.
 abstract class WaAuthController<T> extends WaController {
@@ -87,7 +85,6 @@ abstract class WaAuthController<T> extends WaController {
 
 /// The `Permissions` class provides a set of predefined constants representing
 /// user permission levels.
-///
 /// These constants can be used to check and assign different permission levels
 /// within the authentication logic.
 /// You can define custom permission levels by extending this class.

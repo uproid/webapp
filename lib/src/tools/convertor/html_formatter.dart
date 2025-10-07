@@ -1,5 +1,4 @@
 /// A utility class for formatting HTML strings with proper indentation and line breaks.
-///
 /// This formatter preserves the exact HTML content and functionality while making
 /// it more readable by adding appropriate formatting.
 class HtmlFormatter {

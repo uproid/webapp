@@ -5,7 +5,6 @@ import 'mode_less_array.dart';
 import 'model_less.dart';
 
 /// Extension on [Map] that provides utility methods for type conversion and data extraction.
-///
 /// This extension adds methods to safely extract and convert values from a map with default values if the key is not found or if the value cannot be converted.
 extension MapFormatHelper on Map {
   /// Retrieves the integer value associated with the [key]. If the key does not exist or the value cannot be parsed as an integer, returns the [def] value.

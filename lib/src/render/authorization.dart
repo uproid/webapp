@@ -1,7 +1,6 @@
 import 'package:webapp/src/tools/convertor/convert_strings.dart';
 
 /// Represents an authorization scheme used for authentication.
-///
 /// The [Authorization] class is designed to handle different types of authorization schemes.
 /// It provides methods to parse authorization headers and extract credentials based on the
 /// specified authentication type.
@@ -92,7 +91,6 @@ class Authorization {
 }
 
 /// Enumeration representing different types of authorization schemes.
-///
 /// - `none`: No authorization.
 enum AuthType {
   none, // No authorization

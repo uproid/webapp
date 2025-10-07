@@ -7,7 +7,6 @@ import 'package:webapp/src/tools/path.dart';
 import 'package:webapp/wa_mysql.dart';
 
 /// A class for handling MySQL database migrations.
-///
 /// This class provides functionality to create, execute, and rollback
 /// database migrations using SQL files stored in a migrations directory.
 /// It maintains a migration history table to track which migrations
@@ -17,12 +16,10 @@ class MysqlMigration {
   MySQLConnection db;
 
   /// Creates a new [MysqlMigration] instance with the provided database connection.
-  ///
   /// [db] The MySQL connection to use for migration operations.
   MysqlMigration(this.db);
 
   /// The migration tracking table structure.
-  ///
   /// This table keeps track of executed migrations with the following fields:
   /// - `file`: The name of the migration SQL file (primary key)
   /// - `created_at`: Timestamp when the migration was executed
@@ -55,7 +52,6 @@ class MysqlMigration {
   );
 
   /// Creates the migration tracking table if it doesn't exist.
-  ///
   /// This is a private method called internally to ensure the migration
   /// table exists before performing any migration operations.
   Future<void> _createTable() async {
@@ -66,17 +62,14 @@ class MysqlMigration {
   }
 
   /// Initializes and executes all pending migrations.
-  ///
   /// This method:
   /// 1. Creates the migration table if it doesn't exist
   /// 2. Scans the migrations directory for SQL files
   /// 3. Executes any migrations that haven't been run yet
   /// 4. Records executed migrations in the tracking table
-  ///
   /// Migration files should contain SQL statements followed by an optional
   /// rollback section marked with `-- ## ROLL BACK:`. Only the portion
   /// before the rollback marker is executed during migration.
-  ///
   /// Returns a success message listing the executed migration files,
   /// or a message indicating no migrations were needed.
   Future<List<String>> migrateInit() async {
@@ -106,17 +99,13 @@ class MysqlMigration {
   }
 
   /// Rolls back the most recent migrations.
-  ///
   /// This method:
   /// 1. Identifies the most recently executed migrations
   /// 2. Executes the rollback SQL statements for each migration
   /// 3. Removes the migration records from the tracking table
-  ///
   /// [deep] The number of migrations to roll back (starting from most recent)
-  ///
   /// Migration files must contain a rollback section marked with
   /// `-- ## ROLL BACK:` followed by the SQL statements to undo the migration.
-  ///
   /// Returns a success message listing the rolled back migration files.
   Future<String> migrateRollback(int deep) async {
     List<String> successRollbackFiles = [];
@@ -164,15 +153,12 @@ class MysqlMigration {
   }
 
   /// Creates a new migration file template.
-  ///
   /// This method generates a new SQL migration file in the migrations directory
   /// with a timestamp-based filename. The file contains a basic template with
   /// sections for:
   /// - Migration SQL statements (-- ## NEW VERSION:)
   /// - Rollback SQL statements (-- ## ROLL BACK:)
-  ///
   /// The filename format is: `{timestamp}_migration.sql`
-  ///
   /// Returns a success message with the path of the created file.
   Future<String> migrateCreate() async {
     File file = File(
@@ -193,9 +179,7 @@ class MysqlMigration {
   }
 
   /// Checks if a migration file has already been executed.
-  ///
   /// [filename] The name of the migration file to check
-  ///
   /// Returns `true` if the migration has been executed, `false` otherwise.
   Future<bool> checkExcutedMigration(String filename) async {
     var query = Sqler()
@@ -214,15 +198,12 @@ class MysqlMigration {
   }
 
   /// Retrieves all migration files from the migrations directory.
-  ///
   /// This method:
   /// 1. Scans the `./migrations` directory for files
   /// 2. Filters for files with `.sql` extension
   /// 3. Sorts them alphabetically by filename
-  ///
   /// The alphabetical sorting ensures migrations are executed in the correct
   /// order based on their timestamp prefixes.
-  ///
   /// Returns a list of [File] objects representing the migration files.
   /// Returns an empty list if the migrations directory doesn't exist.
   Future<List<File>> getMigrationFiles() async {

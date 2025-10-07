@@ -77,7 +77,6 @@ class ApiDoc {
 }
 
 /// Represents a parameter used in an API request.
-///
 /// [T] - The Dart type of the parameter.
 class ApiParameter<T> {
   /// The name of the parameter.
@@ -111,7 +110,6 @@ class ApiParameter<T> {
 }
 
 /// Creates an instance of [ApiParameter].
-///
 /// [name] - The name of the parameter.
 /// [def] - Optional default value for the parameter.
 /// [description] - Optional description of the parameter.
@@ -132,7 +130,6 @@ class ApiBodyField<T> {
 }
 
 /// Represents a field in the body of an API request.
-///
 /// [T] - The Dart type of the body field.
 class ApiResponse<T> {
   /// The name of the body field.

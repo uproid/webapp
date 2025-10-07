@@ -2,16 +2,13 @@ import 'dart:io';
 import 'package:path/path.dart' as p;
 
 /// Extension methods for [File] to provide convenient path and name utilities.
-///
 /// [WaFile] adds helpful methods to the [File] class for extracting different
 /// parts of file paths and names. This extension simplifies common file
 /// operations by providing direct access to file components without manually
 /// parsing paths.
-///
 /// Example usage:
 /// ```dart
 /// final file = File('/path/to/document.pdf');
-///
 /// print(file.fileName);     // 'document'
 /// print(file.fileExtension); // '.pdf'
 /// print(file.filePath);     // '/path/to'

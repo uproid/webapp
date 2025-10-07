@@ -6,7 +6,6 @@ import 'package:webapp/src/tools/convertor/serializable/value_converter/json_val
 import 'package:webapp/wa_console.dart';
 
 /// Manages WebSocket connections and events.
-///
 /// The [SocketManager] class handles WebSocket connections, manages client sessions,
 /// and facilitates communication between the server and connected clients.
 /// It also provides methods for sending messages to clients and users, handling connection events, and managing sessions.
@@ -172,7 +171,6 @@ class SocketManager {
 }
 
 /// Represents events related to WebSocket connections.
-///
 /// The [SocketEvent] class contains optional callbacks for handling WebSocket events
 /// such as connection, disconnection, errors, and messages.
 class SocketEvent {
@@ -201,7 +199,6 @@ class SocketEvent {
 }
 
 /// Represents a WebSocket client.
-///
 /// The [SocketClient] class encapsulates a WebSocket connection and provides
 /// methods for sending data and closing the connection.
 class SocketClient {
@@ -251,7 +248,6 @@ class SocketClient {
 }
 
 /// Manages WebSocket client sessions.
-///
 /// The [SessionsManager] class maintains a map of connected clients and their associated
 /// user IDs, allowing for efficient client management and communication.
 class SessionsManager {

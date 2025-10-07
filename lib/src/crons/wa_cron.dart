@@ -1,10 +1,8 @@
 import 'package:cron/cron.dart';
 
 /// A class to manage and run cron jobs using the `cron` package.
-///
 /// The [WaCron] class schedules and manages tasks based on the given cron schedule.
 /// It includes functionalities for delayed starts, counting executions, and tracking status.
-///
 /// Example:
 /// ```dart
 /// final cronJob = WaCron(
@@ -13,7 +11,6 @@ import 'package:cron/cron.dart';
 ///     print('Task executed $count times');
 ///   },
 /// );
-///
 /// cronJob.start();
 /// ```
 class WaCron {

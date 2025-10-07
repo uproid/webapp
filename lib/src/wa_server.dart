@@ -12,11 +12,9 @@ import 'package:mongo_dart/mongo_dart.dart' as mongo;
 import 'package:webapp/wa_tools.dart';
 
 /// A comprehensive web application server framework for Dart.
-///
 /// The [WaServer] class provides a complete HTTP server implementation with
 /// built-in support for routing, database connectivity (MongoDB and MySQL),
 /// WebSocket management, scheduled tasks (cron jobs), and development tools.
-///
 /// Features:
 /// - HTTP request/response handling with middleware support
 /// - MongoDB and MySQL database integration
@@ -25,7 +23,6 @@ import 'package:webapp/wa_tools.dart';
 /// - Multi-language support
 /// - Development debugging tools
 /// - Migration system for database schema management
-///
 /// Example usage:
 /// ```dart
 /// final config = WaConfigs(
@@ -36,7 +33,6 @@ import 'package:webapp/wa_tools.dart';
 ///     link: 'mongodb://localhost:27017/myapp'
 ///   ),
 /// );
-///
 /// final server = WaServer(configs: config);
 /// await server.start();
 /// ```
@@ -78,7 +74,6 @@ class WaServer {
   final List<Future<List<WebRoute>> Function(WebRequest rq)> _webRoutes = [];
 
   /// Creates an instance of [WaServer] with the specified [WaConfigs] and an optional [onRequest] function.
-  ///
   /// The [configs] parameter is required and provides the configuration for the server.
   /// The [onRequest] parameter, if provided, allows customization of the [WebRequest] before handling.
   WaServer({
@@ -90,17 +85,14 @@ class WaServer {
   }
 
   /// WebSocket-based debugger for local development.
-  ///
   /// Provides real-time debugging capabilities including route inspection,
   /// memory monitoring, language reloading, and server restart functionality.
   /// Only active when `config.enableLocalDebugger` and `config.isLocalDebug` are true.
   SocketManager? debugger;
 
   /// Adds a routing function to the server.
-  ///
   /// The [router] function returns a [Future] containing a list of [WebRoute] based on the provided [WebRequest].
   /// This allows for dynamic routing based on the request.
-  ///
   /// Returns the [WaServer] instance to allow method chaining.
   WaServer addRouting(Future<List<WebRoute>> Function(WebRequest rq) router) {
     _webRoutes.add(router);
@@ -121,7 +113,6 @@ class WaServer {
   }
 
   /// Gets the MongoDB database instance.
-  ///
   /// If the database is not connected, this method will attempt to connect to MongoDB.
   /// Throws an exception if the database is not running.
   mongo.Db get db {
@@ -141,7 +132,6 @@ class WaServer {
   }
 
   /// Stops the server and closes the database connection.
-  ///
   /// The [force] parameter specifies whether to forcefully close the server.
   Future stop({bool force = true}) async {
     if (server != null) {
@@ -156,12 +146,10 @@ class WaServer {
   }
 
   /// Restarts the server by stopping and starting it again.
-  ///
   /// This method performs a graceful restart by:
   /// 1. Stopping the current server instance with force flag
   /// 2. Waiting for 2 seconds to ensure proper cleanup
   /// 3. Starting the server again with the same configuration
-  ///
   /// Any errors during the stop process are logged but don't prevent the restart.
   /// This is useful for applying configuration changes or recovering from errors.
   Future<void> restart() async {
@@ -175,10 +163,8 @@ class WaServer {
   }
 
   /// Starts the server and binds it to the specified IP and port.
-  ///
   /// If `config.noStop` is true, the server will run within a guarded zone to handle errors.
   /// Otherwise, it runs normally.
-  ///
   /// Returns a [Future] containing the [HttpServer] instance.
   /// If [awaitCommands] is true, it will also handle command-line inputs.
   Future<HttpServer> start([List<String>? args, bool awaitCommands = true]) {
@@ -199,9 +185,7 @@ class WaServer {
   }
 
   /// Initializes and starts the HTTP server, sets up the database connection, and handles requests.
-  ///
   /// This method is called internally by [start]. It waits for the database to load and sets up request handling.
-  ///
   /// Returns a [Future] containing the [HttpServer] instance.
   Future<HttpServer> _run(List<String>? args,
       {bool awaitCommands = true}) async {
@@ -240,9 +224,7 @@ class WaServer {
   }
 
   /// Handles incoming HTTP requests by processing them through routing functions and the [onRequest] function.
-  ///
   /// If `config.dbConfig.enable` is true, this method ensures the MongoDB database is connected before handling requests.
-  ///
   /// The request is processed in a guarded zone to catch and log errors, and an error response is sent if needed.
   Future<void> handleRequests(HttpServer server) async {
     server.forEach((HttpRequest httpRequest) async {
@@ -323,7 +305,6 @@ class WaServer {
   }
 
   /// Creates and configures the command manager for interactive CLI operations.
-  ///
   /// Sets up a [CappManager] with all available server commands including:
   /// - `help` - Shows help information for all available commands
   /// - `migrate` - Database migration tools (init, create, rollback, list)
@@ -331,10 +312,8 @@ class WaServer {
   /// - `info` - Displays server information (version, memory, connections)
   /// - `route` - Route inspection and listing tools
   /// - `exit` - Graceful server shutdown
-  ///
   /// Each command includes relevant options and provides structured output
   /// using tables and progress indicators for better user experience.
-  ///
   /// [args] - Command-line arguments to initialize the manager
   /// Returns a configured [CappManager] instance ready for command processing
   CappManager _getCommandManager(List<String> args) => CappManager(
@@ -562,7 +541,6 @@ class WaServer {
       );
 
   /// Processes command-line arguments and enters interactive command mode.
-  ///
   /// Handles the execution of server commands such as:
   /// - `help` - Display available commands
   /// - `migrate` - Database migration operations
@@ -570,11 +548,9 @@ class WaServer {
   /// - `info` - Server information display
   /// - `route` - Route inspection
   /// - `exit` - Graceful server shutdown
-  ///
   /// If no arguments are provided, the method returns immediately.
   /// Otherwise, it starts an interactive command prompt (WebApp>) where
   /// users can continue entering commands.
-  ///
   /// [args] - List of command-line arguments to process
   Future<void> _runCommands(List<String> args) async {
     if (args.isEmpty) {
@@ -588,9 +564,7 @@ class WaServer {
   }
 
   /// Connects to MongoDB using the connection string from the configuration.
-  ///
   /// If `config.dbConfig.enable` is true, the database connection is opened.
-  ///
   /// Returns a [Future] containing the [mongo.Db] instance.
   Future<mongo.Db> connectMongoDb() async {
     var db = mongo.Db(config.dbConfig.link);
@@ -626,7 +600,6 @@ class WaServer {
   }
 
   /// Registers a [WaCron] instance to be scheduled.
-  ///
   /// The [cron] parameter is the [WaCron] instance to be registered.
   void registerCron(WaCron cron) {
     crons.add(cron);
@@ -684,13 +657,11 @@ class WaServer {
   }
 
   /// Flag to track whether the debugger has been initialized.
-  ///
   /// Prevents multiple initialization of the debugging system
   /// when [debuggerInit] is called multiple times.
   var _isDebuggerInit = false;
 
   /// Initializes the local development debugger system.
-  ///
   /// Sets up a WebSocket-based debugging interface that provides:
   /// - Real-time route inspection and listing
   /// - Language file reloading capabilities
@@ -698,10 +669,8 @@ class WaServer {
   /// - Memory usage monitoring
   /// - Error and log message broadcasting
   /// - Console widget for debugging
-  ///
   /// The debugger is only initialized when both `config.enableLocalDebugger`
   /// and `config.isLocalDebug` are true, and prevents duplicate initialization.
-  ///
   /// Automatically adds debugging routes to the server:
   /// - `/debugger` - Main debugger interface
   /// - `/debugger/console.js` - Console widget JavaScript
@@ -808,13 +777,11 @@ class WaServer {
 }
 
 /// Provides version and build information for the WebApp server.
-///
 /// This class contains static information about the current server version
 /// and can be extended to include additional build metadata such as
 /// build date, commit hash, or environment information.
 class _Info {
   /// The current version of the WebApp server framework.
-  ///
   /// Follows semantic versioning (SemVer) format: MAJOR.MINOR.PATCH[-PRERELEASE]
   /// - MAJOR: Breaking changes
   /// - MINOR: New features (backward compatible)

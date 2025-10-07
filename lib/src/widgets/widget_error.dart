@@ -3,7 +3,6 @@ import 'package:webapp/wa_server.dart';
 import 'package:webapp/src/widgets/wa_string_widget.dart';
 
 /// A widget that provides an HTML layout for displaying error messages.
-///
 /// The [ErrorWidget] class implements [WaStringWidget] and provides a predefined
 /// HTML structure to be used for rendering error messages in the application.
 /// It includes styles and structure for displaying error details and stack traces.

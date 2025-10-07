@@ -1,5 +1,4 @@
 /// A utility class for converting file sizes from bytes to human-readable format.
-///
 /// The [ConvertSize] class provides a static method for converting a file size in bytes
 /// into a more understandable string format, including bytes (B), kilobytes (KB), megabytes (MB),
 /// and gigabytes (GB). The conversion takes into account the size of the file and returns the

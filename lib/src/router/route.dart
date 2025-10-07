@@ -5,12 +5,10 @@ import 'package:mime/mime.dart';
 import '../tools/path.dart';
 
 /// A comprehensive route management and request processing system for web applications.
-///
 /// The [Route] class serves as the core routing engine that processes incoming HTTP requests,
 /// matches them against defined route patterns, and handles the appropriate response rendering.
 /// It supports features like nested routing, URL parameters, authentication, permission checks,
 /// static file serving, and widget rendering.
-///
 /// Key features:
 /// - Pattern-based route matching with URL parameters (`{id}`, `{name}`, etc.)
 /// - Nested route structures with parent-child relationships
@@ -19,7 +17,6 @@ import '../tools/path.dart';
 /// - Static file serving from public directory
 /// - Widget and controller-based response handling
 /// - Automatic MIME type detection for static files
-///
 /// Example usage:
 /// ```dart
 /// final routes = [
@@ -29,7 +26,6 @@ import '../tools/path.dart';
 ///     index: () async => handleUserRequest(),
 ///   ),
 /// ];
-///
 /// final router = Route(routing: routes);
 /// router.handle(); // Process the current request
 /// ```

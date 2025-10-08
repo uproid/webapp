@@ -817,6 +817,43 @@ class WebRequest {
     return ""; // Return empty string for SSE completion
   }
 
+  /// Render SSE (Server-Sent Events) stream to the client.
+  /// This method sets up the necessary headers for SSE and streams data to the client.
+  /// The [stream] function should return a stream of strings to be sent as SSE messages.
+  /// Each message is formatted according to the SSE protocol.
+  /// The connection is kept alive until the stream is closed.
+  /// Returns a [Future<String>] that completes when the stream is closed.
+  Future<String> renderSSEString(
+    Stream<String> stream, {
+    ContentType? contentType,
+    int status = HttpStatus.ok,
+    Map<String, String>? headers,
+  }) async {
+    contentType ??= ContentType('text', 'event-stream', charset: 'utf-8');
+
+    headers ??= {
+      'Cache-Control': 'no-cache',
+      'Connection': 'keep-alive',
+      'X-Accel-Buffering': 'no', // For Nginx
+    };
+
+    headers.forEach((key, value) {
+      response.headers.set(key, value);
+    });
+
+    response.statusCode = status;
+    response.headers.contentType = contentType;
+    response.bufferOutput = false;
+
+    await for (var sse in stream) {
+      response.write(sse.toString());
+      await response.flush();
+    }
+
+    await response.close();
+    return ""; // Return empty string for SSE completion
+  }
+
   /// Renders a template with the given parameters and configuration.
   ///
   /// This method supports rendering from a file or a raw template string. It can handle

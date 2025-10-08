@@ -36,14 +36,11 @@ class HomeController extends WaController {
   }
 
   Future<String> sseExample() async {
-    Stream<SSE> streamer = Stream.periodic(Duration(seconds: 1), (count) {
-      return SSE(
-        data: 'This is an SSE message $count',
-        event: 'message',
-      );
+    Stream<String> streamer = Stream.periodic(Duration(seconds: 1), (count) {
+      return 'This is an SSE message $count\n';
     }).take(10);
 
-    return rq.renderSSE(streamer);
+    return rq.renderSSEString(streamer);
   }
 
   Future<String> exampleForm() async {

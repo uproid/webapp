@@ -7,7 +7,7 @@ import '../core/request_context.dart';
 /// interface for standardized request handling. Controllers are typically used to
 /// organize related request handling logic and can be associated with routes to
 /// process incoming HTTP requests.
-/// the [rq] getter, eliminating the need to pass request objects manually.
+/// the [rq] getter, is RequestContext.rq to access the current WebRequest.
 /// This design leverages the Zone-based [RequestContext] system for thread-safe
 /// request handling.
 /// - Thread-safe request handling through Zone isolation
@@ -27,10 +27,6 @@ import '../core/request_context.dart';
 class WaController implements RouteRepos {
   /// Gets the current WebRequest from the request context
   WebRequest get rq => RequestContext.rq;
-
-  ///
-  /// The [rq] parameter is optional now as we use RequestContext to access the current request.
-  WaController([WebRequest? rq]);
 
   /// Provides an asynchronous method for rendering the index page of the controller.
   ///

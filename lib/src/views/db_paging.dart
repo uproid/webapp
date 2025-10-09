@@ -69,8 +69,7 @@ class DBPaging {
   /// - [orderByDef]: The default field for ordering.
   /// - [orderReverseDef]: The default ordering direction.
   /// - [pageDef]: The default page number (default is 1).
-  factory DBPaging.fromRequest(
-    WebRequest rq, {
+  factory DBPaging.fromRequest({
     required int total,
     String profix = 'page',
     int pageSize = 5,
@@ -78,10 +77,11 @@ class DBPaging {
     bool orderReverseDef = false,
     int pageDef = 1,
   }) {
-    var page = rq.get<int>(profix, def: pageDef);
-    var pageSizeFix = rq.get<int>('pageSize', def: pageSize);
-    var orderBy = rq.get<String>('orderBy', def: orderByDef);
-    var orderReverse = rq.get<bool>('orderReverse', def: orderReverseDef);
+    var page = RequestContext.rq.get<int>(profix, def: pageDef);
+    var pageSizeFix = RequestContext.rq.get<int>('pageSize', def: pageSize);
+    var orderBy = RequestContext.rq.get<String>('orderBy', def: orderByDef);
+    var orderReverse =
+        RequestContext.rq.get<bool>('orderReverse', def: orderReverseDef);
 
     return DBPaging(
       page: page,

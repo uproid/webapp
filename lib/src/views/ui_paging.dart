@@ -74,7 +74,7 @@ class UIPaging extends WaView {
     this.orderReverse = false,
   });
 
-  /// A factory constructor to create [UIPaging] from a request object [rq].
+  /// A factory constructor to create [UIPaging] from a request.
   /// This factory method extracts relevant pagination information from the request
   /// and provides default values for optional parameters:
   /// - [total]: The total number of items.
@@ -85,8 +85,7 @@ class UIPaging extends WaView {
   /// - [orderByDef]: The default field for ordering.
   /// - [orderReverseDef]: The default ordering direction.
   /// - [pageDef]: The default page number (default is 1).
-  factory UIPaging.fromRequest(
-    WebRequest rq, {
+  factory UIPaging.fromRequest({
     required int total,
     String profix = 'page',
     String widget = 'dashboard/theme/ui/paging',
@@ -96,10 +95,11 @@ class UIPaging extends WaView {
     bool orderReverseDef = false,
     int pageDef = 1,
   }) {
-    var page = rq.get<int>(profix, def: pageDef);
-    var pageSizeFix = rq.get<int>('pageSize', def: pageSize);
-    var orderBy = rq.get<String>('orderBy', def: orderByDef);
-    var orderReverse = rq.get<bool>('orderReverse', def: orderReverseDef);
+    var page = RequestContext.rq.get<int>(profix, def: pageDef);
+    var pageSizeFix = RequestContext.rq.get<int>('pageSize', def: pageSize);
+    var orderBy = RequestContext.rq.get<String>('orderBy', def: orderByDef);
+    var orderReverse =
+        RequestContext.rq.get<bool>('orderReverse', def: orderReverseDef);
 
     return UIPaging(
       widget: widget,

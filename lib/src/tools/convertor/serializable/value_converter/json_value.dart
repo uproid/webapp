@@ -18,16 +18,14 @@ class WaJson {
   /// - [Duration]: Converts to its string representation.
   ///
   /// [data] is the object to be encoded.
-  /// [rq] is an optional [WebRequest] object used for encoding [TString] instances.
-  ///
   /// Returns a [String] containing the JSON-encoded representation of the [data] object.
-  static String jsonEncoder(Object data, {WebRequest? rq}) {
+  static String jsonEncoder(Object data) {
     return jsonEncode(data, toEncodable: (obj) {
       if (obj == null) {
         return null;
       }
       if (obj is TString) {
-        return obj.write(rq!);
+        return obj.write();
       }
       if (obj is ObjectId) {
         return obj.oid;
@@ -40,7 +38,7 @@ class WaJson {
       }
 
       if (obj is Map) {
-        return encodeMaps(obj, rq: rq);
+        return encodeMaps(obj);
       }
       if (obj is Symbol) {
         return symbolToKey(obj);
@@ -55,9 +53,8 @@ class WaJson {
   /// Convert Symbol maps to String maps
   /// For example, {Symbol('name'): 'John'} becomes {'name': 'John'}
   /// [obj] is the map to be converted.
-  /// [rq] is an optional [WebRequest] object used for encoding [TString] instances.
   /// Returns a new map with String keys.
-  static Map encodeMaps(Map obj, {WebRequest? rq}) {
+  static Map encodeMaps(Map obj) {
     var res = {};
     for (Object o in obj.keys) {
       var key = "";
@@ -139,9 +136,9 @@ class WaJson {
   /// The [data] parameter can be any type of object to be parsed.
   /// The [rq] parameter is an optional [WebRequest] object used for encoding [TString] instances.
   /// Returns a dynamic object representing the parsed JSON data, or null if
-  static Map<T, V>? tryJson<T, V>(dynamic data, {WebRequest? rq}) {
+  static Map<T, V>? tryJson<T, V>(dynamic data) {
     try {
-      var res = jsonEncoder(data, rq: rq);
+      var res = jsonEncoder(data);
       return jsonDecoder(res) as Map<T, V>;
     } catch (e) {
       print(e);

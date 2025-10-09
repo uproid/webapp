@@ -43,10 +43,9 @@ class TString {
   /// String translatedMessage = welcomeMessage.write(request);
   /// ```
   ///
-  /// [rq] The [WebRequest] object that provides the current language context.
   ///
   /// Returns the translated string if found, otherwise returns the original key.
-  String write(WebRequest rq, [Map values = const {}]) {
+  String write([Map values = const {}]) {
     var params = {...values};
     var key = this.key;
     if (key.contains('#')) {
@@ -61,7 +60,7 @@ class TString {
         }
       }
     }
-    final ln = rq.getLanguage();
+    final ln = RequestContext.rq.getLanguage();
     var language = WaServer.appLanguages[ln] ?? WaServer.appLanguages['en'];
     if (language != null && language[key] != null) {
       var res = _repliceParams(language[key]!, params);
@@ -111,6 +110,6 @@ class TString {
 
   @override
   String toString() {
-    return "TString type: '$key' Dont forget, using .write(rq) for TString";
+    return write();
   }
 }

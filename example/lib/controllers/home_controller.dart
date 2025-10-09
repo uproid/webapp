@@ -57,7 +57,7 @@ class HomeController extends WaController {
             (value) async {
               return FieldValidateResult(
                 success: value.toString().isPassword,
-                error: 'error.invalid.password'.tr.write(rq),
+                error: 'error.invalid.password'.tr.write(),
               );
             },
             FieldValidator.requiredField(),
@@ -101,14 +101,14 @@ class HomeController extends WaController {
     var d = Random().nextInt(10);
 
     rq.addParams({
-      'exampleTString': TString('example.tstring').write(rq),
-      'examplePathString': 'example.path'.tr.write(rq),
-      'exampleTranslateParams': 'example.params'.tr.write(rq, {
+      'exampleTString': TString('example.tstring').write(),
+      'examplePathString': 'example.path'.tr.write(),
+      'exampleTranslateParams': 'example.params'.tr.write({
         'name': 'Alexandre',
         'age': Random().nextInt(100),
       }),
       'exampleTranslateDynamic':
-          'example.params.dynamic#$a#$b#$c#$d'.tr.write(rq),
+          'example.params.dynamic#$a#$b#$c#$d'.tr.write(),
     });
     return renderTemplate('example/i18n');
   }

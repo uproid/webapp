@@ -709,10 +709,10 @@ class WebRequest {
         getAttribute: (String key, dynamic object) {
           try {
             if (object is TString) {
-              return object.write(this);
+              return object.write();
             }
             if (object is String && key == 'tr') {
-              return object.tr.write(this);
+              return object.tr.write();
             }
             if (object is Cookie) {
               return key == 'name' ? object.name : object.value;
@@ -905,10 +905,10 @@ class WebRequest {
         getAttribute: (String key, dynamic object) {
           try {
             if (object is TString) {
-              return object.write(this);
+              return object.write();
             }
             if (object is String && key == 'tr') {
-              return object.tr.write(this);
+              return object.tr.write();
             }
             if (object is Cookie) {
               return key == 'name' ? object.name : object.value;
@@ -1039,7 +1039,7 @@ class WebRequest {
         Console.i(e);
       }
 
-      var renderString = WaJson.jsonEncoder(data, rq: this);
+      var renderString = WaJson.jsonEncoder(data);
       await writeAndClose(renderString);
       return renderString;
     } catch (e) {
@@ -1079,7 +1079,7 @@ class WebRequest {
         Console.i(e);
       }
 
-      var renderString = WaJson.jsonEncoder(data, rq: this);
+      var renderString = WaJson.jsonEncoder(data);
       await writeAndClose(renderString);
       return renderString;
     } catch (e) {
@@ -1383,7 +1383,7 @@ class WebRequest {
         return getCookie(key, def: def);
       },
       'ln': getLanguage(),
-      'dir': 'language.${getLanguage()}_dir'.tr.write(this),
+      'dir': 'language.${getLanguage()}_dir'.tr.write(),
       'langs': () {
         var langs = WaServer.appLanguages.keys;
         var result = [];
@@ -1391,8 +1391,8 @@ class WebRequest {
         for (var lang in langs) {
           result.add({
             'code': lang,
-            'label': 'language.${lang}_label'.tr.write(this),
-            'contry': 'language.${lang}_contry'.tr.write(this),
+            'label': 'language.${lang}_label'.tr.write(),
+            'contry': 'language.${lang}_contry'.tr.write(),
           });
         }
 
@@ -1400,7 +1400,7 @@ class WebRequest {
       },
       'pageTitle': route != null && route!.title.isNotEmpty
           ? route!.title
-          : 'pages.title'.tr.write(this),
+          : 'pages.title'.tr.write(),
       'setting': _setting,
       'formChecker': ([String? name]) => formChecker(name: name),
       'widgetPath': (String path) {
@@ -1432,7 +1432,7 @@ class WebRequest {
     params['\$t'] = (String text, [Object? params]) {
       var language = getLanguage();
       if (params == null) {
-        return text.tr.write(this);
+        return text.tr.write();
       } else {
         if (params is Map) {
           return text.tr.writeByLang(language, params);

@@ -1,10 +1,9 @@
 import 'package:webapp/src/views/htmler.dart';
 import 'package:webapp/src/widgets/wa_string_widget.dart';
-import 'package:webapp/wa_route.dart';
 import 'package:webapp/wa_tools.dart';
 
 /// A widget that provides an HTML layout for displaying error messages.
-/// The [DumpWodget] class implements [WaStringWidget] and provides a predefined
+/// The [InlineDumpWidget] class implements [WaStringWidget] and provides a predefined
 /// HTML structure to be used for rendering error messages in the application.
 /// It includes styles and structure for displaying error details and stack traces.
 class InlineDumpWidget implements WaStringWidget {
@@ -39,7 +38,7 @@ class InlineDumpWidget implements WaStringWidget {
             'theme': 'summerfruit-dark',
             'expanded': '2',
           }, children: [
-            $Raw(WaJson.jsonEncoder(variable ?? 'N/A', rq: RequestContext.rq)),
+            $Raw(WaJson.jsonEncoder(variable ?? 'N/A')),
           ]),
         ],
       ),

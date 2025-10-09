@@ -109,7 +109,7 @@ class AuthController extends WaAuthController<MockUserModel> {
           (value) async {
             return FieldValidateResult(
               success: value.toString().isPassword,
-              error: 'error.invalid.password'.tr.write(rq),
+              error: 'error.invalid.password'.tr.write(),
             );
           },
           FieldValidator.requiredField(),

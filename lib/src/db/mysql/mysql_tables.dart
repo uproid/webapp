@@ -444,3 +444,60 @@ class MySqlResult {
 abstract class DataAssoc {
   Future<Map<String, Object?>> toAssoc(Map<String, Object?> row);
 }
+
+/// Abstract base class for MySQL table operations.
+abstract class MysqlTable {
+  MySQLConnection get db;
+
+  String get tableName;
+
+  QField get qName => QField(tableName);
+
+  MTable get table => MTable(
+        name: tableName,
+        fields: [],
+      );
+
+  Future<MySqlResult> deleteBy(Where where) async {
+    var query = Sqler()
+      ..from(qName)
+      ..delete()
+      ..where(where);
+    return table.execute(db, query.toSQL());
+  }
+
+  Future<MySqlResult> deleteById(int id) async {
+    return deleteBy(WhereOne(QField('id'), QO.EQ, QVar(id)));
+  }
+
+  Future<MySqlResult> findById(int id) async {
+    var query = Sqler()
+      ..from(qName)
+      ..selects([
+        ...table.allSelectFields(),
+      ])
+      ..where(WhereOne(QField('id'), QO.EQ, QVar(id)));
+    var res = await table.select(db, query);
+    return res;
+  }
+
+  Future<int> countBy(Where where) async {
+    var query = Sqler()
+      ..from(qName)
+      ..addSelect(SQL.count(QField('id', as: 'count_records')))
+      ..where(where);
+    var result = await table.execute(db, query.toSQL());
+    return result.countRecords;
+  }
+
+  /// All abstract methods
+  Future<({int count, MySqlResult rows})> findAll({
+    String orderBy = 'id',
+    bool orderReverse = true,
+    Map<String, dynamic> filters = const {},
+    int? pageSize,
+    int? offset,
+  });
+
+  Sqler updateFilters(Sqler query, Map<String, dynamic> filter);
+}

@@ -1,7 +1,5 @@
 import 'dart:io';
 import 'dart:math';
-import 'package:webapp/wa_console.dart';
-
 import '../db/mysql/mysql_books.dart';
 import '../db/mysql/mysql_categories.dart';
 import 'package:webapp/wa_mysql.dart';

@@ -980,6 +980,25 @@ class WebRequest {
     'safe': (dynamic input) {
       return htmlEscape.convert(input.toString());
     },
+    'json': (Object? value) {
+      return WaJson.jsonEncoder(value!);
+    },
+    'json_decode': (Object? value) {
+      return WaJson.jsonDecoder(value.toString().unescape());
+    },
+    'bool': (Object? value) {
+      return value.toString().toBool;
+    },
+    'isFalse': (Object? value) {
+      String val = value.toString().trim().toLowerCase();
+      return val != '' && (val == '0' || val == 'false' || val == 'no');
+    },
+    'isTrue': (Object? value) {
+      return value.toString().toBool;
+    },
+    'check': (Object? value, Object? t, [Object? f = '']) {
+      return value.toString().toBool ? t : f;
+    },
   };
 
   static Map<String, Function> get layoutFilters => _layoutFilters;
@@ -1305,6 +1324,111 @@ class WebRequest {
   /// Local events map for testing purposes.
   static final localEvents = <String, Object>{
     'test': (a) => "You passed '$a'",
+    'macro': (String template, Object? data) {
+      if (template.endsWith(WaServer.config.widgetsType)) {
+        template = template.replaceAll(".${WaServer.config.widgetsType}", '');
+      }
+      var params = <String, Object?>{};
+      if (data is Map) {
+        for (var key in data.keys) {
+          params[key.toString()] = data[key];
+        }
+      }
+      return RequestContext.rq.renderAsync(path: template, viewParams: params);
+    },
+    'updateUrlQuery': ([Object? updates]) {
+      if (updates is String) {
+        updates = jsonDecode(updates);
+      }
+
+      var newParams = <String, String>{};
+      if (updates is Map) {
+        for (var key in updates.keys) {
+          newParams[key] = updates[key].toString();
+        }
+      }
+
+      var queryParams = RequestContext.rq.uri.queryParameters
+          .map((key, value) => MapEntry(key, value));
+
+      var newUrl = Uri(
+        queryParameters: {
+          ...queryParams,
+          ...newParams,
+        },
+      );
+
+      return newUrl.toString();
+    },
+    'removeUrlQuery': (dynamic keys) {
+      var queryParams = RequestContext.rq.uri.queryParameters
+          .map((key, value) => MapEntry(key, value));
+
+      for (var key in keys) {
+        queryParams.remove(key);
+      }
+
+      var newUrl = Uri(
+        queryParameters: queryParams,
+      );
+
+      return newUrl.toString();
+    },
+    'existUrlQuery': (dynamic keys) {
+      for (var key in keys) {
+        if (RequestContext.rq.uri.queryParameters.containsKey(key) &&
+            RequestContext.rq.uri.queryParameters[key] != null &&
+            RequestContext.rq.uri.queryParameters[key]!.isNotEmpty) {
+          return true;
+        }
+      }
+      return false;
+    },
+    'endpointQuery': () {
+      var endpoint = RequestContext.rq.uri.path;
+      if (RequestContext.rq.uri.queryParameters.isNotEmpty) {
+        endpoint += '?${RequestContext.rq.uri.query}';
+      }
+      return endpoint;
+    },
+    'log': (Object? value) {
+      Console.e(value);
+      return value;
+    },
+    'pathStartsWith': (String path) {
+      return RequestContext.rq.uri.path.startsWith(path);
+    },
+    'checkPath': (String path) {
+      var uri = RequestContext.rq.uri.path;
+
+      if (path.endsWith('/')) path = path.substring(0, path.length - 1);
+      if (path.startsWith('/')) path = path.substring(1);
+      if (uri.endsWith('/')) uri = uri.substring(0, uri.length - 1);
+      if (uri.startsWith('/')) uri = uri.substring(1);
+
+      var current = uri.split('/');
+      var check = path.split('/');
+
+      if (current.length != check.length &&
+          check.isNotEmpty &&
+          check.last != '?') {
+        return false;
+      }
+
+      for (var i = 0; i < check.length; i++) {
+        var section = check[i];
+        if (section == "*") {
+          continue;
+        }
+        if (section.contains('?')) {
+          return true;
+        }
+        if (i >= current.length || section != current[i]) {
+          return false;
+        }
+      }
+      return true;
+    },
   };
 
   /// Retrieves global events and parameters for rendering.

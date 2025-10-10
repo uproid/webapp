@@ -1,7 +1,6 @@
 import 'package:mysql_client/mysql_client.dart';
 import 'package:mysql_client/mysql_protocol.dart';
 import 'package:webapp/src/forms/form_validator.dart';
-import 'package:webapp/src/tools/console.dart';
 import 'package:webapp/src/tools/convertor/string_validator.dart';
 import 'package:webapp/wa_mysql.dart';
 

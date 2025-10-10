@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:vmservice_io';
 import 'package:webapp/wa_route.dart';
 import 'package:webapp/wa_tools.dart';
 

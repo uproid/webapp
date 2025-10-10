@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import '../app.dart';
 import 'package:webapp/wa_route.dart';
 import 'package:webapp/wa_tools.dart';
 
@@ -15,18 +13,6 @@ var localEvents = <String, Object>{
     var flash = RequestContext.rq.getParam('flashs');
     RequestContext.rq.removeParam('flashs');
     return flash;
-  },
-  'macro': (String template, Object? data) {
-    if (template.endsWith(configs.widgetsType)) {
-      template = template.replaceAll(".${configs.widgetsType}", '');
-    }
-    var params = <String, Object?>{};
-    if (data is Map) {
-      for (var key in data.keys) {
-        params[key.toString()] = data[key];
-      }
-    }
-    return RequestContext.rq.renderAsync(path: template, viewParams: params);
   },
   'updateUrlQuery': ([Object? updates]) {
     if (updates is String) {

@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:mysql_client/mysql_client.dart';
-import 'package:webapp/src/tools/console.dart';
 import 'package:webapp/wa_model_less.dart';
 import 'package:webapp/wa_mysql.dart';
 import 'package:webapp/wa_tools.dart';

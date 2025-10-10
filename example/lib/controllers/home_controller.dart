@@ -1,8 +1,6 @@
 import 'dart:io';
 import 'dart:math';
-import 'package:example/forms/book_form.dart';
-import 'package:webapp/wa_console.dart';
-
+import '../forms/book_form.dart';
 import '../db/mysql/mysql_books.dart';
 import '../db/mysql/mysql_categories.dart';
 import 'package:webapp/wa_mysql.dart';
@@ -227,7 +225,7 @@ class HomeController extends WaController {
       page: pageA,
       total: 1000,
       pageSize: 10,
-      profix: 'page_a',
+      prefix: 'page_a',
       otherQuery: {
         'page_b': pageB.toString(),
         'page_c': pageC.toString(),
@@ -242,7 +240,7 @@ class HomeController extends WaController {
       total: 500,
       pageSize: 10,
       widthSide: 5,
-      profix: 'page_b',
+      prefix: 'page_b',
       otherQuery: {
         'page_a': pageA.toString(),
         'page_c': pageC.toString(),
@@ -256,7 +254,7 @@ class HomeController extends WaController {
       page: pageC,
       total: 1000,
       pageSize: 100,
-      profix: 'page_c',
+      prefix: 'page_c',
       otherQuery: {
         'page_a': pageA.toString(),
         'page_b': pageB.toString(),
@@ -338,7 +336,7 @@ class HomeController extends WaController {
       if (resSendEmail) {
         rq.addParam('sendEmailSuccess', 'Email sent successfully');
       } else {
-        rq.addParam('sendEmailFeiled', 'Email not sent');
+        rq.addParam('sendEmailFailed', 'Email not sent');
       }
     }
 
@@ -496,8 +494,8 @@ class HomeController extends WaController {
         'Active Cron': server.crons
             .where((element) => element.status == CronStatus.running)
             .length,
-        'Stoped Cron': server.crons
-            .where((element) => element.status == CronStatus.stoped)
+        'Stopped Cron': server.crons
+            .where((element) => element.status == CronStatus.stopped)
             .length,
         'Not started Cron': server.crons
             .where((element) => element.status == CronStatus.notStarted)

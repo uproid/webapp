@@ -1,5 +1,5 @@
-import 'package:example/app.dart';
-import 'package:example/db/mysql/mysql_categories.dart';
+import '../app.dart';
+import '../db/mysql/mysql_categories.dart';
 import 'package:webapp/wa_tools.dart';
 import 'package:webapp/wa_ui.dart';
 

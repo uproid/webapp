@@ -45,12 +45,12 @@ class WaCron {
 
   /// The current status of the cron job.
   ///
-  /// Can be [CronStatus.notStarted], [CronStatus.running], or [CronStatus.stoped].
+  /// Can be [CronStatus.notStarted], [CronStatus.running], or [CronStatus.stopped].
   CronStatus _status = CronStatus.notStarted;
 
   /// The current status of the cron job.
   ///
-  /// Can be [CronStatus.notStarted], [CronStatus.running], or [CronStatus.stoped].
+  /// Can be [CronStatus.notStarted], [CronStatus.running], or [CronStatus.stopped].
   /// Public getter to access the current cron status.
   CronStatus get status => _status;
 
@@ -133,10 +133,10 @@ class WaCron {
 
   /// Stops the cron job and cleans up resources.
   ///
-  /// This method changes the cron status to [CronStatus.stoped] and closes the internal [Cron] instance.
+  /// This method changes the cron status to [CronStatus.stopped] and closes the internal [Cron] instance.
   void close() {
     _cron.close();
-    _status = CronStatus.stoped;
+    _status = CronStatus.stopped;
   }
 }
 
@@ -146,7 +146,7 @@ enum CronStatus {
   running,
 
   /// Indicates that the cron job has been stopped.
-  stoped,
+  stopped,
 
   /// Indicates that the cron job has not started yet.
   notStarted,

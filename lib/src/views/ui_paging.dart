@@ -20,7 +20,7 @@ class UIPaging extends WaView {
   int widthSide;
 
   /// The query parameter used to identify the page number in URLs. Defaults to 'page'.
-  String profix;
+  String prefix;
 
   /// Additional query parameters to include in the pagination URLs.
   Map<String, String> otherQuery;
@@ -54,7 +54,7 @@ class UIPaging extends WaView {
   /// The constructor requires a [widget] identifier,
   /// and the [page] and [total] number of items. Optional parameters include:
   /// - [pageSize]: The number of items per page (default is 20).
-  /// - [profix]: The page query parameter name (default is 'page').
+  /// - [prefix]: The page query parameter name (default is 'page').
   /// - [otherQuery]: Additional query parameters.
   /// - [widthSide]: The number of pages to show on each side of the current page (default is 2).
   /// - [useRequsetQueries]: Whether to include request query parameters.
@@ -66,7 +66,7 @@ class UIPaging extends WaView {
     required this.page,
     required this.total,
     this.pageSize = 20,
-    this.profix = 'page',
+    this.prefix = 'page',
     this.otherQuery = const <String, String>{},
     this.widthSide = 2,
     this.useRequsetQueries = false,
@@ -78,7 +78,7 @@ class UIPaging extends WaView {
   /// This factory method extracts relevant pagination information from the request
   /// and provides default values for optional parameters:
   /// - [total]: The total number of items.
-  /// - [profix]: The page query parameter name (default is 'page').
+  /// - [prefix]: The page query parameter name (default is 'page').
   /// - [widget]: The widget identifier (default is 'dashboard/theme/ui/paging').
   /// - [otherQuery]: Additional query parameters.
   /// - [pageSize]: The number of items per page (default is 5).
@@ -87,7 +87,7 @@ class UIPaging extends WaView {
   /// - [pageDef]: The default page number (default is 1).
   factory UIPaging.fromRequest({
     required int total,
-    String profix = 'page',
+    String prefix = 'page',
     String widget = 'dashboard/theme/ui/paging',
     Map<String, String> otherQuery = const {},
     int pageSize = 5,
@@ -95,7 +95,7 @@ class UIPaging extends WaView {
     bool orderReverseDef = false,
     int pageDef = 1,
   }) {
-    var page = RequestContext.rq.get<int>(profix, def: pageDef);
+    var page = RequestContext.rq.get<int>(prefix, def: pageDef);
     var pageSizeFix = RequestContext.rq.get<int>('pageSize', def: pageSize);
     var orderBy = RequestContext.rq.get<String>('orderBy', def: orderByDef);
     var orderReverse =
@@ -108,7 +108,7 @@ class UIPaging extends WaView {
       pageSize: pageSizeFix,
       orderBy: orderBy,
       orderReverse: orderReverse,
-      profix: profix,
+      prefix: prefix,
       otherQuery: otherQuery,
     );
   }
@@ -122,7 +122,7 @@ class UIPaging extends WaView {
   /// - `page`: The current page.
   /// - `pageSize`: The number of items per page.
   /// - `toEnd`: The index of the last item on the current page.
-  /// - `profix`: The page query parameter name.
+  /// - `prefix`: The page query parameter name.
   /// - `rangeTo`: The last page in the displayed range.
   /// - `rangeFrom`: The first page in the displayed range.
   /// - `disableFirst`: Whether the "first page" button should be disabled.
@@ -151,7 +151,7 @@ class UIPaging extends WaView {
 
     if (useRequsetQueries) {
       rq.uri.queryParameters.forEach((key, value) {
-        if (key != profix && !otherQuery.containsKey(key)) {
+        if (key != prefix && !otherQuery.containsKey(key)) {
           otherQuery[key] = value;
         }
       });
@@ -165,7 +165,7 @@ class UIPaging extends WaView {
       'page': page,
       'pageSize': pageSize,
       'toEnd': toEnd,
-      'profix': profix,
+      'prefix': prefix,
       'rangeTo': rangeTo,
       'rangeFrom': rangeFrom,
       'disableFirst': page - 1 <= 0,

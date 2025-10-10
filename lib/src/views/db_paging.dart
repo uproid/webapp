@@ -16,7 +16,7 @@ class DBPaging {
   int pageSize;
 
   /// The query parameter used to identify the page number in URLs. Defaults to 'page'.
-  String profix;
+  String prefix;
 
   /// Whether to use query parameters from the request object.
   bool useRequsetQueries;
@@ -42,7 +42,7 @@ class DBPaging {
   /// The constructor requires the current request object [rq], a [widget] identifier,
   /// and the [page] and [total] number of items. Optional parameters include:
   /// - [pageSize]: The number of items per page (default is 20).
-  /// - [profix]: The page query parameter name (default is 'page').
+  /// - [prefix]: The page query parameter name (default is 'page').
   /// - [otherQuery]: Additional query parameters.
   /// - [widthSide]: The number of pages to show on each side of the current page (default is 2).
   /// - [useRequsetQueries]: Whether to include request query parameters.
@@ -52,7 +52,7 @@ class DBPaging {
     required this.page,
     required this.total,
     this.pageSize = 20,
-    this.profix = 'page',
+    this.prefix = 'page',
     this.useRequsetQueries = false,
     this.orderBy = '',
     this.orderReverse = false,
@@ -62,7 +62,7 @@ class DBPaging {
   /// This factory method extracts relevant pagination information from the request
   /// and provides default values for optional parameters:
   /// - [total]: The total number of items.
-  /// - [profix]: The page query parameter name (default is 'page').
+  /// - [prefix]: The page query parameter name (default is 'page').
   /// - [widget]: The widget identifier (default is 'dashboard/theme/ui/paging').
   /// - [otherQuery]: Additional query parameters.
   /// - [pageSize]: The number of items per page (default is 5).
@@ -71,13 +71,13 @@ class DBPaging {
   /// - [pageDef]: The default page number (default is 1).
   factory DBPaging.fromRequest({
     required int total,
-    String profix = 'page',
+    String prefix = 'page',
     int pageSize = 5,
     String orderByDef = '',
     bool orderReverseDef = false,
     int pageDef = 1,
   }) {
-    var page = RequestContext.rq.get<int>(profix, def: pageDef);
+    var page = RequestContext.rq.get<int>(prefix, def: pageDef);
     var pageSizeFix = RequestContext.rq.get<int>('pageSize', def: pageSize);
     var orderBy = RequestContext.rq.get<String>('orderBy', def: orderByDef);
     var orderReverse =
@@ -89,7 +89,7 @@ class DBPaging {
       pageSize: pageSizeFix,
       orderBy: orderBy,
       orderReverse: orderReverse,
-      profix: profix,
+      prefix: prefix,
     );
   }
 
@@ -102,7 +102,7 @@ class DBPaging {
   /// - `page`: The current page.
   /// - `pageSize`: The number of items per page.
   /// - `toEnd`: The index of the last item on the current page.
-  /// - `profix`: The page query parameter name.
+  /// - `prefix`: The page query parameter name.
   /// - `rangeTo`: The last page in the displayed range.
   /// - `rangeFrom`: The first page in the displayed range.
   /// - `disableFirst`: Whether the "first page" button should be disabled.
@@ -125,7 +125,7 @@ class DBPaging {
       'page': page,
       'pageSize': pageSize,
       'toEnd': toEnd,
-      'profix': profix,
+      'prefix': prefix,
       'orderBy': orderBy,
       'orderReverse': orderReverse,
     };

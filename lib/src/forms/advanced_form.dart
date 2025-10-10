@@ -144,7 +144,7 @@ class Field {
   Field(
     this.name, {
     this.validators = const [],
-    this.initValue = null,
+    this.initValue,
     this.type = String,
     this.initOptions,
   });

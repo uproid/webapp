@@ -13,7 +13,7 @@
   {% if loginResult != true and user == null %}
   <div class="my-3 rounded-lg border border-slate-200 bg-white shadow-sm">
     <div class="p-5">
-      <form method="post" class="space-y-4">
+      <form action="{{ $e.routeUrl('root.form.post') }}" method="post" class="space-y-4">
         <div>
           <label for="email" class="mb-1 block text-sm font-medium text-slate-700">{{ $t('form.validation.email') }}</label>
           <input
@@ -58,7 +58,7 @@
         {{ $t('form.validation.loginSuccess') }} <i>{{ user.name }}</i>
       </div>
       <div class="text-left sm:text-right">
-        <a href="/logout" class="wave inline-flex items-center rounded-md bg-rose-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-500/30">{{ $t('form.validation.logout') }}</a>
+        <a href="{{ $e.routeUrl('root.logout') }}" class="wave inline-flex items-center rounded-md bg-rose-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-500/30">{{ $t('form.validation.logout') }}</a>
       </div>
     </div>
   </div>

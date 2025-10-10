@@ -353,6 +353,12 @@ class WaServer {
                 description: 'Create migration',
               ),
               CappOption(
+                name: 'name',
+                shortName: 'n',
+                description: 'Name of migration file while creating',
+                value: '',
+              ),
+              CappOption(
                 name: 'rollback',
                 shortName: 'r',
                 description: 'Rollback migration',
@@ -382,9 +388,19 @@ class WaServer {
               }
 
               if (c.existsOption('create')) {
+                var name = "";
+                if (c.existsOption('name')) {
+                  name = c.getOption('name');
+                } else {
+                  name = CappConsole.read(
+                    "Enter name of migration: ",
+                    isRequired: true,
+                  );
+                }
+
                 var res = await CappConsole.progress<String>(
                   "Creating migration...",
-                  () async => MysqlMigration(mysqlDb).migrateCreate(),
+                  () async => MysqlMigration(mysqlDb).migrateCreate(name: name),
                 );
                 return CappConsole(res);
               }

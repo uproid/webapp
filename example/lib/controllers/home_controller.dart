@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'dart:math';
+import 'package:webapp/wa_console.dart';
+
 import '../db/mysql/mysql_books.dart';
 import '../db/mysql/mysql_categories.dart';
 import 'package:webapp/wa_mysql.dart';
@@ -698,7 +700,6 @@ class HomeController extends WaController {
         default:
           data = rq.getAll();
       }
-
       var validate = await tableBooks.table.formValidateUI(data);
       if ((action == "update" || action == "add") && validate.result) {
         final title = rq.get<String>('title', def: '');

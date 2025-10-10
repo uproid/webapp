@@ -109,7 +109,7 @@ class TString {
   }
 
   @override
-  String toString() {
-    return write();
+  String toString([Map values = const {}]) {
+    return write(values);
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:mysql_client/mysql_client.dart';
+import 'package:webapp/src/tools/console.dart';
 import 'package:webapp/wa_model_less.dart';
 import 'package:webapp/wa_mysql.dart';
 import 'package:webapp/wa_tools.dart';
@@ -93,12 +94,11 @@ class FormValidator {
     for (var fieldName in fields.keys) {
       var fieldResult = <String, dynamic>{};
       Object? fieldValue;
-      if (data.isEmpty) {
+      if (data.isEmpty && extraData.isEmpty) {
         fieldValue = rq.data(fieldName);
       } else {
         fieldValue = data[fieldName] ?? extraData[fieldName];
       }
-
       fieldResult["value"] = fieldValue;
 
       var fieldEvents = fields[fieldName] ?? [];

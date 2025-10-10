@@ -27,7 +27,7 @@
         </button>
         <a
           class="wave inline-flex items-center gap-2 rounded-md px-2 py-1.5 text-primary-200"
-          href="{{ $e.url('/') }}"
+          href="{{ $e.routeUrl('root.home') }}"
         >
           <span
             class="text-lg font-semibold text-primary-200 hover:text-primary-100"
@@ -76,7 +76,7 @@
             <li>
               <a
                 class="wave flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-red-50 text-red-600"
-                href="{{ $e.url('/logout') }}"
+                href="{{ $e.routeUrl('root.logout') }}"
               >
                 <i class="fas fa-sign-out-alt shrink-0"></i>
                 <span>{{ $t('auth.logout') }}</span>
@@ -88,7 +88,7 @@
 
         <details
           class="relative"
-          dir="{{ 'ltr' if $t('dir') == 'rtl' else 'rtl' }}"
+          dir="{{ $t('dir') == 'rtl' ? 'ltr' : 'rtl' }}"
         >
           <summary
             class="list-none inline-flex h-10 cursor-pointer items-center rounded-md px-3 text-primary-200 hover:bg-primary-800 hover:text-primary-100"

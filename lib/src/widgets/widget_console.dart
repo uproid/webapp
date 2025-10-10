@@ -1631,7 +1631,11 @@ class DebuggerStatusBar {
         
         // Path
         const pathCell = document.createElement('td');
-        pathCell.textContent = route.path || route.fullPath || '-';
+        pathCell.textContent = "Path: " + (route.path || route.fullPath || '-');
+        if(route.key){
+          pathCell.appendChild(document.createElement('br'));
+          pathCell.appendChild(document.createTextNode('Key: '+route.key));
+        }
         row.appendChild(pathCell);
         
         // Type

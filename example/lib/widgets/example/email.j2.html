@@ -8,7 +8,7 @@
   <h3 class="text-xl font-semibold text-slate-800">{{ $t('email.test') }}</h3>
   <div class="mt-4 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
     <div class="p-5">
-      <form method="post" class="space-y-6">
+      <form method="post" action="{{ $e.routeUrl('root.email.post') }}" class="space-y-6">
         <div class="grid gap-4 md:grid-cols-2">
           <div>
             <label for="from" class="mb-1 block text-sm font-medium text-slate-700">{{ $t('email.from') }}</label>

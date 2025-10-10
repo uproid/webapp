@@ -1,6 +1,7 @@
 import 'package:mysql_client/mysql_client.dart';
 import 'package:mysql_client/mysql_protocol.dart';
 import 'package:webapp/src/forms/form_validator.dart';
+import 'package:webapp/src/tools/console.dart';
 import 'package:webapp/src/tools/convertor/string_validator.dart';
 import 'package:webapp/wa_mysql.dart';
 
@@ -291,7 +292,7 @@ extension MySqlTable on MTable {
     Map<String, List<Future<FieldValidateResult> Function(dynamic)>> fields =
         {};
 
-    var exteraData = <String, Object?>{};
+    var extraData = <String, Object?>{};
     for (final field in this.fields) {
       fields[field.name] = field.validators.map((validator) {
         return (value) async {
@@ -302,14 +303,15 @@ extension MySqlTable on MTable {
           );
         };
       }).toList();
-      exteraData[field.name] = data[field.name];
+      extraData[field.name] = data[field.name];
     }
 
     FormValidator formValidator = FormValidator(
       fields: fields,
       name: '${name}_form',
-      extraData: exteraData,
+      extraData: extraData,
     );
+
     var res = await formValidator.validateAndForm();
 
     return FormResult(
@@ -428,4 +430,18 @@ class MySqlResult {
   int get countRecords {
     return int.tryParse((assocFirst?[_countRecordsField] ?? 0).toString()) ?? 0;
   }
+
+  Future<List<Map<String, Object?>>> assocBy(DataAssoc dataAssoc) async {
+    var list = <Map<String, Object?>>[];
+
+    for (var row in rows) {
+      list.add(await dataAssoc.toAssoc(row.assoc()));
+    }
+
+    return list;
+  }
+}
+
+abstract class DataAssoc {
+  Future<Map<String, Object?>> toAssoc(Map<String, Object?> row);
 }

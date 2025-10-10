@@ -5,6 +5,9 @@ import 'package:webapp/wa_route.dart';
 import 'package:webapp/wa_tools.dart';
 
 var localEvents = <String, Object>{
+  'route': (String key) {
+    return WebRoute.getByKey(key)?.getUrl() ?? '';
+  },
   'hasFlash': () {
     return RequestContext.rq.get('flash') != null;
   },

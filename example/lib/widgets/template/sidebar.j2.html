@@ -5,7 +5,7 @@
     <ul class="flex list-none flex-col gap-1 p-0">
       <!-- Navigation Category -->
       <li>
-        <details class="group" {{ 'open' if $e.isPath('/') ?? $e.isPath('/info') else '' }}>
+        <details class="group" {{ $e.hasKey(['root.info', 'root.home']) ? 'open' : '' }}>
           <summary class="flex cursor-pointer list-none items-center justify-between rounded-md px-3 py-2 text-sm hover:bg-primary-50">
             <span class="inline-flex items-center gap-2">
               <i class="fa-solid fa-compass w-5 text-black"></i>
@@ -16,8 +16,8 @@
           <ul class="mt-1 space-y-1 border-l border-outline/20 pl-4">
             <li>
               <a
-                href="/"
-                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/') else '' }}"
+                href="{{ $e.routeUrl('root.home') }}"
+                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ $e.isKey('root.home') ? 'bg-primary-50 font-medium text-primary-700' : '' }}"
                 aria-current="page"
               >
                 <i class="fa-solid fa-house w-5 text-black"></i>
@@ -26,8 +26,8 @@
             </li>
             <li>
               <a
-                href="/info"
-                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/info') else '' }}"
+                href="{{ $e.routeUrl('root.info') }}"
+                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ $e.isKey('root.info') ? 'bg-primary-50 font-medium text-primary-700' : '' }}"
                 aria-current="page"
               >
                 <i class="fa-solid fa-circle-info w-5 text-black"></i>
@@ -40,7 +40,7 @@
 
       <!-- Web Examples Category -->
       <li>
-        <details class="group" {{ 'open' if $e.isPath('/example/form') ?? $e.isPath('/example/cookie') ?? $e.isPath('/example/route') ?? $e.isPath('/example/socket') ?? $e.isPath('/example/email') ?? $e.isPath('/example/panel') ?? $e.isPath('/example/language') else '' }}>
+        <details class="group" {{ $e.hasKey(['root.form','root.form.post','root.cookie','root.cookie.post','root.route','root.socket','root.email','root.email.post','root.panel','root.language']) ? 'open' : '' }}>
           <summary class="flex cursor-pointer list-none items-center justify-between rounded-md px-3 py-2 text-sm hover:bg-primary-50">
             <span class="inline-flex items-center gap-2">
               <i class="fa-solid fa-globe w-5 text-black"></i>
@@ -51,8 +51,8 @@
           <ul class="mt-1 space-y-1 border-l border-outline/20 pl-4">
             <li>
               <a
-                href="/example/form"
-                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/form') else '' }}"
+                href="{{ $e.routeUrl('root.form') }}"
+                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ $e.hasKey(['root.form','root.form.post']) ? 'bg-primary-50 font-medium text-primary-700' : '' }}"
                 aria-current="page"
               >
                 <i class="fa-solid fa-pen-to-square w-5 text-black"></i>
@@ -61,8 +61,8 @@
             </li>
             <li>
               <a
-                href="/example/cookie"
-                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/cookie') else '' }}"
+                href="{{ $e.routeUrl('root.cookie') }}"
+                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ $e.hasKey(['root.cookie','root.cookie.post']) ? 'bg-primary-50 font-medium text-primary-700' : '' }}"
                 aria-current="page"
               >
                 <i class="fa-solid fa-cookie-bite w-5 text-black"></i>
@@ -71,8 +71,8 @@
             </li>
             <li>
               <a
-                href="/example/route"
-                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/route') else '' }}"
+                href="{{ $e.routeUrl('root.route') }}"
+                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ $e.hasKey(['root.route']) ? 'bg-primary-50 font-medium text-primary-700' : '' }}"
                 aria-current="page"
               >
                 <i class="fa-solid fa-route w-5 text-black"></i>
@@ -81,8 +81,8 @@
             </li>
             <li>
               <a
-                href="/example/socket"
-                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/socket') else '' }}"
+                href="{{ $e.routeUrl('root.socket') }}"
+                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ $e.hasKey(['root.socket']) ? 'bg-primary-50 font-medium text-primary-700' : '' }}"
                 aria-current="page"
               >
                 <i class="fa-solid fa-plug w-5 text-black"></i>
@@ -91,8 +91,8 @@
             </li>
             <li>
               <a
-                href="/example/email"
-                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/email') else '' }}"
+                href="{{ $e.routeUrl('root.email') }}"
+                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ $e.hasKey(['root.email','root.email.post']) ? 'bg-primary-50 font-medium text-primary-700' : '' }}"
                 aria-current="page"
               >
                 <i class="fa-solid fa-envelope w-5 text-black"></i>
@@ -101,8 +101,8 @@
             </li>
             <li>
               <a
-                href="/example/panel"
-                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/panel') else '' }}"
+                href="{{ $e.routeUrl('root.panel') }}"
+                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ $e.hasKey(['root.panel']) ? 'bg-primary-50 font-medium text-primary-700' : '' }}"
                 aria-current="page"
               >
                 <i class="fa-solid fa-user-shield w-5 text-black"></i>
@@ -111,8 +111,8 @@
             </li>
             <li>
               <a
-                href="/example/language"
-                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/language') else '' }}"
+                href="{{ $e.routeUrl('root.language') }}"
+                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ $e.hasKey(['root.language']) ? 'bg-primary-50 font-medium text-primary-700' : '' }}"
                 aria-current="page"
               >
                 <i class="fa-solid fa-language w-5 text-black"></i>
@@ -126,7 +126,7 @@
       <!-- Database Examples Category -->
       {% if mongoActive ?? mysqlActive %}
       <li>
-        <details class="group" {{ 'open' if $e.isPath('/example/database') ?? $e.isPath('/example/person') ?? $e.isPath('/example/mysql') else '' }}>
+        <details class="group" {{ $e.hasKey(['root.database','root.person.delete','root.persons', 'root.person.show', 'root.person.post','root.mysql']) ? 'open' : '' }}>
           <summary class="flex cursor-pointer list-none items-center justify-between rounded-md px-3 py-2 text-sm hover:bg-primary-50">
             <span class="inline-flex items-center gap-2">
               <i class="fa-solid fa-database w-5 text-black"></i>
@@ -138,8 +138,8 @@
             {% if mongoActive %}
             <li>
               <a
-                href="/example/database"
-                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/database') else '' }}"
+                href="{{ $e.routeUrl('root.database') }}"
+                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ $e.hasKey(['root.database']) ? 'bg-primary-50 font-medium text-primary-700' : '' }}"
                 aria-current="page"
               >
                 <i class="fa-solid fa-leaf w-5 text-black"></i>
@@ -148,8 +148,8 @@
             </li>
             <li>
               <a
-                href="/example/person"
-                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/person') else '' }}"
+                href="{{ $e.routeUrl('root.persons') }}"
+                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ $e.hasKey(['root.persons','root.person.show','root.person.delete']) ? 'bg-primary-50 font-medium text-primary-700' : '' }}"
                 aria-current="page"
               >
                 <i class="fa-solid fa-user-group w-5 text-black"></i>
@@ -160,8 +160,8 @@
             {% if mysqlActive %}
             <li>
               <a
-                href="/example/mysql"
-                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/mysql') else '' }}"
+                href="{{ $e.routeUrl('root.mysql') }}"
+                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ $e.hasKey(['root.mysql']) ? 'bg-primary-50 font-medium text-primary-700' : '' }}"
                 aria-current="page"
               >
                 <i class="fa-solid fa-server w-5 text-black"></i>
@@ -176,7 +176,7 @@
 
       <!-- Development Tools Category -->
       <li>
-        <details class="group" {{ 'open' if $e.isPath('/example/pagination') ?? $e.isPath('/example/htmler') ?? $e.isPath('/swagger') else '' }}>
+        <details class="group" {{ 'open' if $e.hasKey(['root.pagination', 'root.htmler', 'root.swagger']) else '' }}>
           <summary class="flex cursor-pointer list-none items-center justify-between rounded-md px-3 py-2 text-sm hover:bg-primary-50">
             <span class="inline-flex items-center gap-2">
               <i class="fa-solid fa-tools w-5 text-black"></i>
@@ -187,8 +187,8 @@
           <ul class="mt-1 space-y-1 border-l border-outline/20 pl-4">
             <li>
               <a
-                href="/example/pagination"
-                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/pagination') else '' }}"
+                href="{{ $e.routeUrl('root.pagination') }}"
+                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ $e.hasKey(['root.pagination']) ? 'bg-primary-50 font-medium text-primary-700' : '' }}"
                 aria-current="page"
               >
                 <i class="fa-solid fa-list-ol w-5 text-black"></i>
@@ -197,8 +197,8 @@
             </li>
             <li>
               <a
-                href="/example/htmler"
-                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/htmler') else '' }}"
+                href="{{ $e.routeUrl('root.htmler') }}"
+                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ $e.hasKey(['root.htmler']) ? 'bg-primary-50 font-medium text-primary-700' : '' }}"
                 aria-current="page"
               >
                 <i class="fa-solid fa-theater-masks w-5 text-black"></i>
@@ -207,8 +207,8 @@
             </li>
             <li>
               <a
-                href="/swagger"
-                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/swagger') else '' }}"
+                href="{{ $e.routeUrl('root.swagger') }}"
+                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ $e.hasKey(['root.swagger']) ? 'bg-primary-50 font-medium text-primary-700' : '' }}"
                 aria-current="page"
               >
                 <i class="fa-solid fa-file-code w-5 text-black"></i>
@@ -219,9 +219,9 @@
         </details>
       </li>
 
-      <!-- Debug & Testing Category -->
+      <!-- Testing Category -->
       <li>
-        <details class="group" {{ 'open' if $e.isPath('/example/error') ?? $e.isPath('/example/dump') else '' }}>
+        <details class="group" {{ $e.hasKey(['root.error', 'root.dump']) ? 'open' : '' }}>
           <summary class="flex cursor-pointer list-none items-center justify-between rounded-md px-3 py-2 text-sm hover:bg-primary-50">
             <span class="inline-flex items-center gap-2">
               <i class="fa-solid fa-bug w-5 text-black"></i>
@@ -232,8 +232,8 @@
           <ul class="mt-1 space-y-1 border-l border-outline/20 pl-4">
             <li>
               <a
-                href="/example/error"
-                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/error') else '' }}"
+                href="{{ $e.routeUrl('root.error') }}"
+                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ $e.hasKey(['root.error']) ? 'bg-primary-50 font-medium text-primary-700' : '' }}"
                 aria-current="page"
               >
                 <i class="fa-solid fa-triangle-exclamation w-5 text-black"></i>
@@ -242,8 +242,8 @@
             </li>
             <li>
               <a
-                href="/example/dump"
-                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ 'bg-primary-50 font-medium text-primary-700' if $e.isPath('/example/dump') else '' }}"
+                href="{{ $e.routeUrl('root.dump') }}"
+                class="wave flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-50 hover:text-primary-700 {{ $e.hasKey(['root.dump']) ? 'bg-primary-50 font-medium text-primary-700' : '' }}"
                 aria-current="page"
               >
                 <i class="fa-solid fa-code w-5 text-black"></i>
@@ -253,7 +253,6 @@
           </ul>
         </details>
       </li>
-
     </ul>
   </div>
 </aside>

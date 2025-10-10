@@ -1348,7 +1348,26 @@ class WebRequest {
       );
     };
     var events = {
-      'route': route == null ? '/' : route!.getPathRender(),
+      'route': route?.getPathRender() ?? '/',
+      'routePath': route?.getFullPath() ?? '/',
+      'routeKey': route?.key ?? '',
+      'isKey': (String key) {
+        return route?.key == key;
+      },
+      'hasKey': (List key) {
+        return key.contains(route?.key);
+      },
+      'routeUrl': (
+        String key, [
+        Map<String, Object?> params = const {},
+        Map<String, Object?> query = const {},
+      ]) {
+        var res = WebRoute.getByKey(key)?.getUrl(params, query);
+        if (res == null) {
+          throw Exception("The route key '$key' not found!");
+        }
+        return res;
+      },
       'uri': Uri.encodeComponent(_rq.requestedUri.toString()),
       'uriString': _rq.requestedUri.toString(),
       'path': Uri.encodeComponent(_rq.requestedUri.path),
@@ -1584,7 +1603,7 @@ class WebRequest {
     var pathRequest = _rq.requestedUri.origin;
     var uri = Uri.parse(pathRequest);
     uri = uri.resolve(subPath);
-    if (params != null) {
+    if (params != null && params.isNotEmpty) {
       uri = uri.replace(queryParameters: params);
     }
 

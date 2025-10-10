@@ -25,10 +25,13 @@
           <tr class="odd:bg-white even:bg-slate-50">
             <td class="px-4 py-2 align-top text-sm text-slate-700">{{ loop.index }}</td>
             <td class="px-4 py-2 align-top text-sm">
-              <a class="text-primary-700 hover:underline" href="{{ route.fullPath }}">
-                [{{ route.method }}]
-                {{ route.fullPath }}
-              </a>
+              <div>
+                <a class="text-primary-700 hover:underline" href="{{ route.fullPath }}">
+                  [{{ route.method }}]
+                  {{ route.fullPath }}
+                </a>
+              </div>
+              <div class="text-xs text-slate-500">{{ route.key }}</div>
             </td>
             <td class="px-4 py-2 align-top text-sm text-slate-700">{{ route.type }}</td>
             <td class="px-4 py-2 align-top text-sm text-slate-700">{{ route.permissions }}</td>

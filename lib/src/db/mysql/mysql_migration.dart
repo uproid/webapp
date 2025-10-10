@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
 import 'package:mysql_client/mysql_client.dart';
 import 'package:webapp/src/tools/console.dart';
+import 'package:webapp/src/tools/convertor/convert_strings.dart';
 import 'package:webapp/src/tools/path.dart';
 import 'package:webapp/wa_mysql.dart';
 
@@ -160,17 +161,22 @@ class MysqlMigration {
   /// - Rollback SQL statements (-- ## ROLL BACK:)
   /// The filename format is: `{timestamp}_migration.sql`
   /// Returns a success message with the path of the created file.
-  Future<String> migrateCreate() async {
+  Future<String> migrateCreate({
+    String name = '',
+  }) async {
     File file = File(
       path.join(
         pathTo('./migrations'),
-        '${DateTime.now().millisecondsSinceEpoch}_migration.sql',
+        '${DateTime.now().millisecondsSinceEpoch}_'
+        '${name.isNotEmpty ? '${name.toSlug().replaceAll('-', '_')}_' : ''}'
+        'migration.sql',
       ),
     );
 
     file.createSync(recursive: true);
     file.writeAsString(
       '-- ${DateTime.now()} \n'
+      '${name.isNotEmpty ? '-- Name: $name \n' : ''}'
       '-- ## NEW VERSION:\n\n\n\n'
       '-- ## ROLL BACK:\n\n\n\n',
     );

@@ -67,8 +67,6 @@ abstract class DBCollectionFree {
       });
       json[collection.name] = jsonCollection;
     }
-
-    Console.json(json);
   }
 
   /// The form definition containing field validators and structure.

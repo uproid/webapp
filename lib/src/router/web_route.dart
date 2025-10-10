@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:vmservice_io';
 import 'package:webapp/wa_route.dart';
 import 'package:webapp/wa_tools.dart';
 
@@ -42,6 +43,8 @@ import 'package:webapp/wa_tools.dart';
 /// )
 /// ```
 class WebRoute {
+  static final Map<String, WebRoute> _keyedRoutes = {};
+
   /// The primary path of the route. For example, `/test` or `/test/*`.
   /// If using `/test/*`, it will match all sub-paths under `/test`.
   late String path;
@@ -97,6 +100,9 @@ class WebRoute {
   /// Paths that should not be included in all sub-paths of `/*`.
   late List<String> excludePaths;
 
+  /// Key of routes of the current route, defining a tree structure of routes.
+  String? key;
+
   /// Sub-routes of the current route, defining a tree structure of routes.
   List<WebRoute> children;
 
@@ -116,13 +122,14 @@ class WebRoute {
   /// Returns the full path after rendering.
   String getPathRender() => _pathAfterRender;
 
+  WebRoute? parent;
+
   /// Creates a [WebRoute] instance with the specified parameters.
   ///
   /// [path] and [rq] are required parameters. All other parameters have default values.
   WebRoute({
     required this.path,
-    @Deprecated('This parameter will be removed in future versions. 3.0.0')
-    WebRequest? rq,
+    this.key,
     this.extraPath = const [],
     this.methods = const [RequestMethods.GET],
     this.controller,
@@ -137,7 +144,68 @@ class WebRoute {
     this.permissions = const [],
     this.hosts = const ['*'],
     this.ports = const [],
-  }) : super();
+  }) {
+    if (key != null && key!.isNotEmpty) {
+      _keyedRoutes[key!] = this;
+    }
+
+    for (var child in children) {
+      child.parent = this;
+    }
+  }
+
+  static WebRoute? getByKey(String key) {
+    return _keyedRoutes[key];
+  }
+
+  var _fullPath = '';
+  String _initFullPath() {
+    var paths = <String>[];
+    paths.add(path);
+
+    if (parent != null) {
+      paths.insert(0, parent!._initFullPath());
+    }
+    return endpointNorm(paths);
+  }
+
+  String getFullPath() {
+    if (_fullPath.isNotEmpty) {
+      return _fullPath;
+    }
+    return _fullPath = _initFullPath();
+  }
+
+  String getUrl([
+    Map<String, Object?> params = const {},
+    Map<String, Object?> queries = const {},
+  ]) {
+    String path = getFullPath();
+    params.forEach((key, value) {
+      path = path.replaceAll('{$key}', value.toString());
+    });
+    Map<String, String> q =
+        queries.map((key, value) => MapEntry(key, value.toString()));
+    return RequestContext.rq.url(path, params: q);
+  }
+
+  Map<String, Object?> toDetails() {
+    return {
+      'path': getFullPath(),
+      'extraPath': extraPath,
+      'methods': methods,
+      'auth': auth != null,
+      'children': children.length,
+      'params': params,
+      'title': title,
+      'excludePaths': excludePaths,
+      'apiDoc': apiDoc != null,
+      'permissions': permissions,
+      'hosts': hosts,
+      'ports': ports,
+      'key': key,
+    };
+  }
 
   /// Validates if the current HTTP request method is allowed for this route.
   ///
@@ -185,6 +253,7 @@ class WebRoute {
           index?.toString().split(' ').last.replaceAll(RegExp(r"[:'.]"), ''),
       'hosts': hosts,
       'ports': ports,
+      'key': key,
     });
 
     for (var epath in extraPath) {
@@ -202,6 +271,7 @@ class WebRoute {
             index?.toString().split(' ').last.replaceAll(RegExp(r"[:'.]"), ''),
         'hosts': hosts,
         'ports': ports,
+        'key': key,
       });
     }
 
@@ -263,10 +333,13 @@ class WebRoute {
     Future<ApiDoc>? Function()? apiDoc,
     List<String> hosts = const ['*'],
     List<int> ports = const [],
+    String? key,
   }) {
     var res = <WebRoute>[];
 
+    int i = 0;
     for (var path in paths) {
+      i++;
       final route = WebRoute(
         path: path,
         index: index,
@@ -283,6 +356,7 @@ class WebRoute {
         widget: widget,
         hosts: hosts,
         ports: ports,
+        key: key != null ? '$key.$i' : null,
       );
       res.add(route);
     }

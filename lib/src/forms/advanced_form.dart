@@ -1,3 +1,4 @@
+import 'package:webapp/src/tools/console.dart';
 import 'package:webapp/wa_model_less.dart';
 import 'package:webapp/wa_route.dart';
 import 'package:webapp/wa_ui.dart';
@@ -43,6 +44,12 @@ abstract class AdvancedForm {
       };
     }
     rq.addParam(name, initializer);
+  }
+
+  Future<bool> fill(Map<String, dynamic>? fill) async {
+    return check(
+      fill: fill ?? {},
+    );
   }
 
   Future<bool> check({
@@ -99,12 +106,13 @@ abstract class AdvancedForm {
     return res;
   }
 
-  Future<void> initOptions() async {
-    var res = rq.getParam(this.name) as Map<String, dynamic>? ?? {};
+  Future<AdvancedForm> initOptions() async {
+    var res = rq.getParam(name) as Map<String, dynamic>? ?? {};
     for (var field in _fields) {
       res[field.name]['options'] = await field.initOptions?.call(field) ?? [];
     }
     rq.addParam(name, res);
+    return this;
   }
 
   dynamic _setValue(Field field, dynamic value) {

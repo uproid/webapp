@@ -10,9 +10,9 @@ var localEvents = <String, Object>{
     return RequestContext.rq.get('flash') != null;
   },
   'getFlashs': () {
-    var flash = RequestContext.rq.getParam('flashs');
-    RequestContext.rq.removeParam('flashs');
-    return flash;
+    var flash = RequestContext.rq.session['flashes'];
+    RequestContext.rq.session.remove('flashes');
+    return flash ?? [];
   },
   'updateUrlQuery': ([Object? updates]) {
     if (updates is String) {

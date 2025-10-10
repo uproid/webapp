@@ -103,7 +103,7 @@
           {% endfor %}
         </tbody>
         <tfoot class="bg-slate-50">
-          {% include 'example/mysql/_form_edit.j2.html' %}
+          {% include form_book.widget | unscape %}
         </tfoot>
       </table>
     </div>

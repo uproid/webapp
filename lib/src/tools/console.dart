@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:logger/logger.dart';
 
-typedef LogCallback = void Function(Object log, String type);
+typedef LogCallback = void Function(Object? log, String type);
 
 /// A utility class for logging messages with different severity levels.
 /// The [Console] class provides static methods for logging warnings, errors,

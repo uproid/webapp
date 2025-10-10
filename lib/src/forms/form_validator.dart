@@ -591,10 +591,14 @@ class FieldValidator {
     required MySQLConnection db,
     required String table,
     required String field,
+    bool isRequired = true,
     QO operator = QO.EQ,
     Where? where,
   }) {
     return (v) async {
+      if (!isRequired && (v == null || v.toString().isEmpty)) {
+        return FieldValidateResult(success: true);
+      }
       Sqler sqler = Sqler();
       sqler.from(QField(table));
       sqler.addSelect(SQL.count(QField(field, as: 'count_of_field')));

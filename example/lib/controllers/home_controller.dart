@@ -1,5 +1,8 @@
 import 'dart:io';
 import 'dart:math';
+import 'package:example/forms/book_form.dart';
+import 'package:webapp/wa_console.dart';
+
 import '../db/mysql/mysql_books.dart';
 import '../db/mysql/mysql_categories.dart';
 import 'package:webapp/wa_mysql.dart';
@@ -652,22 +655,24 @@ class HomeController extends WaController {
     MysqlCategories tableCategories = MysqlCategories(server.mysqlDb);
     final action = rq.get<String>('action', def: '');
     rq.addParam('action', action);
+    BookForm bookForm = BookForm();
+    await bookForm.initOptions();
 
     if (action == 'add_category') {
       final title = rq.get<String>('title', def: '');
       if (title.isNotEmpty) {
         var res = await tableCategories.addNewCategory(title: title);
-        if (res.success) {
-          addFlash('Category added successfully');
-        } else {
-          addFlash(
-            'Error adding category: ${res.errorMsg}',
-            type: FlashType.ERROR,
-          );
-        }
+
+        addFlash(
+          res.success
+              ? 'Category added successfully'
+              : 'Error adding category: ${res.errorMsg}',
+          type: res.success ? FlashType.SUCCESS : FlashType.ERROR,
+        );
       } else {
         addFlash('Category title is required', type: FlashType.ERROR);
       }
+      return rq.redirect(WebRoute.getPath('root.mysql'));
     } else if (action == 'delete_category') {
       final id = rq.get<String>('id', def: '');
       await tableCategories.deleteCategory(id);
@@ -683,58 +688,41 @@ class HomeController extends WaController {
     } else if (action == 'add' || action == 'edit' || action == 'update') {
       Map<String, dynamic>? book;
       var bookId = rq.get<String>('id', def: '');
-
       rq.addParam('id', bookId);
 
-      if (action == 'edit' || action == 'update') {
+      if (action == 'edit' || action == 'update' || action == 'add') {
         book = await tableBooks.getBookById(bookId);
-      }
+        var isValid = await bookForm.check();
+        MySqlResult? res;
 
-      var data = <String, dynamic>{};
-      switch (action) {
-        case 'edit':
-          data = book ?? {};
-          break;
-        default:
-          data = rq.getAll();
-      }
-      var validate = await tableBooks.table.formValidateUI(data);
-      if ((action == "update" || action == "add") && validate.result) {
-        final title = rq.get<String>('title', def: '');
-        final author = rq.get<String>('author', def: '');
-        final publishedDate = rq.get<String>('published_date', def: '');
-        final categoryId = rq.get<String>('category_id', def: '');
-        MySqlResult res;
-
-        if (action == "update" && book != null) {
+        if (action == "update" && book != null && isValid) {
           res = await tableBooks.updateBook(
             id: bookId,
-            title: title,
-            author: author,
-            publishedDate: publishedDate,
-            categoryId: categoryId,
+            title: bookForm.get<String>('title', def: ''),
+            author: bookForm.get<String>('author', def: ''),
+            publishedDate: bookForm.get<String>('published_date', def: ''),
+            categoryId: bookForm.get<String>('category_id', def: ''),
           );
-        } else if (action == "add") {
+        } else if (action == "add" && isValid) {
           res = await tableBooks.addNewBook(
-            title: title,
-            author: author,
-            publishedDate: publishedDate,
-            categoryId: categoryId,
+            title: bookForm.get<String>('title', def: ''),
+            author: bookForm.get<String>('author', def: ''),
+            publishedDate: bookForm.get<String>('published_date', def: ''),
+            categoryId: bookForm.get<String>('category_id', def: ''),
           );
-        } else {
-          return rq.redirect('/example/mysql/overview');
         }
 
-        if (res.success) {
-          addFlash('Book added successfully');
-        } else {
+        if (res != null) {
           addFlash(
-            'Error adding book: ${res.errorMsg}',
-            type: FlashType.ERROR,
+            res.success ? 'Book saved successfully' : 'Error saving book',
+            type: res.success ? FlashType.SUCCESS : FlashType.ERROR,
           );
+          return rq.redirect(WebRoute.getPath('root.mysql'));
         }
+
+        await bookForm.fill(res?.assocFirst ?? book);
       } else {
-        rq.addParam('form', validate.form);
+        return rq.redirect(WebRoute.getPath('root.mysql'));
       }
     }
 
@@ -803,12 +791,12 @@ class HomeController extends WaController {
   }
 
   void addFlash(String text, {final type = FlashType.SUCCESS}) {
-    var flashs = rq.get<List>('flashs', def: []);
-    flashs.add({
-      'text': text,
+    List<Map<String, String>> flashMessages = rq.session['flashes'] ?? [];
+    flashMessages.add({
       'type': type.toString(),
+      'text': text,
     });
-    rq.addParam('flashs', flashs);
+    rq.session['flashes'] = flashMessages;
   }
 }
 

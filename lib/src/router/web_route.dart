@@ -157,6 +157,10 @@ class WebRoute {
     return _keyedRoutes[key];
   }
 
+  static String getPath(String key) {
+    return _keyedRoutes[key]?.getFullPath() ?? '/';
+  }
+
   var _fullPath = '';
   String _initFullPath() {
     var paths = <String>[];

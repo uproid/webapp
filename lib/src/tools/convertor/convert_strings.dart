@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:base32/base32.dart';
 import 'package:crypto/crypto.dart';
 import 'package:html_unescape/html_unescape.dart';
+import 'package:intl/intl.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 
 /// Extension methods for [String] to provide various utilities for string manipulation,
@@ -106,5 +107,11 @@ extension ConvertMap on Map {
       res = "${res.isEmpty ? '' : "$res$separatorEntries"}$key$separator$value";
     });
     return res;
+  }
+}
+
+extension DateTimeFormat on DateTime {
+  String format(String format) {
+    return DateFormat(format).format(this);
   }
 }

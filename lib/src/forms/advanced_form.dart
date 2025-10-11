@@ -5,6 +5,7 @@ import 'package:webapp/wa_ui.dart';
 abstract class AdvancedForm {
   WebRequest get rq => RequestContext.rq;
   String name = 'form';
+  String csrfTokenName = 'token';
   String widget = 'forms/form.j2.html';
   Map<String, dynamic> initData = {};
   var _isChecked = false;
@@ -131,6 +132,76 @@ abstract class AdvancedForm {
   }
 
   List<String> get fieldKeys => _fields.map((field) => field.name).toList();
+
+  Field csrf() {
+    var nameCsrf = 'csrf_token_$name';
+    var csrfToken = _generateCsrfToken(nameCsrf);
+    return Field(
+      csrfTokenName,
+      validators: [
+        FieldValidator.requiredField(),
+        (value) async {
+          if (!posted) {
+            return FieldValidateResult(
+              success: true,
+              error: '',
+            );
+          }
+          var res = _checkCsrf(
+            value: rq.get<String>(csrfTokenName, def: ''),
+            name: nameCsrf,
+          );
+          return FieldValidateResult(
+            success: res,
+            error: res ? '' : 'Invalid CSRF token. Please try again.',
+          );
+        },
+      ],
+      initValue: csrfToken,
+    );
+  }
+
+  /// Six hours for session validity
+  bool _checkCsrf({
+    required String name,
+    required String? value,
+    int diffDuration = 60 * 60 * 6,
+  }) {
+    if (value != null && value != '') {
+      Map dataSession = rq.getSession(name, def: {}) as Map;
+      if (value == dataSession['key']) {
+        DateTime time = (dataSession['time'] ?? DateTime.now()) as DateTime;
+        DateTime duration = DateTime.now();
+        if (duration.difference(time).inSeconds <= diffDuration) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  String _generateCsrfToken(String name) {
+    var old = rq.getSession(name, def: {}) as Map;
+    String key = '';
+    DateTime time = DateTime.now();
+
+    if (old.isEmpty) {
+      key = rq.generateRandomString();
+    } else {
+      key = old['key'] ?? rq.generateRandomString();
+      if (!_checkCsrf(value: key, name: name)) {
+        key = rq.generateRandomString();
+        time = DateTime.now();
+      }
+    }
+
+    rq.addSession(name, {
+      'key': key,
+      'time': time,
+    });
+
+    return key;
+  }
 }
 
 class Field {

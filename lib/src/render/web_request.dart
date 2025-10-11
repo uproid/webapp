@@ -1773,6 +1773,31 @@ class WebRequest {
     return false;
   }
 
+  /// Validates a form submission by checking the provided value against the session key and timestamp.
+  /// CSRF protection.
+  /// [name] - The name attribute for the hidden input field. Defaults to 'formChecker'.
+  /// [value] - The value to be validated against the session key.
+  /// [diffDuration] - The maximum allowed duration (in seconds) between the form generation
+  /// and submission. Defaults to 600 seconds (10 minutes).
+  /// Returns a [bool] indicating whether the form submission is valid.
+  bool checkFormByValue({
+    String name = 'formChecker',
+    required String? value,
+    int diffDuration = 600,
+  }) {
+    if (value != null && value != '') {
+      Map dataSession = getSession(name, def: {}) as Map;
+      if (value == dataSession['key']) {
+        int time = (dataSession['time'] ?? 0) as int;
+        int duration = DateTime.now().millisecondsSinceEpoch - time;
+        if (duration / 1000 < diffDuration) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   /// Retrieves the client's IP address from the request headers or connection information.
   ///
   /// This method checks the `X-Real-IP` and `X-Forwarded-For` headers, which are set by Nginx.

@@ -14,6 +14,7 @@ class BookForm extends AdvancedForm {
   @override
   List<Field> fields() {
     return [
+      csrf(),
       Field(
         'title',
         validators: [

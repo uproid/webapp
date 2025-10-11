@@ -49,12 +49,17 @@
                     </select>
                     <div class="mt-1 text-[10px] text-rose-600 {{ '' if $n('form_book/category_id/errors/0') else 'hidden' }}">{{ $n('form_book/category_id/errors/0') }}</div>
                 </div>
+                <!-- CSRF Token -->
+                <input type="hidden" name="token" value="{{ $n('form_book/token/value') }}" />
+                
                 {% if(action == 'edit' ?? action == 'update') %}
                 <input type="hidden" name="id" value="{{ id }}" />
                 <button type="submit" class="wave inline-flex h-9 items-center rounded-md border border-primary-600 bg-primary-50 px-3 text-xs font-medium text-primary-700 hover:bg-primary-100 focus:outline-none focus:ring-2 focus:ring-primary-500/30">{{ $t('mysql.button.update') }}</button>
                 {% else %}
                 <button type="submit" class="wave inline-flex h-9 items-center rounded-md border border-primary-600 bg-primary-50 px-3 text-xs font-medium text-primary-700 hover:bg-primary-100 focus:outline-none focus:ring-2 focus:ring-primary-500/30">{{ $t('database.table.button.add') }}</button>
                 {% endif %}
+
+                <div class="mt-1 text-[10px] text-rose-600 {{ $n('form_book/token/errors/0') ? '' : 'hidden' }}">{{ $n('form_book/token/errors/0') }}</div>
             </div>
         </td>
     </tr>

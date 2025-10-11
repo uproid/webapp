@@ -54,10 +54,7 @@ class RequestMethods {
   /// A list of commonly used HTTP methods for request submissions.
   ///
   /// Includes: POST, GET.
-  static List<String> get GET_POST => [
-        POST,
-        GET,
-      ];
+  static List<String> get GET_POST => [POST, GET];
 
   /// A list containing only the HTTP GET method.
   static List<String> get ONLY_GET => [GET];
@@ -73,4 +70,10 @@ class RequestMethods {
 
   /// A list containing only the HTTP INSERT method.
   static List<String> get ONLY_INSERT => [INSERT];
+
+  static List<String> get GET_ONLY => ONLY_GET;
+  static List<String> get POST_ONLY => ONLY_POST;
+  static List<String> get DELETE_ONLY => ONLY_DELETE;
+  static List<String> get PUT_ONLY => ONLY_PUT;
+  static List<String> get INSERT_ONLY => ONLY_INSERT;
 }

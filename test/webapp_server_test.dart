@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:test/test.dart';
+import 'package:webapp/src/forms/advanced_form.dart';
+import 'package:webapp/src/forms/form_validator.dart';
 import 'package:webapp/src/tools/console.dart';
 import 'package:webapp/src/views/htmler.dart';
 import 'package:webapp/wa_route.dart';
@@ -29,6 +31,23 @@ void main() async {
         path: "/",
         index: () => rq.renderString(text: "TEST"),
         children: [
+          WebRoute(
+            path: '/advanced_form',
+            methods: RequestMethods.GET_ONLY,
+            index: () async {
+              var _ = TestAdvancedForm();
+              return rq.renderDataParam();
+            },
+          ),
+          WebRoute(
+            path: '/advanced_form',
+            methods: RequestMethods.POST_ONLY,
+            index: () async {
+              var form = TestAdvancedForm();
+              await form.check();
+              return rq.renderDataParam();
+            },
+          ),
           WebRoute(
             path: '/sse',
             index: () {
@@ -469,6 +488,81 @@ void main() async {
       );
     }
   });
+
+  test('Test Advanced Form', () async {
+    var reqGet = await http.get(
+      Uri.parse("http://localhost:${httpServer.port}/advanced_form"),
+      headers: {
+        'Cookie': 'DARTSESSID=0f27deca10d6d3a19e9b5819c3f72eac;',
+      },
+    );
+    var dataGet = jsonDecode(reqGet.body);
+
+    var cookies = <String>[];
+    if (reqGet.headers['set-cookie'] != null) {
+      cookies.add(reqGet.headers['set-cookie']!);
+    }
+
+    var reqPost = await http.post(
+      Uri.parse("http://localhost:${httpServer.port}/advanced_form"),
+      headers: {
+        'Cookie': cookies.join('; '),
+      },
+      body: {
+        'name': 'John Doe',
+        'age': '30',
+        'email': 'john.doe@example.com',
+        'token': dataGet['test_form']['token']['value'],
+      },
+    );
+    var dataPost = jsonDecode(reqPost.body);
+
+    var reqPost2 = await http.post(
+      Uri.parse("http://localhost:${httpServer.port}/advanced_form"),
+      headers: {
+        'Cookie': cookies.join('; '),
+      },
+      body: {
+        'name': 'a',
+        'age': '-1',
+        'email': 'john.doe@example',
+        'token': '${dataGet['test_form']['token']['value']}_fake',
+      },
+    );
+    var dataPost2 = jsonDecode(reqPost2.body);
+
+    expect(reqPost.statusCode, 200, reason: "Status code should be 200");
+    expect(
+      dataPost['test_form']['success'],
+      isTrue,
+      reason: "Form submission should be successful",
+    );
+    expect(
+      dataPost2['test_form']['success'],
+      isFalse,
+      reason: "Form submission should fail with invalid token",
+    );
+    expect(
+      dataPost2['test_form']['token']['success'],
+      isFalse,
+      reason: "Token field should have errors",
+    );
+    expect(
+      dataPost2['test_form']['name']['success'],
+      isFalse,
+      reason: "Name field should have errors",
+    );
+    expect(
+      dataPost2['test_form']['age']['success'],
+      isFalse,
+      reason: "Age field should have errors",
+    );
+    expect(
+      dataPost2['test_form']['email']['success'],
+      isFalse,
+      reason: "Email field should have errors",
+    );
+  });
 }
 
 class AuthController extends WaAuthController<String> {
@@ -529,4 +623,34 @@ class AuthController extends WaAuthController<String> {
 
   @override
   void updateAuth(String email, String password, user) {}
+}
+
+class TestAdvancedForm extends AdvancedForm {
+  @override
+  String get name => 'test_form';
+
+  @override
+  List<Field> fields() {
+    return [
+      csrf(),
+      Field('name', validators: [
+        FieldValidator.requiredField(),
+        FieldValidator.fieldLength(min: 3),
+      ]),
+      Field(
+        'age',
+        validators: [
+          FieldValidator.isNumberField(
+            max: 100,
+            min: 1,
+            isRequired: false,
+          ),
+        ],
+      ),
+      Field('email', validators: [
+        FieldValidator.requiredField(),
+        FieldValidator.isEmailField(),
+      ]),
+    ];
+  }
 }

@@ -688,66 +688,7 @@ class WebRequest {
       }
     }
 
-    var env = Environment(
-        globals: getGlobalEvents(),
-        autoReload: false,
-        loader: FileSystemLoader(paths: <String>[WaServer.config.widgetsPath]),
-        leftStripBlocks: false,
-        trimBlocks: false,
-        blockStart: WaServer.config.blockStart,
-        blockEnd: WaServer.config.blockEnd,
-        variableStart: WaServer.config.variableStart,
-        variableEnd: WaServer.config.variableEnd,
-        commentStart: WaServer.config.commentStart,
-        commentEnd: WaServer.config.commentEnd,
-        filters: {
-          ..._layoutFilters,
-          'safe': (dynamic input) => safe(input.toString()),
-          'unscape': (dynamic input) => input.toString().unescape(),
-          'html': (dynamic input) => input.toString().unescape(),
-        },
-        getAttribute: (String key, dynamic object) {
-          try {
-            if (object is TString) {
-              return object.write();
-            }
-            if (object is String && key == 'tr') {
-              return object.tr.write();
-            }
-            if (object is Cookie) {
-              return key == 'name' ? object.name : object.value;
-            }
-
-            if (object[key] != null) {
-              if (object[key] is ObjectId) {
-                return (object[key] as ObjectId).oid;
-              }
-            }
-            if (object[key] is String) {
-              return safe(object[key]);
-            }
-            return object[key];
-          } on NoSuchMethodError {
-            Console.e({
-              'error': {
-                'object': object,
-                'key': key,
-                'error': 'The key "$key" on "$object" not found',
-              }
-            });
-
-            return null;
-          } catch (e) {
-            Console.w({
-              'error': {
-                'object': object,
-                'key': key,
-                'error': e,
-              }
-            });
-            return null;
-          }
-        });
+    var env = getTemplateEnvironment();
     var params = getParams();
     params.addAll(viewParams);
     Template template;
@@ -889,7 +830,26 @@ class WebRequest {
       }
     }
 
-    var env = Environment(
+    var env = getTemplateEnvironment();
+    var params = getParams();
+    params.addAll(viewParams);
+    Template template;
+    if (isFile) {
+      template = env.getTemplate(File(
+        joinPaths([
+          WaServer.config.widgetsPath,
+          "$path.${WaServer.config.widgetsType}",
+        ]),
+      ).path);
+    } else {
+      template = env.fromString(path);
+    }
+    var renderString = template.render(params);
+    return renderString;
+  }
+
+  Environment getTemplateEnvironment() {
+    return Environment(
         globals: getGlobalEvents(),
         autoReload: false,
         loader: FileSystemLoader(paths: <String>[WaServer.config.widgetsPath]),
@@ -901,7 +861,12 @@ class WebRequest {
         variableEnd: WaServer.config.variableEnd,
         commentStart: WaServer.config.commentStart,
         commentEnd: WaServer.config.commentEnd,
-        filters: _layoutFilters,
+        filters: {
+          ..._layoutFilters,
+          'safe': (dynamic input) => safe(input.toString()),
+          'unscape': (dynamic input) => input.toString().unescape(),
+          'html': (dynamic input) => input.toString().unescape(),
+        },
         getAttribute: (String key, dynamic object) {
           try {
             if (object is TString) {
@@ -918,6 +883,9 @@ class WebRequest {
               if (object[key] is ObjectId) {
                 return (object[key] as ObjectId).oid;
               }
+            }
+            if (object[key] is String) {
+              return safe(object[key]);
             }
             return object[key];
           } on NoSuchMethodError {
@@ -941,21 +909,6 @@ class WebRequest {
             return null;
           }
         });
-    var params = getParams();
-    params.addAll(viewParams);
-    Template template;
-    if (isFile) {
-      template = env.getTemplate(File(
-        joinPaths([
-          WaServer.config.widgetsPath,
-          "$path.${WaServer.config.widgetsType}",
-        ]),
-      ).path);
-    } else {
-      template = env.fromString(path);
-    }
-    var renderString = template.render(params);
-    return renderString;
   }
 
   static final Map<String, Function> _layoutFilters = {

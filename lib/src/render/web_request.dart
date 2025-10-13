@@ -1244,10 +1244,11 @@ class WebRequest {
             final filenameMatch =
                 RegExp(r'filename="(.+?)"').firstMatch(contentDisposition);
             if (filenameMatch != null) {
-              //final filename = filenameMatch.group(1);
+              final filename = filenameMatch.group(1) ?? 'unknown';
               final fileBytes = await part
                   .fold<List<int>>([], (bytes, data) => bytes..addAll(data));
               files[nameMatch!.group(1)!] = fileBytes;
+              fields["${nameMatch.group(1)!}_filename"] = filename;
             } else {
               final value = await utf8.decodeStream(part);
               fields[nameMatch!.group(1)!] = value;

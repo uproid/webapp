@@ -27,6 +27,14 @@ abstract class AdvancedForm {
     _init();
   }
 
+  Field getField(String name) {
+    try {
+      return _fields.firstWhere((field) => field.name == name);
+    } catch (e) {
+      throw Exception('Field $name not found in form ${this.name}');
+    }
+  }
+
   void _init() {
     var initializer = {
       'widget': widget,
@@ -89,6 +97,7 @@ abstract class AdvancedForm {
     return success;
   }
 
+  /// data is optional data that can be passed to the initOptions function
   Future<Map<String, dynamic>> checkAndData({
     bool fillEmpties = false,
   }) async {
@@ -109,7 +118,8 @@ abstract class AdvancedForm {
   Future<AdvancedForm> initOptions() async {
     var res = rq.getParam(name) as Map<String, dynamic>? ?? {};
     for (var field in _fields) {
-      res[field.name]['options'] = await field.initOptions?.call(field) ?? [];
+      res[field.name]['options'] =
+          field.initOptions != null ? await field.initOptions!(field) : [];
     }
     rq.addParam(name, res);
     return this;
@@ -209,7 +219,12 @@ class Field {
   List<ValidatorEvent> validators;
   Object? initValue;
   Type type = String;
-  Function(Field field)? initOptions = (field) async => [];
+
+  /// `data` is optional data that can be passed to the initOptions function
+  Function? initOptions = (
+    field,
+  ) async =>
+      null;
 
   Field(
     this.name, {
@@ -226,7 +241,7 @@ class Field {
       'error': '',
       'value': value,
       'failed': false,
-      'options': await initOptions?.call(this) ?? [],
+      'options': initOptions != null ? await initOptions!(this) : [],
     };
     var errors = <String>[];
     bool success = true;

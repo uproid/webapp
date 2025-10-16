@@ -187,8 +187,10 @@ class WaServer {
   /// Initializes and starts the HTTP server, sets up the database connection, and handles requests.
   /// This method is called internally by [start]. It waits for the database to load and sets up request handling.
   /// Returns a [Future] containing the [HttpServer] instance.
-  Future<HttpServer> _run(List<String>? args,
-      {bool awaitCommands = true}) async {
+  Future<HttpServer> _run(
+    List<String>? args, {
+    bool awaitCommands = true,
+  }) async {
     appLanguages = await MultiLanguage(config.languagePath).init();
     // Waiting to load database after a few secounds in live or staging
     if (!config.isLocalDebug) {
@@ -326,6 +328,10 @@ class WaServer {
         ),
         args: args,
         controllers: [
+          CappController('clear', options: [], run: (c) async {
+            CappConsole.clear();
+            return CappConsole.empty;
+          }),
           CappController(
             'help',
             options: [
@@ -713,6 +719,7 @@ class WaServer {
             await debugger?.sendToAll({}, path: 'restartStarted');
             await stop(force: true);
             await start();
+            await getAllRoutes();
           }),
           'get_data': SocketEvent(onMessage: (socket, data) async {
             debugger?.sendToAll({
@@ -727,7 +734,8 @@ class WaServer {
           }),
           'reinit': SocketEvent(onMessage: (socket, data) async {
             print("Server is restarting...");
-            restart();
+            await restart();
+            await getAllRoutes();
           }),
         },
       );

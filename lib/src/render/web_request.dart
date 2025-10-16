@@ -123,6 +123,9 @@ class WebRequest {
   /// Provides access to the HTTP method (e.g., GET, POST) used in the request.
   String get method => _rq.method;
 
+  /// Check method is Post
+  bool get isPost => method == RequestMethods.POST;
+
   /// Provides access to the HTTP headers included in the request.
   HttpHeaders get headers => _rq.headers;
 

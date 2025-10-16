@@ -4,6 +4,7 @@ import 'package:webapp/wa_ui.dart';
 
 abstract class AdvancedForm {
   WebRequest get rq => RequestContext.rq;
+
   String name = 'form';
   String csrfTokenName = 'token';
   String widget = 'forms/form.j2.html';
@@ -11,11 +12,18 @@ abstract class AdvancedForm {
   var _isChecked = false;
   bool get isChecked => _isChecked;
   Map? _checkedResult;
-
+  Map<String, dynamic> options = {};
   List<Field> _fields = [];
   List<Field> fields();
 
-  bool get posted => rq.method == RequestMethods.POST;
+  List<String> get methods => [
+        RequestMethods.POST,
+        RequestMethods.PUT,
+      ];
+
+  bool isSubmitted() {
+    return methods.contains(rq.method);
+  }
 
   AdvancedForm({this.initData = const {}}) {
     _fields = fields();
@@ -23,6 +31,7 @@ abstract class AdvancedForm {
       if (initData.containsKey(field.name)) {
         field.initValue = initData[field.name] ?? field.initValue;
       }
+      field._form = this;
     }
     _init();
   }
@@ -54,7 +63,13 @@ abstract class AdvancedForm {
     rq.addParam(name, initializer);
   }
 
-  Future<bool> fill(Map<String, dynamic>? fill) async {
+  Future<bool> fill(
+    Map<String, dynamic>? fill, {
+    Map<String, dynamic>? options,
+  }) async {
+    if (options != null) {
+      this.options.addAll(options);
+    }
     return check(
       fill: fill ?? {},
     );
@@ -115,7 +130,10 @@ abstract class AdvancedForm {
     return res;
   }
 
-  Future<AdvancedForm> initOptions() async {
+  Future<AdvancedForm> initOptions({
+    Map<String, dynamic> options = const {},
+  }) async {
+    this.options.addAll(options);
     var res = rq.getParam(name) as Map<String, dynamic>? ?? {};
     for (var field in _fields) {
       res[field.name]['options'] =
@@ -151,7 +169,7 @@ abstract class AdvancedForm {
       validators: [
         FieldValidator.requiredField(),
         (value) async {
-          if (!posted) {
+          if (!isSubmitted()) {
             return FieldValidateResult(
               success: true,
               error: '',
@@ -219,6 +237,7 @@ class Field {
   List<ValidatorEvent> validators;
   Object? initValue;
   Type type = String;
+  AdvancedForm? _form;
 
   /// `data` is optional data that can be passed to the initOptions function
   Function? initOptions = (
@@ -245,11 +264,12 @@ class Field {
     };
     var errors = <String>[];
     bool success = true;
-
-    for (var validator in validators) {
-      var result = await validator(value);
-      success &= result.success;
-      errors.addAll(result.errors);
+    if (_form?.isSubmitted() == true) {
+      for (var validator in validators) {
+        var result = await validator(value);
+        success &= result.success;
+        errors.addAll(result.errors);
+      }
     }
 
     res['errors'] = errors;

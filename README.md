@@ -7,6 +7,18 @@
 [![issues-open](https://img.shields.io/github/issues-raw/uproid/webapp)](https://github.com/uproid/webapp/issues) 
 [![Contributions](https://img.shields.io/github/contributors/uproid/webapp)](https://github.com/uproid/webapp/blob/master/CONTRIBUTING.md)
 
+---
+
+## ⚠️ Important Notice: Migration to Finch
+
+**This package is being deprecated and will no longer receive updates.** All future development and improvements will continue in the new **[Finch](https://pub.dev/packages/finch)** package. 
+
+We strongly recommend migrating your projects to Finch as soon as possible. The Finch package offers enhanced features, better performance, and ongoing support. This repository will be maintained for critical bug fixes only, and will be fully deprecated in the near future.
+
+👉 **Please visit the [Finch package](https://pub.dev/packages/finch) to get started with the latest version.**
+
+---
+
 # WebApp Package Overview
 
 WebApp Package is a robust Dart package designed to streamline the development of powerful web applications. Whether you're building APIs, managing databases, creating dynamic frontend widgets, or implementing real-time features, the WebApp package offers a comprehensive suite of tools to accelerate your development process. With built-in support for MongoDB, MySQL, WebSockets, and seamless integration with Nginx, this package is ideal for developers seeking efficiency and scalability in their web projects.
